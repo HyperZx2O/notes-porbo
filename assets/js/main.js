@@ -310,6 +310,28 @@ function init() {
       }
     }
   });
+
+  /* ─── Create changelog overlay dynamically ─── */
+  var overlay = document.createElement("div");
+  overlay.className = "changelog-overlay";
+  overlay.id = "changelog-overlay";
+  overlay.style.display = "none";
+  overlay.innerHTML = '<div class="changelog-panel">'
+    + '<div class="changelog-head">'
+    + '<h2>Changelog</h2>'
+    + '<button class="changelog-close" id="changelog-close" aria-label="Close changelog">&times;</button>'
+    + '</div>'
+    + '<div class="changelog-body" id="changelog-body">'
+    + '<p class="changelog-loading">Loading commits&hellip;</p>'
+    + '</div>'
+    + '</div>';
+  document.body.appendChild(overlay);
+
+  document.getElementById("changelog-btn").addEventListener("click", openChangelog);
+  document.getElementById("changelog-close").addEventListener("click", closeChangelog);
+  overlay.addEventListener("click", function (e) {
+    if (e.target === this) closeChangelog();
+  });
 }
 
 /* ─── Changelog ─── */
@@ -365,17 +387,12 @@ function escapeHtml(str) {
 document.addEventListener("DOMContentLoaded", function () {
   init();
 
-  document.getElementById("changelog-btn").addEventListener("click", openChangelog);
-  document.getElementById("changelog-close").addEventListener("click", closeChangelog);
-  document.getElementById("changelog-overlay").addEventListener("click", function (e) {
-    if (e.target === this) closeChangelog();
-  });
   document.addEventListener("keydown", function (e) {
     var t = e.target;
     if (t.tagName === "INPUT" || t.tagName === "TEXTAREA" || t.isContentEditable) return;
     if (e.key === "Escape") {
       var o = document.getElementById("changelog-overlay");
-      if (o.classList.contains("open")) closeChangelog();
+      if (o && o.classList.contains("open")) closeChangelog();
     }
   });
 });
