@@ -16,7 +16,6 @@ const COURSES = {
     { name: "CSE 4203 - Discrete Mathematics", files: ["midterm.html"] },
     { name: "CSE 4205 - Digital Logic Design", files: [] },
     { name: "HUM 4241 - Islamic History Science and Culture", files: ["midterm.html"] },
-    { name: "HUM 4242 - Arabic II", files: [] },
     { name: "MATH 4241 - Integral Calculus and Differential Equations", files: ["midterm.html"] },
     { name: "PHY 4241 - Physics II", files: ["midterm.html"] },
   ],
@@ -27,7 +26,7 @@ let currentSemester = DEFAULT_SEMESTER;
 let activeCardIndex = -1;
 
 function getCourseDir(semester, courseName) {
-  return semester + "/" + courseName;
+  return "semesters/" + semester + "/" + courseName;
 }
 
 function renderFileRow(course, file, semester) {
@@ -205,35 +204,6 @@ function renderDashboard(semester) {
   activeCardIndex = -1;
 }
 
-function filterCourses(query) {
-  query = query.toLowerCase().trim();
-  const cards = document.querySelectorAll(".course-card");
-  let visibleCount = 0;
-
-  cards.forEach(function (card) {
-    const name = card.dataset.courseName || "";
-    const fileLinks = card.querySelectorAll(".file-row");
-    let fileMatch = false;
-    fileLinks.forEach(function (link) {
-      const text = link.textContent.toLowerCase();
-      if (text.includes(query)) fileMatch = true;
-    });
-
-    const nameMatch = name.includes(query);
-    if (!query || nameMatch || fileMatch) {
-      card.style.display = "";
-      visibleCount++;
-    } else {
-      card.style.display = "none";
-    }
-  });
-
-  const noResults = document.getElementById("no-results");
-  if (noResults) {
-    noResults.classList.toggle("visible", query !== "" && visibleCount === 0);
-  }
-}
-
 function switchSemester(semester) {
   currentSemester = semester;
   localStorage.setItem("sem", semester);
@@ -242,9 +212,158 @@ function switchSemester(semester) {
   document.querySelectorAll(".semester-tab").forEach(function (tab) {
     tab.classList.toggle("active", tab.dataset.semester === semester);
   });
+}
 
-  const searchInput = document.getElementById("search-input");
-  if (searchInput) searchInput.value = "";
+/* ─── Search modal ─── */
+
+var SearchModal = {
+  overlay: null,
+  input: null,
+  body: null,
+  activeIndex: -1,
+  results: [],
+
+  build: function () {
+    if (this.overlay) return;
+    var o = document.createElement("div");
+    o.className = "search-modal-overlay";
+    o.id = "search-modal-overlay";
+    o.innerHTML =
+      '<div class="search-modal-panel">'
+      + '<div class="search-modal-head">'
+      + '<input type="text" class="search-modal-input" id="search-modal-input" placeholder="Search courses and files…" autocomplete="off" spellcheck="false">'
+      + '<button class="search-modal-close" id="search-modal-close" aria-label="Close search">&times;</button>'
+      + '</div>'
+      + '<div class="search-modal-body" id="search-modal-body"></div>'
+      + '</div>';
+    document.body.appendChild(o);
+    this.overlay = o;
+    this.input = document.getElementById("search-modal-input");
+    this.body = document.getElementById("search-modal-body");
+
+    var self = this;
+    document.getElementById("search-modal-close").addEventListener("click", function () { self.close(); });
+    o.addEventListener("click", function (e) { if (e.target === o) self.close(); });
+
+    this.input.addEventListener("input", function () { self.search(this.value); });
+
+    this.input.addEventListener("keydown", function (e) {
+      if (e.key === "Escape") { self.close(); return; }
+      if (e.key === "ArrowDown") { e.preventDefault(); self.navigate(1); return; }
+      if (e.key === "ArrowUp") { e.preventDefault(); self.navigate(-1); return; }
+      if (e.key === "Enter") { e.preventDefault(); self.openActive(); return; }
+    });
+  },
+
+  open: function () {
+    this.build();
+    this.search("");
+    this.overlay.classList.add("open");
+    document.body.classList.add("no-scroll");
+    setTimeout(function (self) { self.input.focus(); }, 50, this);
+    this.activeIndex = -1;
+  },
+
+  close: function () {
+    if (!this.overlay || !this.overlay.classList.contains("open")) return;
+    this.overlay.classList.remove("open");
+    this.input.value = "";
+    this.body.innerHTML = "";
+    document.body.classList.remove("no-scroll");
+    this.activeIndex = -1;
+  },
+
+  search: function (query) {
+    query = query.trim().toLowerCase();
+    this.results = [];
+
+    if (!query) {
+      this.body.innerHTML = "";
+      return;
+    }
+
+    Object.keys(COURSES).forEach(function (sem) {
+      COURSES[sem].forEach(function (course) {
+        var courseMatch = course.name.toLowerCase().includes(query);
+        course.files.forEach(function (file) {
+          var fileMatch = file.toLowerCase().includes(query);
+          if (courseMatch || fileMatch) {
+            this.results.push({
+              semester: sem,
+              course: course.name,
+              file: file,
+              href: getCourseDir(sem, course.name) + "/" + file,
+              matchType: fileMatch ? "file" : "course",
+            });
+          }
+        }, this);
+      }, this);
+    }, this);
+
+    this.renderResults(query);
+  },
+
+  renderResults: function (query) {
+    if (this.results.length === 0) {
+      this.body.innerHTML = '<div class="search-no-results">No results found</div>';
+      this.activeIndex = -1;
+      return;
+    }
+
+    var html = "";
+    var q = query.toLowerCase();
+    for (var i = 0; i < this.results.length; i++) {
+      var r = this.results[i];
+      var nameLabel = r.file.replace(/\.html$/, "").replace(/-/g, " ");
+      var nameHighlighted = highlightText(nameLabel, q);
+      var courseHighlighted = highlightText(r.course, q);
+      html += '<a class="search-result" data-index="' + i + '" href="' + r.href + '">'
+        + '<span class="search-result-path">' + r.semester + ' / ' + r.course + '</span>'
+        + '<span class="search-result-name">' + nameHighlighted + '</span>'
+        + '</a>';
+    }
+    this.body.innerHTML = html;
+    this.activeIndex = -1;
+
+    var self = this;
+    this.body.querySelectorAll(".search-result").forEach(function (el) {
+      el.addEventListener("mouseenter", function () {
+        self.body.querySelectorAll(".search-result").forEach(function (e) { e.classList.remove("active"); });
+        this.classList.add("active");
+        self.activeIndex = parseInt(this.dataset.index);
+      });
+    });
+  },
+
+  navigate: function (dir) {
+    var items = this.body.querySelectorAll(".search-result");
+    if (!items.length) return;
+    items.forEach(function (e) { e.classList.remove("active"); });
+    if (this.activeIndex < 0) {
+      this.activeIndex = dir > 0 ? 0 : items.length - 1;
+    } else {
+      this.activeIndex = Math.max(0, Math.min(items.length - 1, this.activeIndex + dir));
+    }
+    items[this.activeIndex].classList.add("active");
+    items[this.activeIndex].scrollIntoView({ block: "nearest" });
+  },
+
+  openActive: function () {
+    var items = this.body.querySelectorAll(".search-result");
+    if (this.activeIndex >= 0 && this.activeIndex < items.length) {
+      window.location.href = items[this.activeIndex].href;
+    }
+  },
+};
+
+function highlightText(text, query) {
+  if (!query) return escapeHtml(text);
+  var lower = text.toLowerCase();
+  var idx = lower.indexOf(query);
+  if (idx === -1) return escapeHtml(text);
+  return escapeHtml(text.slice(0, idx))
+    + "<mark>" + escapeHtml(text.slice(idx, idx + query.length)) + "</mark>"
+    + escapeHtml(text.slice(idx + query.length));
 }
 
 function init() {
@@ -261,19 +380,32 @@ function init() {
 
   var searchInput = document.getElementById("search-input");
   if (searchInput) {
-    searchInput.addEventListener("input", function () {
-      filterCourses(this.value);
+    searchInput.addEventListener("click", function () {
+      SearchModal.open();
+    });
+    searchInput.addEventListener("focus", function () {
+      this.blur();
+      SearchModal.open();
     });
   }
 
   document.addEventListener("keydown", function (e) {
+    var isOpen = document.getElementById("search-modal-overlay")
+      && document.getElementById("search-modal-overlay").classList.contains("open");
+    if (isOpen) return;
+
     var target = e.target;
     var isInput = target.tagName === "INPUT" || target.tagName === "TEXTAREA" || target.isContentEditable;
 
+    if ((e.ctrlKey || e.metaKey) && e.key === "k") {
+      e.preventDefault();
+      SearchModal.open();
+      return;
+    }
+
     if (!isInput && e.key === "/") {
       e.preventDefault();
-      var si = document.getElementById("search-input");
-      if (si) si.focus();
+      SearchModal.open();
       return;
     }
 
@@ -386,9 +518,9 @@ function escapeHtml(str) {
 init();
 
 document.addEventListener("keydown", function (e) {
-  var t = e.target;
-  if (t.tagName === "INPUT" || t.tagName === "TEXTAREA" || t.isContentEditable) return;
   if (e.key === "Escape") {
+    var so = document.getElementById("search-modal-overlay");
+    if (so && so.classList.contains("open")) { SearchModal.close(); return; }
     var o = document.getElementById("changelog-overlay");
     if (o && o.classList.contains("open")) closeChangelog();
   }
