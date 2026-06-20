@@ -32,6 +32,10 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+body.no-scroll {
+  overflow: hidden;
+}
+
 /* ─── N7: Brutal slab nav ─── */
 
 .masthead {
@@ -91,6 +95,26 @@ body {
 
 .search-wrap input::placeholder {
   color: var(--color-muted);
+}
+
+.drive-link {
+  display: grid;
+  place-items: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  color: var(--color-muted);
+  border: 2px solid var(--color-rule-light);
+  flex-shrink: 0;
+}
+
+.drive-link:hover {
+  color: var(--color-accent);
+  border-color: var(--color-accent);
+}
+
+.drive-link:focus-visible {
+  outline: 2px solid var(--color-focus);
+  outline-offset: 2px;
 }
 
 /* ─── Semester tabs ─── */
@@ -192,6 +216,42 @@ body {
 
 .course-card:focus-within {
   border-color: var(--color-focus);
+}
+
+.course-card.active {
+  border-color: var(--color-accent);
+  box-shadow: inset 0 0 0 2px var(--color-accent);
+}
+
+.course-card-right {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  flex-shrink: 0;
+}
+
+.course-card-empty {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  color: var(--color-muted);
+  letter-spacing: 0.05em;
+}
+
+.course-card-count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 1.1rem;
+  height: 1.1rem;
+  padding: 0 0.25rem;
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  font-weight: 700;
+  color: var(--color-paper);
+  background: var(--color-muted);
+  line-height: 1;
+  vertical-align: middle;
+  margin-left: var(--space-sm);
 }
 
 .course-card-header {
@@ -361,6 +421,147 @@ body {
   text-transform: uppercase;
   letter-spacing: 0.1em;
   color: var(--color-muted);
+}
+
+.footer-sep {
+  color: var(--color-rule-light);
+  margin: 0 var(--space-sm);
+}
+
+.changelog-btn {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--color-muted);
+  background: none;
+  border: none;
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-thickness: 1px;
+}
+
+.changelog-btn:hover {
+  color: var(--color-ink);
+}
+
+.changelog-btn:focus-visible {
+  outline: 2px solid var(--color-focus);
+  outline-offset: 2px;
+}
+
+/* ─── Changelog overlay ─── */
+
+.changelog-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.6);
+  z-index: 1000;
+  justify-content: center;
+  align-items: center;
+  padding: var(--space-md);
+}
+
+.changelog-overlay.open {
+  display: flex;
+}
+
+.changelog-panel {
+  background: var(--color-paper);
+  border: var(--border-thick) solid var(--color-rule);
+  width: 100%;
+  max-width: 560px;
+  max-height: 80vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.changelog-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-md) var(--space-lg);
+  border-bottom: var(--border-thick) solid var(--color-rule);
+}
+
+.changelog-head h2 {
+  font-family: var(--font-display);
+  font-size: var(--text-lg);
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: -0.01em;
+}
+
+.changelog-close {
+  font-family: var(--font-mono);
+  font-size: var(--text-xl);
+  font-weight: 700;
+  color: var(--color-rule);
+  background: none;
+  border: none;
+  cursor: pointer;
+  line-height: 1;
+}
+
+.changelog-close:hover {
+  color: var(--color-ink);
+}
+
+.changelog-close:focus-visible {
+  outline: 2px solid var(--color-focus);
+  outline-offset: 2px;
+}
+
+.changelog-body {
+  padding: var(--space-md) var(--space-lg);
+  overflow-y: auto;
+  flex: 1;
+}
+
+.changelog-loading,
+.changelog-error {
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  color: var(--color-muted);
+  text-align: center;
+  padding: var(--space-xl) 0;
+}
+
+.changelog-error {
+  color: var(--color-accent);
+}
+
+.changelog-empty {
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  color: var(--color-muted);
+  text-align: center;
+  padding: var(--space-xl) 0;
+}
+
+.changelog-item {
+  padding: var(--space-sm) 0;
+  border-bottom: 1px solid var(--color-paper-2);
+}
+
+.changelog-item:last-child {
+  border-bottom: none;
+}
+
+.changelog-item-msg {
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  color: var(--color-ink);
+  line-height: 1.4;
+}
+
+.changelog-item-meta {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  color: var(--color-muted);
+  margin-top: 0.25rem;
 }
 
 /* ─── Responsive ─── */

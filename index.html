@@ -12,6 +12,13 @@
     <h1 class="wordmark">Notes <em>Porbo</em></h1>
     <div class="search-wrap">
       <input type="text" id="search-input" placeholder="Search courses or files…" aria-label="Search courses or files">
+      <a href="https://drive.google.com/drive/u/1/folders/1M_1z8t7hDfQUgv0BBw3xt6wj1j-iRT9I" class="drive-link" target="_blank" rel="noopener" aria-label="Open Google Drive folder">
+        <svg width="20" height="20" viewBox="0 0 48 48" fill="none" aria-hidden="true">
+          <path d="M24 4L8 28h32L24 4z" fill="currentColor" opacity="0.7"/>
+          <path d="M8 28l8 16h16l-8-16H8z" fill="currentColor" opacity="0.5"/>
+          <path d="M40 28l-8 16-8-16h16z" fill="currentColor" opacity="0.3"/>
+        </svg>
+      </a>
     </div>
   </header>
 
@@ -24,8 +31,20 @@
   </main>
 
   <footer class="site-footer">
-    <p>Notes Porbo &copy; 2026</p>
+    <p>Notes Porbo &copy; 2026 <span class="footer-sep">/</span> <button class="changelog-btn" id="changelog-btn">Changelog</button></p>
   </footer>
+
+  <div class="changelog-overlay" id="changelog-overlay">
+    <div class="changelog-panel">
+      <div class="changelog-head">
+        <h2>Changelog</h2>
+        <button class="changelog-close" id="changelog-close" aria-label="Close changelog">&times;</button>
+      </div>
+      <div class="changelog-body" id="changelog-body">
+        <p class="changelog-loading">Loading commits…</p>
+      </div>
+    </div>
+  </div>
 
   <script src="assets/js/main.js"></script>
 </body>
