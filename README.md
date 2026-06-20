@@ -17,6 +17,4 @@ index.html    → Dashboard
 
 ## Updating
 
-1. Add or remove folders/files under any semester directory
-2. Run `node generate.js` to rebuild the course config
-3. Commit and push — GitHub Actions auto-deploys to Pages
+Add or remove folders/files under any semester directory, then commit and push — GitHub Actions auto-deploys to Pages.

@@ -100,20 +100,18 @@ body.no-scroll {
 .drive-link {
   display: grid;
   place-items: center;
-  width: 2.25rem;
-  height: 2.25rem;
-  color: var(--color-muted);
-  border: 2px solid var(--color-rule-light);
+  width: 2.5rem;
+  height: 2.5rem;
+  color: var(--color-ink);
   flex-shrink: 0;
 }
 
 .drive-link:hover {
   color: var(--color-accent);
-  border-color: var(--color-accent);
 }
 
 .drive-link:focus-visible {
-  outline: 2px solid var(--color-focus);
+  outline: var(--border-thick) solid var(--color-focus);
   outline-offset: 2px;
 }
 

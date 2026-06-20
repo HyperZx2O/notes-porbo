@@ -88,6 +88,8 @@ function renderCourseCard(course, semester) {
     badge.className = "course-card-empty";
     badge.textContent = "EMPTY";
     right.appendChild(badge);
+  } else if (count) {
+    right.appendChild(count);
   }
 
   const toggle = document.createElement("span");
@@ -96,7 +98,6 @@ function renderCourseCard(course, semester) {
 
   right.appendChild(toggle);
   header.appendChild(title);
-  if (count) title.appendChild(count);
   header.appendChild(right);
 
   const filesWrap = document.createElement("div");
