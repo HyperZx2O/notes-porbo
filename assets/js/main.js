@@ -338,6 +338,7 @@ function init() {
 function openChangelog() {
   document.body.classList.add("no-scroll");
   var overlay = document.getElementById("changelog-overlay");
+  overlay.style.display = "";
   overlay.classList.add("open");
   var body = document.getElementById("changelog-body");
   body.innerHTML = '<p class="changelog-loading">Loading commits…</p>';
@@ -374,7 +375,9 @@ function openChangelog() {
 
 function closeChangelog() {
   document.body.classList.remove("no-scroll");
-  document.getElementById("changelog-overlay").classList.remove("open");
+  var overlay = document.getElementById("changelog-overlay");
+  overlay.style.display = "";
+  overlay.classList.remove("open");
 }
 
 function escapeHtml(str) {
