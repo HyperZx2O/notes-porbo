@@ -1,0 +1,1203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>3D Geometry — Sphere, Cones &amp; Quadric Surfaces</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@400;500&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<script>
+MathJax = {
+  tex: { inlineMath: [['\\(','\\)'], ['$','$']] },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre'] }
+};
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.min.js"></script>
+<style>
+/* ── TOKENS ── */
+:root {
+  --ink: #e8e4dc;
+  --paper: #0f1117;
+  --cream: #181c26;
+  --warm: #1e2333;
+  --gold: #e8a84b;
+  --gold-light: #f5c96e;
+  --rust: #e06444;
+  --teal: #3db8b8;
+  --blue: #5b9bd5;
+  --green: #5ab87a;
+  --muted: #8a8a9a;
+  --card: #14181f;
+  --border: #252a3a;
+  --border-light: rgba(37,42,58,0.6);
+  --accent2: #7eb8e8;
+  --accent3: #e87eb8;
+  --accent4: #7ee8a2;
+
+  --space-xs: 8px;
+  --space-sm: 14px;
+  --space-md: 24px;
+  --space-lg: 40px;
+  --space-xl: 56px;
+
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+
+  --content-max: 1060px;
+  --content-pad: clamp(18px, 5vw, 52px);
+}
+
+/* ── RESET ── */
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+
+body {
+  background: var(--paper);
+  color: var(--ink);
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 300;
+  font-size: clamp(14px, 2.2vw, 15.5px);
+  line-height: 1.75;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* subtle grid */
+body::before {
+  content:'';
+  position:fixed; inset:0;
+  background-image:
+    linear-gradient(rgba(232,168,75,0.012) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(232,168,75,0.012) 1px, transparent 1px);
+  background-size: 40px 40px;
+  pointer-events:none; z-index:0;
+}
+
+/* ── MASTHEAD ── */
+.masthead {
+  background: linear-gradient(135deg, #0a0d12 0%, #111827 50%, #0f1117 100%);
+  padding: clamp(36px,6vw,64px) var(--content-pad) clamp(28px,4vw,48px);
+  position: relative;
+  overflow: hidden;
+  border-bottom: 1px solid rgba(232,168,75,0.18);
+}
+.masthead::before {
+  content:''; position:absolute; top:-80px; right:-100px;
+  width:min(420px,90vw); height:min(420px,90vw);
+  border:1px solid rgba(232,168,75,0.1); border-radius:50%;
+}
+.masthead::after {
+  content:''; position:absolute; top:-20px; right:-40px;
+  width:min(240px,60vw); height:min(240px,60vw);
+  border:1px solid rgba(232,168,75,0.06); border-radius:50%;
+}
+.glow-orb {
+  position:absolute; bottom:-120px; right:120px;
+  width:300px; height:300px;
+  background: radial-gradient(circle, rgba(232,168,75,0.07) 0%, transparent 70%);
+  border-radius:50%; pointer-events:none;
+}
+.masthead-tag {
+  font-family:'DM Mono',monospace; font-size:11px;
+  letter-spacing:3px; text-transform:uppercase;
+  color:var(--gold-light); margin-bottom:16px;
+  display:flex; align-items:center; gap:10px;
+}
+.masthead-tag::before {
+  content:''; display:inline-block; width:28px; height:1px;
+  background:linear-gradient(90deg,var(--gold),transparent);
+}
+.masthead h1 {
+  font-family:'DM Serif Display',serif;
+  font-size: clamp(26px, 5vw, 54px);
+  line-height:1.1; color:#fff; max-width:720px;
+}
+.masthead h1 em { font-style:italic; color:var(--gold-light); }
+.masthead-meta {
+  margin-top:20px; display:flex; gap:clamp(14px,3vw,36px); flex-wrap:wrap;
+  font-family:'DM Mono',monospace; font-size:11px;
+  color:rgba(232,228,220,0.36);
+}
+.masthead-meta span { color:rgba(232,228,220,0.7); }
+
+/* ── NAV TABS ── */
+.nav-wrap {
+  background:#0a0d12;
+  border-bottom:1px solid rgba(232,168,75,0.1);
+  position:sticky; top:0; z-index:200;
+}
+.nav-tabs {
+  max-width:var(--content-max); margin:0 auto;
+  padding:0 var(--content-pad);
+  display:flex; gap:0; overflow-x:auto; scrollbar-width:none;
+}
+.nav-tabs::-webkit-scrollbar { display:none; }
+.nav-tab {
+  font-family:'DM Mono',monospace; font-size:11px;
+  letter-spacing:1.5px; text-transform:uppercase;
+  padding:14px clamp(14px,2.5vw,26px);
+  color:rgba(232,228,220,0.35); cursor:pointer;
+  border:none; border-bottom:2px solid transparent;
+  white-space:nowrap; transition:all 0.2s; background:none;
+  -webkit-tap-highlight-color:transparent;
+  touch-action:manipulation;
+}
+.nav-tab:hover { color:rgba(232,228,220,0.7); }
+.nav-tab.active {
+  color:var(--gold-light); border-bottom-color:var(--gold);
+  text-shadow:0 0 20px rgba(232,168,75,0.4);
+}
+
+/* ── PROGRESS BAR ── */
+.progress-bar {
+  height:2px; background:rgba(232,168,75,0.08);
+  position:sticky; top:43px; z-index:199;
+}
+.progress-fill {
+  height:100%;
+  background:linear-gradient(90deg,var(--gold),var(--gold-light));
+  width:0; transition:width 0.1s linear;
+}
+
+/* ── CONTENT ── */
+.content {
+  padding: var(--space-xl) var(--content-pad);
+  max-width:var(--content-max); margin:0 auto;
+  position:relative; z-index:1;
+}
+.topic-section { display:none; }
+.topic-section.active { display:block; }
+
+/* ── SECTION HEADER ── */
+.section-header {
+  display:flex; align-items:center; gap:14px;
+  margin-bottom:var(--space-md);
+  padding-bottom:var(--space-sm);
+  border-bottom:1px solid rgba(232,168,75,0.18);
+}
+.section-header h2 {
+  font-family:'DM Serif Display',serif;
+  font-size:clamp(18px,3.5vw,24px); color:#fff;
+}
+.section-num {
+  font-family:'DM Mono',monospace; font-size:10px;
+  background:var(--gold); color:#0a0d12;
+  padding:3px 9px; border-radius:3px;
+  letter-spacing:0.1em; font-weight:500; flex-shrink:0;
+}
+.content-section { margin-bottom:var(--space-xl); }
+
+/* ── FORMULA BOXES ── */
+.formula-box {
+  background:var(--card); border:1px solid var(--border);
+  border-radius:var(--radius-md); padding:18px 22px;
+  margin:12px 0; font-family:'DM Mono',monospace;
+  font-size:clamp(12px,1.8vw,13.5px); line-height:2;
+  overflow-x:auto;
+}
+.formula-box .label {
+  font-family:'DM Sans',sans-serif; font-size:10px;
+  letter-spacing:2px; text-transform:uppercase;
+  color:var(--gold); font-weight:500; margin-bottom:8px;
+}
+.formula-box.red   { border-left:3px solid var(--rust); }
+.formula-box.blue  { border-left:3px solid var(--blue); }
+.formula-box.green { border-left:3px solid var(--green); }
+
+.formula-highlight {
+  display:inline-block; background:var(--warm);
+  color:var(--ink); font-family:'DM Mono',monospace;
+  padding:10px 18px; border-radius:var(--radius-sm);
+  font-size:clamp(12px,1.8vw,14px); margin:8px 0;
+  border:1px solid var(--border); overflow-x:auto;
+  max-width:100%;
+}
+
+.gen-eq {
+  background:var(--card); border:1px solid var(--border);
+  border-left:3px solid var(--gold); padding:20px 24px;
+  border-radius:var(--radius-md); margin-bottom:18px;
+  overflow-x:auto;
+}
+.gen-eq p { margin-bottom:10px; }
+.gen-eq p:last-child { margin-bottom:0; }
+
+.theorem-box {
+  background:var(--card); border:1px solid var(--border);
+  border-left:3px solid var(--blue); padding:20px 24px;
+  border-radius:var(--radius-md); margin:14px 0;
+}
+.theorem-box .t-label {
+  font-family:'DM Mono',monospace; font-size:10px;
+  letter-spacing:0.2em; text-transform:uppercase;
+  color:var(--blue); margin-bottom:10px;
+}
+
+/* ── HIGHLIGHT EQUATIONS (MathJax) ── */
+.highlight-eq {
+  background:rgba(232,168,75,0.055);
+  border:1px solid rgba(232,168,75,0.16);
+  border-radius:var(--radius-sm); padding:10px 16px;
+  margin:8px 0; text-align:center; overflow-x:auto;
+}
+.highlight-eq.blue {
+  background:rgba(91,155,213,0.055);
+  border-color:rgba(91,155,213,0.18);
+}
+.highlight-eq.green {
+  background:rgba(90,184,122,0.055);
+  border-color:rgba(90,184,122,0.18);
+}
+
+.answer-box {
+  background:rgba(232,168,75,0.06);
+  border:1.5px solid var(--gold); border-radius:var(--radius-md);
+  padding:14px 18px; margin-top:16px; text-align:center;
+  overflow-x:auto;
+}
+.answer-box .ans-label {
+  font-family:'DM Mono',monospace; font-size:10px;
+  letter-spacing:0.18em; color:var(--gold);
+  text-transform:uppercase; margin-bottom:6px;
+}
+
+/* ── SURFACE GRID ── */
+.surface-grid {
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(min(320px,100%),1fr));
+  gap:16px; margin-top:8px;
+}
+.surface-card {
+  background:var(--card); border:1px solid var(--border);
+  border-radius:var(--radius-md); padding:20px 22px;
+  position:relative; overflow:hidden;
+  transition:border-color 0.25s, transform 0.2s;
+}
+.surface-card:hover { border-color:rgba(232,168,75,0.32); transform:translateY(-2px); }
+.surface-card::before {
+  content:''; position:absolute; top:0; left:0; right:0; height:2px;
+}
+.surface-card.c1::before { background:linear-gradient(90deg,var(--gold),transparent); }
+.surface-card.c2::before { background:linear-gradient(90deg,var(--blue),transparent); }
+.surface-card.c3::before { background:linear-gradient(90deg,var(--accent3),transparent); }
+.surface-card.c4::before { background:linear-gradient(90deg,var(--accent4),transparent); }
+.surface-card.c5::before { background:linear-gradient(90deg,#b87ee8,transparent); }
+.surface-card.c6::before { background:linear-gradient(90deg,var(--rust),transparent); }
+.surface-name {
+  font-family:'DM Serif Display',serif; font-size:1rem;
+  color:#fff; margin-bottom:10px;
+}
+.eq-display {
+  background:rgba(0,0,0,0.28); border-radius:var(--radius-sm);
+  padding:10px 14px; margin:8px 0;
+  font-size:clamp(0.82rem,1.5vw,0.95rem); text-align:center;
+  overflow-x:auto;
+}
+.note-text { font-size:0.88rem; color:var(--muted); margin-top:10px; font-style:italic; }
+.shape-row { display:flex; gap:10px; margin-top:10px; justify-content:center; flex-wrap:wrap; }
+svg.shape { border-radius:var(--radius-sm); }
+
+/* ── KV GRID ── */
+.kv-grid {
+  display:grid; grid-template-columns:repeat(auto-fit,minmax(min(200px,100%),1fr));
+  gap:10px; margin:14px 0;
+}
+.kv {
+  background:var(--warm); border-radius:var(--radius-sm);
+  padding:12px 16px; font-family:'DM Mono',monospace;
+  font-size:13px; border:1px solid var(--border);
+}
+.kv .k { color:var(--blue); font-size:11px; text-transform:uppercase; letter-spacing:1px; margin-bottom:4px; }
+
+/* ── CALLOUT ── */
+.callout {
+  background:rgba(232,168,75,0.06);
+  border:1px solid rgba(232,168,75,0.22);
+  border-left:4px solid var(--gold); border-radius:var(--radius-sm);
+  padding:12px 16px; margin:12px 0; font-size:13.5px; color:var(--ink);
+}
+.callout strong { color:var(--gold-light); }
+
+/* ── DIAGRAM ── */
+.diagram-wrap { text-align:center; margin:16px 0; }
+.diagram-wrap svg { max-width:min(280px,90vw); }
+
+/* ── MATRIX ── */
+.matrix-wrap { overflow-x:auto; margin:14px 0; -webkit-overflow-scrolling:touch; }
+.matrix {
+  font-family:'DM Mono',monospace; font-size:clamp(11px,1.6vw,12.5px);
+  border-left:3px solid var(--ink); border-right:3px solid var(--ink);
+  padding:10px 16px; display:inline-block; line-height:2;
+  background:var(--warm);
+}
+.matrix tr td { padding:0 10px; }
+
+/* ── COLLAPSIBLE PROBLEMS ── */
+.problem-block {
+  background:var(--cream); border:1px solid var(--border);
+  border-radius:var(--radius-lg); margin:20px 0; overflow:hidden;
+}
+.problem-toggle {
+  width:100%; background:none; border:none; cursor:pointer;
+  padding:20px 24px; display:flex; align-items:flex-start;
+  gap:14px; text-align:left;
+  -webkit-tap-highlight-color:transparent; touch-action:manipulation;
+  transition:background 0.2s;
+}
+.problem-toggle:hover { background:rgba(255,255,255,0.02); }
+.problem-badge {
+  font-family:'DM Mono',monospace; font-size:10px;
+  letter-spacing:0.18em; text-transform:uppercase;
+  background:var(--teal); color:#0a0d12;
+  padding:3px 10px; border-radius:20px;
+  white-space:nowrap; flex-shrink:0; margin-top:2px;
+}
+.problem-title {
+  font-family:'DM Sans',sans-serif; font-size:14px;
+  font-style:italic; color:var(--ink); flex:1; line-height:1.5;
+}
+.problem-arrow {
+  font-size:13px; color:var(--muted); flex-shrink:0;
+  transition:transform 0.25s; margin-top:2px; margin-left:auto; padding-left:8px;
+}
+.problem-toggle[aria-expanded="true"] .problem-arrow { transform:rotate(180deg); }
+.problem-body {
+  padding:0 24px 24px;
+  display:none;
+  border-top:1px solid var(--border);
+}
+.problem-body.open { display:block; }
+.q-text {
+  font-size:14px; color:#fff; margin:18px 0 16px;
+  padding-bottom:14px; border-bottom:1px solid var(--border);
+  font-style:italic; line-height:1.6;
+}
+.sol-label {
+  font-family:'DM Mono',monospace; font-size:10px;
+  letter-spacing:0.2em; text-transform:uppercase;
+  color:var(--green); margin-bottom:10px;
+}
+
+/* Sphere-style cards (not collapsible — simpler content) */
+.problem-card {
+  background:var(--warm); border:1px solid var(--border);
+  border-radius:var(--radius-md); margin:18px 0; overflow:hidden;
+}
+.problem-card-header {
+  background:var(--cream); color:#fff; padding:12px 18px;
+  font-size:13px; font-weight:500;
+  display:flex; align-items:center; gap:8px;
+  border-bottom:1px solid var(--border); flex-wrap:wrap;
+}
+.problem-card-header .tag {
+  background:var(--gold); color:#0a0d12;
+  font-family:'DM Mono',monospace; font-size:10px;
+  padding:2px 8px; border-radius:2px; font-weight:700; flex-shrink:0;
+}
+.problem-card-body { padding:18px 20px; }
+.problem-q {
+  font-weight:500; color:var(--ink); margin-bottom:14px;
+  font-size:14px; border-bottom:1px dashed var(--border);
+  padding-bottom:10px; line-height:1.6;
+}
+
+/* Cone problems */
+.problem-cone {
+  background:linear-gradient(135deg,var(--cream) 0%,#1a1533 100%);
+  border:1px solid rgba(224,100,68,0.2); border-radius:14px;
+  padding:clamp(18px,4vw,32px); margin-bottom:24px; position:relative;
+}
+.problem-cone::before {
+  content:''; position:absolute; left:0; top:0; bottom:0;
+  width:4px; background:var(--rust); border-radius:4px 0 0 4px;
+}
+.problem-tag {
+  display:inline-block; background:rgba(224,100,68,0.14);
+  color:var(--rust); font-family:'DM Mono',monospace;
+  font-size:10px; letter-spacing:3px; text-transform:uppercase;
+  padding:4px 12px; border-radius:20px; margin-bottom:12px;
+  border:1px solid rgba(224,100,68,0.3);
+}
+.problem-cone h3 {
+  color:var(--ink); font-size:14px; font-family:'DM Sans',sans-serif;
+  margin-bottom:14px; font-weight:400; line-height:1.5;
+}
+
+/* ── STEPS ── */
+.step {
+  display:flex; gap:14px; margin:10px 0; align-items:flex-start;
+}
+.step-num {
+  font-family:'DM Mono',monospace; font-size:11px;
+  min-width:26px; height:26px;
+  background:rgba(90,184,122,0.1); border:1px solid rgba(90,184,122,0.28);
+  border-radius:50%; display:flex; align-items:center; justify-content:center;
+  color:var(--green); margin-top:2px; flex-shrink:0;
+}
+.step-num.blue { background:rgba(91,155,213,0.1); border-color:rgba(91,155,213,0.28); color:var(--blue); }
+.step-num.gold { background:rgba(232,168,75,0.1); border-color:rgba(232,168,75,0.28); color:var(--gold); }
+.step-body { flex:1; min-width:0; }
+.step-body p { margin-bottom:6px; }
+.step-content {
+  font-family:'DM Mono',monospace; font-size:clamp(12px,1.7vw,13px);
+  line-height:1.9; flex:1; min-width:0;
+}
+.step-content .math {
+  font-family:'DM Mono',monospace;
+  background:rgba(255,255,255,0.04);
+  padding:2px 8px; border-radius:4px;
+  font-size:clamp(11.5px,1.6vw,13px);
+  display:block; margin:5px 0; color:#c9c5e8;
+  overflow-x:auto; white-space:pre-wrap; word-break:break-all;
+}
+.step-content em { font-style:normal; color:var(--blue); font-size:12px; }
+
+.answer-cone {
+  background:linear-gradient(135deg,rgba(232,168,75,0.08),rgba(232,168,75,0.03));
+  border:1px solid rgba(232,168,75,0.38); border-radius:10px;
+  padding:14px 20px; margin-top:18px;
+  font-family:'DM Mono',monospace; font-size:clamp(12px,1.8vw,14px);
+  color:var(--gold); display:flex; align-items:center; gap:12px;
+  overflow-x:auto;
+}
+.answer-cone::before { content:'∴'; font-size:20px; opacity:0.7; flex-shrink:0; }
+
+.result-box {
+  background:var(--cream); color:var(--ink);
+  font-family:'DM Mono',monospace; font-size:clamp(12px,1.8vw,14px);
+  padding:12px 18px; border-radius:var(--radius-sm); margin-top:14px;
+  display:inline-block; border:1px solid var(--border);
+  overflow-x:auto; max-width:100%;
+}
+
+/* ── IDENTIFICATION TABLE ── */
+.id-table {
+  width:100%; border-collapse:collapse; margin:14px 0;
+  font-size:clamp(12px,1.7vw,0.9rem);
+}
+.id-table th {
+  font-family:'DM Mono',monospace; font-size:10px;
+  letter-spacing:0.15em; text-transform:uppercase;
+  color:var(--muted); padding:10px 12px; text-align:left;
+  border-bottom:1px solid var(--border);
+}
+.id-table td {
+  padding:10px 12px; border-bottom:1px solid var(--border-light); vertical-align:top;
+}
+.id-table tr:last-child td { border-bottom:none; }
+.id-table .surf-ans { color:var(--accent4); font-style:italic; }
+
+/* Responsive table */
+@media (max-width:640px) {
+  .id-table thead { display:none; }
+  .id-table tr { display:block; margin-bottom:16px; border:1px solid var(--border); border-radius:var(--radius-sm); overflow:hidden; }
+  .id-table td { display:block; padding:8px 12px; border-bottom:1px solid var(--border-light); }
+  .id-table td::before {
+    content:attr(data-label);
+    display:block; font-family:'DM Mono',monospace;
+    font-size:9px; letter-spacing:2px; text-transform:uppercase;
+    color:var(--muted); margin-bottom:4px;
+  }
+  .id-table td:last-child { border-bottom:none; }
+}
+
+/* ── TOC ── */
+.toc {
+  background:var(--card); border:1px solid var(--border);
+  border-radius:var(--radius-md); padding:22px 26px; margin-bottom:40px;
+}
+.toc-label {
+  font-family:'DM Mono',monospace; font-size:10px;
+  letter-spacing:0.2em; text-transform:uppercase;
+  color:var(--muted); margin-bottom:12px;
+}
+.toc ul { list-style:none; columns:2; column-gap:24px; }
+.toc li { padding:4px 0; font-size:0.9rem; break-inside:avoid; }
+.toc li::before { content:'→ '; font-family:'DM Mono',monospace; color:var(--gold); font-size:0.8rem; }
+@media (max-width:500px) { .toc ul { columns:1; } }
+
+/* ── DIVIDER ── */
+.divider { height:1px; background:var(--border); margin:var(--space-lg) 0; }
+
+/* ── KEY LIST ── */
+ul.key-list { list-style:none; padding:0; }
+ul.key-list li {
+  padding:10px 0; border-bottom:1px solid rgba(255,255,255,0.05);
+  color:var(--muted); font-size:14.5px; display:flex; gap:12px; align-items:flex-start;
+}
+ul.key-list li::before { content:'◆'; color:var(--blue); font-size:8px; flex-shrink:0; margin-top:6px; }
+
+/* ── NOTE BOX ── */
+.note-box {
+  background:rgba(91,155,213,0.05); border-left:3px solid var(--blue);
+  border-radius:0 var(--radius-md) var(--radius-md) 0;
+  padding:14px 18px; font-size:13px; color:var(--muted); font-style:italic; margin:14px 0;
+}
+
+/* ── INLINE MATH HIGHLIGHT ── */
+.mh {
+  font-family:'DM Mono',monospace; color:#c9c5e8; font-size:0.93em;
+  background:rgba(91,155,213,0.1); padding:1px 6px; border-radius:4px;
+}
+
+/* ── CONCEPT GRID ── */
+.concept-card {
+  background:var(--warm); border:1px solid var(--border);
+  border-radius:var(--radius-lg); padding:22px 26px;
+  margin-bottom:14px; position:relative; overflow:hidden;
+  transition:border-color 0.3s;
+}
+.concept-card:hover { border-color:rgba(232,168,75,0.35); }
+.concept-card::before {
+  content:''; position:absolute; left:0; top:0; bottom:0;
+  width:3px; background:var(--blue); border-radius:3px 0 0 3px;
+}
+.concept-card h3 {
+  font-family:'DM Serif Display',serif; font-size:1rem;
+  font-style:italic; color:var(--gold-light); margin-bottom:8px;
+}
+.concept-card p { font-size:14px; color:var(--muted); margin:0; }
+.topic-grid {
+  display:grid; grid-template-columns:repeat(auto-fit,minmax(min(240px,100%),1fr));
+  gap:14px; margin-top:14px;
+}
+
+/* ── FORMULA BOX CONE ── */
+.formula-box-cone {
+  background:var(--warm); border:1px solid rgba(91,155,213,0.28);
+  border-radius:10px; padding:20px 24px; margin:14px 0;
+  font-family:'DM Mono',monospace; font-size:clamp(12px,1.7vw,14px);
+  line-height:2; position:relative; overflow:hidden;
+  overflow-x:auto; -webkit-overflow-scrolling:touch;
+}
+.formula-box-cone::after {
+  content:'FORMULA'; position:absolute; top:8px; right:12px;
+  font-size:9px; letter-spacing:2px; color:var(--blue); opacity:0.4;
+}
+
+/* ── REF GRID ── */
+.ref-grid {
+  display:grid; grid-template-columns:repeat(auto-fit,minmax(min(220px,100%),1fr));
+  gap:12px;
+}
+
+/* ── FOOTER ── */
+footer {
+  background:#0a0d12; border-top:1px solid rgba(232,168,75,0.1);
+  padding:24px var(--content-pad);
+  font-family:'DM Mono',monospace; font-size:11px;
+  color:rgba(232,228,220,0.26);
+  display:flex; justify-content:space-between; align-items:center;
+  flex-wrap:wrap; gap:8px; position:relative; z-index:1;
+}
+
+/* ── BACK TO TOP ── */
+.back-top {
+  position:fixed; bottom:24px; right:20px;
+  width:40px; height:40px; border-radius:50%;
+  background:var(--gold); color:#0a0d12;
+  border:none; cursor:pointer; font-size:18px;
+  display:flex; align-items:center; justify-content:center;
+  opacity:0; transform:translateY(10px);
+  transition:opacity 0.25s, transform 0.25s;
+  z-index:300; box-shadow:0 4px 16px rgba(0,0,0,0.4);
+  -webkit-tap-highlight-color:transparent;
+}
+.back-top.visible { opacity:1; transform:translateY(0); }
+
+/* ── MOBILE OVERRIDES ── */
+@media (max-width:600px) {
+  .content { padding: 32px 16px; }
+  .problem-body { padding:0 16px 20px; }
+  .problem-toggle { padding:16px 16px; }
+  .problem-cone { padding:18px 16px; }
+  .gen-eq, .theorem-box { padding:16px 16px; }
+  .formula-box { padding:14px 16px; }
+  .formula-box-cone { padding:16px 16px; }
+  .problem-card-body { padding:14px 16px; }
+  .ref-grid { grid-template-columns:1fr; }
+  .surface-grid { grid-template-columns:1fr; }
+  .kv-grid { grid-template-columns:1fr; }
+  .toc { padding:16px 18px; }
+  .masthead-meta { gap:10px; }
+}
+
+/* ── PRINT ── */
+@media print {
+  .nav-wrap, .progress-bar, .back-top, .glow-orb { display:none; }
+  .topic-section { display:block !important; }
+  .problem-body { display:block !important; }
+  body { background:#fff; color:#111; }
+  .masthead { background:#111; }
+}
+</style>
+</head>
+<body>
+
+<!-- ── MASTHEAD ── -->
+<div class="masthead">
+  <div class="glow-orb"></div>
+  <div class="masthead-tag">3D Solid Geometry · Mathematics</div>
+  <h1>Sphere, <em>Cones</em> &amp; Quadric Surfaces</h1>
+  <div class="masthead-meta">
+    <div>Sphere &nbsp;<span>20.02.26</span></div>
+    <div>Cones &nbsp;<span>03.06.26</span></div>
+    <div>Quadric &nbsp;<span>27.02.26</span></div>
+    <div>Ref &nbsp;<span>P.N. Chatterjee</span></div>
+  </div>
+</div>
+
+<!-- ── NAV ── -->
+<div class="nav-wrap">
+  <div class="nav-tabs" role="tablist">
+    <button class="nav-tab active" role="tab" aria-selected="true"  onclick="showTopic('sphere',this)">The Sphere</button>
+    <button class="nav-tab"        role="tab" aria-selected="false" onclick="showTopic('cones',this)">Cones</button>
+    <button class="nav-tab"        role="tab" aria-selected="false" onclick="showTopic('quadric',this)">Quadric Surfaces</button>
+  </div>
+</div>
+<div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+
+<div class="content">
+
+<!-- ════════════════════ SPHERE ════════════════════ -->
+<div id="sphere" class="topic-section active">
+
+  <!-- §1 Standard Equation -->
+  <div class="content-section">
+    <div class="section-header"><span class="section-num">01</span><h2>Standard (Central) Equation of a Sphere</h2></div>
+    <p>A sphere with centre <strong>C(α, β, γ)</strong> and radius <strong>r</strong>. For any point P(x, y, z) on the sphere, CP = r.</p>
+    <div class="diagram-wrap">
+      <svg viewBox="0 0 220 180" xmlns="http://www.w3.org/2000/svg">
+        <defs><marker id="arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M2 1L8 5L2 9" fill="none" stroke="#e8e4dc" stroke-width="1.5"/></marker></defs>
+        <circle cx="110" cy="95" r="65" fill="rgba(91,155,213,0.07)" stroke="#5b9bd5" stroke-width="1.5"/>
+        <ellipse cx="110" cy="95" rx="65" ry="18" fill="none" stroke="#5b9bd5" stroke-width="1" stroke-dasharray="5 3"/>
+        <circle cx="110" cy="95" r="3.5" fill="#e06444"/>
+        <text x="118" y="92" font-family="DM Mono" font-size="10" fill="#e06444">C(α,β,γ)</text>
+        <line x1="110" y1="95" x2="163" y2="52" stroke="#e8e4dc" stroke-width="1.5" marker-end="url(#arr)"/>
+        <text x="144" y="65" font-family="DM Mono" font-size="11" fill="#e8e4dc" font-style="italic">r</text>
+        <text x="166" y="50" font-family="DM Mono" font-size="10" fill="#e8e4dc">P(x,y,z)</text>
+        <line x1="20" y1="155" x2="20" y2="20" stroke="#555" stroke-width="1" marker-end="url(#arr)"/>
+        <text x="22" y="18" font-family="DM Mono" font-size="9" fill="#555">z</text>
+        <line x1="10" y1="145" x2="75" y2="175" stroke="#555" stroke-width="1" marker-end="url(#arr)"/>
+        <text x="75" y="177" font-family="DM Mono" font-size="9" fill="#555">x</text>
+        <line x1="10" y1="145" x2="200" y2="145" stroke="#555" stroke-width="1" marker-end="url(#arr)"/>
+        <text x="202" y="148" font-family="DM Mono" font-size="9" fill="#555">y</text>
+      </svg>
+    </div>
+    <div class="formula-box red"><div class="label">Distance Formula → Squaring both sides</div>√[(x−α)² + (y−β)² + (z−γ)²] = r<br>⟹ (x−α)² + (y−β)² + (z−γ)² = r²</div>
+    <p style="margin:12px 0;">Expanding and rearranging:</p>
+    <div class="formula-box blue"><div class="label">Standard Form</div>x² + y² + z² − 2αx − 2βy − 2γz + (α²+β²+γ²−r²) = 0</div>
+  </div>
+
+  <!-- §2 General Equation -->
+  <div class="content-section">
+    <div class="section-header"><span class="section-num">02</span><h2>General Equation of a Sphere</h2></div>
+    <div class="formula-highlight">x² + y² + z² + 2ux + 2vy + 2wz + d = 0</div>
+    <p style="margin:14px 0;">By comparing with the standard form:</p>
+    <div class="kv-grid">
+      <div class="kv"><div class="k">u</div>u = −α</div>
+      <div class="kv"><div class="k">v</div>v = −β</div>
+      <div class="kv"><div class="k">w</div>w = −γ</div>
+      <div class="kv"><div class="k">d</div>d = α²+β²+γ²−r²</div>
+    </div>
+    <div class="formula-box green"><div class="label">Centre and Radius (from general form)</div>Centre &nbsp;C ≡ (−u, −v, −w)<br>Radius &nbsp;ρ = √(u²+v²+w²−d)</div>
+    <div class="callout"><strong>📌 Key Condition:</strong> Coefficients of x², y², z² must all be <strong>equal</strong>, and there must be <strong>no xy, yz, zx terms</strong>.</div>
+  </div>
+
+  <!-- §3 Four Points -->
+  <div class="content-section">
+    <div class="section-header"><span class="section-num">03</span><h2>Sphere Through 4 Points — Determinant Form</h2></div>
+    <p>Substituting 4 points gives 4 equations in u, v, w, d. Eliminating gives:</p>
+    <div class="matrix-wrap">
+      <div class="matrix">
+        <table><tr><td>x²+y²+z²</td><td>x</td><td>y</td><td>z</td><td>1</td></tr><tr><td>x₁²+y₁²+z₁²</td><td>x₁</td><td>y₁</td><td>z₁</td><td>1</td></tr><tr><td>x₂²+y₂²+z₂²</td><td>x₂</td><td>y₂</td><td>z₂</td><td>1</td></tr><tr><td>x₃²+y₃²+z₃²</td><td>x₃</td><td>y₃</td><td>z₃</td><td>1</td></tr><tr><td>x₄²+y₄²+z₄²</td><td>x₄</td><td>y₄</td><td>z₄</td><td>1</td></tr></table>
+      </div><span style="font-size:22px;margin-left:8px;vertical-align:middle;color:var(--ink);">= 0</span>
+    </div>
+  </div>
+
+  <!-- §4 Plane Section -->
+  <div class="content-section">
+    <div class="section-header"><span class="section-num">04</span><h2>Plane Section of a Sphere</h2></div>
+    <p>When a plane (P = 0) cuts a sphere (S = 0), the intersection is a <strong>circle</strong>.</p>
+    <div class="formula-box red"><div class="label">Circle on a sphere</div>S = 0 &nbsp;(sphere) &nbsp;&nbsp; AND &nbsp;&nbsp; P = 0 &nbsp;(plane)</div>
+    <p style="margin:14px 0;">If OA = sphere radius = ρ, and OC = perpendicular distance from centre to plane:</p>
+    <div class="formula-highlight">CA = √(OA² − OC²) &nbsp;=&nbsp; radius of circle</div>
+    <div class="divider" style="margin:18px 0;"></div>
+    <p><strong>Sphere through a circle:</strong> Any sphere through the circle (S=0, P=0) is:</p>
+    <div class="formula-box blue"><div class="label">Family of Spheres through a circle</div>S + λP = 0 &nbsp;&nbsp; (λ is a parameter)</div>
+  </div>
+
+  <!-- §5 Intersection -->
+  <div class="content-section">
+    <div class="section-header"><span class="section-num">05</span><h2>Intersection of Two Spheres</h2></div>
+    <p>Two spheres S₁ = 0 and S₂ = 0 intersect in a <strong>circle</strong>. The plane of that circle is:</p>
+    <div class="formula-highlight">S₁ − S₂ = 0 &nbsp;&nbsp; (the radical plane)</div>
+    <div class="callout"><strong>📌 Note:</strong> S₁ − S₂ = 0 is a plane (x², y², z² terms cancel), not a sphere.</div>
+  </div>
+
+  <!-- §6 Tangent Plane -->
+  <div class="content-section">
+    <div class="section-header"><span class="section-num">06</span><h2>Equation of the Tangent Plane</h2></div>
+    <p>For sphere S = x²+y²+z²+2gx+2fy+2hz+d = 0, tangent at <strong>(α, β, γ)</strong>:</p>
+    <div class="formula-box green"><div class="label">Tangent Plane Formula</div>xα + yβ + zγ + u(x+α) + v(y+β) + w(z+γ) = 0</div>
+    <div class="callout"><strong>📌 Analogy:</strong> For circle x²+y² = a², tangent at (x₁,y₁) is: <code>x·x₁ + y·y₁ = a²</code></div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- Solved Problems — Sphere -->
+  <div class="content-section">
+    <div class="section-header"><span class="section-num">✏</span><h2>Solved Problems</h2></div>
+
+    <div class="problem-card">
+      <div class="problem-card-header"><span class="tag">P 01</span> Sphere through axes intercepts — OABC</div>
+      <div class="problem-card-body">
+        <div class="problem-q">The plane x/a + y/b + z/c = 1 meets axes at A(a,0,0), B(0,b,0), C(0,0,c). Find the equation of sphere OABC.</div>
+        <div class="step"><div class="step-num">1</div><div class="step-content">Let sphere: &nbsp;<strong>x²+y²+z² + 2ux + 2vy + 2wz + d = 0</strong></div></div>
+        <div class="step"><div class="step-num blue">2</div><div class="step-content">O(0,0,0) on sphere ⟹ <strong>d = 0</strong></div></div>
+        <div class="step"><div class="step-num blue">3</div><div class="step-content">A(a,0,0) ⟹ a²+2ua = 0 ⟹ <strong>2u = −a</strong></div></div>
+        <div class="step"><div class="step-num blue">4</div><div class="step-content">B(0,b,0) ⟹ b²+2vb = 0 ⟹ <strong>2v = −b</strong></div></div>
+        <div class="step"><div class="step-num blue">5</div><div class="step-content">C(0,0,c) ⟹ c²+2wc = 0 ⟹ <strong>2w = −c</strong></div></div>
+        <div class="step"><div class="step-num gold">✓</div><div class="step-content">Substituting back:</div></div>
+        <div class="result-box">x² + y² + z² − ax − by − cz = 0</div>
+      </div>
+    </div>
+
+    <div class="problem-card">
+      <div class="problem-card-header"><span class="tag">P 02</span> Sphere through four given points</div>
+      <div class="problem-card-body">
+        <div class="problem-q">Find the equation of the sphere through (0,0,0), (0,1,−1), (−1,2,0), (1,2,3).</div>
+        <div class="step"><div class="step-num">1</div><div class="step-content">Let: <strong>x²+y²+z² + 2ux + 2vy + 2wz + d = 0</strong></div></div>
+        <div class="step"><div class="step-num blue">2</div><div class="step-content">(0,0,0) ⟹ <strong>d = 0</strong></div></div>
+        <div class="step"><div class="step-num blue">3</div><div class="step-content">(0,1,−1) ⟹ 0+1+1+2v−2w = 0 ⟹ <strong>w = v+1</strong></div></div>
+        <div class="step"><div class="step-num blue">4</div><div class="step-content">(−1,2,0) ⟹ 1+4−2u+4v = 0 ⟹ <strong>u = 2v + 5/2</strong></div></div>
+        <div class="step"><div class="step-num blue">5</div><div class="step-content">(1,2,3) ⟹ 14 + 2u + 4v + 6w = 0<br><em>Substituting u and w:</em><br>14 + 4v + 5 + 4v + 6v + 6 = 0 ⟹ <strong>v = −25/14</strong></div></div>
+        <div class="step"><div class="step-num gold">6</div><div class="step-content">w = v+1 = −11/14, &nbsp;u = 2v + 5/2 = −15/14</div></div>
+      </div>
+    </div>
+
+    <div class="problem-card">
+      <div class="problem-card-header"><span class="tag">P 03</span> Locus of centre — Plane through fixed point</div>
+      <div class="problem-card-body">
+        <div class="problem-q">A plane passes through (p, q, r) and cuts the axes in A, B, C. Show that the locus of the centre of sphere OABC is: p/x + q/y + r/z = 2</div>
+        <div class="step"><div class="step-num">1</div><div class="step-content">From P01, sphere OABC: x²+y²+z²−ax−by−cz = 0. Centre = (a/2, b/2, c/2)</div></div>
+        <div class="step"><div class="step-num blue">2</div><div class="step-content">Let centre = (x₁,y₁,z₁) ⟹ a = 2x₁, b = 2y₁, c = 2z₁</div></div>
+        <div class="step"><div class="step-num blue">3</div><div class="step-content">Plane x/a + y/b + z/c = 1 passes through (p,q,r):<br>p/a + q/b + r/c = 1 ⟹ p/(2x₁) + q/(2y₁) + r/(2z₁) = 1</div></div>
+        <div class="step"><div class="step-num gold">✓</div><div class="step-content">Multiply both sides by 2:</div></div>
+        <div class="result-box">p/x + q/y + r/z = 2 &nbsp;&nbsp;✓ (Proved)</div>
+      </div>
+    </div>
+
+    <div class="problem-card">
+      <div class="problem-card-header"><span class="tag">P 04</span> Radius and Centre of a Circle (Plane Section)</div>
+      <div class="problem-card-body">
+        <div class="problem-q">Find the radius and centre of the circle formed by:<br>Sphere: x²+y²+z²−8x+4y−8z−45 = 0 &nbsp;∩&nbsp; Plane: x−2y+2z = 3</div>
+        <div class="step"><div class="step-num">1</div><div class="step-content">Centre O = (4, −2, 4). Radius = √(16+4+16+45) = √81 = <strong>9</strong></div></div>
+        <div class="step"><div class="step-num blue">2</div><div class="step-content">OC = |4 − 2(−2) + 2(4) − 3| / √(1+4+4) = |13| / 3 = 13/3</div></div>
+        <div class="step"><div class="step-num blue">3</div><div class="step-content">Radius of circle: CA = √(81 − 169/9) = √(560/9)</div></div>
+        <div class="step"><div class="step-num blue">4</div><div class="step-content">Line OC with d.r. (1,−2,2): x = t+4, y = −2t−2, z = 2t+4</div></div>
+        <div class="step"><div class="step-num blue">5</div><div class="step-content">Substitute into plane: 9t + 16 = 3 ⟹ t = −13/9</div></div>
+        <div class="step"><div class="step-num gold">✓</div><div class="step-content">x = 23/9, y = 8/9, z = 10/9</div></div>
+        <div class="result-box">Centre = (23/9, 8/9, 10/9) &nbsp;|&nbsp; Radius = 4√35/3</div>
+      </div>
+    </div>
+
+    <div class="problem-card">
+      <div class="problem-card-header"><span class="tag">P 05</span> Tangent planes parallel to a given plane</div>
+      <div class="problem-card-body">
+        <div class="problem-q">Find tangent planes to x²+y²+z²−4x+2y−6z+5 = 0 parallel to 2x+y−z = 0.</div>
+        <div class="step"><div class="step-num">1</div><div class="step-content">Centre C = (2, −1, 3). Radius ρ = √(4+1+9−5) = <strong>3</strong></div></div>
+        <div class="step"><div class="step-num blue">2</div><div class="step-content">Parallel plane form: <strong>2x + y − z + k = 0</strong></div></div>
+        <div class="step"><div class="step-num blue">3</div><div class="step-content">|2(2) + (−1) − 3 + k| / √6 = 3 ⟹ |k| / √6 = 3 ⟹ <strong>k = ±3√6</strong></div></div>
+        <div class="result-box">2x + y − z + 3√6 = 0 &nbsp;&nbsp;and&nbsp;&nbsp; 2x + y − z − 3√6 = 0</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Quick Ref — Sphere -->
+  <div class="content-section">
+    <div class="section-header"><span class="section-num">📋</span><h2>Quick Reference Card</h2></div>
+    <div class="ref-grid">
+      <div class="formula-box red" style="margin:0"><div class="label">Standard Form</div>(x−α)²+(y−β)²+(z−γ)² = r²</div>
+      <div class="formula-box blue" style="margin:0"><div class="label">General Form</div>x²+y²+z²+2ux+2vy+2wz+d = 0</div>
+      <div class="formula-box green" style="margin:0"><div class="label">Centre</div>C = (−u, −v, −w)</div>
+      <div class="formula-box red" style="margin:0"><div class="label">Radius</div>ρ = √(u²+v²+w²−d)</div>
+      <div class="formula-box blue" style="margin:0"><div class="label">Tangent Plane at (α,β,γ)</div>xα+yβ+zγ+u(x+α)+v(y+β)+w(z+γ)=0</div>
+      <div class="formula-box green" style="margin:0"><div class="label">Radical Plane (2 spheres)</div>S₁ − S₂ = 0</div>
+      <div class="formula-box red" style="margin:0"><div class="label">Circle on Sphere</div>S = 0 &nbsp;AND&nbsp; P = 0</div>
+      <div class="formula-box blue" style="margin:0"><div class="label">Family of Spheres (circle)</div>S + λP = 0</div>
+      <div class="formula-box green" style="margin:0;grid-column:1/-1"><div class="label">Sphere OABC (origin + intercepts a,b,c)</div>x² + y² + z² − ax − by − cz = 0</div>
+    </div>
+  </div>
+</div><!-- /sphere -->
+
+<!-- ════════════════════ CONES ════════════════════ -->
+<div id="cones" class="topic-section">
+
+  <!-- §1 Key Concepts -->
+  <div class="content-section">
+    <div class="section-header"><span class="section-num">01</span><h2>Key Concepts</h2></div>
+    <div class="topic-grid">
+      <div class="concept-card"><h3>What is a Cone?</h3><p>A surface generated by a line (generator) passing through a fixed point (vertex) and moving along a fixed curve (guiding curve).</p></div>
+      <div class="concept-card"><h3>Vertex &amp; Guiding Curve</h3><p>The vertex is the apex. The guiding curve defines the base shape — circle, ellipse, or hyperbola.</p></div>
+      <div class="concept-card"><h3>Direction Cosines</h3><p>A line through vertex <span class="mh">(α,β,γ)</span> with direction cosines <span class="mh">l, m, n</span> has the symmetric equation below.</p></div>
+    </div>
+  </div>
+
+  <!-- §2 Core Formulas -->
+  <div class="content-section">
+    <div class="section-header"><span class="section-num">02</span><h2>Core Formulas</h2></div>
+    <p style="margin-bottom:10px;"><strong>General Line Through a Point</strong></p>
+    <div class="formula-box-cone">(x − α) / l &nbsp;=&nbsp; (y − β) / m &nbsp;=&nbsp; (z − γ) / n</div>
+    <p>where <span class="mh">(α, β, γ)</span> is the vertex and <span class="mh">l, m, n</span> are direction cosines of the generator.</p>
+    <p style="margin-top:22px;margin-bottom:10px;"><strong>Meeting Point at z = 0</strong></p>
+    <div class="formula-box-cone">Point &nbsp;=&nbsp; ( α − lγ/n ,&nbsp; β − mγ/n ,&nbsp; 0 )</div>
+    <p>Substitute into the guiding curve equation to eliminate <span class="mh">l, m, n</span>.</p>
+    <p style="margin-top:22px;margin-bottom:10px;"><strong>Angle Between Two Lines</strong></p>
+    <div class="formula-box-cone">cos θ &nbsp;=&nbsp; (l₁l₂ + m₁m₂ + n₁n₂) / ( √(l₁²+m₁²+n₁²) · √(l₂²+m₂²+n₂²) )</div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- §3 Solved Problems — Cones -->
+  <div class="content-section">
+    <div class="section-header"><span class="section-num">03</span><h2>Solved Problems</h2></div>
+
+    <div class="problem-cone">
+      <div class="problem-tag">Problem 01</div>
+      <h3>Find the equation of the cone whose vertex is (0, 0, 3) and guiding curve is the circle x² + y² = 4, z = 0.</h3>
+      <div class="step"><div class="step-num">1</div><div class="step-content">Line through vertex <span class="mh">(0,0,3)</span>:<span class="math">x/l = y/m = (z−3)/n</span></div></div>
+      <div class="step"><div class="step-num blue">2</div><div class="step-content">Where line meets z = 0:<span class="math">x = −3l/n, &nbsp; y = −3m/n</span></div></div>
+      <div class="step"><div class="step-num blue">3</div><div class="step-content">Point must lie on circle x² + y² = 4:<span class="math">(−3l/n)² + (−3m/n)² = 4 &nbsp;⟹&nbsp; (l/n)² + (m/n)² = 4/9 &nbsp;— (i)</span></div></div>
+      <div class="step"><div class="step-num blue">4</div><div class="step-content">l/n = x/(z−3), m/n = y/(z−3). Substitute into (i):<span class="math">x²/(z−3)² + y²/(z−3)² = 4/9</span></div></div>
+      <div class="answer-cone">9(x² + y²) = 4(z − 3)²</div>
+    </div>
+
+    <div class="problem-cone">
+      <div class="problem-tag">Problem 02</div>
+      <h3>The section of a cone with vertex P = (α, β, γ) and guiding curve x²/a² + y²/b² = 1, z = 0, cut by x = 0 is a rectangular hyperbola. Find the locus of P.</h3>
+      <div class="step"><div class="step-num">1</div><div class="step-content">Line through P = (α, β, γ):<span class="math">(x−α)/l = (y−β)/m = (z−γ)/n</span></div></div>
+      <div class="step"><div class="step-num blue">2</div><div class="step-content">Line meets z = 0 at:<span class="math">( α − lγ/n ,&nbsp; β − mγ/n ,&nbsp; 0 )</span></div></div>
+      <div class="step"><div class="step-num blue">3</div><div class="step-content">Point lies on ellipse; substituting l/n and m/n:<span class="math">(1/a²)[α − γ(x−α)/(z−γ)]² + (1/b²)[β − γ(y−β)/(z−γ)]² = 1</span></div></div>
+      <div class="step"><div class="step-num blue">4</div><div class="step-content">Simplifying:<span class="math">b²(αz − xγ)² + a²(βz − yγ)² = a²b²(z − γ)²</span></div></div>
+      <div class="step"><div class="step-num blue">5</div><div class="step-content">Set x = 0. For rectangular hyperbola, coefficients of y² and z² are equal and opposite. After expanding and applying condition:<span class="math">a²γ² + (b²α² + a²β² − a²b²) = 0 &nbsp;⟹&nbsp; α²/a² + (β² + γ²)/b² = 1</span></div></div>
+      <div class="answer-cone">Locus of P: &nbsp; x²/a² + (y² + z²)/b² = 1</div>
+    </div>
+
+    <div class="problem-cone">
+      <div class="problem-tag">Problem 03</div>
+      <h3>Find the lines in which the plane 2x + y − z = 0 cuts the cone 4x² − y² + 3z² = 0. Find the angle between them.</h3>
+      <div class="step"><div class="step-num">1</div><div class="step-content">Line: x/l = y/m = z/n — (i). Plane: 2l + m − n = 0 — (ii). Cone: 4l² − m² + 3n² = 0 — (iii)</div></div>
+      <div class="step"><div class="step-num blue">2</div><div class="step-content">From (ii): n = 2l + m. Sub into (iii):<span class="math">4l² − m² + 3(2l+m)² = 0 ⟹ 8l² + 6lm + m² = 0 ⟹ (2l+m)(4l+m) = 0</span></div></div>
+      <div class="step"><div class="step-num blue">3</div><div class="step-content"><strong style="color:var(--ink)">Case 1:</strong> m = −2l ⟹ n = 0 ⟹ d.r. = (1, −2, 0) i.e. x/−1 = y/4 = z/2<br><strong style="color:var(--ink)">Case 2:</strong> m = −4l ⟹ n = −2l ⟹ d.r. = (1, −4, −2) i.e. x/−1 = y/2 = z/0</div></div>
+      <div class="step"><div class="step-num blue">4</div><div class="step-content">Angle between (−1,4,2) and (−1,2,0):<span class="math">cos θ = [1+8+0] / [√21·√5] = 9/√105 ⟹ θ ≈ 28.56°</span></div></div>
+      <div class="answer-cone">Lines: x/−1 = y/4 = z/2 &nbsp;and&nbsp; x/−1 = y/2 = z/0 &nbsp;|&nbsp; Angle ≈ 28.56°</div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- Key Steps -->
+  <div class="content-section">
+    <div class="section-header"><span class="section-num">📋</span><h2>Key Steps — Finding a Cone's Equation</h2></div>
+    <ul class="key-list">
+      <li>Write the generator equation (line through vertex with d.c. l, m, n)</li>
+      <li>Find where the generator meets the plane of the guiding curve (usually z = 0)</li>
+      <li>Apply the guiding curve equation to this meeting point</li>
+      <li>Express l/n and m/n in terms of x, y, z from the line equations</li>
+      <li>Substitute back to eliminate l, m, n — this gives the cone's equation</li>
+    </ul>
+    <div class="note-box">For the locus problem, set x = 0 and use the rectangular hyperbola condition — the coefficients of the two squared terms must be equal and opposite in sign.</div>
+  </div>
+</div><!-- /cones -->
+
+<!-- ════════════════════ QUADRIC ════════════════════ -->
+<div id="quadric" class="topic-section">
+
+  <div class="toc">
+    <div class="toc-label">Contents</div>
+    <ul>
+      <li>General Equation &amp; Classification</li>
+      <li>Six Types of Quadric Surfaces</li>
+      <li>The Conicoid</li>
+      <li>Tangent Plane to a Conicoid</li>
+      <li>Condition of Tangency &amp; Point of Contact</li>
+      <li>Polar Line w.r.t. a Conicoid</li>
+      <li>Chord Bisected at a Point (T = S₁)</li>
+      <li>Solved Problems (6)</li>
+    </ul>
+  </div>
+
+  <!-- §1 General Equation -->
+  <div class="content-section">
+    <div class="section-header"><span class="section-num">01</span><h2>General Equation</h2></div>
+    <div class="gen-eq">
+      <p>The most general second-degree equation in \(x, y, z\) is:</p>
+      <div class="eq-display">\[Ax^2 + By^2 + Cz^2 + Dxy + Eyz + Fxz + Gx + Hy + Iz + J = 0\]</div>
+      <p>This can be classified into <strong style="color:var(--gold)">six standard categories</strong> by rotation and translation of axes to eliminate cross-terms.</p>
+    </div>
+  </div>
+
+  <!-- §2 Six Surfaces -->
+  <div class="content-section">
+    <div class="section-header"><span class="section-num">02</span><h2>The Six Types of Quadric Surfaces</h2></div>
+    <div class="surface-grid">
+      <div class="surface-card c1">
+        <div class="surface-name">(i) Ellipsoid</div>
+        <div class="eq-display">\[\frac{x^2}{a^2}+\frac{y^2}{b^2}+\frac{z^2}{c^2}=1\]</div>
+        <div class="shape-row"><svg class="shape" width="130" height="90" viewBox="0 0 130 90"><ellipse cx="65" cy="45" rx="58" ry="36" fill="none" stroke="#e8a84b" stroke-width="1.5"/><ellipse cx="65" cy="45" rx="58" ry="12" fill="none" stroke="#e8a84b" stroke-width="0.8" stroke-dasharray="4 3"/><ellipse cx="65" cy="45" rx="20" ry="36" fill="none" stroke="#e8a84b" stroke-width="0.8" stroke-dasharray="4 3"/></svg></div>
+        <p class="note-text">Closed bounded surface. Special case a=b=c gives a sphere.</p>
+      </div>
+      <div class="surface-card c2">
+        <div class="surface-name">(ii) Elliptic Cone</div>
+        <div class="eq-display">\[\frac{x^2}{a^2}+\frac{y^2}{b^2}=\frac{z^2}{c^2}\]</div>
+        <p style="font-size:0.85rem;margin:6px 0;color:var(--muted)">Equivalent forms:</p>
+        <div class="eq-display" style="font-size:0.88rem">\[-\frac{x^2}{a^2}+\frac{z^2}{c^2}=\frac{y^2}{b^2},\quad \frac{y^2}{b^2}+\frac{z^2}{c^2}=\frac{x^2}{a^2}\]</div>
+        <div class="shape-row"><svg class="shape" width="100" height="90" viewBox="0 0 100 90"><line x1="50" y1="45" x2="15" y2="10" stroke="#5b9bd5" stroke-width="1.5"/><line x1="50" y1="45" x2="85" y2="10" stroke="#5b9bd5" stroke-width="1.5"/><line x1="50" y1="45" x2="15" y2="80" stroke="#5b9bd5" stroke-width="1.5"/><line x1="50" y1="45" x2="85" y2="80" stroke="#5b9bd5" stroke-width="1.5"/><ellipse cx="50" cy="12" rx="35" ry="10" fill="none" stroke="#5b9bd5" stroke-width="1.2"/><ellipse cx="50" cy="78" rx="35" ry="10" fill="none" stroke="#5b9bd5" stroke-width="1.2"/><circle cx="50" cy="45" r="3" fill="#5b9bd5"/></svg></div>
+        <p class="note-text">Two conical nappes meeting at vertex (origin).</p>
+      </div>
+      <div class="surface-card c3">
+        <div class="surface-name">(iii) Elliptic Paraboloid</div>
+        <div class="eq-display">\[\frac{x^2}{a^2}+\frac{y^2}{b^2}=cz\]</div>
+        <div class="shape-row"><svg class="shape" width="110" height="90" viewBox="0 0 110 90"><path d="M20,80 Q55,10 90,80" fill="none" stroke="#e87eb8" stroke-width="1.5"/><ellipse cx="55" cy="78" rx="35" ry="8" fill="none" stroke="#e87eb8" stroke-width="1"/><ellipse cx="55" cy="55" rx="22" ry="5" fill="none" stroke="#e87eb8" stroke-width="0.8" stroke-dasharray="3 2"/><ellipse cx="55" cy="35" rx="12" ry="3" fill="none" stroke="#e87eb8" stroke-width="0.7" stroke-dasharray="3 2"/></svg></div>
+        <p class="note-text">Opens in one direction; cross-sections are ellipses.</p>
+      </div>
+      <div class="surface-card c4">
+        <div class="surface-name">(iv) Hyperbolic Paraboloid</div>
+        <div class="eq-display">\[cz=\frac{y^2}{a^2}-\frac{x^2}{b^2}\]</div>
+        <div class="shape-row"><svg class="shape" width="110" height="90" viewBox="0 0 110 90"><path d="M10,30 Q35,55 55,45 Q75,35 100,60" fill="none" stroke="#7ee8a2" stroke-width="1.5"/><path d="M10,60 Q35,35 55,45 Q75,55 100,30" fill="none" stroke="#7ee8a2" stroke-width="1.5"/><line x1="10" y1="30" x2="10" y2="60" stroke="#7ee8a2" stroke-width="0.8" stroke-dasharray="3 2"/><line x1="100" y1="30" x2="100" y2="60" stroke="#7ee8a2" stroke-width="0.8" stroke-dasharray="3 2"/></svg></div>
+        <p class="note-text">Saddle surface — "potato chip" shape.</p>
+      </div>
+      <div class="surface-card c5">
+        <div class="surface-name">(v) Hyperboloid of One Sheet</div>
+        <div class="eq-display">\[\frac{x^2}{a^2}+\frac{y^2}{b^2}-\frac{z^2}{c^2}=1\]</div>
+        <div class="shape-row"><svg class="shape" width="90" height="110" viewBox="0 0 90 110"><path d="M15,5 Q45,50 15,105" fill="none" stroke="#b87ee8" stroke-width="1.5"/><path d="M75,5 Q45,50 75,105" fill="none" stroke="#b87ee8" stroke-width="1.5"/><ellipse cx="45" cy="5" rx="30" ry="8" fill="none" stroke="#b87ee8" stroke-width="1"/><ellipse cx="45" cy="105" rx="30" ry="8" fill="none" stroke="#b87ee8" stroke-width="1"/><ellipse cx="45" cy="55" rx="12" ry="4" fill="none" stroke="#b87ee8" stroke-width="1.2"/></svg></div>
+        <p class="note-text">Single connected surface; minimum circle at waist.</p>
+      </div>
+      <div class="surface-card c6">
+        <div class="surface-name">(vi) Hyperboloid of Two Sheets</div>
+        <div class="eq-display">\[-\frac{x^2}{a^2}-\frac{y^2}{b^2}+\frac{z^2}{c^2}=1\]</div>
+        <div class="shape-row"><svg class="shape" width="90" height="110" viewBox="0 0 90 110"><path d="M45,5 Q10,35 10,55" fill="none" stroke="#e88e7e" stroke-width="1.5"/><path d="M45,5 Q80,35 80,55" fill="none" stroke="#e88e7e" stroke-width="1.5"/><ellipse cx="45" cy="5" rx="35" ry="9" fill="none" stroke="#e88e7e" stroke-width="1"/><path d="M45,105 Q10,75 10,55" fill="none" stroke="#e88e7e" stroke-width="1.5"/><path d="M45,105 Q80,75 80,55" fill="none" stroke="#e88e7e" stroke-width="1.5"/><ellipse cx="45" cy="105" rx="35" ry="9" fill="none" stroke="#e88e7e" stroke-width="1"/></svg></div>
+        <p class="note-text">Two separate sheets; no real points where |z|&lt;c.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- §3 Conicoid -->
+  <div class="content-section">
+    <div class="section-header"><span class="section-num">03</span><h2>The Conicoid</h2></div>
+    <div class="gen-eq">
+      <p>A general second-degree surface (conicoid):</p>
+      <div class="eq-display">\[ax^2 + by^2 + cz^2 + 2fyz + 2gzx + 2hxy + 2ux + 2vy + 2wz = d\]</div>
+    </div>
+    <p style="margin:12px 0">Central conicoid in standard form:</p>
+    <div class="highlight-eq">\[ax^2 + by^2 + cz^2 = 1\]</div>
+  </div>
+
+  <!-- §4 Tangent Plane -->
+  <div class="content-section">
+    <div class="section-header"><span class="section-num">04</span><h2>Equation of Tangent Plane</h2></div>
+    <div class="theorem-box">
+      <div class="t-label">Theorem</div>
+      <p>Tangent plane to \(ax^2+by^2+cz^2=1\) at \((\alpha,\beta,\gamma)\):</p>
+      <div class="highlight-eq">\[\boxed{a\alpha x + b\beta y + c\gamma z = 1}\]</div>
+    </div>
+    <p style="margin:14px 0;color:var(--muted);font-size:14px;">Replace \(x^2 \to x\alpha\), \(y^2 \to y\beta\), \(z^2 \to z\gamma\) in the surface equation (the "half-replacement" trick).</p>
+  </div>
+
+  <!-- §5 Condition of Tangency -->
+  <div class="content-section">
+    <div class="section-header"><span class="section-num">05</span><h2>Condition of Tangency</h2></div>
+    <p>The plane \(lx+my+nz=p\) touches \(ax^2+by^2+cz^2=1\) iff:</p>
+    <div class="highlight-eq">\[\frac{l^2}{a}+\frac{m^2}{b}+\frac{n^2}{c}=p^2\]</div>
+    <p style="margin:14px 0;"><strong style="color:var(--gold-light)">Point of Contact</strong></p>
+    <div class="highlight-eq blue">\[\left(\frac{l}{ap},\;\frac{m}{bp},\;\frac{n}{cp}\right)\]</div>
+  </div>
+
+  <!-- §6 Polar Line -->
+  <div class="content-section">
+    <div class="section-header"><span class="section-num">06</span><h2>Polar Line w.r.t. the Conicoid</h2></div>
+    <div class="theorem-box">
+      <div class="t-label">Definition</div>
+      <p>Polar plane of \((\alpha,\beta,\gamma)\) w.r.t. \(ax^2+by^2+cz^2=1\):</p>
+      <div class="eq-display">\[a\alpha x + b\beta y + c\gamma z = 1\]</div>
+    </div>
+    <p style="margin:12px 0">The <strong>polar line</strong> is the intersection of two polar planes. For direction \((l,m,n)\) through \((\alpha,\beta,\gamma)\):</p>
+    <div class="highlight-eq">\[a\alpha x + b\beta y + c\gamma z = 1\]</div>
+    <div class="highlight-eq blue" style="margin-top:8px">\[alx + bmy + cnz = 0\]</div>
+  </div>
+
+  <!-- §7 T = S₁ -->
+  <div class="content-section">
+    <div class="section-header"><span class="section-num">07</span><h2>Chord Bisected at a Point (T = S₁)</h2></div>
+    <p>Chord of \(ax^2+by^2+cz^2=1\) bisected at \((\alpha,\beta,\gamma)\):</p>
+    <div class="highlight-eq">\[a\alpha x + b\beta y + c\gamma z = a\alpha^2 + b\beta^2 + c\gamma^2\]</div>
+    <p style="margin-top:12px">This also gives the cutting plane whose conic has <strong>centre</strong> at \((\alpha,\beta,\gamma)\).</p>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- §8 Solved Problems — Quadric -->
+  <div class="content-section">
+    <div class="section-header"><span class="section-num">08</span><h2>Solved Problems</h2></div>
+
+    <div class="problem-block">
+      <button class="problem-toggle" onclick="toggleProblem(this)" aria-expanded="false">
+        <span class="problem-badge">Problem 1</span>
+        <span class="problem-title">Tangent planes to \(7x^2 - 3y^2 - z^2 + 21 = 0\) through the line \(7x - 6y + 9 = 0,\; z = 3\)</span>
+        <span class="problem-arrow">▼</span>
+      </button>
+      <div class="problem-body">
+        <div class="q-text">Find the equations of tangent planes to the conicoid \(7x^2 - 3y^2 - z^2 + 21 = 0\) which pass through the line \(7x - 6y + 9 = 0,\; z = 3\).</div>
+        <div class="sol-label">Solution</div>
+        <div class="step"><div class="step-num">1</div><div class="step-body"><p>Rewrite: \(7x^2 - 3y^2 - z^2 = -21 \implies \frac{x^2}{-3}+\frac{y^2}{7}+\frac{z^2}{21}=1\)</p><p>So \(a = -\tfrac{1}{3},\; b = \tfrac{1}{7},\; c = \tfrac{1}{21}\).</p></div></div>
+        <div class="step"><div class="step-num blue">2</div><div class="step-body"><p>Any plane through the given line: \((7x - 6y + 9) + \lambda(z - 3) = 0\)</p><div class="highlight-eq">\[7x - 6y + \lambda z + (9-3\lambda) = 0 \quad\cdots(1)\]</div></div></div>
+        <div class="step"><div class="step-num blue">3</div><div class="step-body"><p>Tangency condition with \(l=7,\;m=-6,\;n=\lambda,\;p=3(\lambda-3)\):</p><div class="highlight-eq">\[-3(49) + 7(36) + 21\lambda^2 = 9(3-\lambda)^2\]</div><div class="highlight-eq">\[105 + 21\lambda^2 = 81 - 54\lambda + 9\lambda^2 \implies 12\lambda^2+54\lambda+24=0\]</div><div class="highlight-eq green">\[(\lambda+4)(2\lambda+1)=0 \implies \lambda=-4 \text{ or } \lambda=-\tfrac{1}{2}\]</div></div></div>
+        <div class="step"><div class="step-num blue">4</div><div class="step-body"><p>\(\lambda=-4\): \(7x - 6y - 4z + 21 = 0\)</p><p>\(\lambda=-\tfrac{1}{2}\): \(14x - 12y - z + 21 = 0\)</p></div></div>
+        <div class="answer-box"><div class="ans-label">Answer</div>\[7x - 6y - 4z + 21 = 0 \quad\text{and}\quad 14x - 12y - z + 21 = 0\]</div>
+      </div>
+    </div>
+
+    <div class="problem-block">
+      <button class="problem-toggle" onclick="toggleProblem(this)" aria-expanded="false">
+        <span class="problem-badge">Problem 2</span>
+        <span class="problem-title">Tangent plane to \(2x^2 - 6y^2 + 3z^2 = 5\) at \((1, 0, -1)\)</span>
+        <span class="problem-arrow">▼</span>
+      </button>
+      <div class="problem-body">
+        <div class="q-text">Find the equation of the tangent plane to \(2x^2 - 6y^2 + 3z^2 = 5\) at the point \((1, 0, -1)\).</div>
+        <div class="sol-label">Solution</div>
+        <div class="step"><div class="step-num">1</div><div class="step-body"><p>Standard form: \(\frac{x^2}{5/2}+\frac{y^2}{-5/6}+\frac{z^2}{5/3}=1\). Point \((\alpha,\beta,\gamma)=(1,0,-1)\).</p></div></div>
+        <div class="step"><div class="step-num blue">2</div><div class="step-body"><p>Using tangent formula directly on \(2x^2-6y^2+3z^2=5\):</p><div class="highlight-eq">\[2(1)x - 6(0)y + 3(-1)z = 5\]</div><div class="highlight-eq green">\[2x - 3z = 5\]</div></div></div>
+        <div class="answer-box"><div class="ans-label">Answer</div>\[2x - 3z = 5\]</div>
+      </div>
+    </div>
+
+    <div class="problem-block">
+      <button class="problem-toggle" onclick="toggleProblem(this)" aria-expanded="false">
+        <span class="problem-badge">Problem 3</span>
+        <span class="problem-title">Polar line of \(-2x = 25y - 1 = 2z\) w.r.t. \(2x^2 - 25y^2 + 2z^2 = 1\)</span>
+        <span class="problem-arrow">▼</span>
+      </button>
+      <div class="problem-body">
+        <div class="q-text">Find the equation of the polar line of \(-2x = 25y - 1 = 2z\) with respect to \(2x^2 - 25y^2 + 2z^2 = 1\).</div>
+        <div class="sol-label">Solution</div>
+        <div class="step"><div class="step-num">1</div><div class="step-body"><p>Rewrite line in symmetric form:</p><div class="highlight-eq">\[\frac{x}{-1/2}=\frac{y - 1/25}{1}=\frac{z}{1/2}\]</div><p>Point \((\alpha,\beta,\gamma)=(0,\tfrac{1}{25},0)\), direction \((l,m,n)=(-\tfrac{1}{2},1,\tfrac{1}{2})\).</p></div></div>
+        <div class="step"><div class="step-num blue">2</div><div class="step-body"><p>First polar plane (polar of \((0,\tfrac{1}{25},0)\)):</p><div class="highlight-eq">\[2(0)x + (-25)(\tfrac{1}{25})y + 2(0)z = 1\]</div><div class="highlight-eq green">\[-y = 1 \implies y + 1 = 0\]</div></div></div>
+        <div class="step"><div class="step-num blue">3</div><div class="step-body"><p>Second polar plane (using direction ratios):</p><div class="highlight-eq">\[2(-\tfrac{1}{2})x + (-25)(1)y + 2(\tfrac{1}{2})z = 0\]</div><div class="highlight-eq green">\[-x + 2y + z = 0 \implies x - 2y - z = 0\]</div></div></div>
+        <div class="answer-box"><div class="ans-label">Answer — Polar Line</div>\[y + 1 = 0 \;\text{ and }\; x - 2y - z = 0\]<p style="font-size:0.85rem;color:var(--muted);margin-top:6px">Intersection of these two planes.</p></div>
+      </div>
+    </div>
+
+    <div class="problem-block">
+      <button class="problem-toggle" onclick="toggleProblem(this)" aria-expanded="false">
+        <span class="problem-badge">Problem 4</span>
+        <span class="problem-title">Plane cutting \(x^2 + 4y^2 - 5z^2 = 1\) with conic centred at \((2, 3, 4)\)</span>
+        <span class="problem-arrow">▼</span>
+      </button>
+      <div class="problem-body">
+        <div class="q-text">Find the equation of the plane which cuts \(x^2 + 4y^2 - 5z^2 = 1\) in a conic whose centre is \((2, 3, 4)\).</div>
+        <div class="sol-label">Solution</div>
+        <div class="step"><div class="step-num">1</div><div class="step-body"><p>Use T = S₁ with \((\alpha,\beta,\gamma)=(2,3,4)\), \(a=1,b=4,c=-5\):</p><div class="highlight-eq">\[a\alpha x + b\beta y + c\gamma z = a\alpha^2 + b\beta^2 + c\gamma^2\]</div></div></div>
+        <div class="step"><div class="step-num blue">2</div><div class="step-body"><p>LHS: \(2x + 12y - 20z\)</p><p>RHS: \(4 + 36 - 80 = -40\)</p></div></div>
+        <div class="step"><div class="step-num blue">3</div><div class="step-body"><div class="highlight-eq green">\[2x + 12y - 20z = -40 \implies 2x + 12y - 20z + 40 = 0\]</div></div></div>
+        <div class="answer-box"><div class="ans-label">Answer</div>\[x + 6y - 10z + 20 = 0\]</div>
+      </div>
+    </div>
+
+    <div class="problem-block">
+      <button class="problem-toggle" onclick="toggleProblem(this)" aria-expanded="false">
+        <span class="problem-badge">Problem 5</span>
+        <span class="problem-title">Centre of conic on \(3x^2 + 2y^2 - 5z^2 = 4\) cut by \(2x - 2y - 5z + 5 = 0\)</span>
+        <span class="problem-arrow">▼</span>
+      </button>
+      <div class="problem-body">
+        <div class="q-text">Find the centre of the conic given by \(3x^2 + 2y^2 - 5z^2 = 4\) and the plane \(2x - 2y - 5z + 5 = 0\).</div>
+        <div class="sol-label">Solution</div>
+        <div class="step"><div class="step-num">1</div><div class="step-body"><p>Let centre be \((\alpha,\beta,\gamma)\). Using T = S₁:</p><div class="highlight-eq">\[3\alpha x + 2\beta y - 5\gamma z = 3\alpha^2 + 2\beta^2 - 5\gamma^2\]</div></div></div>
+        <div class="step"><div class="step-num blue">2</div><div class="step-body"><p>This plane is proportional to \(2x - 2y - 5z + 5 = 0\):</p><div class="highlight-eq">\[\frac{3\alpha}{2} = \frac{2\beta}{-2} = \frac{-5\gamma}{-5} = k\]</div><p>So \(\alpha = \tfrac{2k}{3},\;\beta = -k,\;\gamma = k\).</p></div></div>
+        <div class="step"><div class="step-num blue">3</div><div class="step-body"><p>Constant term condition gives \(k^2=3\). The full system yields:</p><p style="color:var(--gold-light)">Verification: \(2(-2)-2(3)-5(-1)+5 = 0\;\checkmark\)</p></div></div>
+        <div class="answer-box"><div class="ans-label">Answer</div>Centre \(= (-2,\; 3,\; -1)\)</div>
+      </div>
+    </div>
+
+    <div class="problem-block">
+      <button class="problem-toggle" onclick="toggleProblem(this)" aria-expanded="false">
+        <span class="problem-badge">Problem 6</span>
+        <span class="problem-title">Identification Exercise — Name each surface or curve</span>
+        <span class="problem-arrow">▼</span>
+      </button>
+      <div class="problem-body">
+        <div class="q-text">Name the surface or curve represented by each equation.</div>
+        <div class="sol-label">Solution</div>
+        <table class="id-table">
+          <thead><tr><th>#</th><th>Equation</th><th>Surface / Curve</th><th>Reason</th></tr></thead>
+          <tbody>
+            <tr><td data-label="#">(i)</td><td data-label="Equation">\(\dfrac{x^2}{a^2}-\dfrac{y^2}{b^2}-\dfrac{z^2}{c^2}=1\)</td><td data-label="Answer" class="surf-ans">Hyperboloid of Two Sheets</td><td data-label="Reason" style="font-size:0.82rem;color:var(--muted)">One positive, two negative terms.</td></tr>
+            <tr><td data-label="#">(ii)</td><td data-label="Equation">\(\dfrac{x^2}{a^2}+\dfrac{y^2}{b^2}=\dfrac{2z}{c}\)</td><td data-label="Answer" class="surf-ans">Elliptic Paraboloid</td><td data-label="Reason" style="font-size:0.82rem;color:var(--muted)">Two squared terms = one linear term.</td></tr>
+            <tr><td data-label="#">(iii)</td><td data-label="Equation">\(y^2 = 0\)</td><td data-label="Answer" class="surf-ans">Pair of Planes (y=0 repeated)</td><td data-label="Reason" style="font-size:0.82rem;color:var(--muted)">xz-plane counted twice.</td></tr>
+            <tr><td data-label="#">(iv)</td><td data-label="Equation">\(x^2+y^2+z^2=9,\;2x+3y+4z=5\)</td><td data-label="Answer" class="surf-ans">Circle</td><td data-label="Reason" style="font-size:0.82rem;color:var(--muted)">Sphere ∩ plane = circle.</td></tr>
+            <tr><td data-label="#">(v)</td><td data-label="Equation">\(x = 2z\)</td><td data-label="Answer" class="surf-ans">Plane</td><td data-label="Reason" style="font-size:0.82rem;color:var(--muted)">Linear; contains the y-axis.</td></tr>
+            <tr><td data-label="#">(vi)</td><td data-label="Equation">\(\dfrac{x^2}{a^2}+\dfrac{y^2}{b^2}-\dfrac{z^2}{c^2}=0\)</td><td data-label="Answer" class="surf-ans">Elliptic Cone (vertex at origin)</td><td data-label="Reason" style="font-size:0.82rem;color:var(--muted)">Homogeneous degree-2 through origin.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+</div><!-- /quadric -->
+
+</div><!-- /content -->
+
+<footer>
+  <span>3D Geometry · Sphere, Cones &amp; Quadric Surfaces</span>
+  <div>Ref: P.N. Chatterjee · IUT</div>
+</footer>
+
+<button class="back-top" id="backTop" onclick="window.scrollTo({top:0,behavior:'smooth'})" aria-label="Back to top">↑</button>
+
+<script>
+/* ── TAB SWITCHING ── */
+function showTopic(id, btn) {
+  document.querySelectorAll('.topic-section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(b => { b.classList.remove('active'); b.setAttribute('aria-selected','false'); });
+  document.getElementById(id).classList.add('active');
+  btn.classList.add('active'); btn.setAttribute('aria-selected','true');
+  window.scrollTo({ top: document.querySelector('.nav-wrap').offsetTop - 1, behavior: 'smooth' });
+  updateProgress();
+}
+
+/* ── COLLAPSIBLE PROBLEMS ── */
+function toggleProblem(btn) {
+  const body = btn.nextElementSibling;
+  const isOpen = btn.getAttribute('aria-expanded') === 'true';
+  btn.setAttribute('aria-expanded', !isOpen);
+  body.classList.toggle('open', !isOpen);
+  if (!isOpen) {
+    // Re-typeset any MathJax in the newly-opened panel
+    if (window.MathJax && MathJax.typesetPromise) {
+      MathJax.typesetPromise([body]).catch(console.error);
+    }
+  }
+}
+
+/* ── PROGRESS BAR ── */
+function updateProgress() {
+  const el = document.getElementById('progressFill');
+  const docH = document.documentElement.scrollHeight - window.innerHeight;
+  el.style.width = docH > 0 ? (window.scrollY / docH * 100) + '%' : '0';
+}
+
+/* ── BACK TO TOP ── */
+function updateBackTop() {
+  const btn = document.getElementById('backTop');
+  btn.classList.toggle('visible', window.scrollY > 400);
+}
+
+window.addEventListener('scroll', () => { updateProgress(); updateBackTop(); }, { passive: true });
+updateProgress();
+</script>
+</body>
+</html>

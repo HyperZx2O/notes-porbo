@@ -1,0 +1,3483 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CIT/CSE 4201 — Previous Year Question Solutions</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@400;500&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Serif+Display:ital@0;1&family=JetBrains+Mono:wght@400;500;600&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet">
+<style>
+/* ═══════════════════════════════════════════════════════════════
+   DESIGN SYSTEM — Deep Obsidian + Ember Gold
+   ═══════════════════════════════════════════════════════════════ */
+:root {
+  --ink: #eae6de;
+  --paper: #090c11;
+  --cream: #10141c;
+  --warm: #161b27;
+  --card: #0e1219;
+  --card-hover: #131822;
+
+  --gold: #e8a84b;
+  --gold-light: #f5c96e;
+  --gold-dim: rgba(232,168,75,0.55);
+  --gold-glow: rgba(232,168,75,0.18);
+
+  --rust: #e0644a;
+  --teal: #3dbebe;
+  --blue: #5b9bd5;
+  --green: #5abf7a;
+  --purple: #9b7ec8;
+  --muted: #6a6a7e;
+  --line: rgba(232,228,220,0.07);
+
+  --shadow-sm:  0 2px 12px rgba(0,0,0,0.5);
+  --shadow-md:  0 6px 32px rgba(0,0,0,0.55);
+  --shadow-lg:  0 16px 56px rgba(0,0,0,0.65);
+  --shadow-gold: 0 0 32px rgba(232,168,75,0.12);
+
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 16px;
+}
+
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior: smooth; font-size: 15px; }
+
+/* ── BODY & BACKGROUND ── */
+body {
+  background: var(--paper);
+  color: var(--ink);
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 300;
+  line-height: 1.78;
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Ambient grid texture */
+body::before {
+  content: '';
+  position: fixed; inset: 0;
+  background-image:
+    linear-gradient(rgba(232,168,75,0.018) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(232,168,75,0.018) 1px, transparent 1px);
+  background-size: 44px 44px;
+  pointer-events: none; z-index: 0;
+}
+
+/* Deep vignette corners */
+body::after {
+  content: '';
+  position: fixed; inset: 0;
+  background: radial-gradient(ellipse at center, transparent 55%, rgba(0,0,0,0.55) 100%);
+  pointer-events: none; z-index: 0;
+}
+
+/* ══════════════════════════════════════════
+   MASTHEAD
+   ══════════════════════════════════════════ */
+.masthead {
+  background:
+    linear-gradient(135deg,
+      #050709 0%,
+      #0c1018 35%,
+      #111827 65%,
+      #0b0f16 100%);
+  color: var(--ink);
+  padding: 68px 56px 56px;
+  position: relative;
+  overflow: hidden;
+  border-bottom: 1px solid rgba(232,168,75,0.2);
+}
+
+/* Noise grain overlay */
+.masthead::before {
+  content: '';
+  position: absolute; inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+  opacity: 0.4; pointer-events: none;
+}
+
+/* Diagonal accent stripe */
+.masthead::after {
+  content: '';
+  position: absolute;
+  top: -80px; right: -80px;
+  width: 500px; height: 500px;
+  background: conic-gradient(from 220deg at 70% 30%,
+    rgba(232,168,75,0.07) 0deg,
+    transparent 60deg,
+    rgba(232,168,75,0.04) 120deg,
+    transparent 180deg
+  );
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.masthead .ring1,
+.masthead .ring2 {
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+}
+.masthead .ring1 {
+  top: -90px; right: -110px;
+  width: 460px; height: 460px;
+  border: 1px solid rgba(232,168,75,0.1);
+  animation: ringRotate 22s linear infinite;
+}
+.masthead .ring2 {
+  top: -24px; right: -50px;
+  width: 260px; height: 260px;
+  border: 1px solid rgba(232,168,75,0.06);
+  animation: ringRotate 14s linear infinite reverse;
+}
+@keyframes ringRotate {
+  from { transform: rotate(0deg) scale(1); }
+  50%  { transform: rotate(180deg) scale(1.05); }
+  to   { transform: rotate(360deg) scale(1); }
+}
+
+.masthead .glow-orb {
+  position: absolute;
+  bottom: -140px; right: 100px;
+  width: 380px; height: 380px;
+  background: radial-gradient(circle, rgba(232,168,75,0.09) 0%, transparent 68%);
+  border-radius: 50%;
+  pointer-events: none;
+  animation: orbPulse 6s ease-in-out infinite;
+}
+@keyframes orbPulse {
+  0%, 100% { opacity: 0.5; transform: scale(1); }
+  50%       { opacity: 1;   transform: scale(1.14); }
+}
+
+.masthead-tag {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10.5px;
+  letter-spacing: 3.5px;
+  text-transform: uppercase;
+  color: var(--gold-light);
+  margin-bottom: 20px;
+  display: flex; align-items: center; gap: 12px;
+  position: relative; z-index: 1;
+  opacity: 0.85;
+}
+.masthead-tag::before {
+  content: '';
+  display: inline-block;
+  width: 32px; height: 1px;
+  background: linear-gradient(90deg, var(--gold), transparent);
+}
+
+.masthead h1 {
+  font-family: 'Syne', sans-serif;
+  font-weight: 700;
+  font-size: clamp(30px, 4.8vw, 54px);
+  line-height: 1.08;
+  color: #fff;
+  max-width: 800px;
+  position: relative; z-index: 1;
+  letter-spacing: -0.03em;
+}
+.masthead h1 em {
+  font-style: italic;
+  font-family: 'DM Serif Display', serif;
+  color: var(--gold-light);
+  font-weight: 400;
+}
+
+.masthead-meta {
+  margin-top: 28px;
+  display: flex; gap: 32px; flex-wrap: wrap;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10.5px;
+  color: rgba(232,228,220,0.32);
+  position: relative; z-index: 1;
+  letter-spacing: 0.5px;
+}
+.masthead-meta span { color: rgba(232,228,220,0.65); }
+
+/* ══════════════════════════════════════════
+   NAV TABS
+   ══════════════════════════════════════════ */
+.nav-tabs {
+  background: rgba(5,7,9,0.92);
+  border-bottom: 1px solid rgba(232,168,75,0.1);
+  padding: 0 56px;
+  display: flex; gap: 0;
+  overflow-x: auto;
+  position: sticky; top: 0; z-index: 100;
+  scrollbar-width: none;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+}
+.nav-tabs::-webkit-scrollbar { display: none; }
+
+.nav-tab {
+  font-family: 'Syne', sans-serif;
+  font-weight: 500;
+  font-size: 11.5px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  padding: 16px 24px;
+  color: rgba(232,228,220,0.32);
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  white-space: nowrap;
+  transition: color 0.22s, border-color 0.22s, background 0.22s;
+  background: none;
+  border-left: none; border-right: none; border-top: none;
+  position: relative;
+}
+.nav-tab:hover {
+  color: rgba(232,228,220,0.72);
+  background: rgba(232,168,75,0.04);
+}
+.nav-tab.active {
+  color: var(--gold-light);
+  border-bottom-color: var(--gold);
+}
+.nav-tab.active::after {
+  content: '';
+  position: absolute;
+  bottom: -2px; left: 50%; transform: translateX(-50%);
+  width: 55%; height: 2px;
+  background: var(--gold-light);
+  filter: blur(5px);
+  animation: tabGlow 2.2s ease-in-out infinite;
+}
+@keyframes tabGlow {
+  0%, 100% { opacity: 0.35; width: 35%; }
+  50%       { opacity: 1;   width: 78%; }
+}
+
+/* ══════════════════════════════════════════
+   BREADCRUMB
+   ══════════════════════════════════════════ */
+.breadcrumb {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: rgba(232,228,220,0.28);
+  padding: 11px 0;
+  margin-bottom: 30px;
+  display: flex; align-items: center; gap: 9px; flex-wrap: wrap;
+  position: sticky; top: 48px;
+  background: var(--paper);
+  z-index: 90;
+  border-bottom: 1px solid rgba(232,168,75,0.07);
+}
+.breadcrumb .bc-sep { color: rgba(232,168,75,0.28); font-size: 12px; }
+.breadcrumb .bc-active { color: var(--gold-light); }
+.breadcrumb .bc-count {
+  margin-left: auto;
+  background: rgba(232,168,75,0.07);
+  border: 1px solid rgba(232,168,75,0.14);
+  padding: 2px 12px;
+  border-radius: 20px;
+  color: var(--gold);
+  font-size: 9.5px;
+}
+
+/* ══════════════════════════════════════════
+   TOOLBAR
+   ══════════════════════════════════════════ */
+.toolbar {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 10px; margin-bottom: 22px; flex-wrap: wrap;
+}
+.toolbar-right { display: flex; gap: 8px; align-items: center; }
+
+.toolbar-btn {
+  font-family: 'Syne', sans-serif;
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  padding: 7px 16px;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  border: 1px solid rgba(232,168,75,0.2);
+  background: rgba(232,168,75,0.05);
+  color: var(--gold-dim);
+  transition: background 0.18s, border-color 0.18s, color 0.18s, transform 0.15s;
+}
+.toolbar-btn:hover {
+  background: rgba(232,168,75,0.12);
+  border-color: rgba(232,168,75,0.38);
+  color: var(--gold-light);
+  transform: translateY(-1px);
+}
+
+/* ══════════════════════════════════════════
+   SEARCH BAR
+   ══════════════════════════════════════════ */
+.search-wrap {
+  position: relative; flex: 1; min-width: 180px; max-width: 340px;
+}
+.search-wrap input {
+  width: 100%;
+  background: rgba(255,255,255,0.028);
+  border: 1px solid rgba(232,168,75,0.17);
+  border-radius: var(--radius-sm);
+  padding: 8px 36px 8px 14px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: var(--ink);
+  outline: none;
+  transition: border-color 0.22s, box-shadow 0.22s;
+}
+.search-wrap input::placeholder { color: rgba(232,228,220,0.22); }
+.search-wrap input:focus {
+  border-color: rgba(232,168,75,0.48);
+  box-shadow: 0 0 0 3px rgba(232,168,75,0.08);
+}
+.search-wrap .search-icon {
+  position: absolute; right: 11px; top: 50%; transform: translateY(-50%);
+  color: rgba(232,168,75,0.3); pointer-events: none; font-size: 12px;
+}
+
+.search-no-result {
+  text-align: center; padding: 52px 24px;
+  font-family: 'JetBrains Mono', monospace; font-size: 12px;
+  color: var(--muted); display: none;
+}
+.q-block.search-hidden { display: none; }
+
+/* ══════════════════════════════════════════
+   REVIEWED CHECKBOX
+   ══════════════════════════════════════════ */
+.reviewed-wrap {
+  display: flex; align-items: center; gap: 8px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px; letter-spacing: 0.8px; text-transform: uppercase;
+  color: var(--muted); padding: 0 28px 14px;
+  cursor: pointer; user-select: none;
+  transition: color 0.2s;
+}
+.reviewed-wrap:hover { color: var(--green); }
+.reviewed-wrap input[type=checkbox] { accent-color: var(--green); width: 13px; height: 13px; cursor: pointer; }
+.q-block.reviewed { border-color: rgba(90,191,122,0.28) !important; }
+.q-block.reviewed .q-header { background: rgba(90,191,122,0.035) !important; }
+
+/* ══════════════════════════════════════════
+   INCOMPLETE BADGE
+   ══════════════════════════════════════════ */
+.incomplete-badge {
+  display: inline-flex; align-items: center; gap: 4px;
+  font-family: 'JetBrains Mono', monospace; font-size: 10px;
+  padding: 3px 10px; border-radius: 20px;
+  background: rgba(224,100,74,0.09); color: var(--rust);
+  border: 1px solid rgba(224,100,74,0.24);
+  letter-spacing: 0.8px; text-transform: uppercase; margin-left: 8px;
+}
+
+/* ══════════════════════════════════════════
+   LAYOUT
+   ══════════════════════════════════════════ */
+.content {
+  padding: 30px 56px 60px;
+  max-width: 1240px;
+  margin: 0 auto;
+  position: relative; z-index: 1;
+}
+.section { display: none; }
+.section.active { display: block; }
+
+/* ══════════════════════════════════════════
+   SECTION HEADER
+   ══════════════════════════════════════════ */
+.section-header {
+  display: flex; align-items: flex-start; justify-content: space-between;
+  flex-wrap: wrap; gap: 16px;
+  margin-bottom: 20px; padding-bottom: 26px;
+  border-bottom: 1px solid rgba(232,168,75,0.22);
+}
+.section-info h2 {
+  font-family: 'Syne', sans-serif;
+  font-weight: 700;
+  font-size: 26px; color: #fff;
+  letter-spacing: -0.025em;
+}
+.section-info .subtitle {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11.5px; color: var(--muted); margin-top: 6px;
+  letter-spacing: 0.3px;
+}
+.section-badges { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+.badge {
+  font-family: 'Syne', sans-serif;
+  font-weight: 600;
+  font-size: 10px; padding: 4px 13px; border-radius: 4px;
+  letter-spacing: 1.2px; text-transform: uppercase;
+}
+.badge-gold   { background: rgba(232,168,75,0.1);  color: var(--gold);   border: 1px solid rgba(232,168,75,0.22); }
+.badge-teal   { background: rgba(61,190,190,0.09); color: var(--teal);   border: 1px solid rgba(61,190,190,0.18); }
+.badge-purple { background: rgba(155,126,200,0.09);color: var(--purple); border: 1px solid rgba(155,126,200,0.18); }
+.badge-rust   { background: rgba(224,100,74,0.09); color: var(--rust);   border: 1px solid rgba(224,100,74,0.18); }
+.badge-blue   { background: rgba(91,155,213,0.09); color: var(--blue);   border: 1px solid rgba(91,155,213,0.18); }
+
+/* ══════════════════════════════════════════
+   QUESTION BLOCK
+   ══════════════════════════════════════════ */
+.q-block {
+  margin-bottom: 18px;
+  background: var(--card);
+  border: 1px solid rgba(232,168,75,0.08);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-md);
+  animation: slideIn 0.38s cubic-bezier(0.22,1,0.36,1) both;
+  transition: border-color 0.22s, box-shadow 0.22s, transform 0.22s;
+}
+.q-block:hover {
+  border-color: rgba(232,168,75,0.2);
+  box-shadow: var(--shadow-lg), var(--shadow-gold);
+  transform: translateY(-1px);
+}
+@keyframes slideIn {
+  from { opacity: 0; transform: translateY(18px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.q-header {
+  padding: 20px 28px;
+  display: flex; align-items: center; gap: 18px;
+  cursor: pointer; user-select: none;
+  border-bottom: 1px solid transparent;
+  transition: background 0.18s;
+  position: relative;
+}
+.q-header::before {
+  content: '';
+  position: absolute; left: 0; top: 50%; transform: translateY(-50%);
+  width: 3px; height: 0;
+  background: linear-gradient(to bottom, var(--gold), transparent);
+  border-radius: 0 3px 3px 0;
+  transition: height 0.3s ease;
+}
+.q-header:hover { background: var(--warm); }
+.q-header:hover::before { height: 60%; }
+.q-header.open  {
+  border-bottom: 1px solid rgba(232,168,75,0.1);
+  background: var(--warm);
+}
+.q-header.open::before { height: 80%; }
+
+.q-num {
+  font-family: 'DM Serif Display', serif;
+  font-size: 20px; color: var(--gold);
+  min-width: 54px; text-shadow: 0 0 24px rgba(232,168,75,0.4);
+  white-space: nowrap;
+}
+.q-title  {
+  flex: 1; font-weight: 400;
+  font-size: 14px; color: var(--ink);
+  line-height: 1.42; font-family: 'DM Sans', sans-serif;
+}
+.q-marks  {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10.5px; color: var(--muted); white-space: nowrap;
+}
+.q-arrow  {
+  color: var(--gold); font-size: 11px;
+  transition: transform 0.3s cubic-bezier(0.22,1,0.36,1); opacity: 0.55; flex-shrink: 0;
+}
+.q-header.open .q-arrow { transform: rotate(180deg); opacity: 1; }
+
+/* Animated expand */
+.q-body {
+  display: grid; grid-template-rows: 0fr;
+  transition: grid-template-rows 0.34s cubic-bezier(0.22,1,0.36,1);
+}
+.q-body-inner { overflow: hidden; }
+.q-body.open { grid-template-rows: 1fr; }
+.q-body-inner-pad { padding: 32px 32px 38px; }
+
+/* ══════════════════════════════════════════
+   SUB-QUESTIONS
+   ══════════════════════════════════════════ */
+.sub-q {
+  margin-bottom: 32px; padding-bottom: 32px;
+  border-bottom: 1px dashed rgba(232,228,220,0.07);
+}
+.sub-q:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+
+.sub-label {
+  font-family: 'Syne', sans-serif;
+  font-weight: 600;
+  font-size: 10px; letter-spacing: 2.5px; text-transform: uppercase;
+  color: var(--gold); margin-bottom: 8px; opacity: 0.82;
+}
+
+.sub-question {
+  font-style: italic;
+  color: rgba(232,228,220,0.52);
+  font-size: 13.5px; margin-bottom: 18px;
+  padding: 13px 20px;
+  background: rgba(232,168,75,0.035);
+  border-left: 2px solid rgba(232,168,75,0.32);
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  line-height: 1.65;
+}
+
+.answer h4 {
+  font-family: 'Syne', sans-serif;
+  font-weight: 600;
+  font-size: 15px; color: #fff;
+  margin-bottom: 10px; margin-top: 20px;
+  letter-spacing: -0.01em;
+}
+.answer h4:first-child { margin-top: 0; }
+.answer p {
+  color: rgba(232,228,220,0.78);
+  font-size: 14.5px; margin-bottom: 10px; line-height: 1.88;
+}
+
+/* ══════════════════════════════════════════
+   INFO BOXES
+   ══════════════════════════════════════════ */
+.info-box {
+  padding: 14px 20px; border-radius: var(--radius-md); margin: 16px 0;
+  font-size: 14px; line-height: 1.7;
+}
+.info-box.tip    { background: rgba(61,190,190,0.065);  border-left: 2px solid var(--teal); }
+.info-box.warn   { background: rgba(224,100,74,0.065);  border-left: 2px solid var(--rust); }
+.info-box.note   { background: rgba(91,155,213,0.065);  border-left: 2px solid var(--blue); }
+.info-box.key    { background: rgba(232,168,75,0.07);   border-left: 2px solid var(--gold); }
+.info-box.purple { background: rgba(155,126,200,0.07);  border-left: 2px solid var(--purple); }
+.info-box.green  { background: rgba(90,191,122,0.065);  border-left: 2px solid var(--green); }
+.info-box strong {
+  display: block; font-size: 9.5px; letter-spacing: 2px;
+  text-transform: uppercase; margin-bottom: 6px; opacity: 0.55;
+  font-family: 'Syne', sans-serif; font-weight: 700;
+  color: var(--gold-light);
+}
+
+/* ══════════════════════════════════════════
+   TABLE
+   ══════════════════════════════════════════ */
+.ans-table {
+  width: 100%; border-collapse: collapse; margin: 16px 0;
+  font-size: 13.5px; border-radius: var(--radius-md); overflow: hidden;
+}
+.ans-table th {
+  background: rgba(5,7,9,0.9); color: var(--gold-light);
+  padding: 11px 18px; text-align: left;
+  font-family: 'Syne', sans-serif; font-weight: 600;
+  font-size: 10px; letter-spacing: 1.8px; text-transform: uppercase;
+  border-bottom: 1px solid rgba(232,168,75,0.15);
+}
+.ans-table td {
+  padding: 11px 18px; border-bottom: 1px solid var(--line);
+  vertical-align: top; color: rgba(232,228,220,0.78);
+}
+.ans-table tr:nth-child(even) td { background: rgba(255,255,255,0.018); }
+.ans-table tr:hover td { background: rgba(232,168,75,0.038); }
+
+/* ══════════════════════════════════════════
+   LISTS
+   ══════════════════════════════════════════ */
+.ans-list { padding-left: 0; list-style: none; margin: 10px 0; }
+.ans-list li {
+  padding: 7px 0 7px 24px; position: relative;
+  font-size: 14.5px; color: rgba(232,228,220,0.78);
+  border-bottom: 1px solid rgba(232,228,220,0.038);
+  line-height: 1.72;
+}
+.ans-list li::before {
+  content: '›'; position: absolute; left: 2px;
+  color: var(--gold); font-size: 14px; top: 7px; font-weight: 700;
+}
+.ans-list li:last-child { border-bottom: none; }
+.ans-list .nested { margin-top: 7px; margin-left: 14px; }
+.ans-list .nested li::before { content: '·'; color: var(--teal); top: 8px; font-size: 14px; }
+
+/* ══════════════════════════════════════════
+   CODE BLOCKS
+   ══════════════════════════════════════════ */
+pre {
+  background: #06090e;
+  border: 1px solid rgba(232,168,75,0.1);
+  border-radius: var(--radius-md);
+  padding: 22px 24px;
+  overflow-x: auto;
+  margin: 16px 0;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 13px;
+  line-height: 1.68;
+  color: #beccde;
+  position: relative;
+}
+pre::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, var(--gold-glow), transparent 70%);
+}
+
+pre .kw  { color: #9b80d0; }   /* keywords */
+pre .ty  { color: #3dc8c8; }   /* types */
+pre .fn  { color: #f5c96e; }   /* function names */
+pre .cm  { color: #4a5a6e; font-style: italic; }  /* comments */
+pre .st  { color: #5abf7a; }   /* strings */
+pre .nu  { color: #e8a84b; }   /* numbers */
+pre .pp  { color: #e0644a; }   /* preprocessor */
+
+/* ── INLINE CODE ── */
+code {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12.5px;
+  color: var(--teal);
+  background: rgba(61,190,190,0.09);
+  padding: 1px 7px; border-radius: 4px;
+}
+
+/* ══════════════════════════════════════════
+   NUMBERED STEPS
+   ══════════════════════════════════════════ */
+.steps-list {
+  padding-left: 0; list-style: none; margin: 10px 0;
+  counter-reset: steps;
+}
+.steps-list li {
+  counter-increment: steps;
+  padding: 11px 16px 11px 52px; position: relative;
+  font-size: 14px; color: rgba(232,228,220,0.78);
+  border-bottom: 1px solid rgba(232,228,220,0.05);
+  line-height: 1.72; background: rgba(255,255,255,0.012);
+  margin-bottom: 4px; border-radius: var(--radius-sm);
+  transition: background 0.15s;
+}
+.steps-list li:hover { background: rgba(232,168,75,0.04); }
+.steps-list li::before {
+  content: counter(steps);
+  position: absolute; left: 14px; top: 11px;
+  width: 24px; height: 24px;
+  background: rgba(232,168,75,0.14);
+  color: var(--gold-light);
+  font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 600;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  line-height: 24px; text-align: center;
+}
+
+/* ══════════════════════════════════════════
+   EXAM CHIPS
+   ══════════════════════════════════════════ */
+.exam-tag {
+  display: inline-block;
+  font-family: 'Syne', sans-serif; font-weight: 600;
+  font-size: 10px; letter-spacing: 1.2px;
+  padding: 3px 10px; border-radius: 20px;
+  margin: 3px 4px 3px 0; text-transform: uppercase;
+}
+.exam-mid  { background: rgba(61,190,190,0.1);  color: var(--teal);   border: 1px solid rgba(61,190,190,0.22); }
+.exam-fin  { background: rgba(232,168,75,0.1);  color: var(--gold);   border: 1px solid rgba(232,168,75,0.22); }
+.exam-2011 { background: rgba(224,100,74,0.1);  color: var(--rust);   border: 1px solid rgba(224,100,74,0.22); }
+.exam-2012 { background: rgba(91,155,213,0.1);  color: var(--blue);   border: 1px solid rgba(91,155,213,0.22); }
+.exam-2023 { background: rgba(155,126,200,0.1); color: var(--purple); border: 1px solid rgba(155,126,200,0.22); }
+.exam-2022 { background: rgba(90,191,122,0.1);  color: var(--green);  border: 1px solid rgba(90,191,122,0.22); }
+
+/* ══════════════════════════════════════════
+   FIX / CORRECTION NOTE
+   ══════════════════════════════════════════ */
+.fix-note {
+  font-family: 'JetBrains Mono', monospace; font-size: 11px;
+  color: #ff9f80; padding: 9px 16px;
+  background: rgba(224,100,74,0.08);
+  border: 1px solid rgba(224,100,74,0.2);
+  border-radius: var(--radius-sm); margin-top: 10px;
+}
+.fix-note::before { content: '✎ CORRECTED — '; font-weight: 600; }
+
+/* ══════════════════════════════════════════
+   MISC
+   ══════════════════════════════════════════ */
+mark {
+  background: rgba(232,168,75,0.17); color: var(--gold-light);
+  padding: 1px 5px; border-radius: 3px;
+}
+strong { font-weight: 500; color: rgba(232,228,220,0.95); }
+
+/* ══════════════════════════════════════════
+   BACK TO TOP
+   ══════════════════════════════════════════ */
+#back-to-top {
+  position: fixed; bottom: 30px; right: 30px; z-index: 200;
+  width: 46px; height: 46px; border-radius: 50%;
+  background: rgba(232,168,75,0.1);
+  border: 1px solid rgba(232,168,75,0.32);
+  color: var(--gold-light); font-size: 18px; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  opacity: 0; transform: translateY(14px);
+  transition: opacity 0.3s, transform 0.3s, background 0.2s, box-shadow 0.2s;
+  pointer-events: none; backdrop-filter: blur(8px);
+  box-shadow: 0 4px 20px rgba(232,168,75,0.1);
+}
+#back-to-top.visible { opacity: 1; transform: translateY(0); pointer-events: auto; }
+#back-to-top:hover {
+  background: rgba(232,168,75,0.2);
+  box-shadow: 0 6px 28px rgba(232,168,75,0.25);
+  transform: translateY(-2px);
+}
+
+/* ══════════════════════════════════════════
+   SCROLLBAR
+   ══════════════════════════════════════════ */
+::-webkit-scrollbar { width: 5px; height: 5px; }
+::-webkit-scrollbar-track { background: var(--cream); }
+::-webkit-scrollbar-thumb { background: rgba(232,168,75,0.22); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(232,168,75,0.38); }
+
+/* ══════════════════════════════════════════
+   FOOTER
+   ══════════════════════════════════════════ */
+footer {
+  border-top: 1px solid rgba(232,168,75,0.1);
+  padding: 30px 56px;
+  display: flex; justify-content: space-between; align-items: center;
+  flex-wrap: wrap; gap: 12px;
+  font-family: 'JetBrains Mono', monospace; font-size: 10.5px;
+  color: var(--muted); position: relative; z-index: 1;
+  background: #050709;
+  letter-spacing: 0.3px;
+}
+footer span { color: var(--gold); }
+
+/* ══════════════════════════════════════════
+   MOBILE
+   ══════════════════════════════════════════ */
+@media (max-width: 768px) {
+  .masthead { padding: 38px 20px 32px; }
+  .nav-tabs { padding: 0; display: grid; grid-template-columns: repeat(3, 1fr); }
+  .nav-tab { padding: 12px 6px; font-size: 10px; letter-spacing: 0.5px; text-align: center; }
+  .content { padding: 14px 14px 40px; }
+  .breadcrumb { top: 47px; font-size: 9px; }
+  .q-header { padding: 14px 18px; gap: 10px; }
+  .q-num { font-size: 17px; min-width: 38px; }
+  .q-title { font-size: 13px; }
+  .q-marks { display: none; }
+  .q-body-inner-pad { padding: 18px 16px 24px; }
+  .ans-table { display: block; overflow-x: auto; font-size: 12px; }
+  pre { font-size: 11.5px; padding: 14px; }
+  footer { padding: 20px; flex-direction: column; text-align: center; font-size: 10px; }
+  .toolbar { flex-direction: column; align-items: flex-start; }
+  .search-wrap { max-width: 100%; }
+}
+
+/* ══════════════════════════════════════════
+   PRINT
+   ══════════════════════════════════════════ */
+@media print {
+  * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+  body { background: #fff !important; color: #1a1a1a !important; font-size: 12pt; }
+  body::before, body::after { display: none; }
+  .masthead { background: #fff !important; border-bottom: 2px solid #c8893b !important; padding: 24pt 0 16pt; }
+  .masthead h1 { color: #1a1a1a !important; } .masthead h1 em { color: #c8893b !important; }
+  .masthead .ring1, .masthead .ring2, .masthead .glow-orb { display: none; }
+  .nav-tabs, .toolbar, .breadcrumb, #back-to-top, footer { display: none !important; }
+  .content { padding: 16pt 0; max-width: 100%; }
+  .section { display: block !important; }
+  .section + .section { page-break-before: always; }
+  .q-block { background: #fff !important; border: 1px solid #ddd !important; box-shadow: none !important; page-break-inside: avoid; animation: none !important; transform: none !important; }
+  .q-header { background: #f5f0e8 !important; border-bottom: 1px solid #ddd !important; }
+  .q-num { color: #c8893b !important; text-shadow: none !important; }
+  .q-title { color: #1a1a1a !important; }
+  .q-arrow { display: none; }
+  .q-header::before { display: none; }
+  .q-body { display: grid !important; grid-template-rows: 1fr !important; }
+  .q-body-inner-pad { padding: 10pt 14pt !important; }
+  .answer h4 { color: #1a1a1a !important; }
+  .answer p { color: #333 !important; }
+  .ans-list li { color: #333 !important; } .ans-list li::before { color: #c8893b !important; }
+  pre { background: #f8f8f8 !important; border-color: #ddd !important; color: #1a1a1a !important; }
+  mark { background: #fde8b4 !important; color: #8a5c10 !important; }
+  code { background: #e8f7f7 !important; color: #2a7070 !important; }
+}
+</style>
+
+</head>
+<body>
+
+<!-- ── MASTHEAD ── -->
+<div class="masthead">
+  <div class="ring1"></div>
+  <div class="ring2"></div>
+  <div class="glow-orb"></div>
+  <div class="masthead-tag">IUT · Computer Programming · Previous Year Solutions</div>
+  <h1>Structured Programming — <em>Question Solutions</em></h1>
+  <div class="masthead-meta">
+    COURSE · <span>Structured Programming (CSE 4107)</span>
+    &nbsp;|&nbsp; COVERAGE · <span>2010–2011, 2011–2012, 2021–2022, 2022–2023</span>
+  </div>
+</div>
+
+<!-- ── NAV TABS ── -->
+<div class="nav-tabs">
+  <button class="nav-tab active" onclick="showSection('sec-mid2011',this)">Mid 10&ndash;11</button>
+  <button class="nav-tab" onclick="showSection('sec-fin2011',this)">Final 10&ndash;11</button>
+  <button class="nav-tab" onclick="showSection('sec-mid2012',this)">Mid 11&ndash;12</button>
+  <button class="nav-tab" onclick="showSection('sec-fin2012',this)">Final 11&ndash;12</button>
+  <button class="nav-tab" onclick="showSection('sec-fin2022',this)">Final 21&ndash;22</button>
+  <button class="nav-tab" onclick="showSection('sec-fin2023',this)">Final 22&ndash;23</button>
+  <button class="nav-tab" onclick="showSection('sec-fin2024',this)">Final 23&ndash;24</button>
+</div>
+
+<div class="content">
+
+<!-- ══════════════════════════════════════════════════ -->
+<!-- SECTION 1 · MID SEMESTER 2010–2011 -->
+<!-- ══════════════════════════════════════════════════ -->
+<div class="section active" id="sec-mid2011">
+  <div class="breadcrumb">
+    CIT 4201 <span class="bc-sep">›</span> <span class="bc-active">Mid Semester 2010–2011</span>
+    <span class="bc-count">4 Questions</span>
+  </div>
+  <div class="toolbar">
+    <div class="search-wrap">
+      <input type="text" id="search-mid2011" placeholder="Search questions…" oninput="filterQuestions('sec-mid2011', this.value)">
+      <span class="search-icon">🔍</span>
+    </div>
+    <div class="toolbar-right">
+      <button class="toolbar-btn" onclick="expandAll('sec-mid2011')">Expand All</button>
+      <button class="toolbar-btn" onclick="collapseAll('sec-mid2011')">Collapse All</button>
+    </div>
+  </div>
+  <div class="section-header">
+    <div class="section-info">
+      <h2>Mid Semester Examination</h2>
+      <div class="subtitle">CIT 4201 · Computer Programming · Summer Semester 2010–2011</div>
+    </div>
+    <div class="section-badges">
+      <span class="badge badge-teal">Mid Exam</span>
+      <span class="badge badge-gold">2010–2011</span>
+    </div>
+  </div>
+
+  <!-- Q1 -->
+  <div class="q-block" id="qb-mid2011-1a">
+    <div class="q-header" onclick="toggleQ(this)">
+      <div class="q-num"><span class="exam-mid">Mid</span></div>
+      <div class="q-title">Q1(a) — Remove Consecutive Duplicate Characters from a String</div>
+      <div class="q-marks">String Manipulation</div>
+      <div class="q-arrow">▼</div>
+    </div>
+    <div class="q-body">
+      <div class="q-body-inner"><div class="q-body-inner-pad">
+        <div class="sub-q">
+          <div class="sub-label">Part (a)</div>
+          <div class="sub-question">Read a string and a character c. Collapse every run of two or more consecutive occurrences of c into a single occurrence.</div>
+          <div class="answer">
+            <p>The program scans the string in-place. When a run of <code>c</code> of length ≥ 2 is found, it shifts the rest of the string left to remove the extras, then decrements the effective length accordingly.</p>
+            <pre>#include &lt;stdio.h&gt;
+#include &lt;string.h&gt;
+
+int main() {
+    char s[100], c;
+    int i, j, count = 0;
+    scanf("%99[^\n]", s);
+    getchar();
+    scanf(" %c", &amp;c);
+
+    int len = strlen(s);
+    for (i = 0; i &lt; len; ) {
+        if (s[i] == c) {
+            count = 1;
+            j = i + 1;
+            while (j &lt; len &amp;&amp; s[j] == c) { count++; j++; }
+            if (count &gt;= 2) {
+                /* shift everything from j backwards to i+1 */
+                for (int k = j; k &lt;= len; k++)
+                    s[i + (k - j)] = s[k];
+                len -= (count - 1);
+            } else {
+                i++;
+            }
+        } else {
+            i++;
+        }
+    }
+    printf("%s\n", s);
+    return 0;
+}</pre>
+            <div class="info-box tip"><strong>How It Works</strong>When a run of <code>c</code> of length ≥ 2 is detected starting at index <code>i</code> and ending before index <code>j</code>, the substring from <code>j</code> onward is copied back to <code>i+1</code>, effectively keeping exactly one <code>c</code> and removing the rest. <code>len</code> is reduced by <code>count−1</code>.</div>
+          </div>
+        </div>
+      </div></div>
+    </div>
+  </div>
+
+  <!-- Q1b -->
+  <div class="q-block">
+    <div class="q-header" onclick="toggleQ(this)">
+      <div class="q-num"><span class="exam-mid">Mid</span></div>
+      <div class="q-title">Q1(b) — Recursive Functions &amp; Palindrome Check</div>
+      <div class="q-marks">Recursion / Strings</div>
+      <div class="q-arrow">▼</div>
+    </div>
+    <div class="q-body">
+      <div class="q-body-inner"><div class="q-body-inner-pad">
+        <div class="sub-q">
+          <div class="sub-label">Definition</div>
+          <div class="answer">
+            <h4>Recursive Function</h4>
+            <p>A function that calls itself to solve a problem by breaking it into smaller, identical sub-problems until a <em>base case</em> is reached. Every recursive function needs a base case to prevent infinite recursion.</p>
+            <h4>Palindrome Check (Recursive Approach)</h4>
+            <p>A string is a palindrome if the first and last characters are equal and the inner substring is also a palindrome.</p>
+            <pre>#include &lt;stdio.h&gt;
+#include &lt;string.h&gt;
+
+int isPalindrome(char *s, int start, int end) {
+    /* Base case: single character or empty string */
+    if (start &gt;= end) return 1;
+
+    /* If mismatch found, not a palindrome */
+    if (s[start] != s[end]) return 0;
+
+    /* Recurse for the middle part */
+    return isPalindrome(s, start + 1, end - 1);
+}
+
+int main() {
+    char s[100];
+    printf("Enter string: ");
+    scanf("%99s", s);
+    
+    if (isPalindrome(s, 0, strlen(s) - 1))
+        printf("1\n"); /* Palindrome */
+    else
+        printf("0\n"); /* Not Palindrome */
+
+    return 0;
+}</pre>
+            <div class="info-box note"><strong>Recursive logic</strong>The function <code>isPalindrome</code> checks the characters at <code>start</code> and <code>end</code>. If they match, it calls itself with <code>start+1</code> and <code>end-1</code>. The recursion stops when <code>start >= end</code> (success) or a mismatch occurs (failure).</div>
+            <div class="info-box tip"><strong>Palindrome Examples</strong>"racecar" → <mark>1</mark> &nbsp;|&nbsp; "level" → <mark>1</mark> &nbsp;|&nbsp; "hello" → <mark>0</mark></div>
+          </div>
+        </div>
+      </div></div>
+    </div>
+  </div>
+
+  <!-- Q2 -->
+  <div class="q-block">
+    <div class="q-header" onclick="toggleQ(this)">
+      <div class="q-num"><span class="exam-mid">Mid</span></div>
+      <div class="q-title">Q2(a) — Trace the Output (Prepend Loop)</div>
+      <div class="q-marks">Tracing</div>
+      <div class="q-arrow">▼</div>
+    </div>
+    <div class="q-body">
+      <div class="q-body-inner"><div class="q-body-inner-pad">
+        <div class="sub-q">
+          <div class="sub-label">Part (a) — Trace Output of copyString() Program</div>
+          <div class="sub-question">Determine the output of the provided program involving string manipulation and pointers.</div>
+          <div class="answer">
+            <p>The function <code>copyString(str1, str2)</code> copies "Hello world" to <code>str1</code>, but then swaps the first and last characters (indices 0 and 10), resulting in <code>"dello worlH"</code> at the destination address. The loop in <code>main</code> calls this for progressively incremented pointers <code>str1+0, str1+1, ...</code>.</p>
+            <pre>#include &lt;stdio.h&gt;
+#include &lt;string.h&gt;
+void copyString(char *str1, char *str2);
+int main(){
+    char str1[100],str2[100]="Hello world";
+    char *p1,*p2;
+    int i;
+    for(i=0;i&lt;5;i++){
+        p1=str1+i;
+        p2=str2;
+        copyString(p1,p2);
+        printf("%s\n",str1);
+    }
+    return 0;
+}
+void copyString(char *str1, char *str2){
+    int i,len = strlen(str2);
+    for(i=len;i&gt;=0;i--) { *(str1+i) = *(str2+i); }
+    /* Swap first and last of the copied string */
+    *str1 = *(str2+len-1);      /* 'd' from index 10 */
+    *(str1+len-1) = *str2;      /* 'H' from index 0 */
+}</pre>
+            <p><strong>Output:</strong></p>
+            <pre>dello worlH
+ddello worlH
+dddello worlH
+ddddello worlH
+dddddello worlH</pre>
+            <div class="info-box note"><strong>Step-by-Step Trace</strong>
+              <br>1. <code>i=0</code>: Copies to <code>str1</code>. Result: <code>dello worlH</code>
+              <br>2. <code>i=1</code>: Copies to <code>str1+1</code>. Index 0 remains <code>'d'</code> from step 1. Result: <code>ddello worlH</code>
+              <br>3. <code>i=2</code>: Copies to <code>str1+2</code>. Indices 0,1 remain <code>'d'</code>. Result: <code>dddello worlH</code>
+              <br>...and so on.
+            </div>
+          </div>
+        </div>
+      </div></div>
+    </div>
+  </div>
+
+  <!-- Q2b -->
+  <div class="q-block">
+    <div class="q-header" onclick="toggleQ(this)">
+      <div class="q-num"><span class="exam-mid">Mid</span></div>
+      <div class="q-title">Q2(b) — Matrix Addition</div>
+      <div class="q-marks">2D Arrays</div>
+      <div class="q-arrow">▼</div>
+    </div>
+    <div class="q-body">
+      <div class="q-body-inner"><div class="q-body-inner-pad">
+        <div class="sub-q">
+          <div class="sub-label">Part (b)</div>
+          <div class="sub-question">Read two matrices and print their element-wise sum, or report that summation is not possible if dimensions differ.</div>
+          <div class="answer">
+            <pre>#include &lt;stdio.h&gt;
+
+int main() {
+    int r1, c1, r2, c2;
+    scanf("%d %d", &amp;r1, &amp;c1);
+    int A[r1][c1];
+    for (int i = 0; i &lt; r1; i++)
+        for (int j = 0; j &lt; c1; j++)
+            scanf("%d", &amp;A[i][j]);
+
+    scanf("%d %d", &amp;r2, &amp;c2);
+    int B[r2][c2];
+    for (int i = 0; i &lt; r2; i++)
+        for (int j = 0; j &lt; c2; j++)
+            scanf("%d", &amp;B[i][j]);
+
+    if (r1 != r2 || c1 != c2) {
+        printf("Summation is not possible\n");
+        return 0;
+    }
+    for (int i = 0; i &lt; r1; i++) {
+        for (int j = 0; j &lt; c1; j++) {
+            printf("%d", A[i][j] + B[i][j]);
+            if (j &lt; c1 - 1) printf(" ");
+        }
+        printf("\n");
+    }
+    return 0;
+}</pre>
+          </div>
+        </div>
+      </div></div>
+    </div>
+  </div>
+
+  <!-- Q2c -->
+  <div class="q-block">
+    <div class="q-header" onclick="toggleQ(this)">
+      <div class="q-num"><span class="exam-mid">Mid</span></div>
+      <div class="q-title">Q2(c) — Multidimensional Arrays in C</div>
+      <div class="q-marks">Concept</div>
+      <div class="q-arrow">▼</div>
+    </div>
+    <div class="q-body">
+      <div class="q-body-inner"><div class="q-body-inner-pad">
+        <div class="sub-q">
+          <div class="answer">
+            <h4>Declaration &amp; Memory Layout</h4>
+            <p>A multidimensional array is an array of arrays. Declared as <code>int mat[3][4];</code> (3 rows, 4 columns). Elements are stored in <strong>row-major order</strong> — all elements of row 0 followed by row 1, etc. Total memory = rows × cols × sizeof(type).</p>
+            <h4>Initialization</h4>
+            <pre>int arr[2][3] = { {1,2,3}, {4,5,6} };  // nested braces (preferred)
+int arr[2][3] = {1,2,3,4,5,6};         // linear form (also valid)</pre>
+            <h4>Passing to Functions</h4>
+            <p>The column size must <strong>always</strong> be specified in the parameter:</p>
+            <pre>void func(int arr[][3], int rows);   // valid
+void func(int (*arr)[3], int rows);  // also valid
+// void func(int arr[][], int rows); // INVALID — omitting column size</pre>
+            <h4>Use Cases &amp; Limitations</h4>
+            <ul class="ans-list">
+              <li>Matrix operations, game boards, image pixel grids, tabular data.</li>
+              <li><strong>Limitation:</strong> Fixed size for static arrays; no bounds checking (risk of buffer overflow).</li>
+              <li><strong>Limitation:</strong> Complex memory management for higher dimensions.</li>
+            </ul>
+          </div>
+        </div>
+      </div></div>
+    </div>
+  </div>
+
+  <!-- Q3a -->
+  <div class="q-block">
+    <div class="q-header" onclick="toggleQ(this)">
+      <div class="q-num"><span class="exam-mid">Mid</span></div>
+      <div class="q-title">Q3(a) — What Does myFunction() Do? (strcpy simulation)</div>
+      <div class="q-marks">Pointers / Strings</div>
+      <div class="q-arrow">▼</div>
+    </div>
+    <div class="q-body">
+      <div class="q-body-inner"><div class="q-body-inner-pad">
+        <div class="sub-q">
+          <div class="answer">
+            <p>The function simulates <code>strcpy()</code>. It copies each character from source pointer <code>y</code> into destination pointer <code>x</code> until the null terminator <code>'\0'</code> is reached — identical behaviour to the standard library <code>strcpy()</code>.</p>
+            <div class="info-box warn"><strong>Structural Note</strong>The original code contains an unnecessary nested loop structure. The intent and outcome match <code>strcpy()</code>, but the double-loop is logically redundant. Also note: string termination uses <code>'\0'</code> (null character), not <code>NULL</code> (null pointer).</div>
+            <h4>Corrected / Cleaner Version</h4>
+            <pre>void myFunction(char *x, char *y) {
+    while (*y != '\0') {
+        *x = *y;
+        x++;
+        y++;
+    }
+    *x = '\0';  /* null-terminate the destination */
+}</pre>
+          </div>
+        </div>
+      </div></div>
+    </div>
+  </div>
+
+  <!-- Q3b -->
+  <div class="q-block">
+    <div class="q-header" onclick="toggleQ(this)">
+      <div class="q-num"><span class="exam-mid">Mid</span></div>
+      <div class="q-title">Q3(b) — Reverse a Number</div>
+      <div class="q-marks">Math / Loops</div>
+      <div class="q-arrow">▼</div>
+    </div>
+    <div class="q-body">
+      <div class="q-body-inner"><div class="q-body-inner-pad">
+        <div class="sub-q">
+          <div class="answer">
+            <pre>#include &lt;stdio.h&gt;
+
+int main() {
+    int n, reversed = 0;
+    scanf("%d", &amp;n);
+    while (n != 0) {
+        int digit = n % 10;
+        reversed = reversed * 10 + digit;
+        n /= 10;
+    }
+    printf("%d\n", reversed);
+    return 0;
+}</pre>
+            <div class="info-box tip"><strong>Example</strong>Input <mark>1234</mark> → Output <mark>4321</mark>. Each iteration extracts the last digit with <code>%10</code> and appends it to <code>reversed</code> by multiplying by 10 first.</div>
+          </div>
+        </div>
+      </div></div>
+    </div>
+  </div>
+
+  <!-- Q3c -->
+  <div class="q-block">
+    <div class="q-header" onclick="toggleQ(this)">
+      <div class="q-num"><span class="exam-mid">Mid</span></div>
+      <div class="q-title">Q3(c) — Why Must Strings End with '\0'?</div>
+      <div class="q-marks">Concept</div>
+      <div class="q-arrow">▼</div>
+    </div>
+    <div class="q-body">
+      <div class="q-body-inner"><div class="q-body-inner-pad">
+        <div class="sub-q">
+          <div class="answer">
+            <p>In C, strings are plain arrays of <code>char</code> — there is no built-in length field. The null character <code>'\0'</code> (ASCII 0) acts as a sentinel marking the end. It is essential for three reasons:</p>
+            <ol class="steps-list">
+              <li><strong>Standard library functions</strong> such as <code>printf("%s")</code>, <code>strlen()</code>, <code>strcpy()</code>, and <code>strcat()</code> all rely on <code>'\0'</code> to know where the string ends. Without it they read past the intended boundary, producing garbage output, crashes, or undefined behaviour.</li>
+              <li><strong>Correct length computation:</strong> <code>strlen("hello")</code> returns 5 because it counts until <code>'\0'</code>. A missing terminator causes it to scan arbitrary memory.</li>
+              <li><strong>Security:</strong> Omitting <code>'\0'</code> can cause buffer overflows and other memory-safety vulnerabilities.</li>
+            </ol>
+          </div>
+        </div>
+      </div></div>
+    </div>
+  </div>
+
+  <!-- Q4a -->
+  <div class="q-block">
+    <div class="q-header" onclick="toggleQ(this)">
+      <div class="q-num"><span class="exam-mid">Mid</span></div>
+      <div class="q-title">Q4(a) — Command-Line Argument Addition</div>
+      <div class="q-marks">CLI / argc/argv</div>
+      <div class="q-arrow">▼</div>
+    </div>
+    <div class="q-body">
+      <div class="q-body-inner"><div class="q-body-inner-pad">
+        <div class="sub-q">
+          <div class="answer">
+            <pre>#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+
+int main(int argc, char *argv[]) {
+    if (argc != 3) {
+        printf("Usage: %s num1 num2\n", argv[0]);
+        return 1;
+    }
+    int num1 = atoi(argv[1]);
+    int num2 = atoi(argv[2]);
+    printf("%d\n", num1 + num2);
+    return 0;
+}
+/* Compile: gcc -o demo demo.c
+   Run:     ./demo 24 12   → output: 36 */</pre>
+          </div>
+        </div>
+      </div></div>
+    </div>
+  </div>
+
+  <!-- Q4b -->
+  <div class="q-block">
+    <div class="q-header" onclick="toggleQ(this)">
+      <div class="q-num"><span class="exam-mid">Mid</span></div>
+      <div class="q-title">Q4(b) — Pointer &amp; Array Expression Evaluation</div>
+      <div class="q-marks">Pointers</div>
+      <div class="q-arrow">▼</div>
+    </div>
+    <div class="q-body">
+      <div class="q-body-inner"><div class="q-body-inner-pad">
+        <div class="sub-q">
+          <div class="answer">
+            <p>Given <code>int x[6]</code> where <code>x[i] = i*i</code>, base address = <mark>4500</mark>, <code>sizeof(int) = 2</code>:</p>
+            <table class="ans-table">
+              <thead><tr><th>Expression</th><th>Explanation</th><th>Answer</th></tr></thead>
+              <tbody>
+                <tr><td><code>x</code></td><td>Array name → address of x[0]</td><td><mark>4500</mark></td></tr>
+                <tr><td><code>&amp;x[0]</code></td><td>Address of first element</td><td><mark>4500</mark></td></tr>
+                <tr><td><code>*x</code></td><td>Dereference array name → value at x[0] = 0×0</td><td><mark>0</mark></td></tr>
+                <tr><td><code>x[1]</code></td><td>Value at index 1 → 1×1</td><td><mark>1</mark></td></tr>
+                <tr><td><code>&amp;x[1]</code></td><td>Address of x[1] → 4500 + 1×2</td><td><mark>4502</mark></td></tr>
+                <tr><td><code>x+2</code></td><td>Pointer to x[2] → 4500 + 2×2</td><td><mark>4504</mark></td></tr>
+                <tr><td><code>*(x+2)</code></td><td>Value at x[2] → 2×2</td><td><mark>4</mark></td></tr>
+                <tr><td><code>*(&amp;x[2]+1)</code></td><td>&amp;x[2]=4504; +1 → x[3]; dereference → 3×3</td><td><mark>9</mark></td></tr>
+                <tr><td><code>*(x+5)</code></td><td>x[5] = 5×5 = 25 (all 6 elements are initialized)</td><td><mark>25</mark></td></tr>
+              </tbody>
+            </table>
+            <div class="fix-note">The PDF states *(x+5) gives "Garbage" claiming i≤4, but the loop initialises x[i]=i*i for i=0..5 (6 elements). x[5] = 25 is fully defined — not garbage.</div>
+          </div>
+        </div>
+      </div></div>
+    </div>
+  </div>
+
+  <!-- Q4c -->
+  <div class="q-block">
+    <div class="q-header" onclick="toggleQ(this)">
+      <div class="q-num"><span class="exam-mid">Mid</span></div>
+      <div class="q-title">Q4(c) — Trace the switch/if Ladder Output</div>
+      <div class="q-marks">Tracing</div>
+      <div class="q-arrow">▼</div>
+    </div>
+    <div class="q-body">
+      <div class="q-body-inner"><div class="q-body-inner-pad">
+        <div class="sub-q">
+          <div class="answer">
+            <table class="ans-table">
+              <thead><tr><th>Case</th><th>Output</th></tr></thead>
+              <tbody>
+                <tr><td>i)</td><td><pre style="margin:0;border:none;background:transparent;padding:4px 0;">First
+Second</pre></td></tr>
+                <tr><td>ii)</td><td><pre style="margin:0;border:none;background:transparent;padding:4px 0;">Second</pre></td></tr>
+                <tr><td>iii)</td><td><pre style="margin:0;border:none;background:transparent;padding:4px 0;">Third</pre></td></tr>
+                <tr><td>iv)</td><td><pre style="margin:0;border:none;background:transparent;padding:4px 0;">End</pre></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div></div>
+    </div>
+  </div>
+
+</div><!-- end sec-mid2011 -->
+
+
+<!-- ══════════════════════════════════════════════════ -->
+<!-- SECTION 2 · FINAL SEMESTER 2010–2011 -->
+<!-- ══════════════════════════════════════════════════ -->
+<div class="section" id="sec-fin2011">
+  <div class="breadcrumb">
+    CIT 4201 <span class="bc-sep">›</span> <span class="bc-active">Semester Final 2010–2011</span>
+    <span class="bc-count">8 Questions</span>
+  </div>
+  <div class="toolbar">
+    <div class="search-wrap">
+      <input type="text" id="search-fin2011" placeholder="Search questions…" oninput="filterQuestions('sec-fin2011', this.value)">
+      <span class="search-icon">🔍</span>
+    </div>
+    <div class="toolbar-right">
+      <button class="toolbar-btn" onclick="expandAll('sec-fin2011')">Expand All</button>
+      <button class="toolbar-btn" onclick="collapseAll('sec-fin2011')">Collapse All</button>
+    </div>
+  </div>
+  <div class="section-header">
+    <div class="section-info">
+      <h2>Semester Final Examination</h2>
+      <div class="subtitle">CIT 4201 · Computer Programming · Summer Semester 2010–2011</div>
+    </div>
+    <div class="section-badges">
+      <span class="badge badge-gold">Final Exam</span>
+      <span class="badge badge-gold">2010–2011</span>
+    </div>
+  </div>
+
+  <!-- Q1a -->
+  <div class="q-block">
+    <div class="q-header" onclick="toggleQ(this)">
+      <div class="q-num"><span class="exam-fin">Final</span></div>
+      <div class="q-title">Q1(a) — Recursive Character Printing — Execution Order</div>
+      <div class="q-marks">Recursion / Tracing</div>
+      <div class="q-arrow">▼</div>
+    </div>
+    <div class="q-body">
+      <div class="q-body-inner"><div class="q-body-inner-pad">
+        <div class="sub-q">
+          <div class="sub-question">Number the execution order of each line when myFunction('f') is called. Output: a b c d e f</div>
+          <div class="answer">
+            <p>The function recurses <em>down</em> from <code>'f'</code> to <code>'a'</code>, then prints each character on the way <em>back up</em>, producing <code>a b c d e f</code>.</p>
+            <pre>#include&lt;stdio.h&gt;       /* [1] preprocessed first */
+void myFunction(char ch); /* [2] prototype */
+int main(){               /* [3] main entry */
+    myFunction('f');      /* [4] first call */
+    return 0;             /* [9] after all recursion returns */
+}
+void myFunction(char ch){ /* [5] definition */
+    if(ch &gt;= 'a'){        /* [6] base check each call */
+        myFunction(ch-1); /* [7] recurse downward */
+        printf("%c ", ch);/* [8] prints on way BACK UP */
+    }
+}</pre>
+            <div class="info-box tip"><strong>Output</strong><mark>a b c d e f</mark> — the printf executes after each recursive call returns, printing in ascending order.</div>
+          </div>
+        </div>
+      </div></div>
+    </div>
+  </div>
+
+  <!-- Q1b -->
+  <div class="q-block">
+    <div class="q-header" onclick="toggleQ(this)">
+      <div class="q-num"><span class="exam-fin">Final</span></div>
+      <div class="q-title">Q1(b) — Macro Expansion: GETVALUE(3+2)</div>
+      <div class="q-marks">Preprocessor / Macros</div>
+      <div class="q-arrow">▼</div>
+    </div>
+    <div class="q-body">
+      <div class="q-body-inner"><div class="q-body-inner-pad">
+        <div class="sub-q">
+          <div class="answer">
+            <p>Macros perform <strong>textual substitution</strong> before compilation. Operator precedence applies to the expanded text, not the original argument.</p>
+            <table class="ans-table">
+              <thead><tr><th>#</th><th>Macro Definition</th><th>Expanded Expression</th><th>Result</th></tr></thead>
+              <tbody>
+                <tr><td>1</td><td><code>#define GETVALUE(x) x*x</code></td><td><code>3+2*3+2</code></td><td><mark>11</mark></td></tr>
+                <tr><td>2</td><td><code>#define GETVALUE(x) x*(x)</code></td><td><code>3+2*(3+2)</code></td><td><mark>13</mark></td></tr>
+                <tr><td>3</td><td><code>#define GETVALUE(x) (x)*x</code></td><td><code>(3+2)*3+2</code></td><td><mark>17</mark></td></tr>
+                <tr><td>4</td><td><code>#define GETVALUE(x) (x)*(x)</code></td><td><code>(3+2)*(3+2)</code></td><td><mark>25</mark></td></tr>
+              </tbody>
+            </table>
+            <div class="info-box key"><strong>Takeaway</strong>Always wrap macro parameters in parentheses — use form 4 to avoid precedence surprises.</div>
+          </div>
+        </div>
+      </div></div>
+    </div>
+  </div>
+
+  <!-- Q1c -->
+  <div class="q-block">
+    <div class="q-header" onclick="toggleQ(this)">
+      <div class="q-num"><span class="exam-fin">Final</span></div>
+      <div class="q-title">Q1(c) — Return Type &amp; Behaviour of strcmp()</div>
+      <div class="q-marks">String Functions</div>
+      <div class="q-arrow">▼</div>
+    </div>
+    <div class="q-body">
+      <div class="q-body-inner"><div class="q-body-inner-pad">
+        <div class="sub-q">
+          <div class="answer">
+            <p>Return type: <code>int</code>. <code>strcmp(s1, s2)</code> compares two strings lexicographically and returns the difference of ASCII values of the first differing characters.</p>
+            <table class="ans-table">
+              <thead><tr><th>Call</th><th>First Differing Chars</th><th>Calculation</th><th>Result</th></tr></thead>
+              <tbody>
+                <tr><td><code>strcmp("abc","abc")</code></td><td>none (equal)</td><td>—</td><td><mark>0</mark></td></tr>
+                <tr><td><code>strcmp("abc","xyz")</code></td><td>'a' vs 'x'</td><td>97 − 120</td><td><mark>−23</mark></td></tr>
+                <tr><td><code>strcmp("xyz","abc")</code></td><td>'x' vs 'a'</td><td>120 − 97</td><td><mark>23</mark></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div></div>
+    </div>
+  </div>
+
+  <!-- Q2a -->
+  <div class="q-block">
+    <div class="q-header" onclick="toggleQ(this)">
+      <div class="q-num"><span class="exam-fin">Final</span></div>
+      <div class="q-title">Q2(a) — Storage Class Specifiers in C</div>
+      <div class="q-marks">Concept</div>
+      <div class="q-arrow">▼</div>
+    </div>
+    <div class="q-body">
+      <div class="q-body-inner"><div class="q-body-inner-pad">
+        <div class="sub-q">
+          <div class="answer">
+            <ul class="ans-list">
+              <li><strong>auto</strong> — Default for local variables. Allocated on function entry, freed on exit. Scope: block-level. Example: <code>int x;</code> (same as <code>auto int x;</code>)</li>
+              <li><strong>extern</strong> — Declares a variable defined elsewhere (another file). Does not allocate memory — only references an existing one. Used to share globals across files. Example: <code>extern int globalVar;</code></li>
+              <li><strong>register</strong> — Hints the compiler to store the variable in a CPU register for faster access. Address cannot be taken (<code>&amp;</code> is illegal). Often used for loop counters. Example: <code>register int i;</code></li>
+              <li><strong>static</strong> — For local variables: retains its value between function calls, initialised only once. For globals/functions: limits scope to the current file (internal linkage).</li>
+            </ul>
+            <pre>void func() {
+    static int count = 0;  /* persists across calls */
+    count++;
+}</pre>
+          </div>
+        </div>
+      </div></div>
+    </div>
+  </div>
+
+  <!-- Q2b -->
+  <div class="q-block">
+    <div class="q-header" onclick="toggleQ(this)">
+      <div class="q-num"><span class="exam-fin">Final</span></div>
+      <div class="q-title">Q2(b) — Structure vs. Union</div>
+      <div class="q-marks">Concept</div>
+      <div class="q-arrow">▼</div>
+    </div>
+    <div class="q-body">
+      <div class="q-body-inner"><div class="q-body-inner-pad">
+        <div class="sub-q">
+          <div class="answer">
+            <p><strong>Structure:</strong> Groups different data types under one name. Each member occupies its own memory location. Total size ≥ sum of member sizes (plus alignment padding).</p>
+            <p><strong>Union:</strong> All members share the same memory block. Size equals the largest member. Only one member holds a valid value at any time — saves memory.</p>
+            <pre>/* Structure — all members coexist */
+struct Student {
+    char name[50];
+    int  age;
+    float marks;
+};  /* Size ≈ 58+ bytes */
+
+/* Union — members overlap */
+union Data {
+    int  i;
+    float f;
+    char str[20];
+};  /* Size = 20 bytes (largest member) */
+
+/* Memory layout:
+   Struct:  [name...][age][marks]  &lt;-- separate slots
+   Union:   [i / f / str]          &lt;-- same 20-byte block */</pre>
+          </div>
+        </div>
+      </div></div>
+    </div>
+  </div>
+
+  <!-- Q2d -->
+  <div class="q-block">
+    <div class="q-header" onclick="toggleQ(this)">
+      <div class="q-num"><span class="exam-fin">Final</span></div>
+      <div class="q-title">Q2(d) — Pointers: Increment by 5 via Pointer</div>
+      <div class="q-marks">Pointers</div>
+      <div class="q-arrow">▼</div>
+    </div>
+    <div class="q-body">
+      <div class="q-body-inner"><div class="q-body-inner-pad">
+        <div class="sub-q">
+          <div class="answer">
+            <p>A pointer is a variable that stores the memory address of another variable, enabling indirect access and in-place modification.</p>
+            <pre>#include &lt;stdio.h&gt;
+
+int incrementByFive(int *ptr) {
+    *ptr += 5;    /* dereference and modify original variable */
+    return *ptr;  /* return updated value */
+}
+
+int main() {
+    int num = 10;
+    printf("Before: %d\n", num);           /* 10 */
+    int result = incrementByFive(&amp;num);    /* pass address */
+    printf("After:    %d\n", num);         /* 15 */
+    printf("Returned: %d\n", result);      /* 15 */
+    return 0;
+}</pre>
+          </div>
+        </div>
+      </div></div>
+    </div>
+  </div>
+
+  <!-- Q4 Doubly Linked List -->
+  <div class="q-block">
+    <div class="q-header" onclick="toggleQ(this)">
+      <div class="q-num"><span class="exam-fin">Final</span></div>
+      <div class="q-title">Q4 — Doubly Linked List Operations</div>
+      <div class="q-marks">Data Structures</div>
+      <div class="q-arrow">▼</div>
+    </div>
+    <div class="q-body">
+      <div class="q-body-inner"><div class="q-body-inner-pad">
+        <div class="sub-q">
+          <div class="sub-label">Part (a) — Find and return node by value</div>
+          <div class="answer">
+            <pre>node* getTheAddress(int x, list *m) {
+    if (m == NULL || m-&gt;startaddress == NULL) return NULL;
+    node *current = m-&gt;startaddress;
+    while (current != NULL) {
+        if (current-&gt;value == x) return current;
+        current = current-&gt;next;
+    }
+    return NULL;
+}</pre>
+          </div>
+        </div>
+        <div class="sub-q">
+          <div class="sub-label">Part (b) — Delete nodes immediately before and after node n</div>
+          <div class="answer">
+            <pre>node *prevNode = n-&gt;prev;
+node *nextNode = n-&gt;next;
+
+/* Remove node BEFORE n */
+if (prevNode != NULL) {
+    if (prevNode-&gt;prev != NULL)
+        prevNode-&gt;prev-&gt;next = n;  /* bypass prevNode */
+    else
+        m-&gt;startaddress = n;       /* prevNode was head */
+    n-&gt;prev = prevNode-&gt;prev;
+    free(prevNode);
+}
+
+/* Remove node AFTER n */
+if (nextNode != NULL) {
+    if (nextNode-&gt;next != NULL)
+        nextNode-&gt;next-&gt;prev = n;  /* bypass nextNode */
+    else
+        m-&gt;endaddress = n;         /* nextNode was tail */
+    n-&gt;next = nextNode-&gt;next;
+    free(nextNode);
+}</pre>
+          </div>
+        </div>
+        <div class="sub-q">
+          <div class="sub-label">Part (c) — Count occurrences of value x</div>
+          <div class="answer">
+            <pre>int count = 0;
+node *current = m-&gt;startaddress;
+while (current != NULL) {
+    if (current-&gt;value == x) count++;
+    current = current-&gt;next;
+}
+return count;</pre>
+          </div>
+        </div>
+      </div></div>
+    </div>
+  </div>
+
+  <!-- Q5 malloc/free + atoi + trace -->
+  <div class="q-block">
+    <div class="q-header" onclick="toggleQ(this)">
+      <div class="q-num"><span class="exam-fin">Final</span></div>
+      <div class="q-title">Q5 — malloc/free, myFunction (atoi), Trace Output</div>
+      <div class="q-marks">Dynamic Memory</div>
+      <div class="q-arrow">▼</div>
+    </div>
+    <div class="q-body">
+      <div class="q-body-inner"><div class="q-body-inner-pad">
+        <div class="sub-q">
+          <div class="sub-label">Part (a) — malloc() and free()</div>
+          <div class="answer">
+            <ul class="ans-list">
+              <li><code>malloc(size_t size)</code> — Dynamically allocates <code>size</code> bytes on the heap. Returns <code>void*</code> or <code>NULL</code> on failure. Example: <code>int *arr = (int*)malloc(10 * sizeof(int));</code></li>
+              <li><code>free(void *ptr)</code> — Releases memory previously allocated by malloc/calloc/realloc. Never call on NULL or an already-freed pointer. Example: <code>free(arr); arr = NULL;</code></li>
+            </ul>
+          </div>
+        </div>
+        <div class="sub-q">
+          <div class="sub-label">Part (b) — What does myFunction() simulate?</div>
+          <div class="answer">
+            <p>The function simulates <code>atoi()</code> — converts the numeric prefix of a string to an <code>int</code>. It uses <code>sscanf(input, "%d", &amp;i)</code> to parse an integer. Returns 0 for an empty string or if the first character is not a digit.</p>
+            <div class="info-box warn"><strong>Bug in Original</strong><code>input[i] != NULL</code> should be <code>input[i] != '\0'</code>. <code>NULL</code> is a null pointer constant, not the null character. The intent is correct; the terminology is wrong.</div>
+          </div>
+        </div>
+        <div class="sub-q">
+          <div class="sub-label">Part (c) — Trace the Output</div>
+          <div class="answer">
+            <pre>5 4 3 2 1
+2 2 2 2 2
+2 3 4 4 6</pre>
+          </div>
+        </div>
+      </div></div>
+    </div>
+  </div>
+
+  <!-- Q6 -->
+  <div class="q-block">
+    <div class="q-header" onclick="toggleQ(this)">
+      <div class="q-num"><span class="exam-fin">Final</span></div>
+      <div class="q-title">Q6 — Character Selection, Branch Tracing, Recursive Number Print</div>
+      <div class="q-marks">Control Flow / Recursion</div>
+      <div class="q-arrow">▼</div>
+    </div>
+    <div class="q-body">
+      <div class="q-body-inner"><div class="q-body-inner-pad">
+        <div class="sub-q">
+          <div class="sub-label">Part (a &amp; b) — Character selection based on integer i</div>
+          <div class="answer">
+            <pre>#include&lt;stdio.h&gt;
+int main(){
+    char ch;  int i;
+    scanf("%d", &amp;i);
+    if      (i == 1)              ch = 'm';
+    else if (i &gt; 0 &amp;&amp; i &lt; 5)    ch = 'x';
+    else if (i &gt;= 5)             ch = 'y';
+    else if (i &gt; -5)             ch = 'c';  /* i&lt;=0 and i&gt;-5 */
+    else                          ch = 'b';  /* i&lt;=-5 */
+    printf("%c", ch);
+    return 0;
+}</pre>
+            <table class="ans-table">
+              <thead><tr><th>Input (i)</th><th>Output (ch)</th><th>Branch</th></tr></thead>
+              <tbody>
+                <tr><td>1</td><td><mark>m</mark></td><td>i == 1</td></tr>
+                <tr><td>2</td><td><mark>x</mark></td><td>0 &lt; i &lt; 5</td></tr>
+                <tr><td>7</td><td><mark>y</mark></td><td>i ≥ 5</td></tr>
+                <tr><td>−3</td><td><mark>c</mark></td><td>i &gt; −5</td></tr>
+                <tr><td>−4</td><td><mark>c</mark></td><td>i &gt; −5</td></tr>
+                <tr><td>−6</td><td><mark>b</mark></td><td>i ≤ −5</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="sub-q">
+          <div class="sub-label">Part (c) — Recursive number printing (forward then backward)</div>
+          <div class="answer">
+            <pre>#include &lt;stdio.h&gt;
+void printTheNumbers(int x) {
+    if (x &lt; 0) return;
+    printf("%d ", x);        /* print on way DOWN */
+    printTheNumbers(x - 1);  /* recurse */
+    if (x != 0)
+        printf("%d ", x);    /* print on way BACK UP (skip 0) */
+}
+/* Input 3 → output: 3 2 1 0 1 2 3 */</pre>
+          </div>
+        </div>
+      </div></div>
+    </div>
+  </div>
+
+  <!-- Q7 -->
+  <div class="q-block">
+    <div class="q-header" onclick="toggleQ(this)">
+      <div class="q-num"><span class="exam-fin">Final</span></div>
+      <div class="q-title">Q7 — Date/Time, void Pointers, fread/fwrite, Double-Pointer Trace</div>
+      <div class="q-marks">File I/O / Pointers</div>
+      <div class="q-arrow">▼</div>
+    </div>
+    <div class="q-body">
+      <div class="q-body-inner"><div class="q-body-inner-pad">
+        <div class="sub-q">
+          <div class="sub-label">Part (a) — Display current date/time and execution time</div>
+          <div class="answer">
+            <pre>#include &lt;stdio.h&gt;
+#include &lt;time.h&gt;
+int main() {
+    clock_t start = clock();
+    time_t now = time(NULL);
+    struct tm *local = localtime(&amp;now);
+    printf("Current Date and Time: %s", asctime(local));
+    clock_t end = clock();
+    double cpu = ((double)(end - start)) / CLOCKS_PER_SEC;
+    printf("Total execution time: %.6f seconds\n", cpu);
+    return 0;
+}</pre>
+          </div>
+        </div>
+        <div class="sub-q">
+          <div class="sub-label">Part (b) — void Pointers and fread()/fwrite()</div>
+          <div class="answer">
+            <p>A <code>void*</code> is a generic pointer that can hold the address of any data type. It cannot be dereferenced directly — it must first be cast to a concrete pointer type.</p>
+            <p><strong>Why fread()/fwrite() use void*:</strong> They copy raw bytes between memory and a file, independent of data type. <code>void*</code> lets the caller pass a pointer to any type without explicit casting.</p>
+            <pre>size_t fread (      void *ptr, size_t size, size_t n, FILE *stream);
+size_t fwrite(const void *ptr, size_t size, size_t n, FILE *stream);
+/* ptr    — buffer to read into / data source to write from
+   size   — byte size of one element (e.g. sizeof(int))
+   n      — number of elements
+   stream — open FILE* pointer
+   return — number of items successfully read/written */
+
+int arr[5] = {1,2,3,4,5};
+FILE *fp = fopen("data.bin","wb");
+fwrite(arr, sizeof(int), 5, fp);</pre>
+          </div>
+        </div>
+        <div class="sub-q">
+          <div class="sub-label">Part (c) — Double-pointer memory trace</div>
+          <div class="answer">
+            <p>Initial: <code>int x=1, y=2, *px=&amp;x, *py=&amp;y, **ppx=&amp;px</code></p>
+            <table class="ans-table">
+              <thead><tr><th>Addr</th><th>Var</th><th>Initial</th><th>After px=py</th><th>After ppx=&amp;py</th><th>After y=*px</th><th>After x=**ppx+1</th></tr></thead>
+              <tbody>
+                <tr><td>100</td><td>x</td><td>1</td><td>1</td><td>1</td><td>1</td><td><mark>3</mark></td></tr>
+                <tr><td>102</td><td>y</td><td>2</td><td>2</td><td>2</td><td>2</td><td>2</td></tr>
+                <tr><td>104</td><td>px</td><td>100</td><td>102</td><td>102</td><td>102</td><td>102</td></tr>
+                <tr><td>106</td><td>py</td><td>102</td><td>102</td><td>102</td><td>102</td><td>102</td></tr>
+                <tr><td>108</td><td>ppx</td><td>104</td><td>104</td><td>106</td><td>106</td><td>106</td></tr>
+              </tbody>
+            </table>
+            <div class="info-box note"><strong>Step 4 Detail</strong>ppx=106 → *ppx = [106] = 102 → **ppx = [102] = 2 → x = 2+1 = <mark>3</mark></div>
+          </div>
+        </div>
+      </div></div>
+    </div>
+  </div>
+
+  <!-- Q8 -->
+  <div class="q-block">
+    <div class="q-header" onclick="toggleQ(this)">
+      <div class="q-num"><span class="exam-fin">Final</span></div>
+      <div class="q-title">Q8 — Copy File to Multiple Destinations, Count Vowels, Expression Evaluation</div>
+      <div class="q-marks">File I/O / Expressions</div>
+      <div class="q-arrow">▼</div>
+    </div>
+    <div class="q-body">
+      <div class="q-body-inner"><div class="q-body-inner-pad">
+        <div class="sub-q">
+          <div class="sub-label">Part (a) — Copy a file to multiple destinations</div>
+          <div class="answer">
+            <pre>#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+int main(int argc, char *argv[]) {
+    if (argc &lt; 4) { printf("Usage: %s &lt;src&gt; &lt;n&gt; &lt;dest1&gt; ...\n",argv[0]); return 1; }
+    int num_copies = atoi(argv[2]);
+    FILE *src_fp = fopen(argv[1], "rb");
+    if (!src_fp) { printf("Error opening '%s'\n",argv[1]); return 1; }
+    for (int i = 0; i &lt; num_copies; i++) {
+        FILE *dst = fopen(argv[3+i], "wb");
+        if (!dst) { fclose(src_fp); return 1; }
+        int ch;
+        while ((ch = fgetc(src_fp)) != EOF) fputc(ch, dst);
+        fclose(dst);
+        rewind(src_fp);
+    }
+    fclose(src_fp);
+    printf("Copied '%s' to %d file(s).\n", argv[1], num_copies);
+    return 0;
+}</pre>
+          </div>
+        </div>
+        <div class="sub-q">
+          <div class="sub-label">Part (b) — Count vowels in a string</div>
+          <div class="answer">
+            <pre>int calculateVowel(char *str) {
+    if (str == NULL) return 0;
+    int count = 0;
+    while (*str) {
+        char c = tolower(*str);
+        if (c=='a'||c=='e'||c=='i'||c=='o'||c=='u') count++;
+        str++;
+    }
+    return count;
+}</pre>
+          </div>
+        </div>
+        <div class="sub-q">
+          <div class="sub-label">Part (c) — Expression evaluation (i=3, j=5)</div>
+          <div class="answer">
+            <table class="ans-table">
+              <thead><tr><th>#</th><th>Expression</th><th>Calculation</th><th>Result</th><th>i after</th><th>j after</th></tr></thead>
+              <tbody>
+                <tr><td>1</td><td><code>(i/2)+4</code></td><td>3/2=1 (int div); 1+4</td><td><mark>5</mark></td><td>3</td><td>5</td></tr>
+                <tr><td>2</td><td><code>(j%3)*i</code></td><td>5%3=2; 2×3</td><td><mark>6</mark></td><td>3</td><td>5</td></tr>
+                <tr><td>3</td><td><code>(i++)-(i--)</code></td><td>Undefined behaviour (modifies i twice without sequence point)</td><td><mark>UB</mark></td><td>3</td><td>5</td></tr>
+                <tr><td>4</td><td><code>j=(i+=2)</code></td><td>i becomes 5; j=5</td><td><mark>5</mark></td><td>5</td><td>5</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div></div>
+    </div>
+  </div>
+
+</div><!-- end sec-fin2011 -->
+
+
+<!-- ══════════════════════════════════════════════════ -->
+<!-- SECTION 3 · MID SEMESTER 2011–2012 -->
+<!-- ══════════════════════════════════════════════════ -->
+<div class="section" id="sec-mid2012">
+  <div class="breadcrumb">
+    CSE 4201 <span class="bc-sep">›</span> <span class="bc-active">Mid Semester 2011–2012</span>
+    <span class="bc-count">4 Questions</span>
+  </div>
+  <div class="toolbar">
+    <div class="search-wrap">
+      <input type="text" id="search-mid2012" placeholder="Search questions…" oninput="filterQuestions('sec-mid2012', this.value)">
+      <span class="search-icon">🔍</span>
+    </div>
+    <div class="toolbar-right">
+      <button class="toolbar-btn" onclick="expandAll('sec-mid2012')">Expand All</button>
+      <button class="toolbar-btn" onclick="collapseAll('sec-mid2012')">Collapse All</button>
+    </div>
+  </div>
+  <div class="section-header">
+    <div class="section-info">
+      <h2>Mid Semester Examination</h2>
+      <div class="subtitle">CSE 4201 · Computer Programming · Summer Semester 2011–2012</div>
+    </div>
+    <div class="section-badges">
+      <span class="badge badge-teal">Mid Exam</span>
+      <span class="badge badge-teal">2011–2012</span>
+    </div>
+  </div>
+
+  <!-- Q1a Pascal's Triangle -->
+  <div class="q-block">
+    <div class="q-header" onclick="toggleQ(this)">
+      <div class="q-num"><span class="exam-mid">Mid</span></div>
+      <div class="q-title">Q1(a) — Pascal's Triangle</div>
+      <div class="q-marks">2D Arrays</div>
+      <div class="q-arrow">▼</div>
+    </div>
+    <div class="q-body">
+      <div class="q-body-inner"><div class="q-body-inner-pad">
+        <div class="sub-q">
+          <div class="answer">
+            <pre>#include &lt;stdio.h&gt;
+int main() {
+    int n;
+    scanf("%d", &amp;n);
+    if (n &lt; 1 || n &gt; 10) { printf("Invalid input.\n"); return 1; }
+    int tri[10][10];
+    for (int i = 0; i &lt; n; i++)
+        for (int j = 0; j &lt;= i; j++)
+            tri[i][j] = (j==0 || j==i) ? 1 : tri[i-1][j-1]+tri[i-1][j];
+
+    for (int i = 0; i &lt; n; i++) {
+        for (int s = 0; s &lt; n-i-1; s++) printf(" ");
+        for (int j = 0; j &lt;= i; j++) printf("%6d", tri[i][j]);
+        printf("\n");
+    }
+    return 0;
+}</pre>
+          </div>
+        </div>
+      </div></div>
+    </div>
+  </div>
+
+  <!-- Q1b Pointer arithmetic trace -->
+  <div class="q-block">
+    <div class="q-header" onclick="toggleQ(this)">
+      <div class="q-num"><span class="exam-mid">Mid</span></div>
+      <div class="q-title">Q1(b) — Pointer Arithmetic Trace</div>
+      <div class="q-marks">Pointers</div>
+      <div class="q-arrow">▼</div>
+    </div>
+    <div class="q-body">
+      <div class="q-body-inner"><div class="q-body-inner-pad">
+        <div class="sub-q">
+          <div class="sub-question">Given int a[] = {10,9,8,7,6,...} and int *p1 = a, trace each expression.</div>
+          <div class="answer">
+            <table class="ans-table">
+              <thead><tr><th>Var</th><th>Expression</th><th>Explanation</th><th>Value</th></tr></thead>
+              <tbody>
+                <tr><td>t</td><td><code>(*p1)++</code></td><td>Assign a[0]=10 to t, then a[0] becomes 11</td><td><mark>10</mark></td></tr>
+                <tr><td>u</td><td><code>++(*p1)</code></td><td>Increment a[0] to 12, assign to u</td><td><mark>12</mark></td></tr>
+                <tr><td>v</td><td><code>*p1</code></td><td>p1 still at a[0], which is now 12</td><td><mark>12</mark></td></tr>
+                <tr><td>w</td><td><code>*++p1</code></td><td>Advance p1 to a[1], dereference → 9</td><td><mark>9</mark></td></tr>
+                <tr><td>x</td><td><code>*p1++</code></td><td>Read a[1]=9, then advance p1 to a[2]</td><td><mark>9</mark></td></tr>
+                <tr><td>y</td><td><code>*(++p1)</code></td><td>Advance p1 to a[3], dereference → 7</td><td><mark>7</mark></td></tr>
+                <tr><td>z</td><td><code>*(p1+1)</code></td><td>p1 at a[3]; p1+1 → a[4] = 6</td><td><mark>6</mark></td></tr>
+              </tbody>
+            </table>
+            <div class="info-box tip"><strong>Program Output</strong><mark>10 12 12 9 9 7 6</mark> — Array state after: a[0]=12, a[1]=9, rest unchanged.</div>
+          </div>
+        </div>
+      </div></div>
+    </div>
+  </div>
+
+  <!-- Q2a Parity matrix -->
+  <div class="q-block">
+    <div class="q-header" onclick="toggleQ(this)">
+      <div class="q-num"><span class="exam-mid">Mid</span></div>
+      <div class="q-title">Q2(a) — Parity / Even-Bit Check Matrix (File I/O)</div>
+      <div class="q-marks">File I/O / Arrays</div>
+      <div class="q-arrow">▼</div>
+    </div>
+    <div class="q-body">
+      <div class="q-body-inner"><div class="q-body-inner-pad">
+        <div class="sub-q">
+          <div class="answer">
+            <pre>#include &lt;stdio.h&gt;
+int main() {
+    FILE *fp = fopen("in.txt","r");
+    if (!fp) { printf("Error opening in.txt\n"); return 1; }
+    int mat[6][6] = {0};
+    for (int i = 0; i &lt; 5; i++)
+        for (int j = 0; j &lt; 5; j++)
+            fscanf(fp, "%d", &amp;mat[i][j]);
+    fclose(fp);
+
+    /* Row parity (column 6) */
+    for (int i = 0; i &lt; 5; i++) {
+        int cnt = 0;
+        for (int j = 0; j &lt; 5; j++) if (mat[i][j]==1) cnt++;
+        mat[i][5] = cnt % 2;
+    }
+    /* Column parity (row 6) */
+    for (int j = 0; j &lt; 6; j++) {
+        int cnt = 0;
+        for (int i = 0; i &lt; 5; i++) if (mat[i][j]==1) cnt++;
+        mat[5][j] = cnt % 2;
+    }
+    for (int i = 0; i &lt; 6; i++) {
+        for (int j = 0; j &lt; 6; j++) printf("%d ", mat[i][j]);
+        printf("\n");
+    }
+    return 0;
+}</pre>
+          </div>
+        </div>
+      </div></div>
+    </div>
+  </div>
+
+  <!-- Q2b strcat fix -->
+  <div class="q-block">
+    <div class="q-header" onclick="toggleQ(this)">
+      <div class="q-num"><span class="exam-mid">Mid</span></div>
+      <div class="q-title">Q2(b) — What Does f1() Simulate? Identify &amp; Fix Mistakes</div>
+      <div class="q-marks">String Functions / Bugs</div>
+      <div class="q-arrow">▼</div>
+    </div>
+    <div class="q-body">
+      <div class="q-body-inner"><div class="q-body-inner-pad">
+        <div class="sub-q">
+          <div class="answer">
+            <p>The function simulates <code>strcat()</code> — it appends string p2 to the end of string p1 and returns the original start of p1.</p>
+            <h4>Bugs in the Original Code</h4>
+            <ul class="ans-list">
+              <li><code>char *reserve = *p1;</code> → should be <code>char *reserve = p1;</code> (save the pointer, not the dereferenced char)</li>
+              <li><code>while(p1 != '\0')</code> → should be <code>while(*p1 != '\0')</code> (dereference to check the character)</li>
+              <li><code>while(p2 != '\0') *++p1 = ++p2;</code> → should be <code>while(*p2) *p1++ = *p2++;</code> (copy char then advance both)</li>
+              <li>Missing null-terminator <code>*p1 = '\0';</code> after the copy loop.</li>
+            </ul>
+            <h4>Corrected Version</h4>
+            <pre>char *f1(char *p1, char *p2) {
+    char *reserve = p1;        /* save start of destination */
+    while (*p1 != '\0') p1++; /* advance to end of string */
+    while (*p2 != '\0')
+        *p1++ = *p2++;         /* copy p2 onto end of p1 */
+    *p1 = '\0';                /* null-terminate */
+    return reserve;
+}</pre>
+          </div>
+        </div>
+      </div></div>
+    </div>
+  </div>
+
+  <!-- Q3a trace -->
+  <div class="q-block">
+    <div class="q-header" onclick="toggleQ(this)">
+      <div class="q-num"><span class="exam-mid">Mid</span></div>
+      <div class="q-title">Q3(a) — Trace the Recursive print() Output</div>
+      <div class="q-marks">Recursion / Tracing</div>
+      <div class="q-arrow">▼</div>
+    </div>
+    <div class="q-body">
+      <div class="q-body-inner"><div class="q-body-inner-pad">
+        <div class="sub-q">
+          <div class="answer">
+            <p>The function <code>print(ch)</code> first recurses down to the null character (printing nothing for it), then prints <code>*ch</code> on the way back up — producing <code>*&lt;char&gt;</code> for every non-null character.</p>
+            <pre>*M*i*d*T*e*r*m
+666666*2*n*d*S*e*m</pre>
+            <div class="info-box warn"><strong>Corrected Output Explanation</strong>The first loop calls <code>print(b+i)</code> with <code>b="MidTerm"</code> producing <code>*M*i*d*T*e*r*m</code>.
+            <br>The second loop is <code>for(i=0; i&lt;mystrlen(b); i++)</code> where <code>b="2ndSem"</code> (length&nbsp;6). <strong>Crucially, <code>mystrlen()</code> contains a <code>printf("%d", len)</code> call internally and is evaluated on every loop iteration</strong> — including the final exit-check when <code>i=6</code>. That means <code>mystrlen</code> is called and prints <code>6</code> a total of <strong>7 times</strong> (iterations i=0 through i=6). The loop body runs 6 times, printing <code>*2*n*d*S*e*m</code>. So the full second line is <code>6666666*2*n*d*S*e*m</code>.
+            <br><br>The original HTML incorrectly stated <code>6*2*n*d*S*e*m</code> (called once). This has been corrected.</div>
+          </div>
+        </div>
+      </div></div>
+    </div>
+  </div>
+
+  <!-- Q3b highest freq -->
+  <div class="q-block">
+    <div class="q-header" onclick="toggleQ(this)">
+      <div class="q-num"><span class="exam-mid">Mid</span></div>
+      <div class="q-title">Q3(b) — Highest-Frequency Character in Three Strings</div>
+      <div class="q-marks">Arrays / Strings</div>
+      <div class="q-arrow">▼</div>
+    </div>
+    <div class="q-body">
+      <div class="q-body-inner"><div class="q-body-inner-pad">
+        <div class="sub-q">
+          <div class="answer">
+            <pre>#include &lt;stdio.h&gt;
+#include &lt;ctype.h&gt;
+#include &lt;string.h&gt;
+int main() {
+    char s[3][100];
+    for (int k = 0; k &lt; 3; k++) {
+        fgets(s[k], 100, stdin);
+        s[k][strcspn(s[k],"\n")] = '\0';
+    }
+    for (int k = 0; k &lt; 3; k++) {
+        int freq[26] = {0}, maxFreq = 0;
+        for (int i = 0; s[k][i]; i++) {
+            char c = tolower(s[k][i]);
+            if (c &gt;= 'a' &amp;&amp; c &lt;= 'z') {
+                freq[c-'a']++;
+                if (freq[c-'a'] &gt; maxFreq) maxFreq = freq[c-'a'];
+            }
+        }
+        printf("String %d: ", k+1);
+        int first = 1;
+        for (int i = 0; i &lt; 26; i++)
+            if (freq[i] == maxFreq &amp;&amp; maxFreq &gt; 0) {
+                if (!first) printf(", ");
+                printf("'%c'", toupper('a'+i));
+                first = 0;
+            }
+        printf(" have the highest frequency.\n");
+    }
+    return 0;
+}</pre>
+          </div>
+        </div>
+      </div></div>
+    </div>
+  </div>
+
+  <!-- Q4 -->
+  <div class="q-block">
+    <div class="q-header" onclick="toggleQ(this)">
+      <div class="q-num"><span class="exam-mid">Mid</span></div>
+      <div class="q-title">Q4 — Factorial, GCD, and Streams in C</div>
+      <div class="q-marks">Recursion / I/O</div>
+      <div class="q-arrow">▼</div>
+    </div>
+    <div class="q-body">
+      <div class="q-body-inner"><div class="q-body-inner-pad">
+        <div class="sub-q">
+          <div class="sub-label">Part (a) — Factorial (iterative)</div>
+          <div class="answer">
+            <pre>int myfunction(int z) {
+    int y = 0, v1 = 1;
+    while (z &gt; y) { y++; v1 *= y; }
+    return v1;  /* returns z! */
+}</pre>
+          </div>
+        </div>
+        <div class="sub-q">
+          <div class="sub-label">Part (b) — GCD (recursive, Euclidean algorithm)</div>
+          <div class="answer">
+            <pre>int gcd(int a, int b) {
+    if (b == 0) return a;
+    return gcd(b, a % b);
+}</pre>
+          </div>
+        </div>
+        <div class="sub-q">
+          <div class="sub-label">Part (c) — Streams in C</div>
+          <div class="answer">
+            <p>A <strong>stream</strong> is an abstract, uniform interface for reading or writing a sequence of bytes, independent of the underlying device (file, keyboard, network, etc.).</p>
+            <ul class="ans-list">
+              <li>Streams provide a device-independent I/O interface.</li>
+              <li><strong>Text streams</strong> handle character data and may translate newlines; <strong>binary streams</strong> transfer raw bytes with no translation.</li>
+              <li>Standard streams — <code>stdin</code>, <code>stdout</code>, <code>stderr</code> — are opened automatically at program start.</li>
+              <li>Files are accessed via streams through <code>FILE*</code> pointers returned by <code>fopen()</code>.</li>
+              <li>Stream buffering reduces system calls and improves I/O performance.</li>
+            </ul>
+          </div>
+        </div>
+      </div></div>
+    </div>
+  </div>
+
+</div><!-- end sec-mid2012 -->
+
+
+<!-- ══════════════════════════════════════════════════ -->
+<!-- SECTION 4 · FINAL SEMESTER 2011–2012 -->
+<!-- ══════════════════════════════════════════════════ -->
+<div class="section" id="sec-fin2012">
+  <div class="breadcrumb">
+    CSE 4201 <span class="bc-sep">›</span> <span class="bc-active">Semester Final 2011–2012</span>
+    <span class="bc-count">8 Questions</span>
+  </div>
+  <div class="toolbar">
+    <div class="search-wrap">
+      <input type="text" id="search-fin2012" placeholder="Search questions…" oninput="filterQuestions('sec-fin2012', this.value)">
+      <span class="search-icon">🔍</span>
+    </div>
+    <div class="toolbar-right">
+      <button class="toolbar-btn" onclick="expandAll('sec-fin2012')">Expand All</button>
+      <button class="toolbar-btn" onclick="collapseAll('sec-fin2012')">Collapse All</button>
+    </div>
+  </div>
+  <div class="section-header">
+    <div class="section-info">
+      <h2>Semester Final Examination</h2>
+      <div class="subtitle">CSE 4201 · Computer Programming · Summer Semester 2011–2012</div>
+    </div>
+    <div class="section-badges">
+      <span class="badge badge-gold">Final Exam</span>
+      <span class="badge badge-blue">2011–2012</span>
+    </div>
+  </div>
+
+  <!-- Q1a digit histogram -->
+  <div class="q-block">
+    <div class="q-header" onclick="toggleQ(this)">
+      <div class="q-num"><span class="exam-fin">Final</span></div>
+      <div class="q-title">Q1(a) — Digit Frequency Histogram</div>
+      <div class="q-marks">Arrays / Strings</div>
+      <div class="q-arrow">▼</div>
+    </div>
+    <div class="q-body">
+      <div class="q-body-inner"><div class="q-body-inner-pad">
+        <div class="sub-q">
+          <div class="answer">
+            <pre>#include &lt;stdio.h&gt;
+#include &lt;string.h&gt;
+int main() {
+    char num[101];
+    int freq[10] = {0};
+    scanf("%100s", num);
+    for (int i = 0; num[i]; i++)
+        if (num[i] &gt;= '0' &amp;&amp; num[i] &lt;= '9') freq[num[i]-'0']++;
+    for (int d = 0; d &lt; 10; d++) {
+        printf("%d: ", d);
+        for (int j = 0; j &lt; freq[d]; j++) printf("*");
+        printf("\n");
+    }
+    return 0;
+}</pre>
+            <div class="info-box tip"><strong>Sample Output for "1122334"</strong><code>1: **  2: **  3: **  4: *</code></div>
+          </div>
+        </div>
+      </div></div>
+    </div>
+  </div>
+
+  <!-- Q2a natural language arithmetic -->
+  <div class="q-block">
+    <div class="q-header" onclick="toggleQ(this)">
+      <div class="q-num"><span class="exam-fin">Final</span></div>
+      <div class="q-title">Q2(a) — Natural-Language Arithmetic Expression Parser</div>
+      <div class="q-marks">Strings / Parsing</div>
+      <div class="q-arrow">▼</div>
+    </div>
+    <div class="q-body">
+      <div class="q-body-inner"><div class="q-body-inner-pad">
+        <div class="sub-q">
+          <div class="answer">
+            <p>Reads a sentence like "three plus five", converts word-digits to integers, identifies the operator, and prints the numeric result.</p>
+            <pre>#include &lt;stdio.h&gt;
+#include &lt;string.h&gt;
+#include &lt;ctype.h&gt;
+
+int wordToDigit(char *word) {
+    char lower[20];
+    strcpy(lower, word);
+    for (int i = 0; lower[i]; i++) lower[i] = tolower(lower[i]);
+    const char *words[] = {"zero","one","two","three","four",
+                           "five","six","seven","eight","nine"};
+    for (int i = 0; i &lt; 10; i++)
+        if (strcmp(lower, words[i])==0) return i;
+    return -1;
+}
+
+int main() {
+    char line[100], tokens[20][20];
+    int tokenCount = 0;
+    fgets(line, sizeof(line), stdin);
+    line[strcspn(line,"\n")] = '\0';
+    char *token = strtok(line," ");
+    while (token &amp;&amp; tokenCount &lt; 20) {
+        strcpy(tokens[tokenCount++], token);
+        token = strtok(NULL," ");
+    }
+    int num1=0, num2=0, i=0; char op='\0';
+    while (i &lt; tokenCount) {
+        if (strcasecmp(tokens[i],"plus")==0||strcasecmp(tokens[i],"add")==0)
+            { op='+'; i++; break; }
+        else if (strcasecmp(tokens[i],"minus")==0||strcasecmp(tokens[i],"subtract")==0)
+            { op='-'; i++; break; }
+        else num1 = num1*10 + wordToDigit(tokens[i++]);
+    }
+    while (i &lt; tokenCount) { int d=wordToDigit(tokens[i++]); if (d!=-1) num2=num2*10+d; }
+    printf("%d\n", op=='+' ? num1+num2 : num1-num2);
+    return 0;
+}</pre>
+          </div>
+        </div>
+      </div></div>
+    </div>
+  </div>
+
+  <!-- Q2b union byte swap -->
+  <div class="q-block">
+    <div class="q-header" onclick="toggleQ(this)">
+      <div class="q-num"><span class="exam-fin">Final</span></div>
+      <div class="q-title">Q2(b) — Union Byte-Swap Memory Trace</div>
+      <div class="q-marks">Union / Memory</div>
+      <div class="q-arrow">▼</div>
+    </div>
+    <div class="q-body">
+      <div class="q-body-inner"><div class="q-body-inner-pad">
+        <div class="sub-q">
+          <div class="answer">
+            <p>On a 16-bit system (<code>sizeof(int)=2</code>), all union members share the same 2 bytes:</p>
+            <table class="ans-table">
+              <thead><tr><th>Step</th><th>Action</th><th>Byte 0 (low)</th><th>Byte 1 (high)</th><th>int value</th></tr></thead>
+              <tbody>
+                <tr><td>1</td><td><code>var.ch = '$'</code></td><td>36 ('$')</td><td>??</td><td>—</td></tr>
+                <tr><td>2</td><td><code>var.ch2[0] = 'A'</code></td><td>65 ('A')</td><td>??</td><td>—</td></tr>
+                <tr><td>3</td><td><code>var.ch2[1] = 0</code></td><td>65 ('A')</td><td>0</td><td>65</td></tr>
+                <tr><td>4</td><td>swap [0]↔[1]</td><td>0</td><td>65 ('A')</td><td><mark>16640</mark></td></tr>
+              </tbody>
+            </table>
+            <div class="info-box note"><strong>Calculation</strong>After swap: byte 0 = 0, byte 1 = 65. Little-endian integer = 0 + 65 × 256 = <mark>16640</mark></div>
+          </div>
+        </div>
+      </div></div>
+    </div>
+  </div>
+
+  <!-- Q3 file read + nested loop trace + array expr -->
+  <div class="q-block">
+    <div class="q-header" onclick="toggleQ(this)">
+      <div class="q-num"><span class="exam-fin">Final</span></div>
+      <div class="q-title">Q3 — File Read, Nested-Loop Trace, Array/Pointer Expression</div>
+      <div class="q-marks">File I/O / Tracing</div>
+      <div class="q-arrow">▼</div>
+    </div>
+    <div class="q-body">
+      <div class="q-body-inner"><div class="q-body-inner-pad">
+        <div class="sub-q">
+          <div class="sub-label">Part (a) — Read and print a file character by character</div>
+          <div class="answer">
+            <pre>#include &lt;stdio.h&gt;
+int main() {
+    FILE *fp; char c;
+    fp = fopen("test.c","r");
+    if (fp==NULL) { printf("Error opening file.\n"); return 1; }
+    while ((c=fgetc(fp))!=EOF) putchar(c);
+    fclose(fp);
+    return 0;
+}</pre>
+          </div>
+        </div>
+        <div class="sub-q">
+          <div class="sub-label">Part (b) — Trace the nested-loop output</div>
+          <div class="answer">
+            <pre>0e1v2l3o4s
+0e1v2l3o
+0e1v2l
+0e1v
+0e</pre>
+          </div>
+        </div>
+        <div class="sub-q">
+          <div class="sub-label">Part (c) — Array/pointer expression output</div>
+          <div class="answer">
+            <pre>8 5 7 7 9</pre>
+          </div>
+        </div>
+      </div></div>
+    </div>
+  </div>
+
+  <!-- Q4 digit sum + bitwise -->
+  <div class="q-block">
+    <div class="q-header" onclick="toggleQ(this)">
+      <div class="q-num"><span class="exam-fin">Final</span></div>
+      <div class="q-title">Q4 — Digit Sum Condition &amp; Bitwise Operators</div>
+      <div class="q-marks">Math / Bitwise</div>
+      <div class="q-arrow">▼</div>
+    </div>
+    <div class="q-body">
+      <div class="q-body-inner"><div class="q-body-inner-pad">
+        <div class="sub-q">
+          <div class="sub-label">Part (a) — Find numbers where n == 4 × digit-sum(n)</div>
+          <div class="answer">
+            <pre>#include &lt;stdio.h&gt;
+int main() {
+    for (int n = 0; n &lt;= 100; n++) {
+        int temp=n, sum=0;
+        while (temp&gt;0) { sum+=temp%10; temp/=10; }
+        if (n == 4*sum) printf("%d ", n);
+    }
+    printf("\n");
+    return 0;
+}
+/* Output: 0 4 8 12 20 24 36 48 */</pre>
+            <div class="info-box note"><strong>Note on n=0</strong>The while loop body never executes for n=0, so sum remains 0. The condition 0 == 4×0 is true, so 0 is included in the output.</div>
+          </div>
+        </div>
+        <div class="sub-q">
+          <div class="sub-label">Part (b) — Bitwise operators (a=5, b=3)</div>
+          <div class="answer">
+            <table class="ans-table">
+              <thead><tr><th>Op</th><th>Name</th><th>Rule</th><th>Example</th><th>Result</th></tr></thead>
+              <tbody>
+                <tr><td><code>&amp;</code></td><td>AND</td><td>1 if both bits are 1</td><td><code>0101 &amp; 0011</code></td><td><mark>1</mark></td></tr>
+                <tr><td><code>|</code></td><td>OR</td><td>1 if at least one bit is 1</td><td><code>0101 | 0011</code></td><td><mark>7</mark></td></tr>
+                <tr><td><code>^</code></td><td>XOR</td><td>1 if bits differ</td><td><code>0101 ^ 0011</code></td><td><mark>6</mark></td></tr>
+                <tr><td><code>~</code></td><td>NOT</td><td>Inverts all bits; ~x = -(x+1)</td><td><code>~0101</code></td><td><mark>-6</mark></td></tr>
+                <tr><td><code>&lt;&lt;</code></td><td>Left Shift</td><td>Shift left; fill right with 0</td><td><code>0101 &lt;&lt; 1</code></td><td><mark>10</mark></td></tr>
+                <tr><td><code>&gt;&gt;</code></td><td>Right Shift</td><td>Shift right; fill with sign bit</td><td><code>0101 &gt;&gt; 1</code></td><td><mark>2</mark></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div></div>
+    </div>
+  </div>
+
+  <!-- Q5 student ID validate + trace -->
+  <div class="q-block">
+    <div class="q-header" onclick="toggleQ(this)">
+      <div class="q-num"><span class="exam-fin">Final</span></div>
+      <div class="q-title">Q5 — Student ID Validation &amp; Recursive/Loop Trace</div>
+      <div class="q-marks">Strings / Recursion</div>
+      <div class="q-arrow">▼</div>
+    </div>
+    <div class="q-body">
+      <div class="q-body-inner"><div class="q-body-inner-pad">
+        <div class="sub-q">
+          <div class="sub-label">Part (a) — Validate a 6-digit student ID</div>
+          <div class="answer">
+            <p>Rules: exactly 6 digits; digit 3 (index 2) in [1,5]; digit 4 (index 3) in [2,4]; last 2 digits form a number in (0, 90).</p>
+            <pre>int validate(char *id) {
+    if (strlen(id) != 6) return 0;
+    for (int i = 0; i &lt; 6; i++)
+        if (!isdigit(id[i])) return 0;
+    int d3 = id[2]-'0', d4 = id[3]-'0';
+    int last2 = (id[4]-'0')*10 + (id[5]-'0');
+    if (d3&lt;1||d3&gt;5) return 0;
+    if (d4&lt;2||d4&gt;4) return 0;
+    if (last2&lt;=0||last2&gt;=90) return 0;
+    return 1;
+}</pre>
+          </div>
+        </div>
+        <div class="sub-q">
+          <div class="sub-label">Part (b) — Trace the recursive/loop output</div>
+          <div class="answer">
+            <pre>c
+cc
+icc
+licc
+Alicc</pre>
+          </div>
+        </div>
+      </div></div>
+    </div>
+  </div>
+
+  <!-- Q6 Teacher DB -->
+  <div class="q-block">
+    <div class="q-header" onclick="toggleQ(this)">
+      <div class="q-num"><span class="exam-fin">Final</span></div>
+      <div class="q-title">Q6 — Teacher Database (Add, Show)</div>
+      <div class="q-marks">Structs / File</div>
+      <div class="q-arrow">▼</div>
+    </div>
+    <div class="q-body">
+      <div class="q-body-inner"><div class="q-body-inner-pad">
+        <div class="sub-q">
+          <div class="sub-label">Part (a) — Add teacher with duplicate check</div>
+          <div class="answer">
+            <pre>#define MAX_TEACHERS 100
+struct Teacher { char name[50]; char dept[50]; };
+struct Teacher teachers[MAX_TEACHERS];
+int count = 0;
+
+/* In main() — add routine: */
+int isDuplicate = 0;
+for (int i = 0; i &lt; count; i++)
+    if (strcmp(teachers[i].name, name)==0) { isDuplicate=1; break; }
+if (isDuplicate)
+    printf("Warning: '%s' already exists.\n", name);
+else if (count &gt;= MAX_TEACHERS)
+    printf("Database full!\n");
+else {
+    strcpy(teachers[count].name, name);
+    strcpy(teachers[count].dept, dept);
+    count++;
+    printf("Teacher '%s' added.\n", name);
+}</pre>
+          </div>
+        </div>
+        <div class="sub-q">
+          <div class="sub-label">Part (b) — Show all or by department</div>
+          <div class="answer">
+            <pre>void showTheNames() {
+    int choice;  char dept[50];
+    scanf("%d",&amp;choice); getchar();
+    if (choice==1) {
+        for (int i=0;i&lt;count;i++)
+            printf("Name: %s, Dept: %s\n", teachers[i].name, teachers[i].dept);
+    } else if (choice==2) {
+        fgets(dept, sizeof(dept), stdin);
+        dept[strcspn(dept,"\n")]='\0';
+        int found=0;
+        for (int i=0;i&lt;count;i++)
+            if (strcmp(teachers[i].dept,dept)==0) {
+                printf("Name: %s\n",teachers[i].name); found=1;
+            }
+        if (!found) printf("No teachers in '%s'.\n", dept);
+    }
+}</pre>
+          </div>
+        </div>
+      </div></div>
+    </div>
+  </div>
+
+  <!-- Q7 anagram + macro -->
+  <div class="q-block">
+    <div class="q-header" onclick="toggleQ(this)">
+      <div class="q-num"><span class="exam-fin">Final</span></div>
+      <div class="q-title">Q7 — Numeric-String Anagram Checker &amp; TOTAL_ELEMENTS Macro</div>
+      <div class="q-marks">Strings / Macros</div>
+      <div class="q-arrow">▼</div>
+    </div>
+    <div class="q-body">
+      <div class="q-body-inner"><div class="q-body-inner-pad">
+        <div class="sub-q">
+          <div class="sub-label">Part (a) — Numeric-string anagram checker</div>
+          <div class="answer">
+            <pre>#include &lt;stdio.h&gt;
+#include &lt;string.h&gt;
+int main() {
+    char num1[20], num2[20];
+    scanf("%19s %19s", num1, num2);
+    int len1=strlen(num1), len2=strlen(num2);
+    if (len1!=len2) { printf("Not anagram\n"); return 0; }
+    int freq[10]={0};
+    for (int i=0;i&lt;len1;i++) { freq[num1[i]-'0']++; freq[num2[i]-'0']--; }
+    for (int i=0;i&lt;10;i++)
+        if (freq[i]!=0) { printf("Not anagram\n"); return 0; }
+    printf("Anagram\n");
+    return 0;
+}</pre>
+          </div>
+        </div>
+        <div class="sub-q">
+          <div class="sub-label">Part (b) — Iterate over a global array using a macro</div>
+          <div class="answer">
+            <pre>#include &lt;stdio.h&gt;
+int array[] = {1,2,3,4,5,6,7};
+#define TOTAL_ELEMENTS (sizeof(array)/sizeof(array[0]))
+int main() {
+    int d;
+    for (d=0; d &lt; (int)TOTAL_ELEMENTS; d++)
+        printf("%d\n", array[d]);
+    return 0;
+}
+/* Output: 1 through 7, one per line */</pre>
+            <div class="info-box key"><strong>Why This Macro Matters</strong><code>sizeof(array)/sizeof(array[0])</code> computes the element count at <em>compile time</em>, avoiding hardcoded sizes and preventing off-by-one errors. Cast to <code>int</code> avoids signed/unsigned comparison warnings.</div>
+          </div>
+        </div>
+      </div></div>
+    </div>
+  </div>
+
+    <div class="q-block">
+    <div class="q-header" onclick="toggleQ(this)">
+      <div class="q-num"><span class="exam-fin">Final</span></div>
+      <div class="q-title">Q3(b) &mdash; Union & Memory Visualization (16640)</div>
+      <div class="q-marks">Memory / Unions</div>
+      <div class="q-arrow">▼</div>
+    </div>
+    <div class="q-body">
+      <div class="q-body-inner"><div class="q-body-inner-pad">
+        <p>Explain why the union prints 16640.</p>
+        <pre>union { char ch; char ch2[2]; int i; } var;
+var.ch2[0]=0; var.ch2[1]='A'; // 'A' = 65
+printf("%d", var.i);</pre>
+        <div class="info-box note"><strong>Step-by-Step Logic</strong>
+        In a Little-endian system, <code>ch2[0]</code> is the low-byte and <code>ch2[1]</code> is the high-byte.
+        <br>Value = $65 \times 256 + 0 = 16640$.
+        <br>Memory view: <code>[0][65][0][0]</code> (interpreting first 4 bytes as int).
+        </div>
+      </div></div>
+    </div>
+  </div>
+
+<!-- Q8 doubly linked list -->
+  <div class="q-block">
+    <div class="q-header" onclick="toggleQ(this)">
+      <div class="q-num"><span class="exam-fin">Final</span></div>
+      <div class="q-title">Q8 — Doubly Linked List Insertions &amp; Bit Shift Operators</div>
+      <div class="q-marks">Data Structures / Bitwise</div>
+      <div class="q-arrow">▼</div>
+    </div>
+    <div class="q-body">
+      <div class="q-body-inner"><div class="q-body-inner-pad">
+        <div class="sub-q">
+          <div class="sub-label">Part (a) — Insert at end, front, and position</div>
+          <div class="answer">
+            <pre>typedef struct node { int i; struct node *prev, *next; } node;
+
+void insertAtEnd(node **head, node **tail, int val) {
+    node *n = malloc(sizeof(node));
+    n-&gt;i=val; n-&gt;next=NULL; n-&gt;prev=*tail;
+    if (!*head) *head=*tail=n;
+    else { (*tail)-&gt;next=n; *tail=n; }
+}
+void insertAtFront(node **head, node **tail, int val) {
+    node *n = malloc(sizeof(node));
+    n-&gt;i=val; n-&gt;prev=NULL; n-&gt;next=*head;
+    if (*head) (*head)-&gt;prev=n; else *tail=n;
+    *head=n;
+}
+void insertAtPosition(node **head, node **tail, int pos, int val) {
+    node *temp=*head;
+    for (int i=0;i&lt;pos&amp;&amp;temp;i++) temp=temp-&gt;next;
+    if (!temp) return;
+    node *n=malloc(sizeof(node));
+    n-&gt;i=val; n-&gt;next=temp-&gt;next; n-&gt;prev=temp;
+    if (temp-&gt;next) temp-&gt;next-&gt;prev=n; else *tail=n;
+    temp-&gt;next=n;
+}
+/* main: insert 2,3,4 at end → 2 3 4
+         insertAtPosition(1,7) → 2 3 7 4
+         insertAtFront(1)      → 1 2 3 7 4
+   Output: 1 2 3 7 4 */</pre>
+          </div>
+        </div>
+        <div class="sub-q">
+          <div class="sub-label">Part (b) — Left shift and right shift operators</div>
+          <div class="answer">
+            <table class="ans-table">
+              <thead><tr><th>Operator</th><th>Direction</th><th>Fill (unsigned)</th><th>Fill (signed)</th><th>Math Effect</th></tr></thead>
+              <tbody>
+                <tr><td><code>&lt;&lt;</code></td><td>Left</td><td>0</td><td>0</td><td>Multiply by 2ⁿ</td></tr>
+                <tr><td><code>&gt;&gt;</code></td><td>Right</td><td>0</td><td>Sign bit</td><td>Divide by 2ⁿ (integer)</td></tr>
+              </tbody>
+            </table>
+            <ul class="ans-list">
+              <li><strong>Left shift:</strong> <code>5 &lt;&lt; 1</code>: <code>0000 0101 → 0000 1010</code> = <mark>10</mark></li>
+              <li><strong>Right shift (positive):</strong> <code>12 &gt;&gt; 2</code>: <code>0000 1100 → 0000 0011</code> = <mark>3</mark></li>
+              <li><strong>Right shift (negative):</strong> <code>-8 &gt;&gt; 1</code>: <code>1111 1000 → 1111 1100</code> = <mark>-4</mark> (sign bit propagated)</li>
+            </ul>
+          </div>
+        </div>
+      </div></div>
+    </div>
+  </div>
+
+</div><!-- end sec-fin2012 -->
+
+
+<!-- ══════════════════════════════════════════════════ -->
+<!-- SECTION 5 · FINAL 2021–2022 (CSE 4107) -->
+
+
+<div class="section" id="sec-fin2022">
+  <div class="breadcrumb">
+    CSE 4107 <span class="bc-sep">&rsaquo;</span> <span class="bc-active">Semester Final 2021&ndash;2022</span>
+    <span class="bc-count">8 Questions</span>
+  </div>
+  <div class="toolbar">
+    <div class="search-wrap">
+      <input type="text" id="search-fin2022" placeholder="Search questions..." oninput="filterQuestions('sec-fin2022', this.value)">
+      <span class="search-icon">🔍</span>
+    </div>
+    <div class="toolbar-right">
+      <button class="toolbar-btn" onclick="expandAll('sec-fin2022')">Expand All</button>
+      <button class="toolbar-btn" onclick="collapseAll('sec-fin2022')">Collapse All</button>
+    </div>
+  </div>
+  <div class="section-header">
+    <div class="section-info">
+      <h2>Semester Final Examination</h2>
+      <div class="subtitle">CSE 4107 · Structured Programming I · Winter Semester 2021&ndash;2022</div>
+    </div>
+    <div class="section-badges">
+      <span class="badge badge-gold">Final Exam</span>
+      <span class="badge badge-purple">2021&ndash;2022</span>
+    </div>
+  </div>
+
+  <!-- Q1 -->
+  <div class="q-block">
+    <div class="q-header" onclick="toggleQ(this)">
+      <div class="q-num"><span class="exam-fin">Final</span></div>
+      <div class="q-title">Q1 &mdash; Team Info 2D Struct Array &amp; Match Schedule with Date</div>
+      <div class="q-marks">Structs / Arrays</div>
+      <div class="q-arrow">▼</div>
+    </div>
+    <div class="q-body">
+      <div class="q-body-inner"><div class="q-body-inner-pad">
+        <div class="sub-q">
+          <div class="sub-label">Part (a) &mdash; Store Team Info in a 2D Struct Array</div>
+          <div class="answer">
+            <pre>#include &lt;stdio.h&gt;
+#define GROUPS 4
+#define TEAMS_PER_GROUP 8
+struct TeamInfo { char name[50]; int ranking; };
+
+int main() {
+    struct TeamInfo groups[GROUPS][TEAMS_PER_GROUP];
+    for (int g=0;g&lt;GROUPS;g++)
+        for (int t=0;t&lt;TEAMS_PER_GROUP;t++) {
+            printf("Group %d, Team %d: ",g+1,t+1);
+            scanf("%s %d",groups[g][t].name,&amp;groups[g][t].ranking);
+        }
+    for (int g=0;g&lt;GROUPS;g++) {
+        printf("Group %d:\n",g+1);
+        for (int t=0;t&lt;TEAMS_PER_GROUP;t++)
+            printf("  [%s, %d]\n",groups[g][t].name,groups[g][t].ranking);
+    }
+    return 0;
+}</pre>
+          </div>
+        </div>
+        <div class="sub-q">
+          <div class="sub-label">Part (b) &mdash; Schedule Group-Stage Matches with Date Progression</div>
+          <div class="answer">
+            <pre>void orderTeams(struct TeamInfo *a, struct TeamInfo *b) {
+    if (a-&gt;ranking &gt; b-&gt;ranking) {
+        struct TeamInfo tmp=*a; *a=*b; *b=tmp;
+    }
+}
+void nextDate(int *d, int *m, int *y) {
+    int days[]={0,31,28,31,30,31,30,31,31,30,31,30,31};
+    if (++(*d) &gt; days[*m]) { *d=1; if (++(*m)&gt;12){*m=1;++(*y);} }
+}
+const char* getMonthName(int m) {
+    static const char *mo[]={"","Jan","Feb","Mar","Apr","May","Jun",
+                              "Jul","Aug","Sep","Oct","Nov","Dec"};
+    return (m&gt;=1&amp;&amp;m&lt;=12)?mo[m]:"";
+}</pre>
+            <div class="info-box tip"><strong>Logic</strong>Each pair (i,j) within a group is scheduled for one game. <code>orderTeams()</code> ensures the lower-ranked team is listed first. <code>nextDate()</code> handles month rollovers including December→January.</div>
+          </div>
+        </div>
+      </div></div>
+    </div>
+  </div>
+
+  <!-- Q2 -->
+  <div class="q-block">
+    <div class="q-header" onclick="toggleQ(this)">
+      <div class="q-num"><span class="exam-fin">Final</span></div>
+      <div class="q-title">Q2 &mdash; Shorten Player Name &amp; Collatz Reward Calculator</div>
+      <div class="q-marks">Strings / Math</div>
+      <div class="q-arrow">▼</div>
+    </div>
+    <div class="q-body">
+      <div class="q-body-inner"><div class="q-body-inner-pad">
+        <div class="sub-q">
+          <div class="sub-label">Part (a) &mdash; Shorten a Player Name</div>
+          <div class="answer">
+            <p>Prints last name in title case, a space, then first and last characters of the first name (both uppercase).</p>
+            <pre>void shortenName(char *first, char *last) {
+    int lf=strlen(first), ll=strlen(last);
+    printf("%c", toupper(last[0]));
+    for (int i=1;i&lt;ll;i++) printf("%c",tolower(last[i]));
+    printf(" %c%c\n", toupper(first[0]), toupper(first[lf&gt;1?lf-1:0]));
+}</pre>
+          </div>
+        </div>
+        <div class="sub-q">
+          <div class="sub-label">Part (b) &mdash; Collatz-Based Reward Calculator</div>
+          <div class="answer">
+            <pre>#include &lt;stdio.h&gt;
+long long calculateReward(int goals) {
+    long long reward = (long long)goals * 1000;
+    int n = goals;
+    while (n &gt; 1) {
+        n = (n%2) ? 3*n+1 : n/2;
+        reward += (long long)n * 1000;
+    }
+    return reward;
+}
+int main() {
+    int goals; scanf("%d",&amp;goals);
+    printf("Reward: %lld\n", calculateReward(goals));
+    return 0;
+}</pre>
+          </div>
+        </div>
+      </div></div>
+    </div>
+  </div>
+
+  <!-- Q3 offside -->
+  <div class="q-block">
+    <div class="q-header" onclick="toggleQ(this)">
+      <div class="q-num"><span class="exam-fin">Final</span></div>
+      <div class="q-title">Q3 &mdash; Offside Detection</div>
+      <div class="q-marks">Arrays / Logic</div>
+      <div class="q-arrow">▼</div>
+    </div>
+    <div class="q-body">
+      <div class="q-body-inner"><div class="q-body-inner-pad">
+        <div class="sub-q">
+          <div class="answer">
+            <p>Reads 2×11 player positions and attack direction. Finds the last defender's x-coordinate, counts attackers beyond it.</p>
+            <pre>#include &lt;stdio.h&gt;
+int main() {
+    int players[2][11][2]; char dir;
+    for (int i=0;i&lt;11;i++) scanf("%d,%d",&amp;players[0][i][0],&amp;players[0][i][1]);
+    for (int i=0;i&lt;11;i++) scanf("%d,%d",&amp;players[1][i][0],&amp;players[1][i][1]);
+    scanf(" %c",&amp;dir);
+    int def_x, count=0;
+    if (dir=='>') {
+        def_x=players[0][0][0];
+        for (int i=1;i&lt;11;i++) if (players[0][i][0]&gt;def_x) def_x=players[0][i][0];
+        for (int j=0;j&lt;11;j++) if (players[1][j][0]&gt;def_x) count++;
+    } else {
+        def_x=players[1][0][0];
+        for (int i=1;i&lt;11;i++) if (players[1][i][0]&lt;def_x) def_x=players[1][i][0];
+        for (int j=0;j&lt;11;j++) if (players[0][j][0]&lt;def_x) count++;
+    }
+    printf(count&lt;2?"Offside\n":"Not Offside\n");
+    return 0;
+}</pre>
+          </div>
+        </div>
+      </div></div>
+    </div>
+  </div>
+
+  <!-- Q4 trace + seat pattern -->
+  <div class="q-block">
+    <div class="q-header" onclick="toggleQ(this)">
+      <div class="q-num"><span class="exam-fin">Final</span></div>
+      <div class="q-title">Q4 &mdash; Trace Recursive Output &amp; Seat Pattern</div>
+      <div class="q-marks">Recursion / Tracing</div>
+      <div class="q-arrow">▼</div>
+    </div>
+    <div class="q-body">
+      <div class="q-body-inner"><div class="q-body-inner-pad">
+        <div class="sub-q">
+          <div class="sub-label">Part (a) &mdash; Trace the Recursive FIFA-2022 Output</div>
+          <div class="answer">
+            <table class="ans-table">
+              <thead><tr><th>Part</th><th>Output / Behaviour</th></tr></thead>
+              <tbody>
+                <tr><td>i)</td><td><code>FIFA-20222202-AFIF</code><br><em>f1 at Location #1 (before printf): prints on return (reverse), then printf fires forward.</em></td></tr>
+                <tr><td>ii)</td><td>Infinite recursion &mdash; outputs 'F' repeatedly until stack overflow (f1 never advances the pointer)</td></tr>
+                <tr><td>iii)</td><td><code>FIFA-20222202-AFI</code><br><em>f1 at Location #2 (after printf): prints forward first, then recurses.</em></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="sub-q">
+          <div class="sub-label">Part (b) &mdash; Recursive Seat Pattern</div>
+          <div class="answer">
+            <pre>void seat_pattern(int n) {
+    if (n &lt;= 0) return;
+    for (int i=0;i&lt;n;i++) printf("#");
+    printf("\n");
+    if (n &gt; 1) {
+        seat_pattern(n-1);
+        for (int i=0;i&lt;n;i++) printf("#");
+        printf("\n");
+    }
+}
+/* n=3 output:
+   ###
+   ##
+   #
+   ##
+   ### */</pre>
+            <div class="info-box tip"><strong>Pattern for n=3</strong><code>###</code> → <code>##</code> → <code>#</code> → <code>##</code> → <code>###</code> &mdash; symmetric staircase expanding then contracting.</div>
+          </div>
+        </div>
+      </div></div>
+    </div>
+  </div>
+
+  <!-- Q5 file IO + password -->
+  <div class="q-block">
+    <div class="q-header" onclick="toggleQ(this)">
+      <div class="q-num"><span class="exam-fin">Final</span></div>
+      <div class="q-title">Q5 &mdash; File I/O: Team Card Data &amp; Password Validator</div>
+      <div class="q-marks">File I/O / Validation</div>
+      <div class="q-arrow">▼</div>
+    </div>
+    <div class="q-body">
+      <div class="q-body-inner"><div class="q-body-inner-pad">
+        <div class="sub-q">
+          <div class="sub-label">Part (a) &mdash; Read, Update &amp; Save Team Card Data</div>
+          <div class="answer">
+            <pre>typedef struct { char name[50]; int rank,red_cards,yellow_cards; } Team;
+
+/* Read from info.txt */
+fp = fopen("info.txt","r");
+for (int i=0;i&lt;32;i++) {
+    fscanf(fp,"%s %d",teams[i].name,&amp;teams[i].rank);
+    teams[i].red_cards=teams[i].yellow_cards=0;
+}
+fclose(fp);
+
+/* Update interactively and save back */
+fp = fopen("info.txt","w");
+for (int i=0;i&lt;32;i++)
+    fprintf(fp,"%s %d %d %d\n",teams[i].name,teams[i].rank,
+            teams[i].red_cards,teams[i].yellow_cards);
+fclose(fp);</pre>
+          </div>
+        </div>
+        <div class="sub-q">
+          <div class="sub-label">Part (b) &mdash; Password Validator</div>
+          <div class="answer">
+            <p>Valid when: ≥ 10 chars, has uppercase + lowercase + digit, does not contain "password" (case-insensitive).</p>
+            <pre>int validate_password(char *password) {
+    int len=strlen(password);
+    if (len&lt;10) return 0;
+    int has_upper=0,has_lower=0,has_digit=0;
+    for (int i=0;i&lt;len;i++) {
+        if (isupper(password[i])) has_upper=1;
+        if (islower(password[i])) has_lower=1;
+        if (isdigit(password[i])) has_digit=1;
+    }
+    if (!(has_upper&amp;&amp;has_lower&amp;&amp;has_digit)) return 0;
+    char *lp=malloc(len+1);
+    for (int i=0;i&lt;len;i++) lp[i]=tolower(password[i]);
+    lp[len]='\0';
+    int ok=(strstr(lp,"password")==NULL)?1:0;
+    free(lp);
+    return ok;
+}</pre>
+          </div>
+        </div>
+      </div></div>
+    </div>
+  </div>
+
+  <!-- Q6 -->
+  <div class="q-block">
+    <div class="q-header" onclick="toggleQ(this)">
+      <div class="q-num"><span class="exam-fin">Final</span></div>
+      <div class="q-title">Q6 &mdash; Self-Replicating Program, strcat Fix, Two Return Values</div>
+      <div class="q-marks">CLI / Pointers / Structs</div>
+      <div class="q-arrow">▼</div>
+    </div>
+    <div class="q-body">
+      <div class="q-body-inner"><div class="q-body-inner-pad">
+        <div class="sub-q">
+          <div class="sub-label">Part (a) &mdash; Self-Replicating Program</div>
+          <div class="answer">
+            <pre>#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+int main(int argc, char *argv[]) {
+    if (argc!=2||atoi(argv[1])&lt;=0) { printf("Usage: %s &lt;n&gt;\n",argv[0]); return 1; }
+    FILE *fp=fopen(__FILE__,"r");
+    if (!fp) { printf("Error.\n"); return 1; }
+    int n=atoi(argv[1]);
+    for (int i=0;i&lt;n;i++) {
+        rewind(fp); int c;
+        while ((c=fgetc(fp))!=EOF) putchar(c);
+        if (i&lt;n-1) printf("\n--- Copy %d ---\n\n",i+1);
+    }
+    fclose(fp);
+    return 0;
+}</pre>
+          </div>
+        </div>
+        <div class="sub-q">
+          <div class="sub-label">Part (b) &mdash; Re-implement strcat() &mdash; Fix the Bug</div>
+          <div class="answer">
+            <div class="fix-note">Original bug: <code>char *begin = *a</code> dereferences the pointer, getting the first character. Fix: <code>char *begin = a</code></div>
+            <pre>char* f1(char *a, char *b) {
+    char *begin = a;  /* Fixed */
+    while (*a) a++;
+    while (*b) *a++ = *b++;
+    *a = '\0';
+    return begin;
+}</pre>
+          </div>
+        </div>
+        <div class="sub-q">
+          <div class="sub-label">Part (c) &mdash; Returning Two Values from C</div>
+          <div class="answer">
+            <pre>/* Approach 1 &mdash; Output pointers */
+void square_and_sqrt(double num, double *sq, double *sq_root) {
+    *sq = num * num;
+    *sq_root = sqrt(num);
+}
+
+/* Approach 2 &mdash; Return a struct */
+typedef struct { double square; double square_root; } MathResult;
+MathResult square_and_sqrt(double num) {
+    MathResult r;
+    r.square = num * num;
+    r.square_root = sqrt(num);
+    return r;
+}</pre>
+          </div>
+        </div>
+      </div></div>
+    </div>
+  </div>
+
+</div><!-- end sec-fin2022 -->
+
+
+<!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
+<!-- SECTION · FINAL SEMESTER 2022&ndash;2023 (CSE 4107) -->
+<!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
+<div class="section" id="sec-fin2023">
+  <div class="breadcrumb">
+    CSE 4107 <span class="bc-sep">&rsaquo;</span> <span class="bc-active">Semester Final 2022&ndash;2023</span>
+    <span class="bc-count">6 Questions</span>
+  </div>
+  <div class="toolbar">
+    <div class="search-wrap">
+      <input type="text" id="search-fin2023" placeholder="Search questions..." oninput="filterQuestions('sec-fin2023', this.value)">
+      <span class="search-icon">🔍</span>
+    </div>
+    <div class="toolbar-right">
+      <button class="toolbar-btn" onclick="expandAll('sec-fin2023')">Expand All</button>
+      <button class="toolbar-btn" onclick="collapseAll('sec-fin2023')">Collapse All</button>
+    </div>
+  </div>
+  <div class="section-header">
+    <div class="section-info">
+      <h2>Semester Final Examination</h2>
+      <div class="subtitle">CSE 4107 · Structured Programming I · Winter Semester 2022&ndash;2023</div>
+    </div>
+    <div class="section-badges">
+      <span class="badge badge-gold">Final Exam</span>
+      <span class="badge badge-gold">2022&ndash;2023</span>
+    </div>
+  </div>
+
+  <!-- Q1 SMS validate + sort select -->
+  <div class="q-block">
+    <div class="q-header" onclick="toggleQ(this)">
+      <div class="q-num"><span class="exam-fin">Final</span></div>
+      <div class="q-title">Q1 &mdash; SMS Admission Validation &amp; Sort/Select Applicants</div>
+      <div class="q-marks">Strings / Sorting</div>
+      <div class="q-arrow">▼</div>
+    </div>
+    <div class="q-body">
+      <div class="q-body-inner"><div class="q-body-inner-pad">
+        <div class="sub-q">
+          <div class="sub-label">Part (a) &mdash; Validate SMS Admission Format</div>
+          <div class="answer">
+            <p>Returns 1 (valid) only if: first word = "IUT", second word = "DHA", fifth word = "DHA", HSC year ≥ SSC year + 2.</p>
+            <pre>int validate(char *sms) {
+    char first[20], second[20], fifth[20];
+    int hsc_year, ssc_year;
+    if (sscanf(sms,"%19s %19s %*s %d %19s %*s %d",
+               first,second,&amp;hsc_year,fifth,&amp;ssc_year)!=5) return 0;
+    if (strcmp(first,"IUT")!=0) return 0;
+    if (strcmp(second,"DHA")!=0) return 0;
+    if (strcmp(fifth,"DHA")!=0) return 0;
+    return hsc_year &gt;= ssc_year+2;
+}</pre>
+          </div>
+        </div>
+        <div class="sub-q">
+          <div class="sub-label">Part (b-i) &mdash; sortApplicants() &mdash; Descending bubble sort</div>
+          <div class="answer">
+            <pre>void sortApplicants(int n, int arr[][2]) {
+    for (int i=0;i&lt;n-1;i++)
+        for (int j=0;j&lt;n-i-1;j++)
+            if (arr[j][1] &lt; arr[j+1][1]) {
+                int tmp_id=arr[j][0], tmp_m=arr[j][1];
+                arr[j][0]=arr[j+1][0]; arr[j][1]=arr[j+1][1];
+                arr[j+1][0]=tmp_id;    arr[j+1][1]=tmp_m;
+            }
+}</pre>
+          </div>
+        </div>
+        <div class="sub-q">
+          <div class="sub-label">Part (b-ii) &mdash; selectApplicants() &mdash; Pick top â‰¤8000 including ties</div>
+          <div class="answer">
+            <pre>int* selectApplicants(int sorted_arr[][2], int total, int *selected_count) {
+    int limit = (total &lt; 8000) ? total : 8000;
+    if (limit==0) { *selected_count=0; return NULL; }
+    int cutoff = sorted_arr[limit-1][1];
+    int count=0;
+    while (count&lt;total &amp;&amp; sorted_arr[count][1]&gt;=cutoff) count++;
+    *selected_count=count;
+    int *result=(int*)malloc((count+1)*sizeof(int));
+    if (!result) return NULL;
+    result[0]=count;
+    for (int i=0;i&lt;count;i++) result[i+1]=sorted_arr[i][0];
+    return result;
+}</pre>
+          </div>
+        </div>
+      </div></div>
+    </div>
+  </div>
+
+  <!-- Q2 seat distance + MCQ + parse ID -->
+  <div class="q-block">
+    <div class="q-header" onclick="toggleQ(this)">
+      <div class="q-num"><span class="exam-fin">Final</span></div>
+      <div class="q-title">Q2 &mdash; Seat Distance, MCQ Marks, Parse Student ID</div>
+      <div class="q-marks">Arrays / Math</div>
+      <div class="q-arrow">▼</div>
+    </div>
+    <div class="q-body">
+      <div class="q-body-inner"><div class="q-body-inner-pad">
+        <div class="sub-q">
+          <div class="sub-label">Part (a) &mdash; Seat Distance (Manhattan)</div>
+          <div class="answer">
+            <pre>int seatDistance(int seatPlan[][20], int myID, int friendID) {
+    int myRow,myCol,fRow,fCol,foundMy=0,foundFriend=0;
+    for (int i=0;i&lt;30&amp;&amp;(!foundMy||!foundFriend);i++)
+        for (int j=0;j&lt;20&amp;&amp;(!foundMy||!foundFriend);j++) {
+            if (seatPlan[i][j]==myID) { myRow=i;myCol=j;foundMy=1; }
+            if (seatPlan[i][j]==friendID) { fRow=i;fCol=j;foundFriend=1; }
+        }
+    return abs(myRow-fRow)+abs(myCol-fCol);
+}</pre>
+          </div>
+        </div>
+        <div class="sub-q">
+          <div class="sub-label">Part (b) &mdash; MCQ Mark Calculator (+1 correct, âˆ’0.25 wrong, skip 'x')</div>
+          <div class="answer">
+            <pre>double calculateMarks(char *answers, char *correct) {
+    double marks=0.0;
+    for (int i=0;answers[i]!='\0';i++) {
+        if (answers[i]=='x') continue;
+        marks += (answers[i]==correct[i]) ? 1.0 : -0.25;
+    }
+    return marks;
+}</pre>
+          </div>
+        </div>
+        <div class="sub-q">
+          <div class="sub-label">Part (c) &mdash; Parse Student ID</div>
+          <div class="answer">
+            <pre>void parseStudentID(long long id) {
+    int batch    = id / 10000000;
+    int deptCode = (id / 10000) % 100;
+    int section  = (id / 100) % 10;
+    char *dept;
+    switch (deptCode) {
+        case 1: dept="MPE"; break; case 2: dept="EEE"; break;
+        case 3: dept="TVE"; break; case 4: dept="CSE"; break;
+        case 5: dept="CEE"; break; case 6: dept="BTM"; break;
+        default: dept="Unknown";
+    }
+    printf("Batch: %d, Department: %s, Section: %d\n",batch,dept,section);
+}</pre>
+          </div>
+        </div>
+      </div></div>
+    </div>
+  </div>
+
+  <!-- Q3 backups + CSV -->
+  <div class="q-block">
+    <div class="q-header" onclick="toggleQ(this)">
+      <div class="q-num"><span class="exam-fin">Final</span></div>
+      <div class="q-title">Q3 &mdash; Create 20 Backups &amp; Load/Save CSV Records</div>
+      <div class="q-marks">File I/O / CLI</div>
+      <div class="q-arrow">▼</div>
+    </div>
+    <div class="q-body">
+      <div class="q-body-inner"><div class="q-body-inner-pad">
+        <div class="sub-q">
+          <div class="sub-label">Part (a) &mdash; Create 20 Backup Copies</div>
+          <div class="answer">
+            <pre>void createBackups(int studentID) {
+    char cmd[200];
+    for (int i=1;i&lt;=20;i++) {
+        sprintf(cmd,"copy %d.jpg %d_backup%d.jpg",studentID,studentID,i);
+        system(cmd);
+    }
+}</pre>
+          </div>
+        </div>
+        <div class="sub-q">
+          <div class="sub-label">Part (b) &mdash; Load &amp; Save Student Records from CSV</div>
+          <div class="answer">
+            <pre>typedef struct { int id; char name[101]; char phone[21]; float cgpa; } Student;
+
+void load(Student arr[]) {
+    FILE *fp=fopen("info.csv","r");
+    if (!fp) return;
+    for (int i=0;i&lt;2000;i++)
+        fscanf(fp,"%d,%[^,],%[^,],%f\n",&amp;arr[i].id,arr[i].name,arr[i].phone,&amp;arr[i].cgpa);
+    fclose(fp);
+}
+void save(Student arr[]) {
+    FILE *fp=fopen("info.csv","w");
+    if (!fp) return;
+    for (int i=0;i&lt;2000;i++)
+        fprintf(fp,"%d,%s,%s,%.2f\n",arr[i].id,arr[i].name,arr[i].phone,arr[i].cgpa);
+    fclose(fp);
+}</pre>
+          </div>
+        </div>
+      </div></div>
+    </div>
+  </div>
+
+  <!-- Q4 macro + clean varname + reorder -->
+  <div class="q-block">
+    <div class="q-header" onclick="toggleQ(this)">
+      <div class="q-num"><span class="exam-fin">Final</span></div>
+      <div class="q-title">Q4 &mdash; hello_world Macro, Clean Variable Name, Recursive Digit Sum</div>
+      <div class="q-marks">Macros / Strings / Recursion</div>
+      <div class="q-arrow">▼</div>
+    </div>
+    <div class="q-body">
+      <div class="q-body-inner"><div class="q-body-inner-pad">
+        <div class="sub-q">
+          <div class="sub-label">Part (a) &mdash; Define a hello_world Macro</div>
+          <div class="answer">
+            <pre>#define hello_world(x) printf("hello_world")</pre>
+          </div>
+        </div>
+        <div class="sub-q">
+          <div class="sub-label">Part (b) &mdash; Clean a Variable Name</div>
+          <div class="answer">
+            <pre>void cleanVarName(char *input) {
+    int len=strlen(input), start=-1;
+    for (int i=0;i&lt;len;i++)
+        if (isalpha(input[i])||input[i]=='_') { start=i; break; }
+    if (start==-1) { printf("\n"); return; }
+    for (int i=start;i&lt;len;i++)
+        if (isalnum(input[i])||input[i]=='_') putchar(input[i]);
+    printf("\n");
+}</pre>
+          </div>
+        </div>
+        <div class="sub-q">
+          <div class="sub-label">Part (c) &mdash; Recursive Digit Sum (Reconstructed)</div>
+          <div class="answer">
+            <pre>#include &lt;stdio.h&gt;
+int f1(int num);
+int main() {
+    int x, num;
+    scanf("%d", &amp;num);
+    x = f1(num);
+    printf("%d", x);
+    return 0;
+}
+int f1(int num) {
+    int x;
+    if (!num) return 0;
+    x = num % 10;
+    num /= 10;
+    x += f1(num);
+    return x;
+}</pre>
+          </div>
+        </div>
+      </div></div>
+    </div>
+  </div>
+
+  <!-- Q5 display name + cancel picnic + organizer -->
+  <div class="q-block">
+    <div class="q-header" onclick="toggleQ(this)">
+      <div class="q-num"><span class="exam-fin">Final</span></div>
+      <div class="q-title">Q5 &mdash; Display Name, Cancel Picnic, Alphabetically First Participant</div>
+      <div class="q-marks">Strings</div>
+      <div class="q-arrow">▼</div>
+    </div>
+    <div class="q-body">
+      <div class="q-body-inner"><div class="q-body-inner-pad">
+        <div class="sub-q">
+          <div class="sub-label">Part (a) &mdash; Strip Vowels from First Name, Uppercase Last Name</div>
+          <div class="answer">
+            <pre>void displayName(char *first, char *last) {
+    for (int i=0;first[i];i++) {
+        char c=tolower(first[i]);
+        if (c!='a'&amp;&amp;c!='e'&amp;&amp;c!='i'&amp;&amp;c!='o'&amp;&amp;c!='u') putchar(first[i]);
+    }
+    printf(" ");
+    for (int i=0;last[i];i++) putchar(toupper(last[i]));
+    printf("\n");
+}</pre>
+          </div>
+        </div>
+        <div class="sub-q">
+          <div class="sub-label">Part (b) &mdash; Cancel Picnic if "strike" or "blockade" appears &gt;100 times</div>
+          <div class="answer">
+            <pre>int shouldCancelPicnic(char *news) {
+    int count=0; char *p=news;
+    while ((p=strstr(p,"strike")))  { count++; p+=6; }
+    p=news;
+    while ((p=strstr(p,"blockade"))) { count++; p+=8; }
+    return count&gt;100;
+}</pre>
+          </div>
+        </div>
+        <div class="sub-q">
+          <div class="sub-label">Part (c) &mdash; Find the Alphabetically First Participant</div>
+          <div class="answer">
+            <pre>void printOrganizer(char participants[][100], int n) {
+    int minIdx=0;
+    for (int i=1;i&lt;n;i++)
+        if (strcmp(participants[i],participants[minIdx])&lt;0) minIdx=i;
+    printf("%s\n",participants[minIdx]);
+}</pre>
+          </div>
+        </div>
+      </div></div>
+    </div>
+  </div>
+
+  <!-- Q6 malloc + grade + XOR -->
+  <div class="q-block">
+    <div class="q-header" onclick="toggleQ(this)">
+      <div class="q-num"><span class="exam-fin">Final</span></div>
+      <div class="q-title">Q6 &mdash; malloc/realloc, Final Grade, XOR Cipher</div>
+      <div class="q-marks">Dynamic Memory / Bitwise</div>
+      <div class="q-arrow">▼</div>
+    </div>
+    <div class="q-body">
+      <div class="q-body-inner"><div class="q-body-inner-pad">
+        <div class="sub-q">
+          <div class="sub-label">Part (a) &mdash; malloc &amp; realloc for StudentMarks</div>
+          <div class="answer">
+            <pre>typedef struct { int quizzes[4]; int midterm; int final; } StudentMarks;
+
+/* Allocate for 100 students */
+StudentMarks *students=(StudentMarks*)malloc(100*sizeof(StudentMarks));
+if (!students) { printf("Allocation failed.\n"); return 1; }
+
+/* Extend to 105 students */
+StudentMarks *tmp=(StudentMarks*)realloc(students,105*sizeof(StudentMarks));
+if (!tmp) { printf("Reallocation failed.\n"); free(students); return 1; }
+students=tmp;
+free(students);</pre>
+          </div>
+        </div>
+        <div class="sub-q">
+          <div class="sub-label">Part (b) &mdash; Print Final Grade (best 3 of 4 quizzes)</div>
+          <div class="answer">
+            <pre>void printFinalGrade(int q1,int q2,int q3,int q4,int mt,int fn,int att){
+    int q[4]={q1,q2,q3,q4};
+    for (int i=0;i&lt;3;i++)
+        for (int j=i+1;j&lt;4;j++)
+            if (q[j]&gt;q[i]) { int t=q[i]; q[i]=q[j]; q[j]=t; }
+    int total=q[0]+q[1]+q[2]+mt+fn+att;
+    if      (total&gt;=80) puts("A+");
+    else if (total&gt;=70) puts("A");
+    else if (total&gt;=60) puts("B");
+    else if (total&gt;=50) puts("C");
+    else if (total&gt;=40) puts("D");
+    else                 puts("F");
+}</pre>
+          </div>
+        </div>
+        <div class="sub-q">
+          <div class="sub-label">Part (c) &mdash; XOR Cipher Decode</div>
+          <div class="answer">
+            <pre>#include &lt;stdio.h&gt;
+int main() {
+    char s[]="CDRU!NG!MTBJ!@OE!RNSSX!GNS!UID!DYUS@!BM@RR";
+    for (int i=0;s[i];i++) putchar(s[i]^1);
+    puts("");
+    return 0;
+}</pre>
+          </div>
+        </div>
+      </div></div>
+    </div>
+  </div>
+
+</div><!-- end sec-fin2023 -->
+
+
+<!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
+<!-- SECTION · FINAL SEMESTER 2023&ndash;2024 (CSE 4107) -->
+<!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
+<div class="section" id="sec-fin2024">
+  <div class="breadcrumb">
+    CSE 4107 <span class="bc-sep">&rsaquo;</span> <span class="bc-active">Semester Final 2023&ndash;2024</span>
+    <span class="bc-count">4 Questions</span>
+  </div>
+  <div class="toolbar">
+    <div class="search-wrap">
+      <input type="text" id="search-fin2024" placeholder="Search questions..." oninput="filterQuestions('sec-fin2024', this.value)">
+      <span class="search-icon">🔍</span>
+    </div>
+    <div class="toolbar-right">
+      <button class="toolbar-btn" onclick="expandAll('sec-fin2024')">Expand All</button>
+      <button class="toolbar-btn" onclick="collapseAll('sec-fin2024')">Collapse All</button>
+    </div>
+  </div>
+  <div class="section-header">
+    <div class="section-info">
+      <h2>Semester Final Examination</h2>
+      <div class="subtitle">CSE 4107 · Structured Programming I · Winter Semester 2023&ndash;2024</div>
+    </div>
+    <div class="section-badges">
+      <span class="badge badge-gold">Final Exam</span>
+      <span class="badge badge-gold">2023&ndash;2024</span>
+    </div>
+  </div>
+
+  <div class="q-block">
+    <div class="q-header" onclick="toggleQ(this)">
+      <div class="q-num"><span class="exam-fin">Final</span></div>
+      <div class="q-title">Q1(b) &mdash; Magic Square Validator</div>
+      <div class="q-marks">2D Arrays</div>
+      <div class="q-arrow">▼</div>
+    </div>
+    <div class="q-body">
+      <div class="q-body-inner"><div class="q-body-inner-pad">
+        <div class="sub-q">
+          <div class="answer">
+            <p>A magic square has equal row, column, and diagonal sums.</p>
+            <pre>int isMagic(int mat[10][10], int n) {
+    int sum = 0, d1 = 0, d2 = 0;
+    for (int j = 0; j &lt; n; j++) sum += mat[0][j];
+    for (int i = 0; i &lt; n; i++) {
+        int rs = 0, cs = 0;
+        for (int j = 0; j &lt; n; j++) {
+            rs += mat[i][j];
+            cs += mat[j][i];
+        }
+        if (rs != sum || cs != sum) return 0;
+        d1 += mat[i][i];
+        d2 += mat[i][n - 1 - i];
+    }
+    return (d1 == sum &amp;&amp; d2 == sum);
+}</pre>
+          </div>
+        </div>
+      </div></div>
+    </div>
+  </div>
+
+  <div class="q-block">
+    <div class="q-header" onclick="toggleQ(this)">
+      <div class="q-num"><span class="exam-fin">Final</span></div>
+      <div class="q-title">Q4(b) &mdash; Trace the Recursive f1("ABC") Output</div>
+      <div class="q-marks">Recursion Trace</div>
+      <div class="q-arrow">▼</div>
+    </div>
+    <div class="q-body">
+      <div class="q-body-inner"><div class="q-body-inner-pad">
+        <div class="sub-q">
+          <div class="answer">
+            <table class="ans-table">
+              <thead><tr><th>Recursive Call Position</th><th>Output</th><th>Logic</th></tr></thead>
+              <tbody>
+                <tr><td>Only Location #1 (before printf)</td><td><code>CBA</code></td><td>Prints on the way back from recursion (Reverse).</td></tr>
+                <tr><td>Only Location #2 (after printf)</td><td><code>ABC</code></td><td>Prints before recursing (Forward).</td></tr>
+                <tr><td>Both #1 and #2</td><td><code>CBCACBC</code></td><td>Binary tree traversal. f("C")="C", f("BC")="CBC", f("ABC")="CBCACBC".</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div></div>
+    </div>
+  </div>
+
+</div><!-- end sec-fin2024 -->
+</div><!-- end content -->
+
+<button id="back-to-top" onclick="window.scrollTo({top:0,behavior:\'smooth\'})">↑</button>
+
+<footer>
+  <span>CIT/CSE 4201 &amp; CSE 4107 · Computer Programming</span> · IUT · Previous Year Question Solutions
+  <div>Study Smart · Good Luck 🎯</div>
+</footer>
+
+<script>
+function showSection(id, btn) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(b => b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  btn.classList.add('active');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+  const inp = document.querySelector('#' + id + ' .search-wrap input');
+  if (inp) { inp.value = ''; filterQuestions(id, ''); }
+}
+
+function toggleQ(header) {
+  header.classList.toggle('open');
+  const body = header.nextElementSibling;
+  body.classList.toggle('open');
+}
+
+function expandAll(sectionId) {
+  const sec = document.getElementById(sectionId);
+  sec.querySelectorAll('.q-header').forEach(h => {
+    h.classList.add('open');
+    h.nextElementSibling.classList.add('open');
+  });
+}
+function collapseAll(sectionId) {
+  const sec = document.getElementById(sectionId);
+  sec.querySelectorAll('.q-header').forEach(h => {
+    h.classList.remove('open');
+    h.nextElementSibling.classList.remove('open');
+  });
+}
+
+function filterQuestions(sectionId, query) {
+  const sec = document.getElementById(sectionId);
+  const q = query.trim().toLowerCase();
+  const blocks = sec.querySelectorAll('.q-block');
+  let visibleCount = 0;
+  blocks.forEach(block => {
+    const text = block.innerText.toLowerCase();
+    if (!q || text.includes(q)) {
+      block.classList.remove('search-hidden');
+      visibleCount++;
+    } else {
+      block.classList.add('search-hidden');
+    }
+  });
+  let noRes = sec.querySelector('.search-no-result');
+  if (!noRes) {
+    noRes = document.createElement('div');
+    noRes.className = 'search-no-result';
+    noRes.textContent = 'No questions match your search.';
+    sec.appendChild(noRes);
+  }
+  noRes.style.display = (visibleCount === 0 && q) ? 'block' : 'none';
+}
+
+function markReviewed(checkbox) {
+  const block = checkbox.closest('.q-block');
+  if (checkbox.checked) {
+    block.classList.add('reviewed');
+    checkbox.parentElement.style.color = 'var(--green)';
+  } else {
+    block.classList.remove('reviewed');
+    checkbox.parentElement.style.color = '';
+  }
+  const id = block.id || block.querySelector('.q-title')?.textContent?.trim().slice(0,40);
+  if (id) localStorage.setItem('reviewed_' + id, checkbox.checked ? '1' : '0');
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  document.querySelectorAll('.q-block').forEach((block, idx) => {
+    if (!block.querySelector('.reviewed-wrap')) {
+      const label = document.createElement('label');
+      label.className = 'reviewed-wrap';
+      const cb = document.createElement('input');
+      cb.type = 'checkbox';
+      cb.onchange = function() { markReviewed(this); };
+      label.appendChild(cb);
+      label.appendChild(document.createTextNode(' Mark as Reviewed'));
+      block.appendChild(label);
+      const blockId = block.id || block.querySelector('.q-title')?.textContent?.trim().slice(0,40);
+      if (blockId && localStorage.getItem('reviewed_' + blockId) === '1') {
+        cb.checked = true;
+        block.classList.add('reviewed');
+        label.style.color = 'var(--green)';
+      }
+    }
+  });
+});
+
+const btt = document.getElementById('back-to-top');
+window.addEventListener('scroll', () => {
+  btt.classList.toggle('visible', window.scrollY > 320);
+}, { passive: true });
+</script>
+</body>
+</html>

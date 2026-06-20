@@ -1,0 +1,435 @@
+/* Hallmark · pre-emit critique: P5 H4 E5 S5 R4 V4
+ * macrostructure: Index-First · theme: Brutal · genre: editorial
+ * nav: N7 Brutal slab · footer: Ft2 Inline single line · enrichment: none
+ * audience: classmates · use: navigate to study files · tone: utilitarian + brutalist
+ * axes: light paper · display-heavy · warm accent
+ * post-audit fixes: tokens.css extracted, easing tokens, reduced-motion, header overflow-wrap
+ */
+
+@import url("tokens.css");
+@import url("https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,800&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&display=swap");
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  overflow-x: clip;
+}
+
+body {
+  overflow-x: clip;
+  font-family: var(--font-body);
+  font-size: var(--text-base);
+  line-height: 1.6;
+  color: var(--color-ink);
+  background: var(--color-paper);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ─── N7: Brutal slab nav ─── */
+
+.masthead {
+  border-bottom: var(--border-thick) solid var(--color-rule);
+  padding: var(--space-lg) var(--space-xl);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-lg);
+  flex-wrap: wrap;
+}
+
+.masthead .wordmark {
+  font-family: var(--font-display);
+  font-size: var(--text-xl);
+  font-weight: 800;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+  color: var(--color-ink);
+  overflow-wrap: anywhere;
+  min-width: 0;
+}
+
+.masthead .wordmark em {
+  font-style: normal;
+  color: var(--color-accent);
+}
+
+.search-wrap {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+.search-wrap input {
+  font-family: var(--font-body);
+  font-size: var(--text-sm);
+  padding: var(--space-sm) var(--space-md);
+  border: 2px solid var(--color-rule);
+  border-radius: var(--radius-none);
+  background: var(--color-paper);
+  color: var(--color-ink);
+  min-width: 220px;
+  transition: border-color var(--dur-fast) var(--ease-out);
+}
+
+.search-wrap input:focus-visible {
+  outline: none;
+  border-color: var(--color-focus);
+}
+
+.search-wrap input:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.search-wrap input::placeholder {
+  color: var(--color-muted);
+}
+
+/* ─── Semester tabs ─── */
+
+.semester-bar {
+  display: flex;
+  gap: 0;
+  border-bottom: var(--border-thick) solid var(--color-rule);
+  padding: 0 var(--space-xl);
+}
+
+.semester-tab {
+  font-family: var(--font-display);
+  font-size: var(--text-base);
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: var(--space-md) var(--space-lg);
+  border: none;
+  border-radius: var(--radius-none);
+  background: transparent;
+  color: var(--color-muted);
+  cursor: pointer;
+  position: relative;
+  transition: color var(--dur-fast) var(--ease-out);
+}
+
+.semester-tab:hover {
+  color: var(--color-ink);
+}
+
+.semester-tab:focus-visible {
+  outline: 2px solid var(--color-focus);
+  outline-offset: -2px;
+}
+
+.semester-tab:active {
+  color: var(--color-accent);
+}
+
+.semester-tab:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.semester-tab.active {
+  color: var(--color-ink);
+  background: var(--color-paper-2);
+  box-shadow: inset 0 calc(-1 * var(--border-thick)) 0 0 var(--color-rule);
+}
+
+/* ─── Dashboard main ─── */
+
+.dashboard {
+  padding: var(--space-2xl) var(--space-xl);
+}
+
+.dashboard-header {
+  margin-bottom: var(--space-xl);
+}
+
+.dashboard-header h2 {
+  font-family: var(--font-display);
+  font-size: var(--text-2xl);
+  font-weight: 800;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+  overflow-wrap: anywhere;
+  min-width: 0;
+}
+
+.dashboard-header p {
+  font-family: var(--font-body);
+  font-size: var(--text-base);
+  color: var(--color-muted);
+  margin-top: var(--space-sm);
+}
+
+/* ─── Course grid ─── */
+
+.course-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 320px), 1fr));
+  gap: var(--space-md);
+}
+
+.course-card {
+  border: var(--border-thick) solid var(--color-rule);
+  border-radius: var(--radius-none);
+  background: var(--color-paper);
+  transition: border-color var(--dur-fast) var(--ease-out), background var(--dur-fast) var(--ease-out);
+  overflow: hidden;
+}
+
+.course-card:hover {
+  border-color: var(--color-accent);
+}
+
+.course-card:focus-within {
+  border-color: var(--color-focus);
+}
+
+.course-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-md) var(--space-lg);
+  cursor: pointer;
+  user-select: none;
+  gap: var(--space-md);
+}
+
+.course-card-header h3 {
+  font-family: var(--font-display);
+  font-size: var(--text-md);
+  font-weight: 800;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+  text-transform: uppercase;
+  overflow-wrap: anywhere;
+  min-width: 0;
+}
+
+.course-card-toggle {
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  font-weight: 500;
+  color: var(--color-muted);
+  transition: transform var(--dur-normal) var(--ease-out);
+  flex-shrink: 0;
+}
+
+.course-card.expanded .course-card-toggle {
+  transform: rotate(45deg);
+}
+
+.course-card-header:hover .course-card-toggle {
+  color: var(--color-accent);
+}
+
+/* ponytail: max-height animation is a layout property — Hallmark wants
+   transform/opacity only. A grid-template-rows 0fr→1fr swap avoids layout
+   thrashing on modern browsers but still animates layout. This works,
+   feels instant, and is zero-JS. Upgrade if you need content to push
+   sibling cards without a reflow cost. */
+.course-files {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height var(--dur-slow) var(--ease-out);
+}
+
+.course-card.expanded .course-files {
+  max-height: 500px;
+}
+
+.course-files-inner {
+  border-top: 1px solid var(--color-rule-light);
+  padding: var(--space-sm) var(--space-lg) var(--space-md);
+}
+
+.file-link {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: var(--space-sm) 0;
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  color: var(--color-ink);
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: color var(--dur-fast) var(--ease-out), border-color var(--dur-fast) var(--ease-out);
+}
+
+.file-link::before {
+  content: "\2192";
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  color: var(--color-muted);
+  transition: color var(--dur-fast) var(--ease-out);
+}
+
+.file-link:hover {
+  color: var(--color-accent);
+}
+
+.file-link:hover::before {
+  color: var(--color-accent);
+}
+
+.file-link:focus-visible {
+  outline: 2px solid var(--color-focus);
+  outline-offset: 2px;
+  border-radius: 0;
+}
+
+.file-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+.file-link {
+  flex: 1;
+  min-width: 0;
+}
+
+.file-download {
+  display: grid;
+  place-items: center;
+  width: 1.75rem;
+  height: 1.75rem;
+  flex-shrink: 0;
+  color: var(--color-muted);
+  text-decoration: none;
+  transition: color var(--dur-fast) var(--ease-out);
+}
+
+.file-download::after {
+  content: "\2193";
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  line-height: 1;
+}
+
+.file-download:hover {
+  color: var(--color-accent);
+}
+
+.file-download:focus-visible {
+  outline: 2px solid var(--color-focus);
+  outline-offset: 2px;
+}
+
+.file-row:last-child .file-link {
+  border-bottom: none;
+}
+
+/* ─── No results ─── */
+
+.no-results {
+  display: none;
+  text-align: center;
+  padding: var(--space-3xl) var(--space-xl);
+}
+
+.no-results.visible {
+  display: block;
+}
+
+.no-results p {
+  font-family: var(--font-mono);
+  font-size: var(--text-base);
+  color: var(--color-muted);
+}
+
+/* ─── Ft2: Inline single line footer ─── */
+
+.site-footer {
+  border-top: var(--border-thick) solid var(--color-rule);
+  padding: var(--space-lg) var(--space-xl);
+  text-align: center;
+}
+
+.site-footer p {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--color-muted);
+}
+
+/* ─── Responsive ─── */
+
+@media (max-width: 768px) {
+  .masthead {
+    flex-direction: column;
+    align-items: stretch;
+    gap: var(--space-md);
+    padding: var(--space-md) var(--space-md);
+  }
+
+  .search-wrap input {
+    min-width: 0;
+    width: 100%;
+  }
+
+  .semester-bar {
+    padding: 0 var(--space-md);
+    overflow-x: auto;
+  }
+
+  .semester-tab {
+    padding: var(--space-sm) var(--space-md);
+    font-size: var(--text-sm);
+    white-space: nowrap;
+  }
+
+  .dashboard {
+    padding: var(--space-lg) var(--space-md);
+  }
+
+  .course-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .dashboard-header h2 {
+    font-size: var(--text-xl);
+  }
+}
+
+@media (max-width: 414px) {
+  .masthead .wordmark {
+    font-size: var(--text-lg);
+  }
+
+  .course-card-header {
+    padding: var(--space-sm) var(--space-md);
+  }
+
+  .course-card-header h3 {
+    font-size: var(--text-sm);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .course-files-inner {
+    padding: var(--space-sm) var(--space-md) var(--space-md);
+  }
+}
+
+/* ─── Reduced motion ─── */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+  }
+}

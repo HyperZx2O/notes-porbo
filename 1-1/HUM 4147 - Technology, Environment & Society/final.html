@@ -1,0 +1,1705 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CSE 4147 — Suggestion Solutions</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@400;500&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ink: #e8e4dc;
+  --paper: #0f1117;
+  --cream: #181c26;
+  --warm: #1e2333;
+  --gold: #e8a84b;
+  --gold-light: #f5c96e;
+  --rust: #e06444;
+  --teal: #3db8b8;
+  --blue: #5b9bd5;
+  --green: #5ab87a;
+  --purple: #9b7ec8;
+  --muted: #8a8a9a;
+  --line: rgba(232,228,220,0.09);
+  --card: #14181f;
+  --shadow: 0 4px 32px rgba(0,0,0,0.4);
+  --bg-dark: #0a0d12;
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--paper);
+  color: var(--ink);
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 300;
+  font-size: 15px;
+  line-height: 1.75;
+  min-height: 100vh;
+}
+
+body::before {
+  content:'';
+  position:fixed; inset:0;
+  background-image:
+    linear-gradient(rgba(232,168,75,0.015) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(232,168,75,0.015) 1px, transparent 1px);
+  background-size: 40px 40px;
+  pointer-events:none; z-index:0;
+}
+
+/* ── MASTHEAD ── */
+.masthead {
+  background: linear-gradient(135deg, #0a0d12 0%, #111827 50%, #0f1117 100%);
+  color: var(--ink);
+  padding: 60px 52px 48px;
+  position: relative;
+  overflow: hidden;
+  border-bottom: 1px solid rgba(232,168,75,0.18);
+}
+
+/* Animated decorative circles */
+.masthead .ring1,
+.masthead .ring2 {
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+}
+.masthead .ring1 {
+  top: -80px; right: -100px;
+  width: 420px; height: 420px;
+  border: 1px solid rgba(232,168,75,0.12);
+  animation: ringRotate 18s linear infinite;
+  transform-origin: center center;
+}
+.masthead .ring2 {
+  top: -20px; right: -40px;
+  width: 240px; height: 240px;
+  border: 1px solid rgba(232,168,75,0.07);
+  animation: ringRotate 12s linear infinite reverse;
+  transform-origin: center center;
+}
+@keyframes ringRotate {
+  from { transform: rotate(0deg) scale(1); }
+  50%  { transform: rotate(180deg) scale(1.04); }
+  to   { transform: rotate(360deg) scale(1); }
+}
+
+.masthead .glow-orb {
+  position: absolute;
+  bottom: -120px; right: 120px;
+  width: 300px; height: 300px;
+  background: radial-gradient(circle, rgba(232,168,75,0.08) 0%, transparent 70%);
+  border-radius: 50%;
+  pointer-events: none;
+  animation: orbPulse 5s ease-in-out infinite;
+}
+@keyframes orbPulse {
+  0%, 100% { opacity: 0.6; transform: scale(1); }
+  50%       { opacity: 1;   transform: scale(1.12); }
+}
+
+.masthead-tag {
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--gold-light);
+  margin-bottom: 18px;
+  display: flex; align-items: center; gap: 10px;
+  position: relative; z-index: 1;
+}
+.masthead-tag::before {
+  content: '';
+  display: inline-block;
+  width: 28px; height: 1px;
+  background: linear-gradient(90deg, var(--gold), transparent);
+}
+.masthead h1 {
+  font-family: 'DM Serif Display', serif;
+  font-size: clamp(32px, 5vw, 56px);
+  line-height: 1.1;
+  color: #fff;
+  max-width: 720px;
+  position: relative; z-index: 1;
+}
+.masthead h1 em { font-style: italic; color: var(--gold-light); }
+.masthead-meta {
+  margin-top: 24px;
+  display: flex; gap: 36px; flex-wrap: wrap;
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  color: rgba(232,228,220,0.38);
+  position: relative; z-index: 1;
+}
+.masthead-meta span { color: rgba(232,228,220,0.7); }
+
+/* ── NAV TABS ── */
+.nav-tabs {
+  background: #0a0d12;
+  border-bottom: 1px solid rgba(232,168,75,0.1);
+  padding: 0 52px;
+  display: flex; gap: 0;
+  overflow-x: auto;
+  position: sticky; top: 0; z-index: 100;
+  scrollbar-width: none;
+}
+.nav-tabs::-webkit-scrollbar { display: none; }
+.nav-tab {
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  padding: 16px 26px;
+  color: rgba(232,228,220,0.35);
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  white-space: nowrap;
+  transition: color 0.2s, border-color 0.2s, text-shadow 0.2s;
+  background: none; border-left: none; border-right: none; border-top: none;
+  position: relative;
+}
+.nav-tab:hover { color: rgba(232,228,220,0.7); }
+.nav-tab.active {
+  color: var(--gold-light);
+  border-bottom-color: var(--gold);
+}
+/* Animated glow on active tab underline */
+.nav-tab.active::after {
+  content: '';
+  position: absolute;
+  bottom: -2px; left: 50%; transform: translateX(-50%);
+  width: 60%;
+  height: 2px;
+  background: var(--gold-light);
+  filter: blur(4px);
+  animation: tabGlow 2s ease-in-out infinite;
+}
+@keyframes tabGlow {
+  0%, 100% { opacity: 0.4; width: 40%; }
+  50%       { opacity: 1;   width: 80%; }
+}
+
+/* ── BREADCRUMB ── */
+.breadcrumb {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: rgba(232,228,220,0.3);
+  padding: 10px 0 0;
+  margin-bottom: 28px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  position: sticky;
+  top: 49px;
+  background: var(--paper);
+  z-index: 90;
+  border-bottom: 1px solid rgba(232,168,75,0.06);
+  padding-bottom: 10px;
+}
+.breadcrumb .bc-sep { color: rgba(232,168,75,0.3); }
+.breadcrumb .bc-active { color: var(--gold-light); }
+.breadcrumb .bc-count {
+  margin-left: auto;
+  background: rgba(232,168,75,0.08);
+  border: 1px solid rgba(232,168,75,0.15);
+  padding: 2px 10px;
+  border-radius: 20px;
+  color: var(--gold);
+}
+
+/* ── EXPAND / COLLAPSE TOOLBAR ── */
+.toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+.toolbar-btn {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  padding: 7px 16px;
+  border-radius: 5px;
+  cursor: pointer;
+  border: 1px solid rgba(232,168,75,0.2);
+  background: rgba(232,168,75,0.06);
+  color: var(--gold);
+  transition: background 0.15s, border-color 0.15s;
+}
+.toolbar-btn:hover {
+  background: rgba(232,168,75,0.12);
+  border-color: rgba(232,168,75,0.4);
+}
+
+/* ── CONTENT ── */
+.content { padding: 28px 52px 52px; max-width: 1200px; margin: 0 auto; position: relative; z-index: 1; }
+.section { display: none; }
+.section.active { display: block; }
+
+/* ── SECTION HEADER ── */
+.section-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-bottom: 16px;
+  padding-bottom: 24px;
+  border-bottom: 1px solid rgba(232,168,75,0.25);
+}
+.section-info h2 {
+  font-family: 'DM Serif Display', serif;
+  font-size: 28px;
+  color: #fff;
+}
+.section-info .subtitle {
+  font-family: 'DM Mono', monospace;
+  font-size: 12px;
+  color: var(--muted);
+  margin-top: 5px;
+}
+.section-badges { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+.badge {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  padding: 4px 12px;
+  border-radius: 3px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+.badge-gold   { background: rgba(232,168,75,0.12); color: var(--gold);   border: 1px solid rgba(232,168,75,0.25); }
+.badge-teal   { background: rgba(61,184,184,0.1);  color: var(--teal);   border: 1px solid rgba(61,184,184,0.2); }
+.badge-purple { background: rgba(155,126,200,0.1); color: var(--purple); border: 1px solid rgba(155,126,200,0.2); }
+.badge-rust   { background: rgba(224,100,68,0.1);  color: var(--rust);   border: 1px solid rgba(224,100,68,0.2); }
+
+/* ── MUST-MEMORIZE SUMMARY CARD ── */
+.memo-card {
+  background: linear-gradient(135deg, rgba(232,168,75,0.06) 0%, rgba(155,126,200,0.06) 100%);
+  border: 1px solid rgba(232,168,75,0.2);
+  border-radius: 12px;
+  padding: 24px 28px;
+  margin-bottom: 28px;
+  position: relative;
+  overflow: hidden;
+}
+.memo-card::before {
+  content: '';
+  position: absolute; top: 0; left: 0;
+  width: 3px; height: 100%;
+  background: linear-gradient(180deg, var(--gold), var(--purple));
+}
+.memo-card-title {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--gold-light);
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.memo-card-title::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, rgba(232,168,75,0.3), transparent);
+}
+.memo-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 10px;
+}
+.memo-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 10px 14px;
+  background: rgba(255,255,255,0.025);
+  border-radius: 7px;
+  border: 1px solid rgba(232,228,220,0.05);
+  font-size: 13px;
+  color: rgba(232,228,220,0.8);
+  line-height: 1.5;
+}
+.memo-item .memo-dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  margin-top: 6px;
+}
+.memo-dot.d-gold   { background: var(--gold); }
+.memo-dot.d-teal   { background: var(--teal); }
+.memo-dot.d-rust   { background: var(--rust); }
+.memo-dot.d-blue   { background: var(--blue); }
+.memo-dot.d-purple { background: var(--purple); }
+
+/* ── QUESTION BLOCK ── */
+.q-block {
+  margin-bottom: 20px;
+  background: var(--card);
+  border: 1px solid rgba(232,168,75,0.08);
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: var(--shadow);
+  animation: slideIn 0.4s ease both;
+  transition: border-color 0.2s;
+}
+.q-block:hover { border-color: rgba(232,168,75,0.18); }
+
+@keyframes slideIn {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.q-header {
+  padding: 20px 26px;
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  cursor: pointer;
+  user-select: none;
+  border-bottom: 1px solid transparent;
+  transition: background 0.15s;
+}
+.q-header:hover { background: var(--warm); }
+.q-header.open  { border-bottom: 1px solid rgba(232,168,75,0.1); background: var(--warm); }
+
+.q-num {
+  font-family: 'DM Serif Display', serif;
+  font-size: 22px;
+  color: var(--gold);
+  min-width: 52px;
+  text-shadow: 0 0 20px rgba(232,168,75,0.3);
+  white-space: nowrap;
+}
+.q-title  { flex: 1; font-weight: 500; font-size: 14px; color: var(--ink); line-height: 1.4; }
+.q-marks  { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--muted); white-space: nowrap; }
+.q-arrow  { color: var(--gold); font-size: 11px; transition: transform 0.3s ease; opacity: 0.6; flex-shrink: 0; }
+.q-header.open .q-arrow { transform: rotate(180deg); opacity: 1; }
+
+/* Smooth slide animation for body */
+.q-body {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.32s ease;
+}
+.q-body-inner { overflow: hidden; }
+.q-body.open { grid-template-rows: 1fr; }
+.q-body-inner-pad { padding: 30px 30px 36px; }
+
+/* Sub questions */
+.sub-q {
+  margin-bottom: 30px;
+  padding-bottom: 30px;
+  border-bottom: 1px dashed rgba(232,228,220,0.07);
+}
+.sub-q:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+
+.sub-label {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 7px;
+  opacity: 0.8;
+}
+.sub-question {
+  font-style: italic;
+  color: rgba(232,228,220,0.55);
+  font-size: 13.5px;
+  margin-bottom: 16px;
+  padding: 12px 18px;
+  background: rgba(232,168,75,0.04);
+  border-left: 3px solid rgba(232,168,75,0.35);
+  border-radius: 0 6px 6px 0;
+  line-height: 1.6;
+}
+
+.answer h4 {
+  font-family: 'DM Serif Display', serif;
+  font-size: 16px;
+  color: #fff;
+  margin-bottom: 9px;
+  margin-top: 18px;
+}
+.answer h4:first-child { margin-top: 0; }
+.answer p {
+  color: rgba(232,228,220,0.8);
+  font-size: 14.5px;
+  margin-bottom: 10px;
+  line-height: 1.85;
+}
+
+/* Info boxes */
+.info-box {
+  padding: 14px 18px;
+  border-radius: 8px;
+  margin: 14px 0;
+  font-size: 14px;
+}
+.info-box.tip    { background: rgba(61,184,184,0.07);  border-left: 3px solid var(--teal); }
+.info-box.warn   { background: rgba(224,100,68,0.07);  border-left: 3px solid var(--rust); }
+.info-box.note   { background: rgba(91,155,213,0.07);  border-left: 3px solid var(--blue); }
+.info-box.key    { background: rgba(232,168,75,0.08);  border-left: 3px solid var(--gold); }
+.info-box.purple { background: rgba(155,126,200,0.08); border-left: 3px solid var(--purple); }
+.info-box.green  { background: rgba(90,184,122,0.07);  border-left: 3px solid var(--green); }
+.info-box strong { display: block; font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 5px; opacity: 0.6; font-family: 'DM Mono', monospace; color: var(--gold-light); }
+
+/* Table */
+.ans-table { width: 100%; border-collapse: collapse; margin: 14px 0; font-size: 13.5px; }
+.ans-table th {
+  background: #0a0d12;
+  color: var(--gold-light);
+  padding: 10px 16px;
+  text-align: left;
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  border-bottom: 1px solid rgba(232,168,75,0.15);
+}
+.ans-table td {
+  padding: 10px 16px;
+  border-bottom: 1px solid var(--line);
+  vertical-align: top;
+  color: rgba(232,228,220,0.8);
+}
+.ans-table tr:nth-child(even) td { background: rgba(255,255,255,0.02); }
+.ans-table tr:hover td { background: rgba(232,168,75,0.04); }
+
+/* List */
+.ans-list { padding-left: 0; list-style: none; margin: 8px 0; }
+.ans-list li {
+  padding: 6px 0 6px 22px;
+  position: relative;
+  font-size: 14.5px;
+  color: rgba(232,228,220,0.8);
+  border-bottom: 1px solid rgba(232,228,220,0.04);
+  line-height: 1.7;
+}
+.ans-list li::before {
+  content: '→';
+  position: absolute;
+  left: 0;
+  color: var(--gold);
+  font-size: 11px;
+  top: 8px;
+}
+.ans-list li:last-child { border-bottom: none; }
+.ans-list .nested { margin-top: 6px; margin-left: 12px; }
+.ans-list .nested li::before { content: '·'; color: var(--teal); top: 7px; font-size: 14px; }
+
+/* Numbered steps */
+.steps-list { padding-left: 0; list-style: none; margin: 8px 0; counter-reset: steps; }
+.steps-list li {
+  counter-increment: steps;
+  padding: 10px 14px 10px 50px;
+  position: relative;
+  font-size: 14px;
+  color: rgba(232,228,220,0.8);
+  border-bottom: 1px solid rgba(232,228,220,0.05);
+  line-height: 1.7;
+  background: rgba(255,255,255,0.01);
+  margin-bottom: 4px;
+  border-radius: 6px;
+}
+.steps-list li::before {
+  content: counter(steps);
+  position: absolute;
+  left: 14px; top: 10px;
+  width: 24px; height: 24px;
+  background: rgba(232,168,75,0.15);
+  color: var(--gold-light);
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  font-weight: 500;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  line-height: 24px; text-align: center;
+}
+
+/* Lecture chip */
+.lec-tag {
+  display: inline-block;
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 1px;
+  padding: 3px 10px;
+  border-radius: 20px;
+  margin: 3px 4px 3px 0;
+  text-transform: uppercase;
+}
+.lec-tag.lec1 { background: rgba(61,184,184,0.1);  color: var(--teal);   border: 1px solid rgba(61,184,184,0.25); }
+.lec-tag.lec2 { background: rgba(232,168,75,0.1);  color: var(--gold);   border: 1px solid rgba(232,168,75,0.25); }
+.lec-tag.lec3 { background: rgba(224,100,68,0.1);  color: var(--rust);   border: 1px solid rgba(224,100,68,0.25); }
+.lec-tag.lec4 { background: rgba(91,155,213,0.1);  color: var(--blue);   border: 1px solid rgba(91,155,213,0.25); }
+.lec-tag.lec5 { background: rgba(155,126,200,0.1); color: var(--purple); border: 1px solid rgba(155,126,200,0.25); }
+.lec-tag.vvv  { background: rgba(224,100,68,0.15); color: #ff9f80;       border: 1px solid rgba(224,100,68,0.35); font-weight: 500; }
+
+/* Priority bars — colour-coded by level */
+.priority-bar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 14px;
+  padding: 10px 16px;
+  border-radius: 6px;
+  border: 1px solid;
+}
+/* 3 stars = V.V.V — amber */
+.priority-bar.p3 {
+  background: rgba(232,168,75,0.07);
+  border-color: rgba(232,168,75,0.2);
+}
+.priority-bar.p3 .stars   { color: var(--gold); }
+.priority-bar.p3 .prio-label { color: var(--gold-light); }
+/* 4 stars = V.V.V.V — red/rust */
+.priority-bar.p4 {
+  background: rgba(224,100,68,0.08);
+  border-color: rgba(224,100,68,0.22);
+}
+.priority-bar.p4 .stars   { color: var(--rust); }
+.priority-bar.p4 .prio-label { color: #ff9f80; }
+
+.priority-bar .stars     { font-size: 15px; letter-spacing: 3px; }
+.priority-bar .prio-label { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase; }
+.priority-bar .prio-badge {
+  margin-left: auto;
+  font-family: 'DM Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  padding: 2px 8px;
+  border-radius: 20px;
+}
+.p3 .prio-badge { background: rgba(232,168,75,0.15); color: var(--gold-light); border: 1px solid rgba(232,168,75,0.3); }
+.p4 .prio-badge { background: rgba(224,100,68,0.15); color: #ff9f80;           border: 1px solid rgba(224,100,68,0.3); }
+
+/* Cycle diagram */
+.cycle-diagram {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 20px 0;
+  padding: 20px;
+  background: rgba(255,255,255,0.015);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+}
+.cycle-node {
+  display: inline-block;
+  padding: 8px 18px;
+  border-radius: 6px;
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  border: 1px solid;
+}
+.cycle-node.n1 { background: rgba(61,184,184,0.1);  color: var(--teal);  border-color: rgba(61,184,184,0.3); }
+.cycle-node.n2 { background: rgba(232,168,75,0.1);  color: var(--gold);  border-color: rgba(232,168,75,0.3); }
+.cycle-node.n3 { background: rgba(224,100,68,0.1);  color: var(--rust);  border-color: rgba(224,100,68,0.3); }
+.cycle-node.n4 { background: rgba(90,184,122,0.1);  color: var(--green); border-color: rgba(90,184,122,0.3); }
+.cycle-arrow { color: var(--gold); font-size: 18px; opacity: 0.5; }
+.cycle-loop  { color: var(--gold-light); font-size: 10px; font-family: 'DM Mono', monospace; letter-spacing: 1px; margin-top: 10px; width: 100%; text-align: center; opacity: 0.6; }
+
+/* Hierarchy bar */
+.hierarchy { margin: 14px 0; display: flex; flex-direction: column; gap: 6px; }
+.hier-item {
+  padding: 10px 16px;
+  border-radius: 6px;
+  font-size: 14px;
+  color: rgba(232,228,220,0.85);
+  display: flex; align-items: center; gap: 12px;
+  border-left: 3px solid;
+}
+.hier-item:nth-child(1) { background: rgba(232,168,75,0.08);  border-color: var(--gold); }
+.hier-item:nth-child(2) { background: rgba(232,168,75,0.06);  border-color: rgba(232,168,75,0.6); }
+.hier-item:nth-child(3) { background: rgba(61,184,184,0.07);  border-color: var(--teal); }
+.hier-item:nth-child(4) { background: rgba(91,155,213,0.07);  border-color: var(--blue); }
+.hier-item:nth-child(5) { background: rgba(224,100,68,0.07);  border-color: var(--rust); }
+.hier-note {
+  font-family: 'DM Mono', monospace;
+  font-size: 9px;
+  opacity: 0.45;
+  margin-left: auto;
+  white-space: nowrap;
+}
+
+/* Skip note */
+.skip-note {
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  color: var(--muted);
+  padding: 8px 14px;
+  background: rgba(255,255,255,0.02);
+  border-radius: 6px;
+  margin-top: 10px;
+}
+.skip-note::before { content: '⚠ '; color: var(--gold); }
+
+mark {
+  background: rgba(232,168,75,0.18);
+  color: var(--gold-light);
+  padding: 1px 4px;
+  border-radius: 3px;
+}
+strong { font-weight: 500; color: rgba(232,228,220,0.95); }
+code {
+  font-family: 'DM Mono', monospace;
+  font-size: 12.5px;
+  color: var(--teal);
+  background: rgba(61,184,184,0.08);
+  padding: 1px 6px;
+  border-radius: 4px;
+}
+
+/* ── BACK TO TOP ── */
+#back-to-top {
+  position: fixed;
+  bottom: 28px;
+  right: 28px;
+  z-index: 200;
+  width: 44px; height: 44px;
+  border-radius: 50%;
+  background: rgba(232,168,75,0.12);
+  border: 1px solid rgba(232,168,75,0.35);
+  color: var(--gold-light);
+  font-size: 18px;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  opacity: 0;
+  transform: translateY(12px);
+  transition: opacity 0.3s, transform 0.3s, background 0.2s;
+  pointer-events: none;
+  backdrop-filter: blur(6px);
+}
+#back-to-top.visible {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+#back-to-top:hover {
+  background: rgba(232,168,75,0.22);
+}
+
+/* ── SCROLLBAR ── */
+::-webkit-scrollbar { width: 5px; height: 5px; }
+::-webkit-scrollbar-track { background: var(--cream); }
+::-webkit-scrollbar-thumb { background: rgba(232,168,75,0.2); border-radius: 3px; }
+
+/* ── FOOTER ── */
+footer {
+  border-top: 1px solid rgba(232,168,75,0.1);
+  padding: 28px 52px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  color: var(--muted);
+  position: relative; z-index: 1;
+  background: #0a0d12;
+}
+footer span { color: var(--gold); }
+
+/* ── MOBILE ── */
+@media(max-width:768px){
+  .masthead { padding: 36px 20px 32px; }
+  .masthead-tag { font-size: 9px; letter-spacing: 1.5px; }
+  .masthead h1 { font-size: clamp(26px, 7vw, 36px); }
+  .masthead-meta { gap: 14px; font-size: 10px; }
+
+  .nav-tabs { padding: 0; display: grid; grid-template-columns: repeat(3, 1fr); }
+  .nav-tab { padding: 13px 6px; font-size: 10px; letter-spacing: 0.5px; text-align: center; }
+
+  .content { padding: 14px 14px 36px; }
+
+  .breadcrumb { top: 47px; font-size: 9px; padding: 8px 0; margin-bottom: 16px; }
+  .bc-count { display: none; }
+
+  .toolbar { margin-bottom: 14px; }
+  .toolbar-btn { font-size: 9px; padding: 6px 12px; }
+
+  .section-header { flex-direction: column; gap: 12px; margin-bottom: 8px; padding-bottom: 16px; }
+  .section-info h2 { font-size: 22px; }
+
+  .q-header { padding: 14px 16px; gap: 10px; }
+  .q-num { font-size: 17px; min-width: 36px; }
+  .q-title { font-size: 13px; line-height: 1.35; }
+  .q-marks { display: none; }
+
+  .q-body-inner-pad { padding: 18px 16px 24px; }
+
+  .sub-q { margin-bottom: 22px; padding-bottom: 22px; }
+  .sub-question { font-size: 13px; padding: 10px 14px; }
+  .answer h4 { font-size: 15px; }
+  .answer p { font-size: 13.5px; }
+
+  .ans-list li { font-size: 13.5px; padding: 5px 0 5px 20px; }
+  .ans-list .nested li { font-size: 12.5px; }
+
+  .steps-list li { padding: 9px 10px 9px 44px; font-size: 13px; }
+  .steps-list li::before { left: 10px; width: 22px; height: 22px; font-size: 10px; line-height: 22px; }
+
+  .ans-table { display: block; overflow-x: auto; -webkit-overflow-scrolling: touch; font-size: 12px; }
+  .ans-table th, .ans-table td { padding: 8px 12px; white-space: nowrap; }
+
+  .info-box { font-size: 13px; padding: 12px 14px; }
+
+  .cycle-diagram { flex-direction: column; align-items: center; padding: 14px; gap: 4px; }
+  .cycle-arrow { transform: rotate(90deg); font-size: 14px; }
+  .cycle-node { font-size: 10px; padding: 7px 14px; }
+
+  .hier-item { padding: 9px 12px; font-size: 13px; flex-wrap: wrap; gap: 6px; }
+  .hier-note { margin-left: 0; font-size: 9px; }
+
+  .priority-bar { padding: 8px 12px; }
+  .priority-bar .stars { font-size: 12px; }
+  .priority-bar .prio-label { font-size: 9px; }
+
+  .memo-grid { grid-template-columns: 1fr; }
+  .memo-card { padding: 16px 18px; }
+
+  .badge { font-size: 9px; padding: 3px 9px; }
+  .lec-tag { font-size: 9px; padding: 2px 8px; }
+  .skip-note { font-size: 10.5px; }
+
+  #back-to-top { bottom: 18px; right: 18px; width: 40px; height: 40px; font-size: 16px; }
+
+  footer { padding: 20px; flex-direction: column; text-align: center; gap: 6px; font-size: 10px; }
+}
+
+/* ── PRINT STYLES ── */
+@media print {
+  * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+
+  body {
+    background: #fff !important;
+    color: #1a1a1a !important;
+    font-size: 12pt;
+    line-height: 1.6;
+  }
+
+  body::before { display: none; }
+
+  .masthead {
+    background: #fff !important;
+    border-bottom: 2px solid #c8893b !important;
+    padding: 24pt 0 16pt;
+    color: #1a1a1a !important;
+    page-break-after: avoid;
+  }
+  .masthead .ring1, .masthead .ring2, .masthead .glow-orb { display: none; }
+  .masthead-tag { color: #c8893b !important; font-size: 8pt; }
+  .masthead h1  { color: #1a1a1a !important; font-size: 24pt; }
+  .masthead h1 em { color: #c8893b !important; }
+  .masthead-meta { color: #888 !important; }
+  .masthead-meta span { color: #444 !important; }
+
+  .nav-tabs, .toolbar, .breadcrumb, #back-to-top, footer { display: none !important; }
+
+  .content { padding: 16pt 0; max-width: 100%; }
+
+  .section { display: block !important; }
+  .section + .section { page-break-before: always; }
+
+  .section-header {
+    border-bottom: 1px solid #c8893b !important;
+    margin-bottom: 16pt;
+  }
+  .section-info h2 { color: #1a1a1a !important; font-size: 18pt; }
+  .section-info .subtitle { color: #666 !important; }
+
+  .badge {
+    background: transparent !important;
+    border: 1px solid #ccc !important;
+    color: #555 !important;
+  }
+
+  .q-block {
+    background: #fff !important;
+    border: 1px solid #ddd !important;
+    box-shadow: none !important;
+    page-break-inside: avoid;
+    margin-bottom: 12pt;
+    animation: none !important;
+  }
+  .q-header {
+    background: #f5f0e8 !important;
+    border-bottom: 1px solid #ddd !important;
+    padding: 10pt 14pt;
+  }
+  .q-header.open { background: #f5f0e8 !important; }
+  .q-num   { color: #c8893b !important; font-size: 16pt; text-shadow: none !important; }
+  .q-title { color: #1a1a1a !important; font-size: 11pt; }
+  .q-arrow { display: none; }
+  .q-marks { color: #888 !important; }
+
+  /* Force all bodies open for print */
+  .q-body { display: grid !important; grid-template-rows: 1fr !important; }
+  .q-body-inner-pad { padding: 10pt 14pt !important; }
+
+  .sub-label   { color: #c8893b !important; }
+  .sub-question {
+    background: #faf7f0 !important;
+    border-left: 3px solid #c8893b !important;
+    color: #555 !important;
+    font-size: 11pt;
+  }
+
+  .answer h4 { color: #1a1a1a !important; font-size: 13pt; }
+  .answer p  { color: #333 !important; }
+
+  .info-box {
+    background: #fafafa !important;
+    border-left: 3px solid #c8893b !important;
+  }
+  .info-box strong { color: #c8893b !important; }
+
+  .ans-list li { color: #333 !important; border-bottom-color: #eee !important; }
+  .ans-list li::before { color: #c8893b !important; }
+  .ans-list .nested li::before { color: #3d8f8f !important; }
+
+  .steps-list li { background: #fafafa !important; border-bottom-color: #eee !important; color: #333 !important; }
+  .steps-list li::before { background: #f0e8d5 !important; color: #c8893b !important; }
+
+  mark { background: #fde8b4 !important; color: #8a5c10 !important; }
+  code { background: #e8f7f7 !important; color: #2a7070 !important; }
+  strong { color: #111 !important; }
+
+  .ans-table th { background: #f0e8d5 !important; color: #8a5c10 !important; border-bottom-color: #d4b47a !important; }
+  .ans-table td { color: #333 !important; border-bottom-color: #eee !important; }
+  .ans-table tr:nth-child(even) td { background: #fafafa !important; }
+
+  .hier-item { border-left: 3px solid #c8893b !important; background: #fafafa !important; color: #333 !important; }
+  .hier-note { color: #888 !important; }
+
+  .cycle-diagram { background: #fafafa !important; border-color: #ddd !important; }
+  .cycle-node { border: 1px solid #aaa !important; color: #333 !important; background: #f5f5f5 !important; }
+  .cycle-arrow { color: #c8893b !important; }
+  .cycle-loop  { color: #c8893b !important; }
+
+  .priority-bar { border-color: #ddd !important; background: #fafafa !important; }
+  .priority-bar .stars { color: #c8893b !important; }
+  .priority-bar .prio-label { color: #555 !important; }
+  .prio-badge { background: #f0e8d5 !important; color: #8a5c10 !important; border-color: #d4b47a !important; }
+
+  .memo-card { background: #faf7f0 !important; border-color: #d4b47a !important; }
+  .memo-card-title { color: #8a5c10 !important; }
+  .memo-item { background: #fff !important; border-color: #eee !important; color: #333 !important; }
+
+  .lec-tag { border: 1px solid #ccc !important; color: #555 !important; background: #f5f5f5 !important; }
+  .skip-note { background: #fafafa !important; color: #777 !important; }
+}
+</style>
+</head>
+<body>
+
+<!-- BACK TO TOP -->
+<button id="back-to-top" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="Back to top">↑</button>
+
+<!-- MASTHEAD -->
+<div class="masthead">
+  <div class="ring1"></div>
+  <div class="ring2"></div>
+  <div class="glow-orb"></div>
+  <div class="masthead-tag">IUT · CSE 4147 · Technology, Environment &amp; Society</div>
+  <h1>Suggestion <em>Solutions</em></h1>
+  <div class="masthead-meta">
+    <div>Quiz 2 <span>Solved Questions</span></div>
+    <div>Others <span>Extended Topics</span></div>
+    <div>Extra Suggestions <span>Exam Strategy Guide</span></div>
+  </div>
+</div>
+
+<!-- NAV TABS -->
+<div class="nav-tabs">
+  <button class="nav-tab active" onclick="showSection('quiz2', this)">Quiz 2</button>
+  <button class="nav-tab" onclick="showSection('others', this)">Others</button>
+  <button class="nav-tab" onclick="showSection('extras', this)">Extra Suggestions</button>
+</div>
+
+<div class="content">
+
+<!-- ═══════════════ QUIZ 2 ═══════════════ -->
+<div id="quiz2" class="section active">
+
+  <div class="section-header">
+    <div class="section-info">
+      <h2>Quiz 2 — Solved Questions</h2>
+      <div class="subtitle">CSE 4147 · Technology, Environment &amp; Society</div>
+    </div>
+    <div class="section-badges">
+      <div class="badge badge-gold">2 Questions</div>
+      <div class="badge badge-teal">4 Sub-parts</div>
+    </div>
+  </div>
+
+  <div class="breadcrumb">
+    <span>CSE 4147</span>
+    <span class="bc-sep">›</span>
+    <span class="bc-active">Quiz 2</span>
+    <span class="bc-count">2 questions</span>
+  </div>
+
+  <div class="toolbar">
+    <button class="toolbar-btn" onclick="expandAll('quiz2')">Expand All</button>
+    <button class="toolbar-btn" onclick="collapseAll('quiz2')">Collapse All</button>
+  </div>
+
+  <!-- Q1 -->
+  <div class="q-block">
+    <div class="q-header" onclick="toggleQ(this)">
+      <div class="q-num">Q1</div>
+      <div class="q-title">Industrial Hazards — Concept, Typologies &amp; CSE Engineer Exposure</div>
+      <div class="q-marks">Q1(a) + Q1(b)</div>
+      <div class="q-arrow">▼</div>
+    </div>
+    <div class="q-body">
+      <div class="q-body-inner"><div class="q-body-inner-pad">
+
+        <div class="sub-q">
+          <div class="sub-label">Q1(a)</div>
+          <div class="sub-question">Explain the concept of Industrial hazard, and identify its basic typologies with examples.</div>
+          <div class="answer">
+            <p>An <strong>industrial hazard</strong> is defined as any source, situation, or activity in an industrial environment that has the potential to cause injury, illness, or environmental damage. Understanding these hazards is essential for effective risk assessment and safety management.</p>
+            <h4>The Five Major Typologies</h4>
+            <ul class="ans-list">
+              <li><strong>Chemical Hazards</strong> — Arise from exposure to harmful substances.
+                <ul class="ans-list nested">
+                  <li>Toxic gas leaks (e.g., chlorine gas causing respiratory distress)</li>
+                  <li>Long-term lead exposure causing nervous system damage</li>
+                  <li>Hydrofluoric acid in semiconductor plants can damage bone tissue</li>
+                </ul>
+              </li>
+              <li><strong>Physical Hazards</strong> — Environmental factors that harm the body without direct contact.
+                <ul class="ans-list nested">
+                  <li>Noise → Noise-Induced Hearing Loss (NIHL)</li>
+                  <li>Heat → Heat stroke; Radiation → Cancer or burns</li>
+                  <li>Source: Heavy machinery, lasers, high-temperature environments</li>
+                </ul>
+              </li>
+              <li><strong>Biological Hazards</strong> — Exposure to harmful microorganisms.
+                <ul class="ans-list nested">
+                  <li>Bacteria, viruses, fungi, airborne pathogens</li>
+                  <li>Example: <em>Legionella</em> exposure in wastewater treatment plants</li>
+                </ul>
+              </li>
+              <li><strong>Mechanical Hazards</strong> — Caused by interaction between machines and humans.
+                <ul class="ans-list nested">
+                  <li>Entanglement in rotating shafts, crushing by heavy equipment</li>
+                  <li>Risk areas: moving belts, gears, cutting machines</li>
+                </ul>
+              </li>
+              <li><strong>Electrical Hazards</strong> — Risks associated with electrical systems.
+                <ul class="ans-list nested">
+                  <li>Electric shock or electrocution</li>
+                  <li>Arc flash causing extreme heat explosions — often "hidden" until an accident occurs</li>
+                </ul>
+              </li>
+            </ul>
+            <div class="info-box tip"><strong>Key Takeaway</strong>Industrial hazards are diverse and often interact with each other, increasing overall risk. Understanding their typology is the first step toward prevention.</div>
+          </div>
+        </div>
+
+        <div class="sub-q">
+          <div class="sub-label">Q1(b)</div>
+          <div class="sub-question">As a computer science engineer, what forms of industrial hazards could you face while working at a Large-Scale Digital Infrastructure?</div>
+          <div class="answer">
+            <p>A CSE engineer working in large-scale digital infrastructure (e.g., data centres, cyber-physical systems) may face the following hazards:</p>
+            <ul class="ans-list">
+              <li><strong>Electrical Hazards</strong>
+                <ul class="ans-list nested">
+                  <li>High-voltage UPS systems; Battery systems (Lithium-ion, Lead-acid)</li>
+                  <li>Risk: Shock, fire, explosion</li>
+                </ul>
+              </li>
+              <li><strong>Thermal &amp; Noise Hazards (Physical)</strong>
+                <ul class="ans-list nested">
+                  <li>Heat in server "hot aisles" → Heat stress &amp; equipment failure</li>
+                  <li>High-decibel cooling fans → Hearing damage</li>
+                </ul>
+              </li>
+              <li><strong>Ergonomic Hazards</strong>
+                <ul class="ans-list nested">
+                  <li>Long hours of typing and sitting</li>
+                  <li>Conditions: Carpal Tunnel Syndrome, Tendonitis, Computer Vision Syndrome (CVS)</li>
+                </ul>
+              </li>
+              <li><strong>Cyber-Physical System Failures</strong>
+                <ul class="ans-list nested">
+                  <li>Software bugs causing real-world accidents</li>
+                  <li>Example: Faulty algorithm → Machine malfunction → Physical injury</li>
+                </ul>
+              </li>
+              <li><strong>Cyber Attacks</strong>
+                <ul class="ans-list nested">
+                  <li>Attacks on infrastructure systems (energy, transport)</li>
+                  <li>Can lead to: Equipment damage, Environmental hazards</li>
+                </ul>
+              </li>
+            </ul>
+            <div class="info-box key"><strong>Bottom Line</strong>CSE engineers face both traditional industrial hazards and modern digital hazards, making comprehensive safety awareness critical.</div>
+          </div>
+        </div>
+
+      </div></div>
+    </div>
+  </div>
+
+  <!-- Q2 -->
+  <div class="q-block">
+    <div class="q-header" onclick="toggleQ(this)">
+      <div class="q-num">Q2</div>
+      <div class="q-title">Acute vs. Chronic Effects &amp; Three Basic Workplace Exposures for CSE Engineers</div>
+      <div class="q-marks">Q2(a) + Q2(b)</div>
+      <div class="q-arrow">▼</div>
+    </div>
+    <div class="q-body">
+      <div class="q-body-inner"><div class="q-body-inner-pad">
+
+        <div class="sub-q">
+          <div class="sub-label">Q2(a)</div>
+          <div class="sub-question">Distinguish between acute and chronic effects of exposure.</div>
+          <div class="answer">
+            <table class="ans-table">
+              <tr><th>Aspect</th><th>Acute Effects</th><th>Chronic Effects</th></tr>
+              <tr><td><strong>Duration</strong></td><td>Short-term (seconds to hours)</td><td>Long-term (months to years)</td></tr>
+              <tr><td><strong>Exposure Level</strong></td><td>High concentration</td><td>Low but continuous exposure</td></tr>
+              <tr><td><strong>Onset</strong></td><td>Immediate</td><td>Delayed</td></tr>
+              <tr><td><strong>Examples</strong></td><td>Electric shock, gas leak</td><td>Carpal Tunnel Syndrome, hearing loss</td></tr>
+            </table>
+            <div class="info-box note"><strong>Summary</strong>Acute exposure causes immediate harm due to high intensity. Chronic exposure leads to gradual health deterioration over time.</div>
+          </div>
+        </div>
+
+        <div class="sub-q">
+          <div class="sub-label">Q2(b)</div>
+          <div class="sub-question">Identify and briefly explain the three (3) basic workplace exposures faced by Computer Science Engineers.</div>
+          <div class="answer">
+            <ul class="ans-list">
+              <li><strong>Ergonomic Hazards</strong>
+                <ul class="ans-list nested">
+                  <li>Caused by repetitive movements and poor posture</li>
+                  <li>Leads to musculoskeletal disorders (MSDs)</li>
+                  <li>Examples: Carpal Tunnel Syndrome, Eye strain (CVS)</li>
+                </ul>
+              </li>
+              <li><strong>Physical Exposure (Data Center Environment)</strong>
+                <ul class="ans-list nested">
+                  <li>Noise from cooling systems → Hearing loss</li>
+                  <li>Fire suppression systems → Oxygen reduction (hypoxia risk)</li>
+                </ul>
+              </li>
+              <li><strong>Psychosocial Hazards</strong>
+                <ul class="ans-list nested">
+                  <li>Stress from workload and "always-on" systems</li>
+                  <li>Effects: Mental fatigue, increased risk of errors, long-term cardiovascular issues</li>
+                </ul>
+              </li>
+            </ul>
+            <div class="info-box tip"><strong>Key Insight</strong>These exposures highlight that even non-traditional work environments like IT can pose serious health risks, especially over long periods.</div>
+          </div>
+        </div>
+
+      </div></div>
+    </div>
+  </div>
+
+</div><!-- end quiz2 -->
+
+<!-- ═══════════════ OTHERS ═══════════════ -->
+<div id="others" class="section">
+
+  <div class="section-header">
+    <div class="section-info">
+      <h2>Others — Extended Topics</h2>
+      <div class="subtitle">Comprehensive solutions from all five lectures</div>
+    </div>
+    <div class="section-badges">
+      <div class="badge badge-gold">8 Topics</div>
+      <div class="badge badge-purple">Lectures 1–5</div>
+    </div>
+  </div>
+
+  <div class="breadcrumb">
+    <span>CSE 4147</span>
+    <span class="bc-sep">›</span>
+    <span class="bc-active">Others</span>
+    <span class="bc-count">8 topics</span>
+  </div>
+
+  <div class="toolbar">
+    <button class="toolbar-btn" onclick="expandAll('others')">Expand All</button>
+    <button class="toolbar-btn" onclick="collapseAll('others')">Collapse All</button>
+  </div>
+
+  <!-- Q2 -->
+  <div class="q-block">
+    <div class="q-header" onclick="toggleQ(this)">
+      <div class="q-num">Q2</div>
+      <div class="q-title">Industrial Working Conditions — Definition, Dimensions &amp; Drivers</div>
+      <div class="q-marks">Lecture 4, pp. 3–4</div>
+      <div class="q-arrow">▼</div>
+    </div>
+    <div class="q-body">
+      <div class="q-body-inner"><div class="q-body-inner-pad">
+        <div class="sub-q">
+          <div class="sub-label">Question</div>
+          <div class="sub-question">Define "working conditions" and identify its four basic dimensions. Additionally, discuss the three primary drivers that push industries to improve these conditions.</div>
+          <div class="answer">
+            <p><strong>Working conditions</strong> refers to the environment and all existing circumstances of a person's place of work.</p>
+            <h4>The Four Basic Dimensions</h4>
+            <ul class="ans-list">
+              <li><strong>Physical Environment</strong> — Includes factors like temperature, air quality, lighting, and noise levels.</li>
+              <li><strong>Work Organization</strong> — Covers shift patterns, work hours, and the pace of work.</li>
+              <li><strong>Safety &amp; Health</strong> — Access to protective equipment and ergonomic tools.</li>
+              <li><strong>Psychosocial Factors</strong> — Job security, mental health support, and the prevention of workplace harassment.</li>
+            </ul>
+            <h4>The Three Primary Drivers of Improvement</h4>
+            <ul class="ans-list">
+              <li><strong>Legal and Regulatory</strong> — Governments pass laws (like ILO standards) that set a minimum floor for safety; companies must comply or face heavy fines.</li>
+              <li><strong>Economic and Productivity</strong> — Healthy workers are more productive. Reducing accidents lowers insurance premiums and prevents costly downtime from equipment damage.</li>
+              <li><strong>Ethical and Social</strong> — Modern society and consumers demand that products be made under fair conditions as part of <mark>Corporate Social Responsibility (CSR)</mark>.</li>
+            </ul>
+          </div>
+        </div>
+      </div></div>
+    </div>
+  </div>
+
+  <!-- Q3 -->
+  <div class="q-block">
+    <div class="q-header" onclick="toggleQ(this)">
+      <div class="q-num">Q3</div>
+      <div class="q-title">Workplace Exposure Concepts — Dose-Response, OEL, TLV &amp; STEL</div>
+      <div class="q-marks">Lecture 5 p.5 / Lecture 1 p.40</div>
+      <div class="q-arrow">▼</div>
+    </div>
+    <div class="q-body">
+      <div class="q-body-inner"><div class="q-body-inner-pad">
+        <div class="sub-q">
+          <div class="sub-label">Question</div>
+          <div class="sub-question">Explain: (i) Dose-response Relationship (ii) Occupational Exposure Limit (OEL) (iii) Threshold Limit Value (TLV) (iv) Short-Term Exposure Limit (STEL).</div>
+          <div class="answer">
+            <ul class="ans-list">
+              <li><strong>Dose-Response Relationship</strong>
+                <p style="margin:6px 0 0;font-size:14px;color:rgba(232,228,220,0.75);">This principle establishes that the severity of a biological effect is directly related to the "dose" (amount) of a substance received. It helps safety professionals determine the "no-effect" level and identify the point at which a substance becomes toxic, allowing for the creation of safe handling guidelines.</p>
+              </li>
+              <li><strong>Occupational Exposure Limit (OEL)</strong>
+                <p style="margin:6px 0 0;font-size:14px;color:rgba(232,228,220,0.75);">Legally enforceable or recommended upper limits on the concentration of hazardous agents in the air to protect workers from chronic health issues. They act as a benchmark for industrial hygienists to monitor air quality and determine if additional ventilation or PPE is required.</p>
+              </li>
+              <li><strong>Threshold Limit Value (TLV)</strong>
+                <p style="margin:6px 0 0;font-size:14px;color:rgba(232,228,220,0.75);">Developed by ACGIH — the concentration of a substance that nearly all workers can be exposed to repeatedly over a <mark>40-hour work week</mark> without experiencing ill health. Considered a "safe" ceiling for long-term daily exposure based on current scientific data rather than just legal compliance.</p>
+              </li>
+              <li><strong>Short-Term Exposure Limit (STEL)</strong>
+                <p style="margin:6px 0 0;font-size:14px;color:rgba(232,228,220,0.75);">A strictly monitored <mark>15-minute average exposure</mark> that must never be exceeded, even if the overall 8-hour average is low. Designed to prevent acute effects — such as eye irritation, dizziness, or narcosis — that could lead to immediate accidents or long-term tissue damage from brief, high-intensity bursts.</p>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div></div>
+    </div>
+  </div>
+
+  <!-- Q4 -->
+  <div class="q-block">
+    <div class="q-header" onclick="toggleQ(this)">
+      <div class="q-num">Q4</div>
+      <div class="q-title">Risk Assessment Process — 8-Step Systematic Methodology</div>
+      <div class="q-marks">Lecture 2, p.17</div>
+      <div class="q-arrow">▼</div>
+    </div>
+    <div class="q-body">
+      <div class="q-body-inner"><div class="q-body-inner-pad">
+        <div class="sub-q">
+          <div class="sub-label">Question</div>
+          <div class="sub-question">Outline the structured, systematic methodology of the Risk Assessment Process used to ensure comprehensive coverage of potential hazards in industrial system design.</div>
+          <div class="answer">
+            <p>The risk assessment process follows these eight steps:</p>
+            <ol class="steps-list">
+              <li><strong>Understand the System</strong> — Develop a complete understanding of the work system, processes, and environment.</li>
+              <li><strong>Identify Hazards</strong> — Consider various scenarios, operating modes, and potential failure conditions.</li>
+              <li><strong>Associate Risks to Hazards</strong> — Link each identified hazard to specific risks and potential consequences.</li>
+              <li><strong>Determine Likelihood &amp; Consequences</strong> — Assess the probability of occurrence and potential severity of impact.</li>
+              <li><strong>Risk Analysis and Ranking</strong> — Quantify and prioritize risks using established methodologies.</li>
+              <li><strong>Identify Control Measures</strong> — Determine appropriate controls for each hazard following the hierarchy of control.</li>
+              <li><strong>Evaluate Acceptability</strong> — Decide if residual risk levels are acceptable based on legal requirements and standards.</li>
+              <li><strong>Additional Controls (if needed)</strong> — Implement further measures if risk is not acceptable, following <mark>ALARP</mark> principles.</li>
+            </ol>
+          </div>
+        </div>
+      </div></div>
+    </div>
+  </div>
+
+  <!-- Q5 -->
+  <div class="q-block">
+    <div class="q-header" onclick="toggleQ(this)">
+      <div class="q-num">Q5</div>
+      <div class="q-title">Emergency Response Plan (ERP) — Definition &amp; Critical Components</div>
+      <div class="q-marks">Lecture 3, pp. 3–4</div>
+      <div class="q-arrow">▼</div>
+    </div>
+    <div class="q-body">
+      <div class="q-body-inner"><div class="q-body-inner-pad">
+        <div class="sub-q">
+          <div class="sub-label">Question</div>
+          <div class="sub-question">What is an Emergency Response Plan (ERP), and what are the critical components of a strong ERP?</div>
+          <div class="answer">
+            <p>An <strong>ERP</strong> is a detailed, step-by-step instruction manual that an industry follows the moment an accident occurs. It is a formal document outlining exactly how a facility will respond to contain a hazard and protect lives — serving as a bridge between hazard detection and the arrival of professional emergency services.</p>
+            <h4>Critical Components</h4>
+            <ul class="ans-list">
+              <li><strong>Incident Command System (ICS)</strong>
+                <p style="margin:6px 0 0;font-size:14px;color:rgba(232,228,220,0.75);">The organizational backbone of the response. Prevents "freelancing" by using a standardized chain of command and common terminology — everyone knows who is in charge of operations, logistics, and planning, regardless of which agency they belong to.</p>
+              </li>
+              <li><strong>Evacuation and Shelter-in-Place</strong>
+                <p style="margin:6px 0 0;font-size:14px;color:rgba(232,228,220,0.75);"><em>Evacuation</em>: used when the building is the danger (e.g., fire) — mapped routes to assembly points. <em>Shelter-in-Place</em>: used when the outdoor environment is toxic (e.g., chlorine gas leak) — workers stay inside, seal ventilation, and wait for the plume to dissipate.</p>
+              </li>
+              <li><strong>Communication Protocols</strong>
+                <p style="margin:6px 0 0;font-size:14px;color:rgba(232,228,220,0.75);">Dictates how and to whom information flows: internal alarms, hotlines to notify local government, and "Community Right-to-Know" channels to inform the public. This prevents misinformation and ensures responders have accurate data before they arrive.</p>
+              </li>
+              <li><strong>Resource Management</strong>
+                <p style="margin:6px 0 0;font-size:14px;color:rgba(232,228,220,0.75);">Beyond having a list of tools — involves "staging" and maintenance. Specialized resources (chemical neutralizers, foam for oil fires, heavy-duty respirators) are strategically located, regularly inspected, and personnel are trained to operate them under high-stress conditions.</p>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div></div>
+    </div>
+  </div>
+
+  <!-- Q6 -->
+  <div class="q-block">
+    <div class="q-header" onclick="toggleQ(this)">
+      <div class="q-num">Q6</div>
+      <div class="q-title">Industrial Waste Management — Classification, Steps &amp; Water Treatment</div>
+      <div class="q-marks">Lecture 4, pp. 23–26</div>
+      <div class="q-arrow">▼</div>
+    </div>
+    <div class="q-body">
+      <div class="q-body-inner"><div class="q-body-inner-pad">
+        <div class="sub-q">
+          <div class="sub-label">Question</div>
+          <div class="sub-question">Discuss effective industrial waste management by identifying the classification categories, the critical steps involved, and specifically the methods for industrial water treatment and disposal.</div>
+          <div class="answer">
+            <h4>The Five Critical Steps of Waste Management</h4>
+            <ol class="steps-list">
+              <li><strong>Classification</strong> — Identifying the waste's nature (e.g., "Spent Acid" is both Corrosive and Toxic).</li>
+              <li><strong>Storage</strong> — Using labeled containers with Secondary Containment (chemical-proof floors) to prevent soil or water contamination during leaks.</li>
+              <li><strong>Treatment</strong> — Altering the waste to neutralize it or reduce its volume before it leaves the site.</li>
+              <li><strong>Disposal</strong> — Final discharge or storage of treated materials in a way that isolates them from the ecosystem.</li>
+              <li><strong>By-product Stream</strong> — A sustainability-driven step where materials (like copper or fly ash) are recovered from the waste stream to be reused as raw materials.</li>
+            </ol>
+            <h4>Industrial Water Treatment &amp; Disposal Methods</h4>
+            <ul class="ans-list">
+              <li><strong>On-Site Treatment</strong>
+                <ul class="ans-list nested">
+                  <li><em>Equalization &amp; Neutralization:</em> Large tanks balance flow and adjust pH levels.</li>
+                  <li><em>Physical/Chemical Removal:</em> Precipitation or Filtration removes heavy metals or suspended solids, producing manageable "sludge".</li>
+                </ul>
+              </li>
+              <li><strong>Disposal / Discharge Routes</strong>
+                <ul class="ans-list nested">
+                  <li><em>Direct Discharge (Surface Water):</em> Treated water is discharged into rivers or lakes with continuous monitoring.</li>
+                  <li><em>Indirect Discharge (Public Sewers):</em> Treated water is sent to a municipal WWTP.</li>
+                  <li><em>Zero Liquid Discharge (ZLD):</em> All water is evaporated and recovered for reuse — most environmentally friendly but most expensive method.</li>
+                </ul>
+              </li>
+              <li><strong>Sludge Management</strong> — Dehydrated and sent to a Secured Landfill designed to prevent toxic runoff into groundwater.</li>
+            </ul>
+          </div>
+        </div>
+      </div></div>
+    </div>
+  </div>
+
+  <!-- Q7 -->
+  <div class="q-block">
+    <div class="q-header" onclick="toggleQ(this)">
+      <div class="q-num">Q7</div>
+      <div class="q-title">Environmental Hazards &amp; Terminologies — Natural, Anthropogenic, Disaster, Catastrophe</div>
+      <div class="q-marks">Lecture 5, pp. 2–4</div>
+      <div class="q-arrow">▼</div>
+    </div>
+    <div class="q-body">
+      <div class="q-body-inner"><div class="q-body-inner-pad">
+        <div class="sub-q">
+          <div class="sub-label">Question</div>
+          <div class="sub-question">Define "environmental hazard" and differentiate between: (i) Natural hazard (ii) Anthropogenic Hazard (iii) Disaster (iv) Catastrophe.</div>
+          <div class="answer">
+            <p>An <strong>environmental hazard</strong> is any situation or state of events which has the potential to threaten the surrounding natural environment and adversely affect people's health. These range from natural disasters like earthquakes and droughts to man-made pollution and technological failures.</p>
+            <ul class="ans-list">
+              <li><strong>Natural Hazards</strong>
+                <p style="margin:6px 0 0;font-size:14px;color:rgba(232,228,220,0.75);">Physical events caused by the earth's natural systems. Categorized by origin: <mark>Geological</mark> (earthquakes, landslides), <mark>Hydrological</mark> (floods), <mark>Meteorological</mark> (cyclones, heatwaves), or <mark>Biological</mark> (epidemics).</p>
+              </li>
+              <li><strong>Anthropogenic (Man-Induced) Hazards</strong>
+                <p style="margin:6px 0 0;font-size:14px;color:rgba(232,228,220,0.75);">Originate strictly from human activities, industrial processes, or technological failures. Includes industrial accidents (chemical spills, nuclear meltdowns) and long-term issues (smog, groundwater contamination). Unlike natural hazards, these are often <mark>preventable</mark>.</p>
+              </li>
+              <li><strong>Disaster</strong>
+                <p style="margin:6px 0 0;font-size:14px;color:rgba(232,228,220,0.75);">A hazard is classified as a Disaster only when it intersects with a vulnerable population in a way that is <mark>beyond the community's ability to cope</mark>.</p>
+              </li>
+              <li><strong>Catastrophe</strong>
+                <p style="margin:6px 0 0;font-size:14px;color:rgba(232,228,220,0.75);">A disaster of the highest magnitude and severity involving "huge, serious damages" and "sudden, unexpected impacts." Destruction is so widespread that even national resources struggle to provide relief, often causing permanent changes to the region.</p>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div></div>
+    </div>
+  </div>
+
+  <!-- Q8 -->
+  <div class="q-block">
+    <div class="q-header" onclick="toggleQ(this)">
+      <div class="q-num">Q8</div>
+      <div class="q-title">Hazard Exposure Pathway — Source to Human Receptor (4 Steps)</div>
+      <div class="q-marks">Lecture 5, p.20</div>
+      <div class="q-arrow">▼</div>
+    </div>
+    <div class="q-body">
+      <div class="q-body-inner"><div class="q-body-inner-pad">
+        <div class="sub-q">
+          <div class="sub-label">Question</div>
+          <div class="sub-question">Explain the four-step hazard exposure pathway from a source to a human receptor.</div>
+          <div class="answer">
+            <ul class="ans-list">
+              <li><strong>① Source</strong>
+                <p style="margin:6px 0 0;font-size:14px;color:rgba(232,228,220,0.75);">The point of origin where the hazardous agent is released. Can be a <em>point source</em> (leaking storage tank, smokestack) or a <em>non-point source</em> (pesticide runoff). Without a source, there is no exposure potential.</p>
+              </li>
+              <li><strong>② Environmental Medium</strong>
+                <p style="margin:6px 0 0;font-size:14px;color:rgba(232,228,220,0.75);">Once released, the hazard travels through a carrier: Air (inhalation), Water (drinking/swimming), Soil (direct contact or ingestion), or Food (biomagnification). The medium determines how far a hazard can travel.</p>
+              </li>
+              <li><strong>③ Point of Contact</strong>
+                <p style="margin:6px 0 0;font-size:14px;color:rgba(232,228,220,0.75);">The specific location where a person comes into contact with the contaminated medium. Examples: standing downwind of a factory (air), gardening in contaminated soil, drinking from a local well (water).</p>
+              </li>
+              <li><strong>④ Human Receptor</strong>
+                <p style="margin:6px 0 0;font-size:14px;color:rgba(232,228,220,0.75);">The final stage — when a person takes the hazard into their body via a Portal of Entry: lungs (inhalation), skin (dermal absorption), or digestive system (ingestion). A person is only considered a "receptor" once the substance has the potential to cause internal biological damage.</p>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div></div>
+    </div>
+  </div>
+
+  <!-- Q9 -->
+  <div class="q-block">
+    <div class="q-header" onclick="toggleQ(this)">
+      <div class="q-num">Q9</div>
+      <div class="q-title">Disaster Management &amp; Cycle — Definition and Four Components</div>
+      <div class="q-marks">Lecture 5, p.30</div>
+      <div class="q-arrow">▼</div>
+    </div>
+    <div class="q-body">
+      <div class="q-body-inner"><div class="q-body-inner-pad">
+        <div class="sub-q">
+          <div class="sub-label">Question</div>
+          <div class="sub-question">Define "disaster management" and explain the components of the disaster management cycle.</div>
+          <div class="answer">
+            <p><strong>Disaster management</strong> is a continuous cycle aimed at reducing the impact of hazards. It is categorized into a <em>Pre-Disaster (proactive) Phase</em> and a <em>Post-Disaster (reactive) Phase</em>. The cycle implies that the end of one disaster response is the beginning of preparation for the next.</p>
+            <div class="cycle-diagram">
+              <div class="cycle-node n1">Mitigation</div>
+              <div class="cycle-arrow">→</div>
+              <div class="cycle-node n2">Preparedness</div>
+              <div class="cycle-arrow">→</div>
+              <div class="cycle-node n3">Response</div>
+              <div class="cycle-arrow">→</div>
+              <div class="cycle-node n4">Recovery</div>
+              <div class="cycle-arrow">↩</div>
+              <div class="cycle-loop">↺ Continuous Cycle</div>
+            </div>
+            <ul class="ans-list">
+              <li><strong>Mitigation</strong>
+                <p style="margin:6px 0 0;font-size:14px;color:rgba(232,228,220,0.75);">Long-term, proactive measures taken before a hazard occurs to reduce its potential impact. Focuses on the physical/structural side: building levees to prevent flooding, implementing strict building codes to withstand earthquakes.</p>
+              </li>
+              <li><strong>Preparedness</strong>
+                <p style="margin:6px 0 0;font-size:14px;color:rgba(232,228,220,0.75);">Focuses on human readiness. Includes developing ERPs, conducting fire drills, setting up early warning systems, and training community members on what to do when a disaster strikes.</p>
+              </li>
+              <li><strong>Response</strong>
+                <p style="margin:6px 0 0;font-size:14px;color:rgba(232,228,220,0.75);">The "active" phase occurring during or immediately after the disaster. Focus is entirely on saving lives and preventing further damage: search and rescue, emergency medical aid, immediate evacuation to shelters.</p>
+              </li>
+              <li><strong>Recovery</strong>
+                <p style="margin:6px 0 0;font-size:14px;color:rgba(232,228,220,0.75);">Once the immediate threat is over — rebuilding infrastructure (roads, electricity), providing long-term psychological support, and restoring essential services. Goal: return the community to its normal state — or ideally, a state better than before.</p>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div></div>
+    </div>
+  </div>
+
+</div><!-- end others -->
+
+<!-- ═══════════════ EXTRA SUGGESTIONS ═══════════════ -->
+<div id="extras" class="section">
+
+  <div class="section-header">
+    <div class="section-info">
+      <h2>Extra Suggestions</h2>
+      <div class="subtitle">Exam strategy guide — what to memorize, understand, and skip</div>
+    </div>
+    <div class="section-badges">
+      <div class="badge badge-rust">5 Lectures</div>
+      <div class="badge badge-gold">Exam-Focused</div>
+    </div>
+  </div>
+
+  <div class="breadcrumb">
+    <span>CSE 4147</span>
+    <span class="bc-sep">›</span>
+    <span class="bc-active">Extra Suggestions</span>
+    <span class="bc-count">5 lectures</span>
+  </div>
+
+  <!-- Must-Memorize Summary Card -->
+  <div class="memo-card">
+    <div class="memo-card-title">⚑ Must Memorize — Quick Reference</div>
+    <div class="memo-grid">
+      <div class="memo-item"><span class="memo-dot d-teal"></span><span><strong>L1:</strong> Acute vs. Chronic effects; 5 hazard typologies; Occupational Disease Surveillance</span></div>
+      <div class="memo-item"><span class="memo-dot d-gold"></span><span><strong>L2:</strong> Hierarchy of Controls (5 levels); Risk = Probability × Severity</span></div>
+      <div class="memo-item"><span class="memo-dot d-rust"></span><span><strong>L3:</strong> ERP components — ICS, Evacuation/Shelter-in-Place, Communication, Resource Mgmt</span></div>
+      <div class="memo-item"><span class="memo-dot d-blue"></span><span><strong>L4:</strong> Working Conditions — 4 dimensions; 3 drivers (Legal, Economic, Ethical)</span></div>
+      <div class="memo-item"><span class="memo-dot d-purple"></span><span><strong>L5:</strong> Natural Event → Hazard → Disaster → Catastrophe; Disaster Management Cycle</span></div>
+      <div class="memo-item"><span class="memo-dot d-gold"></span><span><strong>L5:</strong> Routes of Entry — Inhalation, Ingestion, Dermal Absorption, Injection</span></div>
+    </div>
+  </div>
+
+  <div class="toolbar">
+    <button class="toolbar-btn" onclick="expandAll('extras')">Expand All</button>
+    <button class="toolbar-btn" onclick="collapseAll('extras')">Collapse All</button>
+  </div>
+
+  <!-- Lecture 1 -->
+  <div class="q-block">
+    <div class="q-header" onclick="toggleQ(this)">
+      <div class="q-num"><span class="lec-tag lec1">L1</span></div>
+      <div class="q-title">Industrial Hazards &amp; Exposure — Types &amp; Body Effects</div>
+      <div class="q-marks">Lecture 1</div>
+      <div class="q-arrow">▼</div>
+    </div>
+    <div class="q-body">
+      <div class="q-body-inner"><div class="q-body-inner-pad">
+        <div class="sub-q">
+          <div class="priority-bar p3">
+            <span class="stars">★★★</span>
+            <span class="prio-label">V.V.V. Important</span>
+            <span class="prio-badge">High Priority</span>
+          </div>
+          <div class="answer">
+            <ul class="ans-list">
+              <li><strong>Fundamental Concepts of Exposure</strong>
+                <ul class="ans-list nested">
+                  <li><em>Acute:</em> Immediate health effects from a single, high-dose exposure (e.g., chlorine gas leak causing respiratory distress).</li>
+                  <li><em>Chronic:</em> Long-term health damage from repeated, low-dose exposure over months or years (e.g., lead exposure causing nervous system damage).</li>
+                </ul>
+              </li>
+              <li><strong>CSE Engineers – Workplace Exposure</strong> — Focus on Ergonomic Hazards (poor posture, repetitive strain) and Psychosocial Hazards (high stress, burnout).</li>
+              <li><strong>Occupational Disease Surveillance</strong> — Systems used to monitor worker health: Medical surveillance, Environmental monitoring, and "Near-Miss" reporting.</li>
+              <li><strong>Ergonomic Hazards (Slide 20)</strong> — Understand core concepts; specific scenarios/case studies are for context only and do <em>not</em> require memorization.</li>
+              <li><strong>Digital Infrastructure &amp; Cyber-Physical Hazards</strong> — Review how software failures can lead to physical industrial catastrophes.</li>
+            </ul>
+          </div>
+        </div>
+      </div></div>
+    </div>
+  </div>
+
+  <!-- Lecture 2 -->
+  <div class="q-block">
+    <div class="q-header" onclick="toggleQ(this)">
+      <div class="q-num"><span class="lec-tag lec2">L2</span></div>
+      <div class="q-title">Risk Management &amp; Hierarchy of Controls</div>
+      <div class="q-marks">Lecture 2</div>
+      <div class="q-arrow">▼</div>
+    </div>
+    <div class="q-body">
+      <div class="q-body-inner"><div class="q-body-inner-pad">
+        <div class="sub-q">
+          <div class="priority-bar p4">
+            <span class="stars">★★★★</span>
+            <span class="prio-label">V.V.V.V. Important</span>
+            <span class="prio-badge">Critical</span>
+          </div>
+          <div class="answer">
+            <h4>Hierarchy of Controls (Slides 1–5) — Most to Least Effective</h4>
+            <div class="hierarchy">
+              <div class="hier-item"><span>Elimination</span><span class="hier-note">Most Effective</span></div>
+              <div class="hier-item"><span>Substitution</span><span class="hier-note">Replace the hazard</span></div>
+              <div class="hier-item"><span>Engineering Controls</span><span class="hier-note">Isolate the worker</span></div>
+              <div class="hier-item"><span>Administrative Controls</span><span class="hier-note">Change the work method</span></div>
+              <div class="hier-item"><span>PPE (Personal Protective Equipment)</span><span class="hier-note">Last Line of Defense</span></div>
+            </div>
+            <div class="info-box key"><strong>Critical Formula (Slides 12–14)</strong><mark>Risk = Probability × Severity</mark> — Ensure deep understanding of risk assessment formulas.</div>
+            <div class="skip-note">Slides 42–47 can be skipped. Slides 35–41 require only basic conceptual understanding.</div>
+          </div>
+        </div>
+      </div></div>
+    </div>
+  </div>
+
+  <!-- Lecture 3 -->
+  <div class="q-block">
+    <div class="q-header" onclick="toggleQ(this)">
+      <div class="q-num"><span class="lec-tag lec3">L3</span></div>
+      <div class="q-title">Emergency Response Planning (ERP) — Post-Accident Strategy</div>
+      <div class="q-marks">Lecture 3</div>
+      <div class="q-arrow">▼</div>
+    </div>
+    <div class="q-body">
+      <div class="q-body-inner"><div class="q-body-inner-pad">
+        <div class="sub-q">
+          <div class="priority-bar p3">
+            <span class="stars">★★★</span>
+            <span class="prio-label">V.V.V. Important</span>
+            <span class="prio-badge">High Priority</span>
+          </div>
+          <div class="answer">
+            <ul class="ans-list">
+              <li><strong>ERP Definition &amp; Components (Pages 3–4)</strong> — Memorize fully: Incident Command System (ICS), Evacuation/Shelter-in-Place protocols, Communication Protocols, and Resource Management.</li>
+              <li><strong>Example of ERP — Ammonia Cold Storage (Slide 15)</strong> — Focus on how the plan, the buffer zone, and technical tools (wind sensors / water curtains) work together as a system.</li>
+            </ul>
+            <div class="skip-note">Pages 11–12 and general examples are for reading only — do not spend time memorizing them.</div>
+          </div>
+        </div>
+      </div></div>
+    </div>
+  </div>
+
+  <!-- Lecture 4 -->
+  <div class="q-block">
+    <div class="q-header" onclick="toggleQ(this)">
+      <div class="q-num"><span class="lec-tag lec4">L4</span></div>
+      <div class="q-title">Working Conditions &amp; Waste Management</div>
+      <div class="q-marks">Lecture 4</div>
+      <div class="q-arrow">▼</div>
+    </div>
+    <div class="q-body">
+      <div class="q-body-inner"><div class="q-body-inner-pad">
+        <div class="sub-q">
+          <div class="answer">
+            <ul class="ans-list">
+              <li><strong>Memorize: Definitions of Working Conditions (Page 3)</strong> — Physical Environment, Work Organization, Safety &amp; Health, and Psychosocial Factors.</li>
+              <li><strong>Understand &amp; Memorize: Drivers of Improvement (Page 4)</strong>
+                <ul class="ans-list nested">
+                  <li>The Table: Legal/Regulatory, Economic/Productivity, and Ethical/Social drivers.</li>
+                </ul>
+              </li>
+              <li><strong class="lec-tag vvv">V.V.V. Important</strong> — <strong>Contemporary Aspects (Page 5)</strong>: Review the specific modern improvements in industrial working conditions.</li>
+            </ul>
+            <div class="skip-note">Pages 19–26 (detailed waste management processes) do not require memorization.</div>
+          </div>
+        </div>
+      </div></div>
+    </div>
+  </div>
+
+  <!-- Lecture 5 -->
+  <div class="q-block">
+    <div class="q-header" onclick="toggleQ(this)">
+      <div class="q-num"><span class="lec-tag lec5">L5</span></div>
+      <div class="q-title">Environmental Hazards &amp; Disaster Management</div>
+      <div class="q-marks">Lecture 5</div>
+      <div class="q-arrow">▼</div>
+    </div>
+    <div class="q-body">
+      <div class="q-body-inner"><div class="q-body-inner-pad">
+        <div class="sub-q">
+          <div class="answer">
+            <ul class="ans-list">
+              <li><strong>Key Terminology (Pages 1–3)</strong>
+                <ul class="ans-list nested">
+                  <li>Memorize: Natural Event, Hazard, Disaster, and Catastrophe.</li>
+                  <li>Slide 2: Definition of Environmental Hazard.</li>
+                </ul>
+              </li>
+              <li><strong>Disaster Management Cycle (DMC)</strong> — Understand the continuous loop:
+                <div class="cycle-diagram" style="margin-top:10px;">
+                  <div class="cycle-node n1">Mitigation</div>
+                  <div class="cycle-arrow">→</div>
+                  <div class="cycle-node n2">Preparedness</div>
+                  <div class="cycle-arrow">→</div>
+                  <div class="cycle-node n3">Response</div>
+                  <div class="cycle-arrow">→</div>
+                  <div class="cycle-node n4">Recovery</div>
+                  <div class="cycle-loop">↺ Continuous</div>
+                </div>
+              </li>
+              <li><strong>Additional Topics to Review</strong>
+                <ul class="ans-list nested">
+                  <li>Natural Disasters vs. Anthropogenic (Man-made) Hazards.</li>
+                  <li>Warfare and Terrorism as environmental threats.</li>
+                  <li>Routes of Entry: How hazards enter the human body — <mark>Inhalation</mark>, <mark>Ingestion</mark>, <mark>Dermal Absorption</mark>, and <mark>Injection</mark>.</li>
+                </ul>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div></div>
+    </div>
+  </div>
+
+</div><!-- end extras -->
+
+</div><!-- end content -->
+
+<footer>
+  <span>CSE 4147 · Technology, Environment &amp; Society</span> · IUT · Suggestion Solutions
+  <div>Study Smart · Good Luck 🎯</div>
+</footer>
+
+<script>
+/* ── Section switching ── */
+function showSection(id, btn) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(b => b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  btn.classList.add('active');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+/* ── Smooth accordion toggle using CSS grid trick ── */
+function toggleQ(header) {
+  const isOpen = header.classList.contains('open');
+  header.classList.toggle('open');
+  const body = header.nextElementSibling;
+  body.classList.toggle('open');
+}
+
+/* ── Expand / Collapse all within a section ── */
+function expandAll(sectionId) {
+  const sec = document.getElementById(sectionId);
+  sec.querySelectorAll('.q-header').forEach(h => {
+    h.classList.add('open');
+    h.nextElementSibling.classList.add('open');
+  });
+}
+function collapseAll(sectionId) {
+  const sec = document.getElementById(sectionId);
+  sec.querySelectorAll('.q-header').forEach(h => {
+    h.classList.remove('open');
+    h.nextElementSibling.classList.remove('open');
+  });
+}
+
+/* ── Back to top button ── */
+const btt = document.getElementById('back-to-top');
+window.addEventListener('scroll', () => {
+  btt.classList.toggle('visible', window.scrollY > 320);
+}, { passive: true });
+</script>
+</body>
+</html>

@@ -1,0 +1,2223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Circuit Analysis Exam Prep — Ch 1-9 | Boylestad</title>
+<style>
+:root{
+  --bg:#0f1115;
+  --panel:#171a21;
+  --panel2:#1d212b;
+  --ink:#e8e9ed;
+  --ink-dim:#9aa0ad;
+  --accent:#ffb627;
+  --accent2:#4fd1c5;
+  --accent3:#ff6b6b;
+  --line:#2a2f3a;
+  --code-bg:#11141a;
+  --good:#4fd17a;
+}
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--ink);
+  font-family:'Georgia','Iowan Old Style',serif;
+  line-height:1.6;
+}
+.layout{display:flex; min-height:100vh;}
+
+/* SIDEBAR TOGGLE BUTTON */
+.sidebar-toggle{
+  position:fixed; top:14px; left:14px; z-index:80;
+  width:40px; height:40px; border-radius:9px;
+  background:var(--panel2); border:1px solid var(--line);
+  color:var(--ink); display:flex; align-items:center; justify-content:center;
+  cursor:pointer; font-size:18px; transition:left .25s ease, background .15s;
+}
+.sidebar-toggle:hover{background:var(--panel);}
+body.sidebar-collapsed .sidebar-toggle{left:14px;}
+.sidebar-backdrop{
+  position:fixed; inset:0; background:rgba(0,0,0,.55); z-index:65;
+  opacity:0; pointer-events:none; transition:opacity .2s ease;
+}
+.sidebar-backdrop.show{opacity:1; pointer-events:auto;}
+
+/* SIDEBAR */
+.sidebar{
+  width:280px; flex-shrink:0;
+  background:var(--panel);
+  border-right:1px solid var(--line);
+  position:sticky; top:0; height:100vh; overflow-y:auto;
+  padding:64px 0 60px;
+  transition:width .25s ease, padding .25s ease, transform .25s ease;
+}
+body.sidebar-collapsed .sidebar{width:0; padding-left:0; padding-right:0; overflow:hidden; border-right:none;}
+.sidebar-brand{
+  padding:0 20px 16px;
+  border-bottom:1px solid var(--line);
+  margin-bottom:10px;
+}
+.sidebar-brand .tag{
+  font-family:'Helvetica Neue',Arial,sans-serif;
+  text-transform:uppercase;
+  letter-spacing:.14em;
+  font-size:11px;
+  color:var(--accent);
+  font-weight:700;
+}
+.sidebar-brand h1{
+  font-size:19px; margin:6px 0 4px; font-family:'Helvetica Neue',Arial,sans-serif; font-weight:700;
+}
+.sidebar-brand p{
+  font-size:12px; color:var(--ink-dim); margin:0; font-family:'Helvetica Neue',Arial,sans-serif;
+}
+.nav-section{padding:4px 10px;}
+.nav-chapter{
+  display:block; width:100%; padding:9px 12px; border-radius:8px;
+  color:var(--ink); text-decoration:none; text-align:left;
+  background:none; border:none; cursor:pointer;
+  font-family:'Helvetica Neue',Arial,sans-serif;
+  font-size:13.5px;
+  margin-bottom:2px;
+  border-left:3px solid transparent;
+}
+.nav-chapter:hover{background:var(--panel2); border-left-color:var(--accent2);}
+.nav-chapter.active{background:var(--panel2); border-left-color:var(--accent);}
+.nav-chapter.active .num{color:var(--accent3);}
+.nav-chapter .num{color:var(--accent); font-weight:700; margin-right:6px;}
+.nav-chapter .time{
+  float:right; color:var(--ink-dim); font-size:11px; padding-top:1px;
+}
+.nav-foot{
+  margin-top:18px; padding:14px 20px; border-top:1px solid var(--line);
+  font-family:'Helvetica Neue',Arial,sans-serif; font-size:11.5px; color:var(--ink-dim);
+}
+.nav-foot a{color:var(--accent2);}
+
+/* MAIN */
+.main{flex:1; min-width:0;}
+.hero{
+  padding:64px 56px 48px;
+  border-bottom:1px solid var(--line);
+  background:
+    radial-gradient(ellipse 900px 400px at 15% -10%, rgba(255,182,39,0.12), transparent),
+    radial-gradient(ellipse 700px 400px at 90% 0%, rgba(79,209,197,0.10), transparent);
+}
+.hero .eyebrow{
+  font-family:'Helvetica Neue',Arial,sans-serif; text-transform:uppercase; letter-spacing:.18em;
+  font-size:11.5px; color:var(--accent2); font-weight:700; margin-bottom:14px;
+}
+.hero h1{
+  font-size:42px; margin:0 0 14px; max-width:780px; line-height:1.15;
+}
+.hero p.lead{
+  font-size:17px; color:var(--ink-dim); max-width:640px; margin:0 0 28px;
+}
+.stat-row{display:flex; gap:14px; flex-wrap:wrap;}
+.stat-card{
+  background:var(--panel); border:1px solid var(--line); border-radius:10px;
+  padding:14px 18px; min-width:140px;
+  font-family:'Helvetica Neue',Arial,sans-serif;
+}
+.stat-card .n{font-size:24px; font-weight:800; color:var(--accent); font-family:Georgia,serif;}
+.stat-card .l{font-size:11.5px; color:var(--ink-dim); text-transform:uppercase; letter-spacing:.06em; margin-top:2px;}
+
+.content{padding:10px 56px 100px;}
+.intro-block{
+  max-width:760px; margin:36px 0 50px; padding:22px 26px;
+  background:var(--panel); border:1px solid var(--line); border-radius:12px;
+  border-left:4px solid var(--accent);
+}
+.intro-block h2{margin-top:0; font-size:18px; font-family:'Helvetica Neue',Arial,sans-serif;}
+.intro-block ul{margin:8px 0 0; padding-left:20px;}
+.intro-block li{margin-bottom:6px; font-size:14.5px; color:var(--ink-dim);}
+
+/* PLAN TABLE */
+.plan-table{
+  width:100%; max-width:920px; border-collapse:collapse; margin:30px 0 60px;
+  font-family:'Helvetica Neue',Arial,sans-serif; font-size:13.5px;
+}
+.plan-table th{
+  text-align:left; padding:10px 14px; background:var(--panel2);
+  color:var(--accent2); text-transform:uppercase; font-size:11px; letter-spacing:.06em;
+  border-bottom:2px solid var(--line);
+}
+.plan-table td{padding:10px 14px; border-bottom:1px solid var(--line); color:var(--ink-dim);}
+.plan-table tr:hover td{background:var(--panel);}
+.plan-table .ch-name{color:var(--ink); font-weight:600;}
+.plan-table .pill{
+  display:inline-block; padding:2px 10px; border-radius:20px; font-size:11px; font-weight:700;
+}
+.pill.high{background:rgba(255,107,107,.15); color:var(--accent3);}
+.pill.med{background:rgba(255,182,39,.15); color:var(--accent);}
+.pill.low{background:rgba(79,209,197,.15); color:var(--accent2);}
+
+/* CHAPTER BLOCKS */
+.chapter{
+  max-width:880px; margin:0 0 90px; padding-top:30px;
+  border-top:1px solid var(--line);
+}
+.chapter-head{display:flex; align-items:baseline; gap:18px; margin-bottom:6px; flex-wrap:wrap;}
+.chapter-head .chno{
+  font-family:'Helvetica Neue',Arial,sans-serif; font-weight:800; font-size:14px;
+  color:var(--bg); background:var(--accent); padding:4px 12px; border-radius:6px;
+}
+.chapter-head h2{font-size:30px; margin:0;}
+.chapter-meta{
+  font-family:'Helvetica Neue',Arial,sans-serif; font-size:12.5px; color:var(--ink-dim);
+  margin-bottom:22px; display:flex; gap:18px; flex-wrap:wrap;
+}
+.chapter-meta span{display:inline-flex; align-items:center; gap:5px;}
+.chapter-meta b{color:var(--accent);}
+
+.topic{margin:34px 0;}
+.topic h3{
+  font-size:21px; margin:0 0 4px; color:var(--ink);
+  border-bottom:1px solid var(--line); padding-bottom:8px;
+}
+.topic .sub-time{
+  font-family:'Helvetica Neue',Arial,sans-serif; font-size:11.5px; color:var(--accent2);
+  margin-bottom:14px; display:block;
+}
+.topic p{margin:10px 0; color:#d4d6dc;}
+.topic ul, .topic ol{margin:10px 0; padding-left:22px; color:#d4d6dc;}
+.topic li{margin-bottom:6px;}
+
+.formula-box{
+  background:var(--code-bg); border:1px solid var(--line); border-left:4px solid var(--accent2);
+  border-radius:8px; padding:16px 20px; margin:16px 0;
+  font-family:'Cambria Math','Georgia',serif; font-size:17px; overflow-x:auto;
+}
+.formula-box .flabel{
+  display:block; font-family:'Helvetica Neue',Arial,sans-serif; font-size:10.5px;
+  text-transform:uppercase; letter-spacing:.08em; color:var(--ink-dim); margin-bottom:6px;
+}
+.formula-box .feq{color:var(--accent); font-weight:700;}
+
+.example{
+  background:var(--panel); border:1px solid var(--line); border-radius:10px;
+  margin:18px 0; overflow:hidden;
+}
+.example-head{
+  background:var(--panel2); padding:10px 18px; font-family:'Helvetica Neue',Arial,sans-serif;
+  font-weight:700; font-size:13px; color:var(--accent); letter-spacing:.02em;
+  border-bottom:1px solid var(--line);
+}
+.example-body{padding:16px 20px;}
+.example-body p{margin:8px 0;}
+.example-body .step{margin:10px 0;}
+.example-body .step .slabel{
+  font-family:'Helvetica Neue',Arial,sans-serif; font-size:11px; color:var(--ink-dim);
+  text-transform:uppercase; letter-spacing:.05em;
+}
+.example-body .math{
+  font-family:'Cambria Math',Georgia,serif; font-size:16px; background:var(--code-bg);
+  padding:8px 14px; border-radius:6px; margin:6px 0; overflow-x:auto;
+}
+.example-body .answer{
+  margin-top:10px; padding:10px 14px; background:rgba(79,209,122,.1);
+  border-left:3px solid var(--good); border-radius:4px; font-weight:700; color:var(--good);
+  font-family:'Cambria Math',Georgia,serif; font-size:16px;
+}
+
+.callout{
+  background:rgba(255,182,39,.08); border:1px solid rgba(255,182,39,.3);
+  border-radius:8px; padding:12px 16px; margin:16px 0; font-size:14px;
+  font-family:'Helvetica Neue',Arial,sans-serif;
+}
+.callout b{color:var(--accent);}
+.callout.warn{background:rgba(255,107,107,.08); border-color:rgba(255,107,107,.3);}
+.callout.warn b{color:var(--accent3);}
+.callout.tip{background:rgba(79,209,197,.08); border-color:rgba(79,209,197,.3);}
+.callout.tip b{color:var(--accent2);}
+
+.video-box{
+  display:flex; gap:14px; align-items:flex-start;
+  background:var(--panel2); border:1px solid var(--line); border-radius:10px;
+  padding:14px 16px; margin:16px 0; text-decoration:none; color:var(--ink);
+  font-family:'Helvetica Neue',Arial,sans-serif;
+  transition:border-color .15s;
+}
+.video-box:hover{border-color:var(--accent2);}
+.video-box .play{
+  flex-shrink:0; width:38px; height:38px; border-radius:50%; background:var(--accent3);
+  display:flex; align-items:center; justify-content:center; color:white; font-size:14px;
+  margin-top:2px;
+}
+.video-box .vtext .vtitle{font-weight:700; font-size:14px; margin-bottom:3px;}
+.video-box .vtext .vsrc{font-size:12px; color:var(--ink-dim);}
+.video-box .vtext .vdesc{font-size:12.5px; color:var(--ink-dim); margin-top:4px;}
+
+.checklist{
+  background:var(--panel); border:1px solid var(--line); border-radius:10px;
+  padding:18px 22px; margin:20px 0;
+}
+.checklist h4{margin:0 0 10px; font-family:'Helvetica Neue',Arial,sans-serif; font-size:14px; color:var(--accent2);}
+.checklist label{
+  display:flex; align-items:flex-start; gap:10px; font-size:13.5px; color:#d4d6dc;
+  margin-bottom:8px; cursor:pointer; font-family:'Helvetica Neue',Arial,sans-serif;
+}
+.checklist input{margin-top:3px; accent-color:var(--accent2); cursor:pointer;}
+
+.circuit-diagram{
+  background:var(--code-bg); border:1px solid var(--line); border-radius:10px;
+  padding:18px 14px 10px; margin:16px 0; overflow-x:auto;
+  display:flex; flex-direction:column; align-items:center;
+}
+.circuit-diagram svg{width:100%; max-width:520px; height:auto; display:block;}
+.circuit-diagram .cd-label{
+  font-family:'Helvetica Neue',Arial,sans-serif; font-size:10.5px; color:var(--ink-dim);
+  text-transform:uppercase; letter-spacing:.08em; margin-bottom:6px; align-self:flex-start;
+}
+.cd-wire{stroke:#7a8190; stroke-width:2; fill:none;}
+.cd-res{stroke:#7a8190; stroke-width:2; fill:none;}
+.cd-text{font-family:'Cambria Math',Georgia,serif; font-size:13px; fill:var(--accent);}
+.cd-text2{font-family:'Cambria Math',Georgia,serif; font-size:13px; fill:var(--accent2);}
+.cd-text-dim{font-family:'Helvetica Neue',Arial,sans-serif; font-size:10.5px; fill:var(--ink-dim);}
+.cd-node{fill:#d4d6dc;}
+
+table.data-table{
+  width:100%; border-collapse:collapse; margin:14px 0; font-size:13.5px;
+  font-family:'Helvetica Neue',Arial,sans-serif;
+}
+table.data-table th{
+  background:var(--panel2); padding:8px 12px; text-align:left; color:var(--accent2);
+  border-bottom:2px solid var(--line); font-size:11.5px; text-transform:uppercase;
+}
+table.data-table td{padding:8px 12px; border-bottom:1px solid var(--line); color:#d4d6dc;}
+
+.formula-grid{
+  display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:12px; margin:18px 0;
+}
+.formula-card{
+  background:var(--code-bg); border:1px solid var(--line); border-radius:8px; padding:14px 16px;
+}
+.formula-card .fname{
+  font-family:'Helvetica Neue',Arial,sans-serif; font-size:11px; color:var(--ink-dim);
+  text-transform:uppercase; letter-spacing:.05em; margin-bottom:6px;
+}
+.formula-card .fexpr{font-size:16px; color:var(--accent); font-weight:700;}
+
+.back-to-top{
+  position:fixed; bottom:24px; right:24px; background:var(--accent); color:var(--bg);
+  width:44px; height:44px; border-radius:50%; display:flex; align-items:center; justify-content:center;
+  text-decoration:none; font-weight:800; box-shadow:0 4px 14px rgba(0,0,0,.4); font-family:Arial,sans-serif;
+  opacity:0; pointer-events:none; transition:opacity .2s;
+  z-index:50;
+}
+.back-to-top.show{opacity:1; pointer-events:auto;}
+
+.final-section{
+  max-width:880px; margin:60px 0; padding:30px; background:var(--panel);
+  border-radius:14px; border:1px solid var(--line);
+}
+.final-section h2{margin-top:0;}
+
+/* PAGES (one chapter visible at a time) */
+.page{display:none;}
+.page.active{display:block; animation:fadeIn .2s ease;}
+@keyframes fadeIn{from{opacity:0; transform:translateY(4px);} to{opacity:1; transform:translateY(0);}}
+
+.page-nav{
+  display:flex; justify-content:space-between; gap:12px; margin:40px 0 0;
+  font-family:'Helvetica Neue',Arial,sans-serif;
+}
+.page-nav button{
+  background:var(--panel); border:1px solid var(--line); color:var(--ink);
+  padding:10px 18px; border-radius:8px; font-size:13.5px; cursor:pointer;
+  font-family:inherit; transition:border-color .15s, background .15s;
+}
+.page-nav button:hover{border-color:var(--accent2); background:var(--panel2);}
+.page-nav button:disabled{opacity:.35; cursor:default;}
+.page-nav button:disabled:hover{border-color:var(--line); background:var(--panel);}
+
+@media (max-width:900px){
+  .sidebar{
+    position:fixed; top:0; left:0; z-index:75;
+    width:280px; height:100vh; transform:translateX(-100%);
+    padding:64px 0 60px; border-right:1px solid var(--line);
+  }
+  .sidebar.open{transform:translateX(0);}
+  body.sidebar-collapsed .sidebar{width:280px; overflow-y:auto;}
+  .main{margin-left:0 !important; width:100%;}
+  .hero{padding:56px 18px 32px;}
+  .content{padding:10px 18px 80px;}
+  .hero h1{font-size:26px;}
+  .hero p.lead{font-size:15px;}
+  .stat-row{gap:10px;}
+  .stat-card{min-width:110px; padding:10px 14px;}
+  .chapter-head h2{font-size:24px;}
+  .chapter, .final-section, .intro-block{max-width:100%;}
+  table.data-table, .plan-table{font-size:12px; display:block; overflow-x:auto; white-space:nowrap;}
+  .formula-box .feq, .example-body .math{font-size:14px;}
+  .formula-grid{grid-template-columns:1fr 1fr;}
+  .page-nav{flex-direction:column;}
+  .page-nav button{width:100%;}
+}
+@media (max-width:480px){
+  .formula-grid{grid-template-columns:1fr;}
+  .hero h1{font-size:22px;}
+}
+.progress-bar{
+  position:sticky; top:0; height:4px; background:var(--line); z-index:40;
+}
+.progress-bar-fill{height:100%; width:0%; background:linear-gradient(90deg,var(--accent),var(--accent2)); transition:width .1s;}
+</style>
+</head>
+<body>
+<div class="progress-bar"><div class="progress-bar-fill" id="progressFill"></div></div>
+<button class="sidebar-toggle" id="sidebarToggle" aria-label="Toggle sidebar">☰</button>
+<div class="sidebar-backdrop" id="sidebarBackdrop"></div>
+<div class="layout">
+
+<nav class="sidebar" id="sidebar">
+  <div class="sidebar-brand">
+    <div class="tag">Exam Prep Guide</div>
+    <h1>Circuit Analysis</h1>
+    <p>Boylestad · Introductory Circuit Analysis, 11th Ed. — Chapters 1–9</p>
+  </div>
+  <div class="nav-section">
+    <button class="nav-chapter" data-target="overview" onclick="showSection('overview')"><span class="num">—</span>Study Plan Overview</button>
+    <button class="nav-chapter" data-target="ch1" onclick="showSection('ch1')"><span class="num">01</span>Introduction & Units<span class="time">2h</span></button>
+    <button class="nav-chapter" data-target="ch2" onclick="showSection('ch2')"><span class="num">02</span>Voltage & Current<span class="time">2h</span></button>
+    <button class="nav-chapter" data-target="ch3" onclick="showSection('ch3')"><span class="num">03</span>Resistance<span class="time">2h</span></button>
+    <button class="nav-chapter" data-target="ch4" onclick="showSection('ch4')"><span class="num">04</span>Ohm's Law, Power, Energy<span class="time">2.5h</span></button>
+    <button class="nav-chapter" data-target="ch5" onclick="showSection('ch5')"><span class="num">05</span>Series DC Circuits<span class="time">3.5h</span></button>
+    <button class="nav-chapter" data-target="ch6" onclick="showSection('ch6')"><span class="num">06</span>Parallel DC Circuits<span class="time">3.5h</span></button>
+    <button class="nav-chapter" data-target="ch7" onclick="showSection('ch7')"><span class="num">07</span>Series-Parallel Circuits<span class="time">3h</span></button>
+    <button class="nav-chapter" data-target="ch8" onclick="showSection('ch8')"><span class="num">08</span>Methods of Analysis (DC)<span class="time">4.5h</span></button>
+    <button class="nav-chapter" data-target="ch9" onclick="showSection('ch9')"><span class="num">09</span>Network Theorems<span class="time">4h</span></button>
+    <button class="nav-chapter" data-target="finalweek" onclick="showSection('finalweek')"><span class="num">—</span>Final Review Plan</button>
+  </div>
+  <div class="nav-foot">
+    Total focused study time: <b style="color:var(--accent)">≈ 27 hours</b><br><br>
+    Built from <i>Introductory Circuit Analysis</i> by Robert L. Boylestad, 11th Edition — your uploaded textbook. All formulas and worked examples are drawn from or modeled directly on this book's Ch. 1–9 content.
+  </div>
+</nav>
+
+<main class="main">
+<header class="hero">
+  <div class="eyebrow">Exam in a few days · Chapters 1–9</div>
+  <h1>Your complete circuit analysis study guide</h1>
+  <p class="lead">Every topic from Chapters 1–9 explained, every key formula boxed up, worked examples solved step-by-step, and a realistic hour-by-hour plan to get you exam-ready — fast.</p>
+  <div class="stat-row">
+    <div class="stat-card"><div class="n">9</div><div class="l">Chapters</div></div>
+    <div class="stat-card"><div class="n">45+</div><div class="l">Topics covered</div></div>
+    <div class="stat-card"><div class="n">40+</div><div class="l">Worked examples</div></div>
+    <div class="stat-card"><div class="n">~27h</div><div class="l">Total study time</div></div>
+  </div>
+</header>
+
+<div class="content">
+
+<div id="overview" class="page active">
+<div class="intro-block">
+<h2>📋 How to use this guide</h2>
+<ul>
+<li>Topics are ordered exactly as they appear in the book — use the sidebar to jump to any chapter or your weak spots.</li>
+<li>Every major concept has a <b>boxed formula</b>, a plain-English explanation, and at least one <b>fully solved numeric example</b> in the book's style.</li>
+<li>⏱️ Time estimates assume you already sat through lectures — these are <i>review + practice</i> times, not first-time-learning times. Add 40–50% if a topic is completely new to you.</li>
+<li>🎥 Video links are included for the topics that benefit most from a visual walkthrough — click to open in a new tab.</li>
+<li>Use the checklists at the end of each chapter to track what you've actually mastered, not just read.</li>
+</ul>
+</div>
+
+<table class="plan-table">
+<tr><th>Ch.</th><th>Topic</th><th>Est. Time</th><th>Exam Priority</th><th>Why it matters</th></tr>
+<tr><td>1</td><td class="ch-name">Introduction & Units</td><td>2.0h</td><td><span class="pill low">Low</span></td><td>Background/SI units — quick read, rarely directly tested</td></tr>
+<tr><td>2</td><td class="ch-name">Voltage & Current</td><td>2.0h</td><td><span class="pill med">Medium</span></td><td>Conceptual foundation for everything after</td></tr>
+<tr><td>3</td><td class="ch-name">Resistance</td><td>2.0h</td><td><span class="pill med">Medium</span></td><td>Color codes & resistivity are classic short-answer questions</td></tr>
+<tr><td>4</td><td class="ch-name">Ohm's Law, Power & Energy</td><td>2.5h</td><td><span class="pill high">High</span></td><td>The core equation used in literally every later chapter</td></tr>
+<tr><td>5</td><td class="ch-name">Series DC Circuits</td><td>3.5h</td><td><span class="pill high">High</span></td><td>KVL + voltage divider — guaranteed exam material</td></tr>
+<tr><td>6</td><td class="ch-name">Parallel DC Circuits</td><td>3.5h</td><td><span class="pill high">High</span></td><td>KCL + current divider — guaranteed exam material</td></tr>
+<tr><td>7</td><td class="ch-name">Series-Parallel Circuits</td><td>3.0h</td><td><span class="pill high">High</span></td><td>Combines Ch 5+6 — the most common exam circuit type</td></tr>
+<tr><td>8</td><td class="ch-name">Methods of Analysis (DC)</td><td>4.5h</td><td><span class="pill high">High</span></td><td>Mesh & nodal analysis — heaviest math, biggest point value</td></tr>
+<tr><td>9</td><td class="ch-name">Network Theorems</td><td>4.0h</td><td><span class="pill high">High</span></td><td>Thévenin/Norton/Superposition — almost always a full question</td></tr>
+</table>
+
+<div class="page-nav"><span></span><button onclick="showSection('ch1')">Start with Ch 1 →</button></div>
+</div>
+
+<section class="chapter page" id="ch1">
+<div class="chapter-head"><span class="chno">CH 1</span><h2>Introduction & Units of Measurement</h2></div>
+<div class="chapter-meta">
+<span>⏱️ <b>~2 hours</b> total</span>
+<span>📖 Sections 1.1–1.13</span>
+<span>🎯 Priority: <b style="color:var(--accent2)">Low–Medium</b></span>
+</div>
+
+<div class="topic">
+<h3>1.1 Units & Systems of Measurement</h3>
+<span class="sub-time">⏱️ 25 min</span>
+<p>Every quantity in electrical engineering needs a <b>number + a unit</b>. Without the unit, a number is meaningless — "12" could be 12 volts, 12 ohms, or 12 amps. This course uses the <b>SI (International System)</b>, built on the MKS (meter-kilogram-second) standard.</p>
+<table class="data-table">
+<tr><th>Quantity</th><th>SI Unit</th><th>Symbol</th></tr>
+<tr><td>Length</td><td>meter</td><td>m</td></tr>
+<tr><td>Mass</td><td>kilogram</td><td>kg</td></tr>
+<tr><td>Time</td><td>second</td><td>s</td></tr>
+<tr><td>Current</td><td>ampere</td><td>A</td></tr>
+<tr><td>Voltage (derived)</td><td>volt</td><td>V</td></tr>
+<tr><td>Resistance (derived)</td><td>ohm</td><td>Ω</td></tr>
+<tr><td>Power (derived)</td><td>watt</td><td>W</td></tr>
+<tr><td>Energy (derived)</td><td>joule</td><td>J</td></tr>
+</table>
+<div class="callout"><b>Exam tip:</b> If a question asks you to "state the unit" of a derived quantity, always give both the name (e.g., "volt") and the symbol (V). Some instructors deduct marks for one without the other.</div>
+</div>
+
+<div class="topic">
+<h3>1.2 Powers of Ten</h3>
+<span class="sub-time">⏱️ 40 min — practice until automatic</span>
+<p>Circuit values span enormous ranges (a resistor might be 2 Ω or 2,000,000 Ω), so powers of ten keep numbers manageable. You must be fluent in all four operations:</p>
+
+<div class="formula-grid">
+<div class="formula-card"><div class="fname">Multiplication</div><div class="fexpr">(10ⁿ)(10ᵐ) = 10⁽ⁿ⁺ᵐ⁾</div></div>
+<div class="formula-card"><div class="fname">Division</div><div class="fexpr">10ⁿ ÷ 10ᵐ = 10⁽ⁿ⁻ᵐ⁾</div></div>
+<div class="formula-card"><div class="fname">Power of a power</div><div class="fexpr">(10ⁿ)ᵐ = 10ⁿᵐ</div></div>
+<div class="formula-card"><div class="fname">Add/Subtract</div><div class="fexpr">A×10ⁿ ± B×10ⁿ = (A±B)×10ⁿ</div></div>
+</div>
+
+<div class="example">
+<div class="example-head">EXAMPLE 1.1 — Powers of Ten Arithmetic (based on Boylestad Examples 1.4–1.8)</div>
+<div class="example-body">
+<p><b>Problem:</b> Simplify the following:</p>
+<p><b>(a)</b> (1000)(10,000) &nbsp; <b>(b)</b> (0.00001)(100) &nbsp; <b>(c)</b> 6300 + 75,000</p>
+<div class="step"><span class="slabel">Part (a)</span>
+<div class="math">(1000)(10,000) = (10³)(10⁴) = 10⁽³⁺⁴⁾ = 10⁷ = 10,000,000</div></div>
+<div class="step"><span class="slabel">Part (b)</span>
+<div class="math">(0.00001)(100) = (10⁻⁵)(10²) = 10⁽⁻⁵⁺²⁾ = 10⁻³ = 0.001</div></div>
+<div class="step"><span class="slabel">Part (c) — must match exponents first</span>
+<div class="math">6300 + 75,000 = (6.3 × 10³) + (75 × 10³) = (6.3 + 75) × 10³ = 81.3 × 10³ = 81,300</div></div>
+</div>
+</div>
+
+<div class="callout warn"><b>Common mistake:</b> Students try to add/subtract powers of ten without first making the exponents equal. <b>6.3 × 10³ + 75 × 10³</b> works because both have 10³ — you cannot add 6.3×10³ + 7.5×10⁴ directly without converting one of them first.</div>
+</div>
+
+<div class="topic">
+<h3>1.3 Notation: Fixed-Point, Scientific & Engineering</h3>
+<span class="sub-time">⏱️ 25 min</span>
+<p><b>Scientific notation:</b> exactly one nonzero digit before the decimal point (e.g., 5.34 × 10³).<br>
+<b>Engineering notation:</b> the exponent is restricted to a multiple of 3 (...,−6, −3, 0, 3, 6, 9,...), and 1–3 digits are allowed before the decimal point (e.g., 53.4 × 10³ or 5.34 × 10⁴ rewritten as 53.4 × 10³). Engineering notation matches the metric prefixes used on every datasheet and multimeter, which is why it's the more practical form for circuits work.</p>
+
+<table class="data-table">
+<tr><th>Prefix</th><th>Symbol</th><th>Power of Ten</th></tr>
+<tr><td>tera</td><td>T</td><td>10¹²</td></tr>
+<tr><td>giga</td><td>G</td><td>10⁹</td></tr>
+<tr><td>mega</td><td>M</td><td>10⁶</td></tr>
+<tr><td>kilo</td><td>k</td><td>10³</td></tr>
+<tr><td>milli</td><td>m</td><td>10⁻³</td></tr>
+<tr><td>micro</td><td>μ</td><td>10⁻⁶</td></tr>
+<tr><td>nano</td><td>n</td><td>10⁻⁹</td></tr>
+<tr><td>pico</td><td>p</td><td>10⁻¹²</td></tr>
+</table>
+<div class="circuit-diagram">
+<span class="cd-label">Metric prefix scale — powers of ten at a glance</span>
+<svg viewBox="0 0 480 90" xmlns="http://www.w3.org/2000/svg">
+<path class="cd-wire" d="M20 45 L460 45"/>
+<g font-family="Helvetica Neue,Arial,sans-serif">
+<circle cx="40" cy="45" r="3" class="cd-node"/><text x="40" y="30" class="cd-text" text-anchor="middle" font-size="12">p</text><text x="40" y="64" class="cd-text-dim" text-anchor="middle" font-size="10">10⁻¹²</text>
+<circle cx="110" cy="45" r="3" class="cd-node"/><text x="110" y="30" class="cd-text" text-anchor="middle" font-size="12">n</text><text x="110" y="64" class="cd-text-dim" text-anchor="middle" font-size="10">10⁻⁹</text>
+<circle cx="180" cy="45" r="3" class="cd-node"/><text x="180" y="30" class="cd-text" text-anchor="middle" font-size="12">μ</text><text x="180" y="64" class="cd-text-dim" text-anchor="middle" font-size="10">10⁻⁶</text>
+<circle cx="250" cy="45" r="3" class="cd-node"/><text x="250" y="30" class="cd-text" text-anchor="middle" font-size="12">m</text><text x="250" y="64" class="cd-text-dim" text-anchor="middle" font-size="10">10⁻³</text>
+<circle cx="320" cy="45" r="4" fill="var(--accent2)"/><text x="320" y="30" class="cd-text2" text-anchor="middle" font-size="13">base</text><text x="320" y="64" class="cd-text-dim" text-anchor="middle" font-size="10">10⁰</text>
+<circle cx="380" cy="45" r="3" class="cd-node"/><text x="380" y="30" class="cd-text" text-anchor="middle" font-size="12">k</text><text x="380" y="64" class="cd-text-dim" text-anchor="middle" font-size="10">10³</text>
+<circle cx="430" cy="45" r="3" class="cd-node"/><text x="430" y="30" class="cd-text" text-anchor="middle" font-size="12">M</text><text x="430" y="64" class="cd-text-dim" text-anchor="middle" font-size="10">10⁶</text>
+</g>
+</svg>
+<p style="font-family:'Helvetica Neue',Arial,sans-serif; font-size:11.5px; color:var(--ink-dim); margin:6px 0 0;">Each step left or right shifts the exponent by a multiple of 3 — moving the decimal point is just sliding along this line.</p>
+</div>
+
+
+<div class="example">
+<div class="example-head">EXAMPLE 1.2 — Unit Conversion (based on Boylestad Examples 1.14–1.16)</div>
+<div class="example-body">
+<p><b>Problem:</b> Convert 20 kHz to megahertz, and convert 0.002 km to millimeters.</p>
+<div class="step"><span class="slabel">Part (a)</span>
+<div class="math">20 kHz = 20 × 10³ Hz = 0.02 × 10⁶ Hz = 0.02 MHz</div></div>
+<div class="step"><span class="slabel">Part (b)</span>
+<div class="math">0.002 km = 0.002 × 10³ m = 2 m = 2 × 10³ mm = 2000 mm</div></div>
+<div class="answer">0.02 MHz &nbsp;|&nbsp; 2000 mm</div>
+</div>
+</div>
+</div>
+
+<div class="topic">
+<h3>1.4 Significant Figures & Rounding</h3>
+<span class="sub-time">⏱️ 15 min</span>
+<p>Keep the same number of significant figures as the least-precise measurement in a calculation. For exam purposes: round final answers to <b>3 significant figures</b> unless told otherwise — this matches the textbook's convention throughout.</p>
+</div>
+
+<div class="checklist">
+<h4>✅ Chapter 1 Mastery Checklist</h4>
+<label><input type="checkbox"> I can convert any number between fixed-point, scientific, and engineering notation</label>
+<label><input type="checkbox"> I can multiply, divide, add, and subtract powers of ten without a calculator</label>
+<label><input type="checkbox"> I know all 8 common SI prefixes (T, G, M, k, m, μ, n, p) and their power of 10</label>
+<label><input type="checkbox"> I can convert between units (e.g., minutes to seconds, km to mm)</label>
+</div>
+
+<div class="page-nav"><button onclick="showSection('overview')">← Overview</button><button onclick="showSection('ch2')">Ch 2 →</button></div>
+</section>
+<section class="chapter page" id="ch2">
+<div class="chapter-head"><span class="chno">CH 2</span><h2>Voltage and Current</h2></div>
+<div class="chapter-meta">
+<span>⏱️ <b>~2 hours</b> total</span>
+<span>📖 Sections 2.1–2.12</span>
+<span>🎯 Priority: <b style="color:var(--accent)">Medium</b></span>
+</div>
+
+<div class="topic">
+<h3>2.1 Atomic Structure & Charge</h3>
+<span class="sub-time">⏱️ 20 min</span>
+<p>Every atom has a nucleus (protons + neutrons) surrounded by orbiting electrons. Current flow is the organized movement of <b>free electrons</b> in the outermost (valence) shell of conductor atoms. The charge on one electron is:</p>
+<div class="formula-box"><span class="flabel">Charge of one electron</span><span class="feq">Q<sub>e</sub> = 1.6 × 10⁻¹⁹ C (coulombs)</span></div>
+<p>It takes <b>6.242 × 10¹⁸ electrons</b> to make up 1 coulomb of charge.</p>
+</div>
+
+<div class="topic">
+<h3>2.2 Voltage (Electromotive Force)</h3>
+<span class="sub-time">⏱️ 25 min</span>
+<p>Voltage is the <b>work required to move a unit charge</b> between two points. Think of it as "electrical pressure" — the push that drives current through a circuit.</p>
+<div class="formula-box"><span class="flabel">Voltage definition</span><span class="feq">V = W / Q</span></div>
+<p>Where V = voltage (volts), W = work/energy (joules), Q = charge (coulombs). One volt = the potential difference that requires 1 joule of work to move 1 coulomb of charge.</p>
+
+<div class="example">
+<div class="example-head">EXAMPLE 2.1 — Voltage from Work and Charge</div>
+<div class="example-body">
+<p><b>Problem:</b> Find the voltage if 48 J of energy are required to move 12 C of charge between two points.</p>
+<div class="step"><div class="math">V = W/Q = 48 J / 12 C = 4 V</div></div>
+<div class="answer">V = 4 V</div>
+</div>
+</div>
+</div>
+
+<div class="topic">
+<h3>2.3 Current</h3>
+<span class="sub-time">⏱️ 25 min</span>
+<p>Current is the <b>rate of charge flow</b> past a point in a circuit:</p>
+<div class="formula-box"><span class="flabel">Current definition</span><span class="feq">I = Q / t</span></div>
+<p>Where I = current (amperes), Q = charge (coulombs), t = time (seconds). One ampere = 1 coulomb of charge passing a point in 1 second.</p>
+
+<div class="example">
+<div class="example-head">EXAMPLE 2.2 — Current from Charge and Time</div>
+<div class="example-body">
+<p><b>Problem:</b> If 0.16 C of charge passes through a wire in 5 seconds, find the current.</p>
+<div class="step"><div class="math">I = Q/t = 0.16 C / 5 s = 0.032 A = 32 mA</div></div>
+<div class="answer">I = 32 mA</div>
+</div>
+</div>
+
+<div class="callout"><b>Conventional vs. electron flow:</b> Electrons physically move from − to +, but by long-standing convention, current is defined as flowing from + to − (the direction positive charge would move). Always use <b>conventional current direction</b> for circuit analysis unless explicitly told otherwise — this is the standard used throughout the rest of the course.</div>
+</div>
+
+<div class="topic">
+<h3>2.4 Voltage Sources</h3>
+<span class="sub-time">⏱️ 20 min</span>
+<p>A voltage source maintains a fixed terminal voltage by converting some form of energy (chemical, mechanical, light, etc.) into electrical energy. Key types:</p>
+<ul>
+<li><b>DC voltage source</b> — fixed polarity and magnitude (e.g., battery)</li>
+<li><b>Ideal source</b> — internal resistance = 0, terminal voltage never sags under load</li>
+<li><b>Real/practical source</b> — has small internal resistance R<sub>int</sub>, so terminal voltage drops slightly under heavy load</li>
+</ul>
+</div>
+
+<div class="topic">
+<h3>2.5 Ampere-Hour Rating & Battery Life</h3>
+<span class="sub-time">⏱️ 20 min</span>
+<p>Battery capacity is rated in <b>ampere-hours (Ah)</b> — the current it can supply for a given time before depleting.</p>
+<div class="formula-box"><span class="flabel">Battery life estimate</span><span class="feq">Life (hours) = Ampere-hour rating / Current drawn</span></div>
+<div class="example">
+<div class="example-head">EXAMPLE 2.3 — Battery Life</div>
+<div class="example-body">
+<p><b>Problem:</b> How long will a 100 Ah battery last if it supplies a constant 4 A load?</p>
+<div class="step"><div class="math">Life = 100 Ah / 4 A = 25 hours</div></div>
+<div class="answer">25 hours</div>
+</div>
+</div>
+</div>
+
+<div class="topic">
+<h3>2.6 Conductors, Insulators & Semiconductors</h3>
+<span class="sub-time">⏱️ 15 min</span>
+<table class="data-table">
+<tr><th>Material type</th><th>Free electrons</th><th>Examples</th></tr>
+<tr><td>Conductor</td><td>Many — low resistance</td><td>Copper, silver, aluminum, gold</td></tr>
+<tr><td>Insulator</td><td>Very few — high resistance</td><td>Rubber, glass, mica, plastic</td></tr>
+<tr><td>Semiconductor</td><td>Between the two — controllable</td><td>Silicon, germanium</td></tr>
+</table>
+</div>
+
+<div class="topic">
+<h3>2.7 Ammeters & Voltmeters</h3>
+<span class="sub-time">⏱️ 15 min</span>
+<ul>
+<li><b>Ammeter</b> measures current — connected <b>in series</b> in the path of current flow (ideally zero resistance so it doesn't disturb the circuit)</li>
+<li><b>Voltmeter</b> measures voltage — connected <b>in parallel</b> across the two points of interest (ideally infinite resistance so it draws no current)</li>
+</ul>
+<div class="circuit-diagram">
+<span class="cd-label">Meter placement — ammeter in series, voltmeter in parallel</span>
+<svg viewBox="0 0 460 150" xmlns="http://www.w3.org/2000/svg">
+<path class="cd-wire" d="M20 30 L20 110 L100 110"/>
+<rect x="10" y="56" width="20" height="4" fill="#7a8190"/>
+<rect x="13" y="74" width="14" height="4" fill="#7a8190"/>
+<path class="cd-wire" d="M20 30 L60 30"/>
+<circle cx="80" cy="30" r="11" fill="none" class="cd-res" style="stroke:var(--accent2)"/>
+<text x="80" y="34" class="cd-text2" text-anchor="middle" font-size="10">A</text>
+<path class="cd-wire" d="M91 30 L130 30"/>
+<rect x="130" y="22" width="36" height="16" class="cd-res" rx="2"/>
+<text x="148" y="14" class="cd-text" text-anchor="middle" font-size="11">R</text>
+<path class="cd-wire" d="M166 30 L200 30 L200 110 L100 110"/>
+<text x="60" y="135" class="cd-text-dim" text-anchor="middle" font-size="11">Ammeter — in the current path</text>
+
+<path class="cd-wire" d="M280 30 L280 110 L360 110"/>
+<rect x="270" y="56" width="20" height="4" fill="#7a8190"/>
+<rect x="273" y="74" width="14" height="4" fill="#7a8190"/>
+<path class="cd-wire" d="M280 30 L330 30"/>
+<rect x="330" y="22" width="36" height="16" class="cd-res" rx="2"/>
+<text x="348" y="14" class="cd-text" text-anchor="middle" font-size="11">R</text>
+<path class="cd-wire" d="M366 30 L420 30 L420 110 L360 110"/>
+<circle cx="420" cy="70" r="11" fill="none" class="cd-res" style="stroke:var(--accent3)"/>
+<text x="420" y="74" class="cd-text2" text-anchor="middle" font-size="10" style="fill:var(--accent3)">V</text>
+<path class="cd-wire" d="M366 30 L420 30 M420 59 L420 30 M420 81 L420 110"/>
+<text x="350" y="135" class="cd-text-dim" text-anchor="middle" font-size="11">Voltmeter — across the two points</text>
+</svg>
+</div>
+
+<div class="callout warn"><b>Exam favorite:</b> "Where is the ammeter connected — series or parallel?" Series, always. Connecting an ammeter in parallel can short the circuit and blow the meter's fuse.</div>
+</div>
+
+<div class="video-box" href="#" onclick="return false;">
+<div class="play">▶</div>
+<div class="vtext">
+<div class="vtitle">Voltage, Current, Resistance & Ohm's Law — Basic Electronics</div>
+<div class="vsrc">The Organic Chemistry Tutor · YouTube</div>
+<div class="vdesc">Search "Voltage Current and Resistance Organic Chemistry Tutor" on YouTube — a clear ~15 min walkthrough of exactly these definitions with worked numeric examples.</div>
+</div>
+</div>
+
+<div class="checklist">
+<h4>✅ Chapter 2 Mastery Checklist</h4>
+<label><input type="checkbox"> I can state and apply V = W/Q</label>
+<label><input type="checkbox"> I can state and apply I = Q/t</label>
+<label><input type="checkbox"> I know the difference between conventional current and electron flow</label>
+<label><input type="checkbox"> I can calculate battery life from Ah rating and load current</label>
+<label><input type="checkbox"> I know ammeters go in series, voltmeters go in parallel</label>
+</div>
+
+<div class="page-nav"><button onclick="showSection('ch1')">← Ch 1</button><button onclick="showSection('ch3')">Ch 3 →</button></div>
+</section>
+<section class="chapter page" id="ch3">
+<div class="chapter-head"><span class="chno">CH 3</span><h2>Resistance</h2></div>
+<div class="chapter-meta">
+<span>⏱️ <b>~2 hours</b> total</span>
+<span>📖 Sections 3.1–3.15</span>
+<span>🎯 Priority: <b style="color:var(--accent)">Medium</b></span>
+</div>
+
+<div class="topic">
+<h3>3.1–3.3 Resistance of Wires & Wire Tables</h3>
+<span class="sub-time">⏱️ 30 min</span>
+<p>Resistance of a conductor depends on four factors — material, length, cross-sectional area, and temperature:</p>
+<div class="formula-box"><span class="flabel">Resistance of a circular wire</span><span class="feq">R = ρL / A</span></div>
+<p>Where ρ (rho) = resistivity of the material (Ω·CM/ft in the English/circular-mil system, or Ω·m in SI), L = length, A = cross-sectional area. <b>Longer wire → more resistance. Thicker wire → less resistance.</b></p>
+<table class="data-table">
+<tr><th>Material</th><th>Resistivity ρ (Ω·CM/ft @ 20°C)</th></tr>
+<tr><td>Silver</td><td>9.9</td></tr>
+<tr><td>Copper</td><td>10.37</td></tr>
+<tr><td>Gold</td><td>14.7</td></tr>
+<tr><td>Aluminum</td><td>17.0</td></tr>
+<tr><td>Tungsten</td><td>33.0</td></tr>
+<tr><td>Nichrome</td><td>675</td></tr>
+</table>
+
+<div class="example">
+<div class="example-head">EXAMPLE 3.1 — Wire Resistance</div>
+<div class="example-body">
+<p><b>Problem:</b> Find the resistance of 100 ft of copper wire with a diameter such that A = 810.1 CM (cir. mils).</p>
+<div class="step"><div class="math">R = ρL/A = (10.37)(100) / 810.1 = 1037 / 810.1 ≈ 1.28 Ω</div></div>
+<div class="answer">R ≈ 1.28 Ω</div>
+</div>
+</div>
+</div>
+
+<div class="topic">
+<h3>3.4–3.5 Metric Units & Temperature Effects</h3>
+<span class="sub-time">⏱️ 25 min</span>
+<p>In conductors (metals), resistance <b>increases</b> with temperature (more vibration → more electron collisions). In semiconductors, resistance typically <b>decreases</b> with temperature (more free carriers released).</p>
+<div class="formula-box"><span class="flabel">Resistance at a new temperature</span><span class="feq">R₂ = R₁ × [(T + t₂) / (T + t₁)]</span></div>
+<p>Where T is the inferred absolute zero constant for the material (T = 234.5°C for copper), t₁ and t₂ are old/new temperatures in °C.</p>
+
+<div class="example">
+<div class="example-head">EXAMPLE 3.2 — Temperature Effect on Resistance (copper)</div>
+<div class="example-body">
+<p><b>Problem:</b> A copper wire has a resistance of 50 Ω at 20°C. Find its resistance at 100°C.</p>
+<div class="step"><div class="math">R₂ = 50 × [(234.5+100)/(234.5+20)] = 50 × (334.5/254.5) = 50 × 1.314 ≈ 65.7 Ω</div></div>
+<div class="answer">R₂ ≈ 65.7 Ω — resistance increased with temperature, as expected for a conductor</div>
+</div>
+</div>
+</div>
+
+<div class="topic">
+<h3>3.6 Superconductors</h3>
+<span class="sub-time">⏱️ 10 min</span>
+<p>Below a critical temperature, certain materials exhibit <b>zero resistance</b> — current flows with no energy loss. Useful for MRI magnets, maglev trains, and power transmission research. Mostly conceptual/definition-based exam content.</p>
+</div>
+
+<div class="topic">
+<h3>3.7–3.8 Types of Resistors & Color Coding ⭐</h3>
+<span class="sub-time">⏱️ 35 min — high yield, memorize this cold</span>
+<p>Fixed resistors use a <b>4-band color code</b>. Reading from the band closest to an edge:</p>
+<ol>
+<li><b>Band 1</b> = first digit</li>
+<li><b>Band 2</b> = second digit</li>
+<li><b>Band 3</b> = multiplier (power of ten — number of zeros after the first 2 digits)</li>
+<li><b>Band 4</b> = tolerance (gold = ±5%, silver = ±10%, none = ±20%)</li>
+</ol>
+
+<table class="data-table">
+<tr><th>Color</th><th>Digit Value</th><th>Multiplier</th></tr>
+<tr><td>Black</td><td>0</td><td>×10⁰</td></tr>
+<tr><td>Brown</td><td>1</td><td>×10¹</td></tr>
+<tr><td>Red</td><td>2</td><td>×10²</td></tr>
+<tr><td>Orange</td><td>3</td><td>×10³</td></tr>
+<tr><td>Yellow</td><td>4</td><td>×10⁴</td></tr>
+<tr><td>Green</td><td>5</td><td>×10⁵</td></tr>
+<tr><td>Blue</td><td>6</td><td>×10⁶</td></tr>
+<tr><td>Violet</td><td>7</td><td>×10⁷</td></tr>
+<tr><td>Gray</td><td>8</td><td>×10⁸</td></tr>
+<tr><td>White</td><td>9</td><td>×10⁹</td></tr>
+<tr><td>Gold</td><td>—</td><td>×0.1 (tolerance ±5%)</td></tr>
+<tr><td>Silver</td><td>—</td><td>×0.01 (tolerance ±10%)</td></tr>
+</table>
+
+<div class="callout tip"><b>Memory trick from the textbook:</b> Colors run dark → light as values run low → high (Black=0 through White=9). Practice saying "red is 2, yellow is 4" out loud repeatedly — repetition is how this sticks.</div>
+<div class="circuit-diagram">
+<span class="cd-label">Reading a 4-band resistor — Brown / Red / Orange / Gold</span>
+<svg viewBox="0 0 380 110" xmlns="http://www.w3.org/2000/svg">
+<path class="cd-wire" d="M10 55 L70 55"/>
+<rect x="70" y="30" width="200" height="50" rx="10" fill="#3a3122" stroke="#7a8190" stroke-width="2"/>
+<path class="cd-wire" d="M270 55 L370 55"/>
+<rect x="95" y="30" width="14" height="50" fill="#7a4a1f"/>
+<text x="102" y="96" class="cd-text-dim" text-anchor="middle" font-size="10">Brown=1</text>
+<rect x="130" y="30" width="14" height="50" fill="#d6453d"/>
+<text x="137" y="96" class="cd-text-dim" text-anchor="middle" font-size="10">Red=2</text>
+<rect x="165" y="30" width="14" height="50" fill="#e08a2b"/>
+<text x="172" y="96" class="cd-text-dim" text-anchor="middle" font-size="10">Orange=×10³</text>
+<rect x="225" y="30" width="14" height="50" fill="#d4af37"/>
+<text x="232" y="96" class="cd-text-dim" text-anchor="middle" font-size="10">Gold=±5%</text>
+<text x="190" y="20" class="cd-text2" text-anchor="middle" font-size="12">12 × 10³ Ω = 12 kΩ ±5%</text>
+</svg>
+</div>
+
+
+<div class="example">
+<div class="example-head">EXAMPLE 3.3 — Reading a Color Code (Boylestad Example 3.13)</div>
+<div class="example-body">
+<p><b>Problem:</b> A resistor has bands: Brown, Red, Orange, Gold. Find its value and tolerance range.</p>
+<div class="step"><span class="slabel">Digits</span><div class="math">Brown = 1, Red = 2 → first two digits = "12"</div></div>
+<div class="step"><span class="slabel">Multiplier</span><div class="math">Orange = ×10³ → 12 × 10³ = 12,000 Ω = 12 kΩ</div></div>
+<div class="step"><span class="slabel">Tolerance</span><div class="math">Gold = ±5% → ±5% of 12,000 = ±600 Ω → range: 11,400 Ω to 12,600 Ω</div></div>
+<div class="answer">R = 12 kΩ ± 5% (11.4 kΩ – 12.6 kΩ)</div>
+</div>
+</div>
+
+<div class="callout"><b>Standard EIA values:</b> Commercial resistors only come in specific values per decade (10, 12, 15, 18, 22, 27, 33, 39, 47, 56, 68, 82 for the 5–20% tolerance range), so that the tolerance bands of adjacent standard values just touch — covering the full range without gaps or excessive overlap.</div>
+</div>
+
+<div class="topic">
+<h3>3.9–3.13 Conductance, Ohmmeters, Thermistors, Photoconductive Cells, Varistors</h3>
+<span class="sub-time">⏱️ 25 min</span>
+<div class="formula-box"><span class="flabel">Conductance (the reciprocal of resistance)</span><span class="feq">G = 1/R &nbsp;(unit: siemens, S)</span></div>
+<table class="data-table">
+<tr><th>Device</th><th>Behavior</th></tr>
+<tr><td>Ohmmeter</td><td>Measures resistance directly; circuit must be unpowered/de-energized before testing</td></tr>
+<tr><td>Thermistor</td><td>Resistance changes sharply with temperature (usually decreases as temp rises — NTC)</td></tr>
+<tr><td>Photoconductive cell (LDR)</td><td>Resistance decreases as light intensity increases</td></tr>
+<tr><td>Varistor (VDR)</td><td>Resistance drops sharply above a threshold voltage — used for surge/transient protection</td></tr>
+</table>
+</div>
+
+<div class="video-box">
+<div class="play">▶</div>
+<div class="vtext">
+<div class="vtitle">How to Read Resistor Color Codes</div>
+<div class="vsrc">Search: "resistor color code tutorial" on YouTube</div>
+<div class="vdesc">Any top result from this search (Organic Chemistry Tutor, GreatScott!, or AddOhms) covers the 4-band and 5-band code with example resistors — practice along with it.</div>
+</div>
+</div>
+
+<div class="checklist">
+<h4>✅ Chapter 3 Mastery Checklist</h4>
+<label><input type="checkbox"> I can compute wire resistance using R = ρL/A</label>
+<label><input type="checkbox"> I can apply the temperature-resistance formula for copper</label>
+<label><input type="checkbox"> I have memorized the 10-color digit code (Black→White = 0→9)</label>
+<label><input type="checkbox"> I can read a 4-band resistor's value and tolerance instantly</label>
+<label><input type="checkbox"> I know G = 1/R and its unit (siemens)</label>
+</div>
+
+<div class="page-nav"><button onclick="showSection('ch2')">← Ch 2</button><button onclick="showSection('ch4')">Ch 4 →</button></div>
+</section>
+<section class="chapter page" id="ch4">
+<div class="chapter-head"><span class="chno">CH 4</span><h2>Ohm's Law, Power, and Energy</h2></div>
+<div class="chapter-meta">
+<span>⏱️ <b>~2.5 hours</b> total</span>
+<span>📖 Sections 4.1–4.9</span>
+<span>🎯 Priority: <b style="color:var(--accent3)">High</b></span>
+</div>
+
+<div class="intro-block" style="margin:0 0 30px;">
+<h2>⭐ This is the most important chapter in the course</h2>
+<p style="margin:0;">Ohm's Law and the power equations form the backbone of every later chapter. Do not move past this chapter until it's automatic.</p>
+</div>
+
+<div class="topic">
+<h3>4.1–4.2 Ohm's Law</h3>
+<span class="sub-time">⏱️ 30 min</span>
+<p>Ohm's Law relates voltage, current, and resistance for a resistive element:</p>
+<div class="formula-box"><span class="flabel">Ohm's Law (3 forms)</span><span class="feq">V = IR &nbsp;&nbsp; I = V/R &nbsp;&nbsp; R = V/I</span></div>
+<p>Memorize the "Ohm's Law triangle": cover the quantity you want to find, and the remaining two show you the operation (multiply if side-by-side, divide if stacked).</p>
+<div class="circuit-diagram">
+<span class="cd-label">The Ohm's Law triangle</span>
+<svg viewBox="0 0 220 150" xmlns="http://www.w3.org/2000/svg">
+<path class="cd-wire" d="M110 15 L20 130 L200 130 Z"/>
+<path class="cd-wire" d="M65 72 L155 72" style="opacity:.6"/>
+<path class="cd-wire" d="M110 72 L110 130" style="opacity:.6"/>
+<text x="110" y="55" class="cd-text" text-anchor="middle" font-size="22">V</text>
+<text x="62" y="112" class="cd-text2" text-anchor="middle" font-size="22">I</text>
+<text x="158" y="112" class="cd-text2" text-anchor="middle" font-size="22">R</text>
+</svg>
+<p style="font-family:'Helvetica Neue',Arial,sans-serif; font-size:11.5px; color:var(--ink-dim); margin:6px 0 0; text-align:center;">Cover the unknown — side-by-side means multiply (V = I×R), stacked means divide (I = V/R, R = V/I).</p>
+</div>
+
+
+<div class="example">
+<div class="example-head">EXAMPLE 4.1 — Basic Ohm's Law</div>
+<div class="example-body">
+<p><b>Problem:</b> A 2.2 kΩ resistor is connected across a 12 V source. Find the current.</p>
+<div class="circuit-diagram">
+<span class="cd-label">Example 4.1 — single resistor across a source</span>
+<svg viewBox="0 0 260 150" xmlns="http://www.w3.org/2000/svg">
+<path class="cd-wire" d="M40 30 L40 130 L220 130 L220 30 L140 30"/>
+<rect x="28" y="58" width="24" height="4" fill="#7a8190"/>
+<rect x="32" y="78" width="16" height="4" fill="#7a8190"/>
+<text x="56" y="74" class="cd-text" font-size="12">E = 12 V</text>
+<path class="cd-wire" d="M40 30 L80 30"/>
+<rect x="80" y="22" width="60" height="16" class="cd-res" rx="2"/>
+<text x="110" y="14" class="cd-text" text-anchor="middle" font-size="12">R = 2.2 kΩ</text>
+<text x="160" y="80" class="cd-text2" font-size="12">I = 5.45 mA</text>
+</svg>
+</div>
+
+<div class="step"><div class="math">I = V/R = 12 V / 2200 Ω = 5.45 × 10⁻³ A = 5.45 mA</div></div>
+<div class="answer">I = 5.45 mA</div>
+</div>
+</div>
+</div>
+
+<div class="topic">
+<h3>4.3 Plotting Ohm's Law (I-V characteristic)</h3>
+<span class="sub-time">⏱️ 15 min</span>
+<p>For a fixed resistor, the I-V graph is a <b>straight line</b> through the origin — the steeper the line, the smaller the resistance (since I = V/R, slope = 1/R). Devices that don't follow this straight-line behavior (like light bulbs, where resistance increases as the filament heats up) are called <b>nonlinear</b>.</p>
+</div>
+
+<div class="topic">
+<h3>4.4 Power ⭐</h3>
+<span class="sub-time">⏱️ 35 min — three equivalent formulas, know all three</span>
+<p>Power is the rate of doing work (energy per unit time), measured in <b>watts (W)</b>. By combining the definition of power with Ohm's Law, we get three interchangeable formulas:</p>
+<div class="formula-grid">
+<div class="formula-card"><div class="fname">Basic definition</div><div class="fexpr">P = VI</div></div>
+<div class="formula-card"><div class="fname">Using resistance & current</div><div class="fexpr">P = I²R</div></div>
+<div class="formula-card"><div class="fname">Using resistance & voltage</div><div class="fexpr">P = V²/R</div></div>
+</div>
+<p>Use whichever form matches the two quantities you already know — this saves a step versus finding the third variable first.</p>
+
+<div class="example">
+<div class="example-head">EXAMPLE 4.2 — Power Dissipation (Boylestad Ex. 4.7)</div>
+<div class="example-body">
+<p><b>Problem:</b> What is the power dissipated by a 5 Ω resistor if the current is 4 A?</p>
+<div class="step"><div class="math">P = I²R = (4 A)² (5 Ω) = (16)(5) = 80 W</div></div>
+<div class="answer">P = 80 W</div>
+</div>
+</div>
+
+<div class="example">
+<div class="example-head">EXAMPLE 4.3 — Light Bulb Rating (Boylestad Ex. 4.8)</div>
+<div class="example-body">
+<p><b>Problem:</b> A light bulb draws I = 0.625 A at its rated voltage of 120 V. Find its wattage rating and its resistance under rated conditions.</p>
+<div class="step"><span class="slabel">Power</span><div class="math">P = VI = (120 V)(0.625 A) = 75 W</div></div>
+<div class="step"><span class="slabel">Resistance</span><div class="math">R = V/I = 120 V / 0.625 A = 192 Ω</div></div>
+<div class="answer">P = 75 W &nbsp;|&nbsp; R = 192 Ω (a "75 W bulb")</div>
+</div>
+</div>
+
+<div class="example">
+<div class="example-head">EXAMPLE 4.4 — Finding Current from Power (Boylestad Ex. 4.9)</div>
+<div class="example-body">
+<p><b>Problem:</b> Determine the current through a 5 kΩ resistor when the power dissipated is 20 mW.</p>
+<div class="step"><div class="math">I = √(P/R) = √(20×10⁻³ / 5×10³) = √(4×10⁻⁶) = 2×10⁻³ A</div></div>
+<div class="answer">I = 2 mA</div>
+</div>
+</div>
+
+<div class="callout warn"><b>Power formula derivation worth memorizing:</b> If P = I²R, then I = √(P/R). If P = V²/R, then V = √(PR). These rearranged forms appear often when power is given and you need V or I.</div>
+</div>
+
+<div class="topic">
+<h3>4.5 Energy ⭐</h3>
+<span class="sub-time">⏱️ 35 min — classic "cost of electricity" exam question</span>
+<p>Energy is power used <b>over time</b>. The practical (utility) unit is the <b>kilowatt-hour (kWh)</b>, not the joule:</p>
+<div class="formula-box"><span class="flabel">Energy in kilowatt-hours</span><span class="feq">W (kWh) = P(W) × t(h) / 1000</span></div>
+
+<div class="example">
+<div class="example-head">EXAMPLE 4.5 — Energy Used Over a Year (Boylestad Ex. 4.11)</div>
+<div class="example-body">
+<p><b>Problem:</b> How much energy (in kWh) is needed to light a 60 W bulb continuously for 1 year (365 days)?</p>
+<div class="step"><div class="math">W = Pt/1000 = (60 W)(24 h/day)(365 days) / 1000 = 525,600 / 1000</div></div>
+<div class="answer">W = 525.6 kWh</div>
+</div>
+</div>
+
+<div class="example">
+<div class="example-head">EXAMPLE 4.6 — Cost of Electricity (Boylestad Ex. 4.13–4.14 style)</div>
+<div class="example-body">
+<p><b>Problem:</b> Find the total cost (at 9¢/kWh) of running: a 1200 W toaster for 30 min, six 50 W bulbs for 4 h, a 400 W washing machine for 45 min, and a 4800 W dryer for 20 min.</p>
+<div class="step"><span class="slabel">Convert each to watt-hours</span>
+<div class="math">
+(1200 W)(0.5 h) = 600 Wh<br>
+(6)(50 W)(4 h) = 1200 Wh<br>
+(400 W)(0.75 h) = 300 Wh<br>
+(4800 W)(0.333 h) = 1600 Wh
+</div></div>
+<div class="step"><span class="slabel">Total</span><div class="math">W = (600+1200+300+1600) Wh / 1000 = 3700/1000 = 3.7 kWh</div></div>
+<div class="step"><span class="slabel">Cost</span><div class="math">Cost = (3.7 kWh)(9¢/kWh) = 33.3¢</div></div>
+<div class="answer">Total cost = 33.3¢</div>
+</div>
+</div>
+</div>
+
+<div class="topic">
+<h3>4.6 Efficiency</h3>
+<span class="sub-time">⏱️ 20 min</span>
+<div class="formula-box"><span class="flabel">Efficiency</span><span class="feq">η (%) = (P<sub>out</sub> / P<sub>in</sub>) × 100%</span></div>
+<p>For systems in series (cascade), total efficiency is the <b>product</b> of individual efficiencies: η<sub>total</sub> = η₁ × η₂ × η₃ × ...</p>
+<div class="example">
+<div class="example-head">EXAMPLE 4.7 — Cascaded Efficiency</div>
+<div class="example-body">
+<p><b>Problem:</b> A power supply (η = 85%) feeds a motor (η = 90%). Find overall efficiency.</p>
+<div class="step"><div class="math">η_total = 0.85 × 0.90 = 0.765 = 76.5%</div></div>
+<div class="answer">η_total = 76.5%</div>
+</div>
+</div>
+</div>
+
+<div class="topic">
+<h3>4.7 Circuit Breakers, GFCIs, and Fuses</h3>
+<span class="sub-time">⏱️ 15 min</span>
+<table class="data-table">
+<tr><th>Device</th><th>Protects against</th><th>Resets?</th></tr>
+<tr><td>Fuse</td><td>Overcurrent (melts a wire element)</td><td>No — must replace</td></tr>
+<tr><td>Circuit breaker</td><td>Overcurrent (mechanical trip)</td><td>Yes — switch back on</td></tr>
+<tr><td>GFCI</td><td>Ground faults / leakage current (shock hazard)</td><td>Yes — reset button</td></tr>
+</table>
+</div>
+
+<div class="video-box">
+<div class="play">▶</div>
+<div class="vtext">
+<div class="vtitle">Ohm's Law (video)</div>
+<div class="vsrc">Khan Academy</div>
+<div class="vdesc"><a href="https://www.khanacademy.org/science/electrical-engineering/ee-circuit-analysis-topic" target="_blank" style="color:var(--accent2)">khanacademy.org — Circuit Analysis hub</a> — open the "DC Circuit Analysis" unit for the Ohm's Law video with a clear worked example.</div>
+</div>
+</div>
+
+<div class="checklist">
+<h4>✅ Chapter 4 Mastery Checklist</h4>
+<label><input type="checkbox"> I can use all 3 forms of Ohm's Law without hesitation</label>
+<label><input type="checkbox"> I can use all 3 forms of the power equation (P=VI, P=I²R, P=V²/R)</label>
+<label><input type="checkbox"> I can calculate energy in kWh and convert to cost</label>
+<label><input type="checkbox"> I can compute efficiency and chain multiple efficiencies together</label>
+<label><input type="checkbox"> I know the difference between a fuse, breaker, and GFCI</label>
+</div>
+
+<div class="page-nav"><button onclick="showSection('ch3')">← Ch 3</button><button onclick="showSection('ch5')">Ch 5 →</button></div>
+</section>
+<section class="chapter page" id="ch5">
+<div class="chapter-head"><span class="chno">CH 5</span><h2>Series DC Circuits</h2></div>
+<div class="chapter-meta">
+<span>⏱️ <b>~3.5 hours</b> total</span>
+<span>📖 Sections 5.1–5.14</span>
+<span>🎯 Priority: <b style="color:var(--accent3)">High</b></span>
+</div>
+
+<div class="topic">
+<h3>5.1–5.2 Series Resistors & Total Resistance</h3>
+<span class="sub-time">⏱️ 30 min</span>
+<p>Elements are in <b>series</b> when they share exactly one common point and carry the <b>same current</b>. For resistors in series, resistances simply add:</p>
+<div class="formula-box"><span class="flabel">Total series resistance</span><span class="feq">R<sub>T</sub> = R₁ + R₂ + R₃ + ... + R<sub>N</sub></span></div>
+<p>If N equal resistors of value R are in series: R<sub>T</sub> = N × R.</p>
+
+<div class="example">
+<div class="example-head">EXAMPLE 5.1 — Total Series Resistance (Boylestad Ex. 5.3)</div>
+<div class="example-body">
+<p><b>Problem:</b> Find R<sub>T</sub> for R₁ = 4.7 kΩ, R₂ = 1 kΩ (×3, i.e. three 1 kΩ resistors), R₃ = 2.2 kΩ, all in series.</p>
+<div class="step"><div class="math">R_T = R₁ + R₃ + (N)(R₂) = 4.7 kΩ + 2.2 kΩ + (3)(1 kΩ) = 9.9 kΩ</div></div>
+<div class="answer">R_T = 9.9 kΩ</div>
+</div>
+</div>
+</div>
+
+<div class="topic">
+<h3>5.3 Series Circuits — Current & Direction</h3>
+<span class="sub-time">⏱️ 30 min</span>
+<div class="formula-box"><span class="flabel">Source current in a series circuit</span><span class="feq">I<sub>s</sub> = E / R<sub>T</sub></span></div>
+<div class="callout"><b>Golden rule of series circuits:</b> The current is the <b>same at every point</b>. Conventional current leaves the + terminal of the source and returns to the − terminal.</div>
+
+<div class="example">
+<div class="example-head">EXAMPLE 5.2 — Full Series Circuit Analysis (Boylestad Fig. 5.12)</div>
+<div class="example-body">
+<p><b>Problem:</b> A circuit has E = 8.4 V driving three series resistors: R₁ = 10 Ω, R₂ = 30 Ω, R₃ = 100 Ω. Find R<sub>T</sub>, I<sub>s</sub>, and the voltage across each resistor.</p>
+<div class="circuit-diagram">
+<span class="cd-label">Fig. 5.12 — Series circuit</span>
+<svg viewBox="0 0 480 170" xmlns="http://www.w3.org/2000/svg">
+<path class="cd-wire" d="M50 30 L50 140"/>
+<rect x="38" y="58" width="24" height="4" fill="#7a8190"/>
+<rect x="42" y="78" width="16" height="4" fill="#7a8190"/>
+<text x="68" y="74" class="cd-text">E = 8.4 V</text>
+<path class="cd-wire" d="M50 30 L120 30"/>
+<rect x="120" y="22" width="44" height="16" class="cd-res" rx="2"/>
+<text x="142" y="14" class="cd-text" text-anchor="middle">R₁ = 10 Ω</text>
+<path class="cd-wire" d="M164 30 L230 30"/>
+<rect x="230" y="22" width="44" height="16" class="cd-res" rx="2"/>
+<text x="252" y="14" class="cd-text" text-anchor="middle">R₂ = 30 Ω</text>
+<path class="cd-wire" d="M274 30 L340 30"/>
+<rect x="340" y="22" width="50" height="16" class="cd-res" rx="2"/>
+<text x="365" y="14" class="cd-text" text-anchor="middle">R₃ = 100 Ω</text>
+<path class="cd-wire" d="M390 30 L430 30 L430 140 L50 140"/>
+<path class="cd-wire" d="M96 30 L106 24 M96 30 L106 36" style="stroke:var(--accent2)"/>
+<text x="80" y="48" class="cd-text2">I_s</text>
+<circle cx="50" cy="30" r="2.5" class="cd-node"/>
+<circle cx="430" cy="140" r="2.5" class="cd-node"/>
+</svg>
+</div>
+
+<div class="step"><span class="slabel">Total resistance</span><div class="math">R_T = 10 + 30 + 100 = 140 Ω</div></div>
+<div class="step"><span class="slabel">Current (same everywhere)</span><div class="math">I_s = E/R_T = 8.4 V / 140 Ω = 0.06 A = 60 mA</div></div>
+<div class="step"><span class="slabel">Voltage drops (Ohm's Law on each resistor)</span>
+<div class="math">V₁ = I·R₁ = (0.06)(10) = 0.6 V<br>V₂ = I·R₂ = (0.06)(30) = 1.8 V<br>V₃ = I·R₃ = (0.06)(100) = 6.0 V</div></div>
+<div class="answer">Check: V₁+V₂+V₃ = 0.6+1.8+6.0 = 8.4 V = E ✓</div>
+</div>
+</div>
+</div>
+
+<div class="topic">
+<h3>5.4 Power Distribution in a Series Circuit</h3>
+<span class="sub-time">⏱️ 15 min</span>
+<p>Total power delivered by the source equals the sum of power dissipated by each resistor (conservation of energy):</p>
+<div class="formula-box"><span class="flabel">Power balance</span><span class="feq">P<sub>delivered</sub> = P₁ + P₂ + P₃ + ... = E × I<sub>s</sub></span></div>
+</div>
+
+<div class="topic">
+<h3>5.5–5.6 Voltage Sources in Series & Kirchhoff's Voltage Law (KVL) ⭐</h3>
+<span class="sub-time">⏱️ 40 min — KVL is tested in almost every exam</span>
+<p><b>Kirchhoff's Voltage Law:</b> The algebraic sum of voltage rises and drops around any closed loop is zero.</p>
+<div class="formula-box"><span class="flabel">KVL</span><span class="feq">ΣV<sub>loop</sub> = 0 &nbsp;&nbsp;or equivalently&nbsp;&nbsp; E = V₁ + V₂ + V₃ + ...</span></div>
+<p><b>Procedure:</b> pick a direction around the loop (commonly clockwise). Going from − to + across an element is a <b>rise</b> (+); going from + to − is a <b>drop</b> (−). Sum them and set equal to zero.</p>
+
+<div class="example">
+<div class="example-head">EXAMPLE 5.3 — Applying KVL to Find an Unknown Voltage (Boylestad Ex. 5.13)</div>
+<div class="example-body">
+<p><b>Problem:</b> In a series loop, E = 54 V, V₁ = 18 V, V₃ = 15 V. Find V₂, then I₂ (given R₂ = 7 Ω), then R₁ and R₃ (given I = 3 A throughout).</p>
+<div class="step"><span class="slabel">KVL</span><div class="math">E = V₁ + V₂ + V₃ → V₂ = E − V₁ − V₃ = 54 − 18 − 15 = 21 V</div></div>
+<div class="step"><span class="slabel">Current</span><div class="math">I₂ = V₂/R₂ = 21 V / 7 Ω = 3 A</div></div>
+<div class="step"><span class="slabel">Resistances</span><div class="math">R₁ = V₁/I = 18/3 = 6 Ω &nbsp;&nbsp; R₃ = V₃/I = 15/3 = 5 Ω</div></div>
+<div class="answer">V₂ = 21 V, I = 3 A, R₁ = 6 Ω, R₃ = 5 Ω</div>
+</div>
+</div>
+
+<div class="callout warn"><b>Common mistake:</b> Forgetting that voltage sources in series can either <b>aid</b> (same polarity orientation, voltages add) or <b>oppose</b> (opposite orientation, voltages subtract) each other. Always check polarity arrows/signs carefully before adding.</div>
+</div>
+
+<div class="topic">
+<h3>5.7 Voltage Divider Rule (VDR) ⭐⭐</h3>
+<span class="sub-time">⏱️ 40 min — guaranteed exam formula, master this</span>
+<p>The VDR lets you find the voltage across any series resistor <b>directly</b> — without first finding the current.</p>
+<div class="formula-box"><span class="flabel">Voltage Divider Rule</span><span class="feq">V<sub>x</sub> = R<sub>x</sub> × (E / R<sub>T</sub>)</span></div>
+<p><b>Key insight:</b> The larger the resistance, the larger the share of voltage it captures. Voltage divides in <b>direct proportion</b> to resistance — and this is true <i>regardless of the actual magnitude</i> of the resistors, only their ratio matters.</p>
+
+<div class="example">
+<div class="example-head">EXAMPLE 5.4 — Voltage Divider Rule (Boylestad Fig. 5.33/5.35 style)</div>
+<div class="example-body">
+<p><b>Problem:</b> E = 20 V across series resistors R₁ = 6 Ω, R₂ = 3 Ω, R₃ = 1 Ω. Find V₁, V₂, V₃ using VDR.</p>
+<div class="step"><span class="slabel">Total resistance</span><div class="math">R_T = 6+3+1 = 10 Ω</div></div>
+<div class="step"><span class="slabel">Apply VDR to each</span>
+<div class="math">
+V₁ = R₁(E/R_T) = 6(20/10) = 12 V<br>
+V₂ = R₂(E/R_T) = 3(20/10) = 6 V<br>
+V₃ = R₃(E/R_T) = 1(20/10) = 2 V</div></div>
+<div class="answer">V₁=12V, V₂=6V, V₃=2V — check: 12+6+2=20V ✓</div>
+</div>
+</div>
+
+<div class="callout tip"><b>Sanity-check trick used by the textbook:</b> Before calculating, glance at the resistor ratios. If R₁ is 1000× bigger than R₃, expect V₁ to be ~1000× bigger than V₃. This catches arithmetic mistakes instantly on an exam.</div>
+</div>
+
+<div class="topic">
+<h3>5.9 Notation (Double-Subscript & Single-Subscript)</h3>
+<span class="sub-time">⏱️ 20 min</span>
+<ul>
+<li><b>V<sub>ab</sub></b> = voltage of point a <i>with respect to</i> point b</li>
+<li><b>V<sub>a</sub></b> = voltage of point a with respect to ground (single subscript, ground implied)</li>
+<li>If V<sub>ab</sub> is negative, point a is actually at a lower potential than point b</li>
+</ul>
+</div>
+
+<div class="topic">
+<h3>5.10 Voltage Regulation & Internal Resistance</h3>
+<span class="sub-time">⏱️ 25 min</span>
+<p>Real sources have internal resistance R<sub>int</sub>, which causes terminal voltage to sag under load:</p>
+<div class="formula-box"><span class="flabel">Terminal voltage under load</span><span class="feq">V<sub>L</sub> = E − I×R<sub>int</sub></span></div>
+<div class="formula-box"><span class="flabel">Voltage Regulation (VR)</span><span class="feq">VR% = [(V<sub>NL</sub> − V<sub>FL</sub>) / V<sub>FL</sub>] × 100%</span></div>
+<p>where V<sub>NL</sub> = no-load voltage, V<sub>FL</sub> = full-load voltage. Lower VR% = better (stiffer) source.</p>
+
+<div class="example">
+<div class="example-head">EXAMPLE 5.5 — Voltage Regulation</div>
+<div class="example-body">
+<p><b>Problem:</b> A supply reads 12.6 V with no load and 11.8 V at full load. Find the voltage regulation.</p>
+<div class="step"><div class="math">VR% = [(12.6 − 11.8)/11.8] × 100% = (0.8/11.8) × 100% ≈ 6.78%</div></div>
+<div class="answer">VR ≈ 6.78%</div>
+</div>
+</div>
+</div>
+
+<div class="video-box">
+<div class="play">▶</div>
+<div class="vtext">
+<div class="vtitle">Kirchhoff's Voltage Law</div>
+<div class="vsrc">Khan Academy</div>
+<div class="vdesc"><a href="https://www.youtube.com/watch?v=Bt6V7D5av9A" target="_blank" style="color:var(--accent2)">youtube.com/watch?v=Bt6V7D5av9A</a> — Willy McAllister explains KVL with a clear walk-around-the-loop example.</div>
+</div>
+</div>
+
+<div class="checklist">
+<h4>✅ Chapter 5 Mastery Checklist</h4>
+<label><input type="checkbox"> I can find R_T for any series combination</label>
+<label><input type="checkbox"> I know current is identical everywhere in a series loop</label>
+<label><input type="checkbox"> I can apply KVL to solve for an unknown voltage in a loop</label>
+<label><input type="checkbox"> I can apply the Voltage Divider Rule directly (without finding I first)</label>
+<label><input type="checkbox"> I understand double-subscript notation (V_ab)</label>
+<label><input type="checkbox"> I can calculate voltage regulation from no-load/full-load voltages</label>
+</div>
+
+<div class="page-nav"><button onclick="showSection('ch4')">← Ch 4</button><button onclick="showSection('ch6')">Ch 6 →</button></div>
+</section>
+<section class="chapter page" id="ch6">
+<div class="chapter-head"><span class="chno">CH 6</span><h2>Parallel DC Circuits</h2></div>
+<div class="chapter-meta">
+<span>⏱️ <b>~3.5 hours</b> total</span>
+<span>📖 Sections 6.1–6.14</span>
+<span>🎯 Priority: <b style="color:var(--accent3)">High</b></span>
+</div>
+
+<div class="topic">
+<h3>6.2 Parallel Resistors & Total Resistance ⭐</h3>
+<span class="sub-time">⏱️ 40 min</span>
+<p>Elements are in <b>parallel</b> when they share both end-points, so the <b>voltage</b> across each is identical.</p>
+<div class="formula-box"><span class="flabel">General parallel resistance (any number of resistors)</span><span class="feq">1/R<sub>T</sub> = 1/R₁ + 1/R₂ + 1/R₃ + ... + 1/R<sub>N</sub></span></div>
+<div class="formula-box"><span class="flabel">Special case — exactly two resistors (product over sum)</span><span class="feq">R<sub>T</sub> = (R₁ × R₂) / (R₁ + R₂)</span></div>
+<div class="formula-box"><span class="flabel">Special case — N equal resistors</span><span class="feq">R<sub>T</sub> = R / N</span></div>
+<div class="callout"><b>Key fact:</b> Total parallel resistance is always <b>smaller</b> than the smallest individual resistor — adding more parallel paths always makes it easier for current to flow.</div>
+
+<div class="example">
+<div class="example-head">EXAMPLE 6.1 — Parallel Resistance via Conductance (Boylestad Ex. 6.1)</div>
+<div class="example-body">
+<p><b>Problem:</b> Find R<sub>T</sub> for R₁ = 3 Ω and R₂ = 6 Ω in parallel, using conductance.</p>
+<div class="step"><span class="slabel">Conductances</span><div class="math">G₁ = 1/R₁ = 1/3 = 0.333 S &nbsp;&nbsp; G₂ = 1/R₂ = 1/6 = 0.167 S</div></div>
+<div class="step"><span class="slabel">Total conductance & resistance</span><div class="math">G_T = 0.333+0.167 = 0.5 S → R_T = 1/G_T = 1/0.5 = 2 Ω</div></div>
+<div class="answer">R_T = 2 Ω &nbsp;(check via product/sum: (3)(6)/(3+6) = 18/9 = 2 Ω ✓)</div>
+</div>
+</div>
+
+<div class="callout tip"><b>Speed tip for exams:</b> For two resistors, skip conductance entirely and use product-over-sum directly: R_T = R₁R₂/(R₁+R₂). It's faster and less error-prone.</div>
+</div>
+
+<div class="topic">
+<h3>6.3 Parallel Circuits — Voltage & Current</h3>
+<span class="sub-time">⏱️ 30 min</span>
+<div class="formula-box"><span class="flabel">Golden rule of parallel circuits</span><span class="feq">V₁ = V₂ = V₃ = ... = E (same voltage across every branch)</span></div>
+<div class="formula-box"><span class="flabel">Source current</span><span class="feq">I<sub>s</sub> = E / R<sub>T</sub></span></div>
+
+<div class="example">
+<div class="example-head">EXAMPLE 6.2 — Full Parallel Circuit Analysis (Boylestad Fig. 6.18)</div>
+<div class="example-body">
+<p><b>Problem:</b> E = 12 V supplies R₁ = 1 kΩ and R₂ = 3 kΩ in parallel. Find R<sub>T</sub>, I₁, I₂, and I<sub>s</sub>.</p>
+<div class="circuit-diagram">
+<span class="cd-label">Fig. 6.18 — Parallel circuit</span>
+<svg viewBox="0 0 380 180" xmlns="http://www.w3.org/2000/svg">
+<path class="cd-wire" d="M40 30 L40 150"/>
+<rect x="28" y="68" width="24" height="4" fill="#7a8190"/>
+<rect x="32" y="88" width="16" height="4" fill="#7a8190"/>
+<text x="56" y="84" class="cd-text">E = 12 V</text>
+<path class="cd-wire" d="M40 30 L340 30"/>
+<path class="cd-wire" d="M40 150 L340 150"/>
+<path class="cd-wire" d="M150 30 L150 70"/>
+<rect x="138" y="70" width="24" height="44" class="cd-res" rx="2"/>
+<text x="150" y="65" class="cd-text" text-anchor="middle">R₁ = 1 kΩ</text>
+<path class="cd-wire" d="M150 114 L150 150"/>
+<path class="cd-wire" d="M280 30 L280 70"/>
+<rect x="268" y="70" width="24" height="44" class="cd-res" rx="2"/>
+<text x="280" y="65" class="cd-text" text-anchor="middle">R₂ = 3 kΩ</text>
+<path class="cd-wire" d="M280 114 L280 150"/>
+<text x="100" y="22" class="cd-text2">I_s</text>
+<text x="160" y="92" class="cd-text2" font-size="11">I₁</text>
+<text x="290" y="92" class="cd-text2" font-size="11">I₂</text>
+<circle cx="40" cy="30" r="2.5" class="cd-node"/>
+<circle cx="150" cy="30" r="2.5" class="cd-node"/>
+<circle cx="280" cy="30" r="2.5" class="cd-node"/>
+</svg>
+</div>
+
+<div class="step"><span class="slabel">Total resistance</span><div class="math">R_T = (1kΩ)(3kΩ)/(1kΩ+3kΩ) = 3/4 = 0.75 kΩ</div></div>
+<div class="step"><span class="slabel">Branch currents (Ohm's law — same V=12V across both)</span>
+<div class="math">I₁ = E/R₁ = 12V/1kΩ = 12 mA<br>I₂ = E/R₂ = 12V/3kΩ = 4 mA</div></div>
+<div class="step"><span class="slabel">Source current</span><div class="math">I_s = E/R_T = 12V/0.75kΩ = 16 mA &nbsp;(check: I₁+I₂ = 12+4 = 16 mA ✓)</div></div>
+<div class="answer">R_T = 0.75 kΩ, I₁ = 12 mA, I₂ = 4 mA, I_s = 16 mA</div>
+</div>
+</div>
+</div>
+
+<div class="topic">
+<h3>6.4 Power Distribution in a Parallel Circuit</h3>
+<span class="sub-time">⏱️ 15 min</span>
+<p>Same principle as series: total power = sum of branch powers = E × I<sub>s</sub>. The branch with the <b>smallest resistance</b> dissipates the <b>most power</b> (since P = V²/R and V is fixed).</p>
+</div>
+
+<div class="topic">
+<h3>6.5 Kirchhoff's Current Law (KCL) ⭐</h3>
+<span class="sub-time">⏱️ 35 min — tested as often as KVL</span>
+<p><b>Kirchhoff's Current Law:</b> The sum of currents entering a node equals the sum of currents leaving that node (conservation of charge).</p>
+<div class="formula-box"><span class="flabel">KCL</span><span class="feq">ΣI<sub>entering</sub> = ΣI<sub>leaving</sub></span></div>
+
+<div class="example">
+<div class="example-head">EXAMPLE 6.3 — Applying KCL</div>
+<div class="example-body">
+<p><b>Problem:</b> At a node, I<sub>s</sub> = 16 mA enters, and it splits into three branches: I₁ = 6 mA, I₂ = 4 mA, and I₃ = unknown. Find I₃.</p>
+<div class="step"><div class="math">I_s = I₁ + I₂ + I₃ → 16 = 6 + 4 + I₃ → I₃ = 6 mA</div></div>
+<div class="answer">I₃ = 6 mA</div>
+</div>
+</div>
+</div>
+
+<div class="topic">
+<h3>6.6 Current Divider Rule (CDR) ⭐⭐</h3>
+<span class="sub-time">⏱️ 40 min — guaranteed exam formula, master this</span>
+<p>The CDR finds the current through any one parallel branch directly:</p>
+<div class="formula-box"><span class="flabel">Current Divider Rule (general)</span><span class="feq">I<sub>x</sub> = (R<sub>T</sub> / R<sub>x</sub>) × I<sub>T</sub></span></div>
+<div class="formula-box"><span class="flabel">Special case — exactly 2 branches</span><span class="feq">I₁ = R₂I<sub>T</sub>/(R₁+R₂) &nbsp;&nbsp; I₂ = R₁I<sub>T</sub>/(R₁+R₂)</span></div>
+<div class="callout"><b>Key fact — the opposite of VDR:</b> The <b>smaller</b> resistor gets the <b>larger</b> share of current (current takes the path of least resistance), whereas in series circuits the larger resistor gets the larger share of voltage.</div>
+
+<div class="example">
+<div class="example-head">EXAMPLE 6.4 — Current Divider Rule (two-branch shortcut)</div>
+<div class="example-body">
+<p><b>Problem:</b> I<sub>T</sub> = 16 mA splits between R₁ = 1 kΩ and R₂ = 3 kΩ in parallel. Find I₁ and I₂.</p>
+<div class="step"><div class="math">I₁ = R₂·I_T/(R₁+R₂) = (3kΩ)(16mA)/(4kΩ) = 12 mA</div></div>
+<div class="step"><div class="math">I₂ = R₁·I_T/(R₁+R₂) = (1kΩ)(16mA)/(4kΩ) = 4 mA</div></div>
+<div class="answer">I₁ = 12 mA, I₂ = 4 mA — matches Example 6.2's direct Ohm's-law results ✓</div>
+</div>
+</div>
+</div>
+
+<div class="topic">
+<h3>6.7–6.8 Voltage Sources in Parallel & Open/Short Circuits</h3>
+<span class="sub-time">⏱️ 25 min</span>
+<ul>
+<li>Only sources of <b>identical voltage</b> should be paralleled (mismatched sources cause large circulating currents).</li>
+<li><b>Open circuit:</b> infinite resistance, zero current through that branch.</li>
+<li><b>Short circuit:</b> zero resistance, all current diverts through the short, bypassing other elements.</li>
+</ul>
+<div class="callout warn"><b>Exam favorite:</b> "What happens to the other branch currents if one parallel branch opens?" Answer: the remaining branches are unaffected in voltage (still = E), but total current I<sub>s</sub> decreases since R<sub>T</sub> increases.</div>
+</div>
+
+<div class="topic">
+<h3>6.9 Summary Table — Series vs Parallel</h3>
+<span class="sub-time">⏱️ 15 min — excellent for last-minute review</span>
+<table class="data-table">
+<tr><th>Property</th><th>Series</th><th>Parallel</th></tr>
+<tr><td>Same quantity throughout</td><td>Current</td><td>Voltage</td></tr>
+<tr><td>R<sub>T</sub> formula</td><td>R₁+R₂+...</td><td>1/(1/R₁+1/R₂+...)</td></tr>
+<tr><td>R<sub>T</sub> compared to parts</td><td>Larger than largest R</td><td>Smaller than smallest R</td></tr>
+<tr><td>Divider rule</td><td>VDR — larger R gets more V</td><td>CDR — smaller R gets more I</td></tr>
+<tr><td>Kirchhoff's law used</td><td>KVL</td><td>KCL</td></tr>
+</table>
+</div>
+
+<div class="video-box">
+<div class="play">▶</div>
+<div class="vtext">
+<div class="vtitle">Kirchhoff's Current Law</div>
+<div class="vsrc">Khan Academy</div>
+<div class="vdesc"><a href="https://www.youtube.com/watch?v=OYerdzZPSI0" target="_blank" style="color:var(--accent2)">youtube.com/watch?v=OYerdzZPSI0</a> — clean explanation of node current balance.</div>
+</div>
+</div>
+
+<div class="checklist">
+<h4>✅ Chapter 6 Mastery Checklist</h4>
+<label><input type="checkbox"> I can find R_T using both the general formula and the 2-resistor shortcut</label>
+<label><input type="checkbox"> I know voltage is identical across all parallel branches</label>
+<label><input type="checkbox"> I can apply KCL at a node to find an unknown branch current</label>
+<label><input type="checkbox"> I can apply the Current Divider Rule (general & 2-branch versions)</label>
+<label><input type="checkbox"> I understand why smaller R → more current, but larger R → more voltage (series)</label>
+<label><input type="checkbox"> I can predict circuit behavior for open/short branch faults</label>
+</div>
+
+<div class="page-nav"><button onclick="showSection('ch5')">← Ch 5</button><button onclick="showSection('ch7')">Ch 7 →</button></div>
+</section>
+<section class="chapter page" id="ch7">
+<div class="chapter-head"><span class="chno">CH 7</span><h2>Series-Parallel Circuits</h2></div>
+<div class="chapter-meta">
+<span>⏱️ <b>~3 hours</b> total</span>
+<span>📖 Sections 7.1–7.11</span>
+<span>🎯 Priority: <b style="color:var(--accent3)">High</b></span>
+</div>
+
+<div class="intro-block" style="margin:0 0 30px;">
+<h2>⭐ The most exam-likely circuit type</h2>
+<p style="margin:0;">Real circuits are rarely purely series or purely parallel. This chapter combines everything from Ch. 5 & 6 into a single systematic method — this is what most multi-part exam problems look like.</p>
+</div>
+
+<div class="topic">
+<h3>7.1–7.2 Identifying Series-Parallel Relationships</h3>
+<span class="sub-time">⏱️ 30 min</span>
+<p>Before doing any math, <b>trace the circuit</b> to identify which elements are truly in series (same current, single path) and which are in parallel (same voltage, shared nodes). Mislabeling this is the #1 cause of wrong answers in this chapter.</p>
+<div class="callout"><b>Two-element test:</b> Elements are in series only if they share exactly one connection point with no other branch tapping off it. Elements are in parallel only if both their terminals connect to the same two nodes.</div>
+</div>
+
+<div class="topic">
+<h3>7.3 The Reduce-and-Return Approach (Ladder Method) ⭐⭐</h3>
+<span class="sub-time">⏱️ 60 min — THE core technique of this chapter, practice many problems</span>
+<p>This is the systematic 5-step method used in nearly every solved example:</p>
+<ol>
+<li><b>Reduce:</b> Starting from the part of the circuit farthest from the source, combine series and parallel groups step-by-step until the whole network becomes a single equivalent resistance R<sub>T</sub>.</li>
+<li><b>Find total current:</b> I<sub>s</sub> = E / R<sub>T</sub> (simple Ohm's Law on the fully-reduced circuit).</li>
+<li><b>Return:</b> Work back outward through your reduction steps, using the current divider rule (CDR) and voltage divider rule (VDR) to find currents/voltages at each stage.</li>
+<li><b>Verify:</b> Check with KCL (currents into a node = currents out) and KVL (voltages around a loop = 0).</li>
+</ol>
+
+<div class="example">
+<div class="example-head">EXAMPLE 7.1 — Full Reduce-and-Return Solution (Boylestad Ex. 7.4 — Fig. 7.12)</div>
+<div class="example-body">
+<p><b>Problem:</b> E = 16.8 V feeds: R₁=9Ω ∥ R₂=6Ω (call this group A, in series with the rest), then this connects to a node b where two parallel branches exist: branch B = R₃(4Ω) in series with [R₄=6Ω ∥ R₅=3Ω], and branch C = R₆=3Ω. Find all currents.</p>
+<div class="circuit-diagram">
+<span class="cd-label">Fig. 7.12 — Series-parallel network (block view)</span>
+<svg viewBox="0 0 480 220" xmlns="http://www.w3.org/2000/svg">
+<path class="cd-wire" d="M30 110 L30 200 L450 200 L450 30 L390 30"/>
+<rect x="20" y="80" width="20" height="4" fill="#7a8190"/>
+<rect x="22" y="95" width="16" height="4" fill="#7a8190"/>
+<text x="44" y="92" class="cd-text" font-size="12">E = 16.8 V</text>
+<path class="cd-wire" d="M30 30 L30 110"/>
+<path class="cd-wire" d="M30 30 L80 30"/>
+<rect x="80" y="14" width="120" height="32" rx="4" class="cd-res"/>
+<text x="140" y="34" class="cd-text" text-anchor="middle" font-size="12">A: R₁(9Ω) ∥ R₂(6Ω) = 3.6 Ω</text>
+<path class="cd-wire" d="M200 30 L240 30 L240 30"/>
+<circle cx="240" cy="30" r="2.5" class="cd-node"/>
+<text x="246" y="46" class="cd-text-dim">node b</text>
+<path class="cd-wire" d="M240 30 L240 60"/>
+<path class="cd-wire" d="M240 60 L130 60 L130 100"/>
+<rect x="80" y="100" width="100" height="32" rx="4" class="cd-res"/>
+<text x="130" y="120" class="cd-text" text-anchor="middle" font-size="11.5">B: R₃ + (R₄∥R₅) = 6 Ω</text>
+<path class="cd-wire" d="M130 132 L130 160 L240 160"/>
+<path class="cd-wire" d="M240 60 L340 60 L340 100"/>
+<rect x="300" y="100" width="80" height="32" rx="4" class="cd-res"/>
+<text x="340" y="120" class="cd-text" text-anchor="middle" font-size="12">C: R₆ = 3 Ω</text>
+<path class="cd-wire" d="M340 132 L340 160 L240 160"/>
+<path class="cd-wire" d="M240 160 L240 200"/>
+<path class="cd-wire" d="M390 30 L390 30"/>
+<text x="130" y="92" class="cd-text2" font-size="11">I_B</text>
+<text x="340" y="92" class="cd-text2" font-size="11">I_C</text>
+<text x="55" y="22" class="cd-text2" font-size="11">I_s = I_A</text>
+</svg>
+</div>
+
+
+<div class="step"><span class="slabel">Step 1 — Reduce each block</span>
+<div class="math">
+R_A = R₁∥R₂ = (9)(6)/(9+6) = 54/15 = 3.6 Ω<br>
+R₄∥R₅ = (6)(3)/(6+3) = 18/9 = 2 Ω<br>
+R_B = R₃ + (R₄∥R₅) = 4 + 2 = 6 Ω<br>
+R_C = R₆ = 3 Ω
+</div></div>
+
+<div class="step"><span class="slabel">Step 2 — Combine B ∥ C, then add A (series) for R_T</span>
+<div class="math">
+R_T = R_A + (R_B ∥ R_C) = 3.6 + (6)(3)/(6+3) = 3.6 + 2 = 5.6 Ω
+</div></div>
+
+<div class="step"><span class="slabel">Step 3 — Total (source) current</span>
+<div class="math">I_s = E/R_T = 16.8 V / 5.6 Ω = 3 A &nbsp;&nbsp;(this is also I_A, since A is in series with the source)</div></div>
+
+<div class="step"><span class="slabel">Step 4 — Return: split current at the B‖C node using CDR</span>
+<div class="math">
+I_B = R_C·I_A/(R_C+R_B) = (3)(3)/(3+6) = 9/9 = 1 A<br>
+I_C = I_A − I_B = 3 − 1 = 2 A &nbsp;(via KCL)
+</div></div>
+
+<div class="answer">I_s = I_A = 3 A, &nbsp; I_B = 1 A, &nbsp; I_C = 2 A</div>
+</div>
+</div>
+
+<div class="callout tip"><b>Exam strategy:</b> Always redraw the reduced circuit at each stage (like the textbook's Fig. 7.13) — a clean small sketch prevents you from losing track of which resistor combination maps to which physical part of the original circuit.</div>
+</div>
+
+<div class="topic">
+<h3>7.4 Block Diagram Approach</h3>
+<span class="sub-time">⏱️ 20 min</span>
+<p>For complex networks, mentally group resistors into labeled "blocks" (A, B, C...) first, solve the simplified block-level circuit, then drill back down into each block. This is exactly the technique used in Example 7.1 above — it scales to any level of complexity.</p>
+</div>
+
+<div class="topic">
+<h3>7.6 Ladder Networks</h3>
+<span class="sub-time">⏱️ 25 min</span>
+<p>A ladder network alternates series and parallel elements down a chain (resembling a ladder's rails and rungs). Solve using reduce-and-return starting from the <b>far end</b> (away from the source) and working back to find R<sub>T</sub>, then return with VDR/CDR to find each rung's voltage/current.</p>
+</div>
+
+<div class="topic">
+<h3>7.7 Voltage Divider Supply (Loaded vs Unloaded)</h3>
+<span class="sub-time">⏱️ 25 min</span>
+<p>An <b>unloaded</b> voltage divider uses only resistors to set tap voltages via VDR. Once you connect a real load (R<sub>L</sub>) to a tap point, that tap's resistor is now in parallel with R<sub>L</sub>, which <b>pulls the output voltage down</b> from its unloaded value.</p>
+<div class="callout warn"><b>Common mistake:</b> Forgetting to recompute the parallel combination once a load is attached. The "loaded" voltage is always ≤ the "unloaded" voltage at that tap.</div>
+</div>
+
+<div class="topic">
+<h3>7.8 Potentiometer Loading</h3>
+<span class="sub-time">⏱️ 15 min</span>
+<p>Similar effect: connecting a load across part of a potentiometer's resistance changes the effective voltage division, especially severe when R<sub>L</sub> is comparable to or smaller than the potentiometer's total resistance.</p>
+</div>
+
+<div class="topic">
+<h3>7.9 Ammeter, Voltmeter & Ohmmeter Design</h3>
+<span class="sub-time">⏱️ 20 min</span>
+<ul>
+<li><b>Ammeter:</b> a sensitive galvanometer with a small <b>shunt resistor in parallel</b> to bypass most of the current</li>
+<li><b>Voltmeter:</b> a galvanometer with a large <b>multiplier resistor in series</b> to limit current and extend the voltage range</li>
+<li><b>Ohmmeter:</b> internal battery + galvanometer + adjustable resistor, calibrated so full-scale deflection = 0 Ω</li>
+</ul>
+</div>
+
+<div class="video-box">
+<div class="play">▶</div>
+<div class="vtext">
+<div class="vtitle">Series-Parallel Combination Circuits</div>
+<div class="vsrc">Search: "series parallel combination circuit reduce and return" on YouTube</div>
+<div class="vdesc">The Organic Chemistry Tutor's circuits playlist has several worked combination-circuit problems that mirror this exact reduce-and-return method.</div>
+</div>
+</div>
+
+<div class="checklist">
+<h4>✅ Chapter 7 Mastery Checklist</h4>
+<label><input type="checkbox"> I can correctly identify which elements are truly series vs. parallel in a mixed circuit</label>
+<label><input type="checkbox"> I can apply the reduce-and-return method from scratch on a multi-block circuit</label>
+<label><input type="checkbox"> I can use VDR and CDR together within the same problem</label>
+<label><input type="checkbox"> I understand why loading a voltage divider/potentiometer reduces output voltage</label>
+<label><input type="checkbox"> I know the basic design principle behind ammeters, voltmeters, and ohmmeters</label>
+</div>
+
+<div class="page-nav"><button onclick="showSection('ch6')">← Ch 6</button><button onclick="showSection('ch8')">Ch 8 →</button></div>
+</section>
+<section class="chapter page" id="ch8">
+<div class="chapter-head"><span class="chno">CH 8</span><h2>Methods of Analysis & Selected Topics (DC)</h2></div>
+<div class="chapter-meta">
+<span>⏱️ <b>~4.5 hours</b> total</span>
+<span>📖 Sections 8.1–8.12</span>
+<span>🎯 Priority: <b style="color:var(--accent3)">Highest</b></span>
+</div>
+
+<div class="intro-block" style="margin:0 0 30px;">
+<h2>⭐ Heaviest math chapter — budget extra time</h2>
+<p style="margin:0;">This chapter introduces systematic, general-purpose methods (branch-current, mesh, nodal analysis) that work on <i>any</i> circuit, even ones too complex for simple series-parallel reduction. Expect at least one full multi-part question from this chapter.</p>
+</div>
+
+<div class="topic">
+<h3>8.2 Branch-Current Analysis</h3>
+<span class="sub-time">⏱️ 50 min</span>
+<p>The most fundamental (if tedious) method — define an unknown current in every branch, then solve for them all using KVL and KCL together.</p>
+<div class="callout"><b>Procedure:</b>
+<ol style="margin:6px 0 0;">
+<li>Assign a current variable and arbitrary direction to every branch</li>
+<li>Mark resistor polarities consistent with your assumed current directions</li>
+<li>Apply KVL around each independent closed loop</li>
+<li>Apply KCL at enough nodes to get one equation per unknown</li>
+<li>Solve the resulting simultaneous equations (substitution or determinants)</li>
+</ol>
+</div>
+
+<div class="example">
+<div class="example-head">EXAMPLE 8.1 — Branch-Current Method (Boylestad Ex. 8.9, Fig. 8.22)</div>
+<div class="example-body">
+<p><b>Problem:</b> A circuit has two batteries E₁ = 2 V and E₂ = 6 V, with R₁ = 2 Ω in series with E₁, R₂ = 1 Ω in series with E₂, and R₃ = 4 Ω as a shared middle branch joining both loops. Find I₁, I₂, I₃.</p>
+<div class="circuit-diagram">
+<span class="cd-label">Fig. 8.22 — Two-loop network, three branches</span>
+<svg viewBox="0 0 420 170" xmlns="http://www.w3.org/2000/svg">
+<path class="cd-wire" d="M30 30 L30 140 L390 140 L390 30 L220 30"/>
+<rect x="18" y="56" width="24" height="4" fill="#7a8190"/>
+<rect x="22" y="76" width="16" height="4" fill="#7a8190"/>
+<text x="48" y="72" class="cd-text" font-size="12">E₁ = 2 V</text>
+<path class="cd-wire" d="M30 30 L80 30"/>
+<rect x="80" y="22" width="40" height="16" class="cd-res" rx="2"/>
+<text x="100" y="14" class="cd-text" text-anchor="middle" font-size="12">R₁ = 2 Ω</text>
+<path class="cd-wire" d="M120 30 L220 30"/>
+<path class="cd-wire" d="M220 30 L220 140"/>
+<rect x="204" y="62" width="32" height="44" class="cd-res" rx="2"/>
+<text x="252" y="86" class="cd-text" font-size="12">R₃ = 4 Ω</text>
+<circle cx="220" cy="30" r="2.5" class="cd-node"/>
+<circle cx="220" cy="140" r="2.5" class="cd-node"/>
+<text x="120" y="78" class="cd-text2" font-size="12">I₁ →</text>
+<text x="285" y="78" class="cd-text2" font-size="12">I₃ ↓</text>
+<text x="330" y="78" class="cd-text2" font-size="12">← I₂</text>
+<rect x="345" y="56" width="20" height="4" fill="#7a8190"/>
+<rect x="350" y="76" width="14" height="4" fill="#7a8190"/>
+<text x="318" y="50" class="cd-text" font-size="12">E₂ = 6 V</text>
+<rect x="330" y="22" width="42" height="16" class="cd-res" rx="2"/>
+<text x="350" y="14" class="cd-text" text-anchor="middle" font-size="12">R₂ = 1 Ω</text>
+<text x="50" y="20" class="cd-text-dim" font-size="10">Loop 1</text>
+<text x="370" y="20" class="cd-text-dim" font-size="10">Loop 2</text>
+</svg>
+</div>
+
+<div class="step"><span class="slabel">KVL — Loop 1 (clockwise)</span><div class="math">+2 V − (2Ω)I₁ − (4Ω)I₃ = 0</div></div>
+<div class="step"><span class="slabel">KVL — Loop 2 (clockwise)</span><div class="math">(4Ω)I₃ + (1Ω)I₂ − 6 V = 0</div></div>
+<div class="step"><span class="slabel">KCL at the shared node</span><div class="math">I₁ + I₂ = I₃</div></div>
+<div class="step"><span class="slabel">Solving the 3×3 system (via determinants)</span><div class="math">I₁ = −1 A &nbsp;&nbsp; I₂ = 2 A &nbsp;&nbsp; I₃ = 1 A</div></div>
+<div class="answer">I₁ = −1 A (actual direction opposite to assumed), I₂ = 2 A, I₃ = 1 A</div>
+</div>
+</div>
+<div class="callout warn"><b>Reminder:</b> A negative result doesn't mean an error — it means the actual current flows opposite to the direction you assumed. Keep the magnitude and flip the arrow.</div>
+</div>
+
+<div class="topic">
+<h3>8.3–8.4 Determinants Method (Cramer's Rule)</h3>
+<span class="sub-time">⏱️ 35 min</span>
+<p>For a 2×2 system <code>a₁x + b₁y = c₁</code>, <code>a₂x + b₂y = c₂</code>:</p>
+<div class="formula-box"><span class="flabel">2×2 Determinant solution</span><span class="feq">x = (c₁b₂ − c₂b₁)/(a₁b₂ − a₂b₁) &nbsp;&nbsp; y = (a₁c₂ − a₂c₁)/(a₁b₂ − a₂b₁)</span></div>
+<p>For 3×3 systems, expand along any row/column using cofactors, or use a calculator/Mathcad as the textbook demonstrates. <b>On a timed exam, a scientific calculator with matrix/determinant functions is a huge time-saver</b> — check if yours is allowed.</p>
+</div>
+
+<div class="topic">
+<h3>8.6–8.7 Mesh (Loop) Analysis — General Approach ⭐⭐</h3>
+<span class="sub-time">⏱️ 70 min — the single highest-yield topic in the course</span>
+<p>Mesh analysis is far more efficient than branch-current for circuits with many elements. Instead of one variable per branch, you assign one variable per <b>independent loop (mesh)</b>.</p>
+<div class="callout"><b>Procedure:</b>
+<ol style="margin:6px 0 0;">
+<li>Assign a clockwise mesh current to each independent (window) loop</li>
+<li>Indicate resistor voltage polarities based on the assumed mesh current direction</li>
+<li>Apply KVL around each mesh — for resistors shared between two meshes, include <i>both</i> mesh currents (subtracting the adjacent mesh's current since it flows opposite through the shared element)</li>
+<li>Solve the resulting system of equations</li>
+</ol>
+</div>
+
+<div class="example">
+<div class="example-head">EXAMPLE 8.2 — Mesh Analysis, Two Independent Loops (Boylestad Ex. 8.12, Fig. 8.31)</div>
+<div class="example-body">
+<p><b>Problem:</b> Loop 1 has E₁ = 5 V and R₁ = 1 Ω; loop 2 has E₂ = 10 V and R₃ = 2 Ω; the two loops share R₂ = 6 Ω. Find both mesh currents.</p>
+<div class="circuit-diagram">
+<span class="cd-label">Fig. 8.31 — Two-mesh network</span>
+<svg viewBox="0 0 420 170" xmlns="http://www.w3.org/2000/svg">
+<path class="cd-wire" d="M30 30 L30 140 L390 140 L390 30 L220 30"/>
+<rect x="18" y="56" width="24" height="4" fill="#7a8190"/>
+<rect x="22" y="76" width="16" height="4" fill="#7a8190"/>
+<text x="48" y="72" class="cd-text" font-size="12">E₁ = 5 V</text>
+<path class="cd-wire" d="M30 30 L80 30"/>
+<rect x="80" y="22" width="40" height="16" class="cd-res" rx="2"/>
+<text x="100" y="14" class="cd-text" text-anchor="middle" font-size="12">R₁ = 1 Ω</text>
+<path class="cd-wire" d="M120 30 L220 30"/>
+<path class="cd-wire" d="M220 30 L220 140"/>
+<rect x="204" y="62" width="32" height="44" class="cd-res" rx="2"/>
+<text x="252" y="84" class="cd-text" font-size="12">R₂ = 6 Ω</text>
+<text x="120" y="78" class="cd-text2" font-size="13">I₁ ↻</text>
+<text x="290" y="78" class="cd-text2" font-size="13">I₂ ↻</text>
+<rect x="345" y="56" width="20" height="4" fill="#7a8190"/>
+<rect x="350" y="76" width="14" height="4" fill="#7a8190"/>
+<text x="320" y="50" class="cd-text" font-size="12">E₂ = 10 V</text>
+<rect x="330" y="22" width="42" height="16" class="cd-res" rx="2"/>
+<text x="350" y="14" class="cd-text" text-anchor="middle" font-size="12">R₃ = 2 Ω</text>
+</svg>
+</div>
+
+<div class="step"><span class="slabel">Loop 1 KVL (clockwise)</span><div class="math">+5 V − (1Ω)I₁ − (6Ω)(I₁ − I₂) = 0 &nbsp;→&nbsp; −7I₁ + 6I₂ = −5</div></div>
+<div class="step"><span class="slabel">Loop 2 KVL (clockwise)</span><div class="math">−(6Ω)(I₂ − I₁) − (2Ω)I₂ + 10 V = 0 &nbsp;→&nbsp; +6I₁ − 8I₂ = −10</div></div>
+<div class="step"><span class="slabel">Solving simultaneously</span><div class="math">I₁ = 1 A &nbsp;&nbsp; I₂ = 2 A</div></div>
+<div class="step"><span class="slabel">Current through the shared 6 Ω resistor</span><div class="math">I_R2 = I₂ − I₁ = 2 − 1 = 1 A (in the direction of I₂)</div></div>
+<div class="answer">I₁ = 1 A, I₂ = 2 A, I through shared resistor = 1 A</div>
+</div>
+</div>
+
+<div class="callout tip"><b>Format/shortcut approach:</b> If every source is a voltage source and every mesh current is drawn clockwise, you can write the matrix directly: diagonal terms = sum of resistances in that loop; off-diagonal terms = negative of the shared resistance between loops; right-hand side = net voltage source in that loop (rises positive). This avoids re-deriving KVL by inspection every time.</div>
+</div>
+
+<div class="topic">
+<h3>8.8 Mesh Analysis — Current Sources & Supermesh</h3>
+<span class="sub-time">⏱️ 30 min</span>
+<p>When a current source sits on the boundary between two meshes (and has no resistance in parallel to convert it), form a <b>supermesh</b>: mentally remove the current source, apply KVL around the resulting combined outer loop, then add a KCL equation relating the mesh currents to the known source current.</p>
+</div>
+
+<div class="topic">
+<h3>8.9 Nodal Analysis — General Approach ⭐⭐</h3>
+<span class="sub-time">⏱️ 70 min — equally high-yield, often paired with mesh analysis on exams</span>
+<p>Nodal analysis solves for <b>node voltages</b> (relative to a chosen reference/ground node) instead of currents.</p>
+<div class="callout"><b>Procedure:</b>
+<ol style="margin:6px 0 0;">
+<li>Count the nodes; pick one as the reference (0 V) — for N nodes you need (N−1) equations</li>
+<li>Label the unknown node voltages V₁, V₂, ...</li>
+<li>At each non-reference node, apply KCL: assume all unknown currents <i>leave</i> the node, and express each in terms of node voltages divided by resistance (Ohm's law: I = V/R)</li>
+<li>Solve the resulting simultaneous equations for the node voltages</li>
+</ol>
+</div>
+
+<div class="example">
+<div class="example-head">EXAMPLE 8.3 — Nodal Analysis (Boylestad Ex. 8.21, Fig. 8.54)</div>
+<div class="example-body">
+<p><b>Problem:</b> A 4 A current source feeds node V₁ (with R₁ = 2 Ω to ground), connected to node V₂ (with R₂ = 6 Ω to ground) through R₃ = 12 Ω, and a 2 A current source pulls current out of node V₂. Find V₁ and V₂.</p>
+<div class="circuit-diagram">
+<span class="cd-label">Fig. 8.54 — Two-node network</span>
+<svg viewBox="0 0 420 170" xmlns="http://www.w3.org/2000/svg">
+<circle cx="100" cy="40" r="3" class="cd-node"/>
+<text x="100" y="22" class="cd-text" text-anchor="middle" font-size="13">V₁</text>
+<circle cx="300" cy="40" r="3" class="cd-node"/>
+<text x="300" y="22" class="cd-text" text-anchor="middle" font-size="13">V₂</text>
+<path class="cd-wire" d="M30 40 L100 40"/>
+<path class="cd-wire" d="M30 40 L30 130 L370 130 L370 40 L300 40"/>
+<circle cx="40" cy="40" r="9" fill="none" class="cd-res"/>
+<path class="cd-wire" d="M40 46 L40 34 M37 40 L43 40" style="stroke:var(--accent2)"/>
+<text x="40" y="62" class="cd-text2" font-size="11">4 A</text>
+<path class="cd-wire" d="M100 40 L100 130"/>
+<rect x="84" y="70" width="32" height="40" class="cd-res" rx="2"/>
+<text x="130" y="92" class="cd-text" font-size="12">R₁=2Ω</text>
+<path class="cd-wire" d="M100 40 L300 40"/>
+<rect x="160" y="32" width="80" height="16" class="cd-res" rx="2"/>
+<text x="200" y="24" class="cd-text" text-anchor="middle" font-size="12">R₃ = 12 Ω</text>
+<path class="cd-wire" d="M300 40 L300 130"/>
+<rect x="284" y="70" width="32" height="40" class="cd-res" rx="2"/>
+<text x="330" y="92" class="cd-text" font-size="12">R₂=6Ω</text>
+<circle cx="360" cy="40" r="9" fill="none" class="cd-res"/>
+<path class="cd-wire" d="M360 34 L360 46 M357 40 L363 40" style="stroke:var(--accent3)"/>
+<text x="345" y="62" class="cd-text2" font-size="11">2 A ↓</text>
+</svg>
+</div>
+
+<div class="step"><span class="slabel">KCL at node V₁</span><div class="math">4 A = V₁/R₁ + (V₁−V₂)/R₃ = V₁/2 + (V₁−V₂)/12</div></div>
+<div class="step"><span class="slabel">KCL at node V₂</span><div class="math">(V₂−V₁)/R₃ + V₂/R₂ + 2 A = 0 &nbsp;→&nbsp; (V₂−V₁)/12 + V₂/6 = −2 A</div></div>
+<div class="step"><span class="slabel">Rearranged into standard form & solved</span>
+<div class="math">7V₁ − V₂ = 48 &nbsp;&nbsp;&nbsp; −V₁ + 3V₂ = −24</div></div>
+<div class="step"><span class="slabel">Result (via determinants)</span><div class="math">V₁ = +6 V &nbsp;&nbsp; V₂ = −6 V</div></div>
+<div class="answer">V₁ = 6 V, V₂ = −6 V. Then I_R3 = (V₁−V₂)/12 = 12/12 = 1 A, flowing from node 1 to node 2</div>
+</div>
+</div>
+
+<div class="callout warn"><b>Common mistake:</b> Forgetting that ALL unknown currents are assumed to <i>leave</i> the node when writing the KCL equation — stay consistent across all nodes, regardless of what assumption you used for other nodes (each node's equation is independent).</div>
+</div>
+
+<div class="topic">
+<h3>8.10 Bridge Networks</h3>
+<span class="sub-time">⏱️ 25 min</span>
+<div class="circuit-diagram">
+<span class="cd-label">Bridge network — balance condition</span>
+<svg viewBox="0 0 320 220" xmlns="http://www.w3.org/2000/svg">
+<circle cx="160" cy="20" r="3" class="cd-node"/>
+<circle cx="40" cy="110" r="3" class="cd-node"/>
+<circle cx="280" cy="110" r="3" class="cd-node"/>
+<circle cx="160" cy="200" r="3" class="cd-node"/>
+<path class="cd-wire" d="M160 20 L40 110"/>
+<text x="85" y="58" class="cd-text" font-size="12">R₁</text>
+<path class="cd-wire" d="M160 20 L280 110"/>
+<text x="225" y="58" class="cd-text" font-size="12">R₂</text>
+<path class="cd-wire" d="M40 110 L160 200"/>
+<text x="85" y="166" class="cd-text" font-size="12">R₃</text>
+<path class="cd-wire" d="M280 110 L160 200"/>
+<text x="225" y="166" class="cd-text" font-size="12">R₄</text>
+<path class="cd-wire" d="M40 110 L130 110"/>
+<circle cx="160" cy="110" r="11" fill="none" class="cd-res"/>
+<text x="160" y="114" class="cd-text2" text-anchor="middle" font-size="10">G</text>
+<path class="cd-wire" d="M190 110 L280 110"/>
+<text x="160" y="6" class="cd-text-dim" text-anchor="middle">+</text>
+<text x="160" y="214" class="cd-text-dim" text-anchor="middle">−</text>
+</svg>
+<p style="font-family:'Helvetica Neue',Arial,sans-serif; font-size:12px; color:var(--ink-dim); margin:8px 0 0;">Balanced when R₁/R₃ = R₂/R₄ — the galvanometer (G) reads zero, no matter what voltage drives the bridge.</p>
+</div>
+
+<p>A bridge network cannot be reduced by simple series-parallel rules. It is <b>balanced</b> (I = 0, V = 0 across the bridge/galvanometer arm) when:</p>
+<div class="formula-box"><span class="flabel">Bridge balance condition</span><span class="feq">R₁ / R₃ = R₂ / R₄</span></div>
+<p>Unbalanced bridges require mesh or nodal analysis to solve fully.</p>
+</div>
+
+<div class="topic">
+<h3>8.12 Y-Δ (Wye-Delta) and Δ-Y Conversions</h3>
+<span class="sub-time">⏱️ 30 min</span>
+<p>Some resistor networks (especially bridges) are neither purely series nor parallel until you convert between Wye (Y) and Delta (Δ) configurations.</p>
+<div class="formula-grid">
+<div class="formula-card"><div class="fname">Δ → Y (each Y resistor)</div><div class="fexpr">R_Y = (product of 2 adjacent Δ resistors) / (sum of all 3 Δ resistors)</div></div>
+<div class="formula-card"><div class="fname">Y → Δ (each Δ resistor)</div><div class="fexpr">R_Δ = (sum of all Y cross-products) / (opposite Y resistor)</div></div>
+</div>
+<div class="callout tip"><b>Special case worth memorizing:</b> If all three Δ resistors equal R, then each Y resistor = R/3. Conversely, if all three Y resistors equal R, each Δ resistor = 3R.</div>
+</div>
+
+<div class="video-box">
+<div class="play">▶</div>
+<div class="vtext">
+<div class="vtitle">Mesh Current Analysis (step by step)</div>
+<div class="vsrc">Khan Academy / Engineering — search "mesh current method Khan Academy"</div>
+<div class="vdesc"><a href="https://www.khanacademy.org/science/electrical-engineering/ee-circuit-analysis-topic/ee-dc-circuit-analysis/v/ee-mesh-current-method" target="_blank" style="color:var(--accent2)">khanacademy.org — EE: Mesh Current Method</a> — Willy McAllister builds up the supermesh concept carefully.</div>
+</div>
+</div>
+
+<div class="video-box">
+<div class="play">▶</div>
+<div class="vtext">
+<div class="vtitle">Nodal Analysis (step by step)</div>
+<div class="vsrc">Khan Academy</div>
+<div class="vdesc"><a href="https://www.khanacademy.org/science/electrical-engineering/ee-circuit-analysis-topic/ee-dc-circuit-analysis/v/ee-node-voltage-method-steps-1-to-4" target="_blank" style="color:var(--accent2)">khanacademy.org — EE: Node Voltage Method</a> — matches the textbook's procedure almost step-for-step.</div>
+</div>
+</div>
+
+<div class="checklist">
+<h4>✅ Chapter 8 Mastery Checklist</h4>
+<label><input type="checkbox"> I can set up and solve a branch-current problem (KVL + KCL together)</label>
+<label><input type="checkbox"> I can solve 2×2 and 3×3 systems using determinants</label>
+<label><input type="checkbox"> I can apply mesh analysis to a 2-loop circuit confidently</label>
+<label><input type="checkbox"> I understand the supermesh technique for current sources</label>
+<label><input type="checkbox"> I can apply nodal analysis to a 2-node circuit confidently</label>
+<label><input type="checkbox"> I know the bridge balance condition R₁/R₃ = R₂/R₄</label>
+<label><input type="checkbox"> I can convert between Y and Δ configurations</label>
+</div>
+
+<div class="page-nav"><button onclick="showSection('ch7')">← Ch 7</button><button onclick="showSection('ch9')">Ch 9 →</button></div>
+</section>
+<section class="chapter page" id="ch9">
+<div class="chapter-head"><span class="chno">CH 9</span><h2>Network Theorems</h2></div>
+<div class="chapter-meta">
+<span>⏱️ <b>~4 hours</b> total</span>
+<span>📖 Sections 9.1–9.9</span>
+<span>🎯 Priority: <b style="color:var(--accent3)">Highest</b></span>
+</div>
+
+<div class="intro-block" style="margin:0 0 30px;">
+<h2>⭐ Almost always a full exam question</h2>
+<p style="margin:0;">These theorems let you analyze just the part of a circuit you care about (e.g., one load resistor) without re-solving the whole network. Thévenin and Superposition especially are near-universal exam topics.</p>
+</div>
+
+<div class="topic">
+<h3>9.2 Superposition Theorem ⭐</h3>
+<span class="sub-time">⏱️ 50 min</span>
+<p>In a linear circuit with multiple independent sources, the total response (current or voltage) at any point equals the <b>sum of the responses caused by each source acting alone</b>, with all other sources set to zero (voltage sources → short circuit; current sources → open circuit).</p>
+<div class="callout"><b>Procedure:</b>
+<ol style="margin:6px 0 0;">
+<li>Pick one source; "zero" all others (short voltage sources, open current sources)</li>
+<li>Solve the simplified circuit for the variable of interest</li>
+<li>Repeat for each remaining source individually</li>
+<li>Algebraically add all the individual contributions (respecting direction/polarity)</li>
+</ol>
+</div>
+
+<div class="example">
+<div class="example-head">EXAMPLE 9.1 — Superposition with 3 Sources (Boylestad Ex. 9.5)</div>
+<div class="example-body">
+<p><b>Problem:</b> Find the current through R₁ = 2 Ω in a circuit with three sources: E₁ = 12 V and E₂ = 6 V (both in series with R₁=2Ω and R₂=4Ω in the loop), and a 3 A current source, with R₂ = 4 Ω.</p>
+<div class="circuit-diagram">
+<span class="cd-label">Boylestad Ex. 9.5 — Two voltage sources + one current source</span>
+<svg viewBox="0 0 420 170" xmlns="http://www.w3.org/2000/svg">
+<path class="cd-wire" d="M30 30 L30 140 L390 140 L390 30 L300 30"/>
+<rect x="18" y="56" width="24" height="4" fill="#7a8190"/>
+<rect x="22" y="76" width="16" height="4" fill="#7a8190"/>
+<text x="48" y="72" class="cd-text" font-size="12">E₁ = 12 V</text>
+<path class="cd-wire" d="M30 30 L80 30"/>
+<rect x="80" y="22" width="42" height="16" class="cd-res" rx="2"/>
+<text x="101" y="14" class="cd-text" text-anchor="middle" font-size="12">R₁ = 2 Ω</text>
+<path class="cd-wire" d="M122 30 L170 30"/>
+<rect x="170" y="22" width="42" height="16" class="cd-res" rx="2"/>
+<text x="191" y="14" class="cd-text" text-anchor="middle" font-size="12">R₂ = 4 Ω</text>
+<path class="cd-wire" d="M212 30 L260 30"/>
+<rect x="240" y="56" width="20" height="4" fill="#7a8190"/>
+<rect x="246" y="76" width="14" height="4" fill="#7a8190"/>
+<text x="226" y="50" class="cd-text" font-size="12">E₂ = 6 V</text>
+<path class="cd-wire" d="M260 30 L260 140"/>
+<circle cx="330" cy="85" r="11" fill="none" class="cd-res" style="stroke:var(--accent2)"/>
+<path class="cd-wire" d="M330 79 L330 91 M327 85 L333 85" style="stroke:var(--accent2)"/>
+<text x="345" y="89" class="cd-text2" font-size="12">3 A</text>
+<path class="cd-wire" d="M330 30 L330 74"/>
+<path class="cd-wire" d="M330 96 L330 140"/>
+<path class="cd-wire" d="M300 30 L330 30"/>
+<text x="55" y="20" class="cd-text-dim" font-size="10">R₁ carries I₁ (find this)</text>
+</svg>
+</div>
+
+<div class="step"><span class="slabel">Effect of E₁ = 12 V alone (short E₂ and open the current source)</span>
+<div class="math">I'₁ = E₁/(R₁+R₂) = 12V/(2Ω+4Ω) = 12/6 = 2 A</div></div>
+<div class="step"><span class="slabel">Effect of E₂ = 6 V alone</span>
+<div class="math">I''₁ = E₂/(R₁+R₂) = 6V/6Ω = 1 A</div></div>
+<div class="step"><span class="slabel">Effect of the 3 A current source alone (use current divider rule)</span>
+<div class="math">I'''₁ = R₂·I/(R₁+R₂) = (4Ω)(3A)/6Ω = 12/6 = 2 A</div></div>
+<div class="step"><span class="slabel">Superpose — add algebraically, respecting each contribution's direction</span>
+<div class="math">I₁ = I''₁ + I'''₁ − I'₁ = 1 A + 2 A − 2 A = 1 A &nbsp;(actual result from the book)</div></div>
+<div class="answer">I₁ = 1 A (total, combining all three sources)</div>
+</div>
+</div>
+
+<div class="callout warn"><b>Common mistake:</b> Superposition applies only to <b>voltage and current</b> (linear quantities). You cannot superpose <b>power</b> directly — power depends on the square of current/voltage, so you must find total current/voltage first, then compute power once at the end.</div>
+</div>
+
+<div class="topic">
+<h3>9.3 Thévenin's Theorem ⭐⭐</h3>
+<span class="sub-time">⏱️ 70 min — the single most important theorem in the course</span>
+<p>Any two-terminal linear network can be replaced by a single equivalent voltage source E<sub>Th</sub> in series with a single equivalent resistance R<sub>Th</sub>.</p>
+<div class="callout"><b>Procedure:</b>
+<ol style="margin:6px 0 0;">
+<li>Remove the load resistor R<sub>L</sub>; label the two open terminals a and b</li>
+<li>Redraw the remaining network</li>
+<li><b>Find R<sub>Th</sub>:</b> zero all sources (short voltage sources, open current sources), then find the resistance looking into terminals a-b</li>
+<li><b>Find E<sub>Th</sub>:</b> restore all sources, then find the open-circuit voltage between a and b</li>
+<li>Draw the Thévenin equivalent (E<sub>Th</sub> in series with R<sub>Th</sub>), reconnect R<sub>L</sub>, and solve with simple Ohm's Law</li>
+</ol>
+</div>
+
+<div class="example">
+<div class="example-head">EXAMPLE 9.2 — Full Thévenin Procedure (Boylestad Ex. 9.6, Fig. 9.26)</div>
+<div class="example-body">
+<p><b>Problem:</b> A network has E = 9 V in series with R₁ = 3 Ω, feeding a node where R₂ = 6 Ω is in parallel with the load R<sub>L</sub>. Find the Thévenin equivalent, then I<sub>L</sub> for R<sub>L</sub> = 2 Ω, 10 Ω, and 100 Ω.</p>
+<div class="circuit-diagram">
+<span class="cd-label">Fig. 9.26 — Original network → Thévenin equivalent</span>
+<svg viewBox="0 0 460 170" xmlns="http://www.w3.org/2000/svg">
+<path class="cd-wire" d="M30 30 L30 130 L120 130"/>
+<rect x="18" y="58" width="24" height="4" fill="#7a8190"/>
+<rect x="22" y="78" width="16" height="4" fill="#7a8190"/>
+<text x="46" y="74" class="cd-text" font-size="12">E = 9 V</text>
+<path class="cd-wire" d="M30 30 L80 30"/>
+<rect x="80" y="22" width="40" height="16" class="cd-res" rx="2"/>
+<text x="100" y="14" class="cd-text" text-anchor="middle" font-size="12">R₁=3Ω</text>
+<path class="cd-wire" d="M120 30 L120 130"/>
+<rect x="104" y="62" width="32" height="40" class="cd-res" rx="2"/>
+<text x="148" y="84" class="cd-text" font-size="12">R₂=6Ω</text>
+<circle cx="120" cy="30" r="2.5" class="cd-node"/>
+<text x="125" y="46" class="cd-text-dim" font-size="10">a</text>
+<circle cx="120" cy="130" r="2.5" class="cd-node"/>
+<text x="125" y="124" class="cd-text-dim" font-size="10">b</text>
+<path class="cd-wire" d="M120 30 L150 30 L150 130 L120 130" style="stroke-dasharray:4,4;opacity:.5"/>
+<text x="150" y="20" class="cd-text-dim" font-size="11" text-anchor="middle">R_L removed</text>
+<text x="200" y="80" class="cd-text2" font-size="20">→</text>
+<path class="cd-wire" d="M260 30 L260 130 L300 130"/>
+<rect x="248" y="58" width="24" height="4" fill="#7a8190"/>
+<rect x="252" y="78" width="16" height="4" fill="#7a8190"/>
+<text x="276" y="74" class="cd-text" font-size="12">E_Th=6V</text>
+<path class="cd-wire" d="M260 30 L310 30"/>
+<rect x="310" y="22" width="44" height="16" class="cd-res" rx="2"/>
+<text x="332" y="14" class="cd-text" text-anchor="middle" font-size="12">R_Th=2Ω</text>
+<path class="cd-wire" d="M354 30 L400 30"/>
+<circle cx="400" cy="30" r="2.5" class="cd-node"/>
+<text x="406" y="26" class="cd-text-dim" font-size="10">a</text>
+<path class="cd-wire" d="M400 30 L400 130 L300 130"/>
+<circle cx="400" cy="130" r="2.5" class="cd-node"/>
+<text x="406" y="124" class="cd-text-dim" font-size="10">b</text>
+<rect x="380" y="65" width="30" height="34" rx="2" fill="none" style="stroke:var(--accent2);stroke-dasharray:3,3"/>
+<text x="395" y="86" class="cd-text2" text-anchor="middle" font-size="11">R_L</text>
+</svg>
+</div>
+
+<div class="step"><span class="slabel">Step 3 — R_Th (short the source E)</span>
+<div class="math">R_Th = R₁ ∥ R₂ = (3Ω)(6Ω)/(3Ω+6Ω) = 18/9 = 2 Ω</div></div>
+<div class="step"><span class="slabel">Step 4 — E_Th (restore source, use VDR for the open-circuit voltage across R₂)</span>
+<div class="math">E_Th = R₂·E/(R₁+R₂) = (6Ω)(9V)/9Ω = 54/9 = 6 V</div></div>
+<div class="step"><span class="slabel">Step 5 — Apply to each load value</span>
+<div class="math">
+R_L=2Ω: &nbsp;I_L = E_Th/(R_Th+R_L) = 6/(2+2) = 1.5 A<br>
+R_L=10Ω: I_L = 6/(2+10) = 0.5 A<br>
+R_L=100Ω: I_L = 6/(2+100) = 0.06 A
+</div></div>
+<div class="answer">R_Th = 2 Ω, E_Th = 6 V — once found, ANY load value takes one line of arithmetic</div>
+</div>
+</div>
+
+<div class="callout tip"><b>Why this matters:</b> Without Thévenin's theorem, changing R<sub>L</sub> would require re-analyzing the entire original circuit from scratch each time. With it, you do the hard work once and then plug in any R<sub>L</sub> instantly — exactly why exams love testing this.</div>
+</div>
+
+<div class="topic">
+<h3>9.4 Norton's Theorem</h3>
+<span class="sub-time">⏱️ 35 min</span>
+<p>The current-source counterpart to Thévenin: any two-terminal linear network can be replaced by a single current source I<sub>N</sub> in parallel with a single resistance R<sub>N</sub>.</p>
+<div class="formula-box"><span class="flabel">Key relationship — Norton ↔ Thévenin</span><span class="feq">R<sub>N</sub> = R<sub>Th</sub> &nbsp;&nbsp; I<sub>N</sub> = E<sub>Th</sub>/R<sub>Th</sub> &nbsp;&nbsp; E<sub>Th</sub> = I<sub>N</sub>×R<sub>N</sub></span></div>
+<p>Find R<sub>N</sub> exactly like R<sub>Th</sub> (zero the sources, look into the terminals). Find I<sub>N</sub> as the <b>short-circuit current</b> between the two open terminals (with all sources active).</p>
+
+<div class="example">
+<div class="example-head">EXAMPLE 9.3 — Norton's Theorem, Same Circuit as Example 9.2 (Boylestad Ex. 9.11)</div>
+<div class="example-body">
+<p><b>Problem:</b> Using the identical network (E=9V, R₁=3Ω, R₂=6Ω), find the Norton equivalent.</p>
+<div class="circuit-diagram">
+<span class="cd-label">Norton equivalent of the same network</span>
+<svg viewBox="0 0 260 160" xmlns="http://www.w3.org/2000/svg">
+<path class="cd-wire" d="M40 30 L40 130 L80 130"/>
+<circle cx="40" cy="50" r="11" fill="none" class="cd-res"/>
+<path class="cd-wire" d="M40 44 L40 56 M37 50 L43 50" style="stroke:var(--accent2)"/>
+<text x="55" y="54" class="cd-text2" font-size="12">I_N = 3 A</text>
+<path class="cd-wire" d="M40 30 L80 30"/>
+<path class="cd-wire" d="M80 30 L80 130"/>
+<rect x="64" y="62" width="32" height="40" class="cd-res" rx="2"/>
+<text x="110" y="84" class="cd-text" font-size="12">R_N = 2 Ω</text>
+<circle cx="80" cy="30" r="2.5" class="cd-node"/>
+<text x="86" y="26" class="cd-text-dim" font-size="10">a</text>
+<circle cx="80" cy="130" r="2.5" class="cd-node"/>
+<text x="86" y="124" class="cd-text-dim" font-size="10">b</text>
+<path class="cd-wire" d="M80 30 L180 30 L180 130 L80 130" style="stroke-dasharray:4,4;opacity:.5"/>
+<rect x="160" y="65" width="30" height="34" rx="2" fill="none" style="stroke:var(--accent2);stroke-dasharray:3,3"/>
+<text x="175" y="86" class="cd-text2" text-anchor="middle" font-size="11">R_L</text>
+</svg>
+</div>
+
+<div class="step"><span class="slabel">R_N (identical method to R_Th)</span><div class="math">R_N = R₁ ∥ R₂ = (3)(6)/9 = 2 Ω</div></div>
+<div class="step"><span class="slabel">I_N — short terminals a-b; this shorts out R₂, so all source current flows through R₁ only</span>
+<div class="math">I_N = E/R₁ = 9V/3Ω = 3 A</div></div>
+<div class="answer">R_N = 2 Ω, I_N = 3 A — check: E_Th = I_N × R_N = 3A × 2Ω = 6 V ✓ matches Example 9.2's Thévenin result exactly</div>
+</div>
+</div>
+</div>
+
+<div class="topic">
+<h3>9.5 Maximum Power Transfer Theorem ⭐</h3>
+<span class="sub-time">⏱️ 35 min</span>
+<p>Maximum power is delivered to a load when the load resistance equals the Thévenin resistance of the source network feeding it.</p>
+<div class="formula-box"><span class="flabel">Maximum power transfer condition</span><span class="feq">R<sub>L</sub> = R<sub>Th</sub></span></div>
+<div class="formula-box"><span class="flabel">Maximum power delivered</span><span class="feq">P<sub>L,max</sub> = E<sub>Th</sub>² / (4×R<sub>Th</sub>)</span></div>
+
+<div class="example">
+<div class="example-head">EXAMPLE 9.4 — Maximum Power Transfer (Boylestad Fig. 9.79, Table 9.1)</div>
+<div class="example-body">
+<p><b>Problem:</b> A Thévenin equivalent has E<sub>Th</sub> = 60 V, R<sub>Th</sub> = 9 Ω. Find R<sub>L</sub> for maximum power transfer, and the value of that maximum power.</p>
+<div class="circuit-diagram">
+<span class="cd-label">Fig. 9.79 — Maximum power transfer condition</span>
+<svg viewBox="0 0 280 160" xmlns="http://www.w3.org/2000/svg">
+<path class="cd-wire" d="M40 30 L40 130 L80 130"/>
+<rect x="28" y="58" width="24" height="4" fill="#7a8190"/>
+<rect x="32" y="78" width="16" height="4" fill="#7a8190"/>
+<text x="56" y="74" class="cd-text" font-size="12">E_Th=60V</text>
+<path class="cd-wire" d="M40 30 L80 30"/>
+<rect x="80" y="22" width="44" height="16" class="cd-res" rx="2"/>
+<text x="102" y="14" class="cd-text" text-anchor="middle" font-size="12">R_Th=9Ω</text>
+<path class="cd-wire" d="M124 30 L180 30"/>
+<path class="cd-wire" d="M180 30 L180 130 L80 130"/>
+<rect x="164" y="62" width="32" height="40" class="cd-res" rx="2"/>
+<text x="220" y="84" class="cd-text2" font-size="12">R_L = 9 Ω</text>
+<text x="220" y="100" class="cd-text-dim" font-size="10">(set equal to R_Th)</text>
+<circle cx="180" cy="30" r="2.5" class="cd-node"/>
+<circle cx="180" cy="130" r="2.5" class="cd-node"/>
+</svg>
+</div>
+
+<div class="step"><span class="slabel">Matching condition</span><div class="math">R_L = R_Th = 9 Ω</div></div>
+<div class="step"><span class="slabel">Maximum power</span><div class="math">P_max = E_Th²/(4R_Th) = (60)²/(4×9) = 3600/36 = 100 W</div></div>
+<div class="step"><span class="slabel">Verify via I and V at the matched point</span>
+<div class="math">I_L = E_Th/(2R_Th) = 60/18 = 3.33 A (half of I_max=6.6A) &nbsp;|&nbsp; V_L = E_Th/2 = 30 V (half of E_Th)</div></div>
+<div class="answer">R_L = 9 Ω for P_max = 100 W</div>
+</div>
+</div>
+
+<div class="callout"><b>Conceptual fact worth memorizing:</b> At maximum power transfer, efficiency is only <b>50%</b> — exactly half the power delivered by the source is lost in R<sub>Th</sub> itself. Maximum power ≠ maximum efficiency.</div>
+</div>
+
+<div class="topic">
+<h3>9.6 Millman's Theorem</h3>
+<span class="sub-time">⏱️ 25 min</span>
+<p>A fast method to combine multiple parallel voltage sources (each with their own series resistance) into one equivalent source.</p>
+<div class="formula-box"><span class="flabel">Millman's Theorem</span><span class="feq">E<sub>eq</sub> = (E₁G₁ + E₂G₂ + ...) / (G₁ + G₂ + ...) &nbsp;&nbsp; where G = 1/R</span></div>
+<div class="formula-box"><span class="flabel">Equivalent resistance</span><span class="feq">R<sub>eq</sub> = 1 / (G₁ + G₂ + ...)</span></div>
+</div>
+
+<div class="topic">
+<h3>9.7–9.8 Substitution & Reciprocity Theorems</h3>
+<span class="sub-time">⏱️ 20 min — lighter conceptual content</span>
+<ul>
+<li><b>Substitution Theorem:</b> If you know the voltage across (or current through) any branch, you can replace that branch with <i>any</i> combination of elements that produces the same V/I, without affecting the rest of the circuit.</li>
+<li><b>Reciprocity Theorem:</b> In a single-source linear circuit, swapping the positions of the source and an ammeter (response) gives the same current reading — the source and response points are interchangeable.</li>
+</ul>
+</div>
+
+<div class="video-box">
+<div class="play">▶</div>
+<div class="vtext">
+<div class="vtitle">Thévenin's Theorem (step-by-step)</div>
+<div class="vsrc">Khan Academy</div>
+<div class="vdesc"><a href="https://www.khanacademy.org/science/electrical-engineering/ee-circuit-analysis-topic/ee-circuit-theorems-topic/v/ee-thevenin-s-theorem" target="_blank" style="color:var(--accent2)">khanacademy.org — EE: Thévenin's Theorem</a> — follows the exact same 5-step procedure as the textbook.</div>
+</div>
+</div>
+
+<div class="video-box">
+<div class="play">▶</div>
+<div class="vtext">
+<div class="vtitle">Superposition Theorem & Norton's Theorem</div>
+<div class="vsrc">Search: "superposition theorem" and "Norton's theorem" on Khan Academy or YouTube</div>
+<div class="vdesc">Khan Academy's EE circuit-theorems playlist covers both in sequence right after Thévenin — useful to watch back-to-back since the methods are so closely related.</div>
+</div>
+</div>
+
+<div class="checklist">
+<h4>✅ Chapter 9 Mastery Checklist</h4>
+<label><input type="checkbox"> I can apply Superposition with mixed voltage and current sources</label>
+<label><input type="checkbox"> I can find R_Th and E_Th for any 2-terminal network</label>
+<label><input type="checkbox"> I can find R_N and I_N, and convert between Norton ↔ Thévenin</label>
+<label><input type="checkbox"> I know the Maximum Power Transfer condition (R_L = R_Th) and can compute P_max</label>
+<label><input type="checkbox"> I understand why max power transfer = only 50% efficiency</label>
+<label><input type="checkbox"> I can apply Millman's Theorem to combine parallel sources</label>
+<label><input type="checkbox"> I understand the Substitution and Reciprocity theorems conceptually</label>
+</div>
+
+<div class="page-nav"><button onclick="showSection('ch8')">← Ch 8</button><button onclick="showSection('finalweek')">Final Review Plan →</button></div>
+</section>
+<section class="final-section page" id="finalweek">
+<h2>🎯 Final Review Plan — Day-by-Day</h2>
+<p style="color:var(--ink-dim);">Adjust based on how many days you actually have left. This plan assumes 3 days, ~6–7 focused hours each. If you have fewer days, prioritize the <span class="pill high" style="vertical-align:middle;">High</span> priority chapters: 4, 5, 6, 7, 8, 9.</p>
+
+<table class="plan-table" style="margin-top:20px;">
+<tr><th>Day</th><th>Focus</th><th>Tasks</th></tr>
+<tr>
+<td><b>Day 1</b></td>
+<td class="ch-name">Foundations (Ch 1–4)</td>
+<td>Read Ch 1–3 quickly (color codes especially). Spend the bulk of the day mastering Ch 4 — Ohm's Law and all 3 power formulas until automatic. Do every example in this guide by hand, not just reading them.</td>
+</tr>
+<tr>
+<td><b>Day 2</b></td>
+<td class="ch-name">Series, Parallel & Combination (Ch 5–7)</td>
+<td>Drill KVL/KCL and the Voltage/Current Divider Rules until you don't need to think about which one to use. Spend the most time on Ch 7's reduce-and-return method — practice on at least 3–4 different circuit shapes.</td>
+</tr>
+<tr>
+<td><b>Day 3</b></td>
+<td class="ch-name">Methods & Theorems (Ch 8–9)</td>
+<td>Mesh and nodal analysis first (they're mechanical once you know the pattern — repetition is key). Then Thévenin/Norton/Superposition. End the day re-solving 2–3 problems from Ch 5–7 cold, without looking, to check retention.</td>
+</tr>
+</table>
+
+<div class="callout tip" style="margin-top:24px;">
+<b>Night before the exam:</b> Don't learn anything new. Re-read only the boxed formulas across all 9 chapters and re-solve 1 example per chapter from memory. Sleep matters more than one more hour of cramming.
+</div>
+
+<h3 style="margin-top:34px; font-size:18px;">📐 Master Formula Sheet — everything in one place</h3>
+<div class="formula-grid">
+<div class="formula-card"><div class="fname">Ohm's Law</div><div class="fexpr">V = IR</div></div>
+<div class="formula-card"><div class="fname">Power</div><div class="fexpr">P = VI = I²R = V²/R</div></div>
+<div class="formula-card"><div class="fname">Energy</div><div class="fexpr">W(kWh) = Pt/1000</div></div>
+<div class="formula-card"><div class="fname">Series R</div><div class="fexpr">R_T = R₁+R₂+...</div></div>
+<div class="formula-card"><div class="fname">Parallel R (2 resistors)</div><div class="fexpr">R_T = R₁R₂/(R₁+R₂)</div></div>
+<div class="formula-card"><div class="fname">Parallel R (general)</div><div class="fexpr">1/R_T = 1/R₁+1/R₂+...</div></div>
+<div class="formula-card"><div class="fname">KVL</div><div class="fexpr">ΣV around loop = 0</div></div>
+<div class="formula-card"><div class="fname">KCL</div><div class="fexpr">ΣI in = ΣI out</div></div>
+<div class="formula-card"><div class="fname">Voltage Divider Rule</div><div class="fexpr">V_x = R_x(E/R_T)</div></div>
+<div class="formula-card"><div class="fname">Current Divider Rule</div><div class="fexpr">I_x = (R_T/R_x)I_T</div></div>
+<div class="formula-card"><div class="fname">Bridge Balance</div><div class="fexpr">R₁/R₃ = R₂/R₄</div></div>
+<div class="formula-card"><div class="fname">Thévenin Load Current</div><div class="fexpr">I_L = E_Th/(R_Th+R_L)</div></div>
+<div class="formula-card"><div class="fname">Norton ↔ Thévenin</div><div class="fexpr">R_N=R_Th, I_N=E_Th/R_Th</div></div>
+<div class="formula-card"><div class="fname">Max Power Transfer</div><div class="fexpr">R_L = R_Th, P_max = E_Th²/4R_Th</div></div>
+</div>
+
+<h3 style="margin-top:34px; font-size:18px;">🎥 More video resources</h3>
+<div class="video-box">
+<div class="play">▶</div>
+<div class="vtext">
+<div class="vtitle">Khan Academy — Full Electrical Engineering: Circuit Analysis course</div>
+<div class="vsrc">khanacademy.org</div>
+<div class="vdesc"><a href="https://www.khanacademy.org/science/electrical-engineering" target="_blank" style="color:var(--accent2)">khanacademy.org/science/electrical-engineering</a> — covers Ohm's Law through Thévenin/Norton/Superposition in short, focused videos with practice problems after each one.</div>
+</div>
+</div>
+<div class="video-box">
+<div class="play">▶</div>
+<div class="vtext">
+<div class="vtitle">The Organic Chemistry Tutor — Physics/Circuits playlist</div>
+<div class="vsrc">YouTube — search "Organic Chemistry Tutor circuits playlist"</div>
+<div class="vdesc">Long-form, heavily example-driven videos on resistor color codes, series-parallel reduction, Kirchhoff's Laws, and Thévenin/Norton — good for working through extra practice problems alongside this guide.</div>
+</div>
+</div>
+
+<h3 style="margin-top:34px; font-size:18px;">⚠️ Top 10 mistakes that lose exam marks</h3>
+<ol style="color:#d4d6dc; padding-left:22px;">
+<li>Mixing up VDR (larger R → more voltage) and CDR (smaller R → more current)</li>
+<li>Forgetting units or mixing kΩ/Ω/MΩ within the same calculation</li>
+<li>Not double-checking with KVL/KCL after solving — always verify your answer sums correctly</li>
+<li>Assuming a negative mesh/branch current is wrong — it just means the actual direction is opposite</li>
+<li>Adding powers of ten without first matching the exponents</li>
+<li>Forgetting that superposition applies to V and I, NOT power directly</li>
+<li>Using the general parallel formula when the 2-resistor product-over-sum shortcut would be faster</li>
+<li>Forgetting to zero out ALL other sources (not just one) when finding R_Th</li>
+<li>Mixing up R_Th (open-circuit based) with R_N — remember R_N = R_Th always</li>
+<li>Rushing the circuit-tracing step in Ch 7 — misidentifying series vs. parallel dooms the entire problem</li>
+</ol>
+
+
+<div class="page-nav"><button onclick="showSection('ch9')">← Ch 9</button><button onclick="showSection('overview')">Back to Overview</button></div>
+</section>
+
+</div> <!-- /.content -->
+</main>
+</div> <!-- /.layout -->
+
+<a href="#" class="back-to-top" id="backToTop">↑</a>
+
+<script>
+var CHAPTER_IDS = ['overview','ch1','ch2','ch3','ch4','ch5','ch6','ch7','ch8','ch9','finalweek'];
+
+function showSection(id){
+  CHAPTER_IDS.forEach(function(cid){
+    var el = document.getElementById(cid);
+    if(el) el.classList.toggle('active', cid === id);
+  });
+  document.querySelectorAll('.nav-chapter').forEach(function(btn){
+    btn.classList.toggle('active', btn.getAttribute('data-target') === id);
+  });
+  document.querySelector('.content').scrollTop = 0;
+  window.scrollTo({top:0, behavior:'instant'});
+  closeSidebarOnMobile();
+  updateProgress();
+}
+
+function isMobileView(){
+  return window.innerWidth <= 900;
+}
+
+function toggleSidebar(){
+  var sidebar = document.getElementById('sidebar');
+  if(isMobileView()){
+    var open = sidebar.classList.toggle('open');
+    document.getElementById('sidebarBackdrop').classList.toggle('show', open);
+  } else {
+    document.body.classList.toggle('sidebar-collapsed');
+  }
+}
+
+function closeSidebarOnMobile(){
+  if(isMobileView()){
+    document.getElementById('sidebar').classList.remove('open');
+    document.getElementById('sidebarBackdrop').classList.remove('show');
+  }
+}
+
+function updateProgress(){
+  var activeIdx = CHAPTER_IDS.findIndex(function(id){
+    var el = document.getElementById(id);
+    return el && el.classList.contains('active');
+  });
+  var pct = activeIdx >= 0 ? ((activeIdx + 1) / CHAPTER_IDS.length) * 100 : 0;
+  document.getElementById('progressFill').style.width = pct + '%';
+}
+
+document.getElementById('sidebarToggle').addEventListener('click', toggleSidebar);
+document.getElementById('sidebarBackdrop').addEventListener('click', closeSidebarOnMobile);
+
+document.getElementById('backToTop').addEventListener('click', function(e){
+  e.preventDefault();
+  window.scrollTo({top:0, behavior:'smooth'});
+  document.querySelector('.content').scrollTop = 0;
+});
+
+window.addEventListener('scroll', function(){
+  var btn = document.getElementById('backToTop');
+  if(window.scrollY > 400){ btn.classList.add('show'); } else { btn.classList.remove('show'); }
+});
+
+// init
+showSection('overview');
+</script>
+
+</body>
+</html>

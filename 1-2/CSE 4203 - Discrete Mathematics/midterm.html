@@ -1,0 +1,1724 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CSE 4302 — Discrete Math Study Guide</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,700;1,400&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0d0f14;
+  --bg-soft:#10131a;
+  --panel:#161a23;
+  --panel2:#1c212c;
+  --ink:#e8eaf0;
+  --ink-dim:#8892aa;
+  --ink-faint:#5f6a7d;
+  --line:#252d40;
+  --line-soft:#1d2333;
+  --code-bg:#090c12;
+
+  --accent:#7c6af7;
+  --accent-bg:rgba(124,106,247,0.08);
+  --accent2:#4fc3f7;
+  --accent2-bg:rgba(79,195,247,0.08);
+  --accent3:#f06292;
+  --accent3-bg:rgba(240,98,146,0.07);
+  --accent4:#66bb6a;
+  --accent4-bg:rgba(102,187,106,0.08);
+  --accent5:#ffa726;
+  --accent5-bg:rgba(255,167,38,0.08);
+  --accent6:#ef5350;
+  --accent6-bg:rgba(239,83,80,0.08);
+
+  --crit:#ef5350;
+  --crit-bg:rgba(239,83,80,0.1);
+  --high:#ffa726;
+  --high-bg:rgba(255,167,38,0.1);
+  --med:#4fc3f7;
+  --med-bg:rgba(79,195,247,0.1);
+  --good:#66bb6a;
+  --good-bg:rgba(102,187,106,0.1);
+  --video:#f06292;
+  --video-bg:rgba(240,98,146,0.08);
+  --gold:#a89cf7;
+
+  --mono:'JetBrains Mono',monospace;
+  --serif:'Playfair Display',Georgia,serif;
+  --sans:'Inter',system-ui,sans-serif;
+}
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{
+  margin:0;
+  background:var(--bg);
+  background-image:
+    radial-gradient(ellipse 80% 50% at 50% -10%, rgba(124,106,247,0.10), transparent),
+    radial-gradient(ellipse 60% 40% at 90% 8%, rgba(79,195,247,0.05), transparent);
+  color:var(--ink);
+  font-family:var(--sans);
+  font-size:14.5px;
+  line-height:1.75;
+}
+::selection{background:var(--accent);color:#06080c;}
+h1,h2,h3,h4{font-family:var(--serif);font-weight:700;color:#fff;margin:0 0 0.5em 0;}
+a{color:var(--accent2);}
+code,.mono{font-family:var(--mono);}
+.layout{display:flex; min-height:100vh;}
+
+/* ===== Sidebar toggle + backdrop ===== */
+.sidebar-toggle{
+  position:fixed; top:14px; left:14px; z-index:80;
+  width:40px; height:40px; border-radius:9px;
+  background:var(--panel2); border:1px solid var(--line);
+  color:var(--ink); display:flex; align-items:center; justify-content:center;
+  cursor:pointer; font-size:18px; transition:left .25s ease, background .15s;
+  font-family:var(--sans);
+}
+.sidebar-toggle:hover{background:var(--panel);}
+.sidebar-toggle:focus-visible{outline:2px solid var(--med);outline-offset:2px;}
+.sidebar-backdrop{
+  position:fixed; inset:0; background:rgba(0,0,0,.6); z-index:65;
+  opacity:0; pointer-events:none; transition:opacity .2s ease;
+}
+.sidebar-backdrop.show{opacity:1; pointer-events:auto;}
+
+/* ===== Sidebar ===== */
+.sidebar{
+  width:280px; flex-shrink:0;
+  background:var(--bg-soft);
+  border-right:1px solid var(--line-soft);
+  position:sticky; top:0; height:100vh; overflow-y:auto;
+  padding:64px 16px 50px 24px;
+  scrollbar-width:thin;
+  transition:width .25s ease, padding .25s ease, transform .25s ease, opacity .15s ease;
+}
+.sidebar::-webkit-scrollbar{width:6px;}
+.sidebar::-webkit-scrollbar-thumb{background:var(--line);border-radius:3px;}
+body.sidebar-collapsed .sidebar{width:0; padding-left:0; padding-right:0; overflow:hidden; border-right:none; opacity:0;}
+
+.side-logo{font-family:var(--mono);font-size:10.5px;letter-spacing:0.1em;color:var(--accent);text-transform:uppercase;margin-bottom:4px;}
+.side-title{font-family:var(--serif);font-weight:700;font-size:18px;color:#fff;margin-bottom:20px;line-height:1.3;}
+.side-section{margin-bottom:18px;}
+.side-section-label{font-family:var(--mono);font-size:10.5px;text-transform:uppercase;letter-spacing:0.1em;color:var(--ink-faint);margin:0 0 8px 4px;}
+.side-link{
+  display:flex;align-items:center;gap:8px;padding:7px 8px;border-radius:7px;
+  color:var(--ink-dim);text-decoration:none;font-family:var(--sans);font-size:13px;font-weight:500;
+  background:none;border:none;width:100%;text-align:left;cursor:pointer;
+  transition:background 0.15s, color 0.15s;
+}
+.side-link:hover{background:var(--panel2);color:var(--ink);}
+.side-link.active,
+.side-link[aria-current="true"]{background:var(--panel2);color:#fff;}
+.side-link.active .side-dot,
+.side-link[aria-current="true"] .side-dot{box-shadow:0 0 0 3px rgba(255,255,255,0.08);}
+.side-link:focus-visible{outline:2px solid var(--med);outline-offset:2px;}
+.side-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0;}
+.side-foot{
+  margin-top:18px; padding:14px 8px 0; border-top:1px solid var(--line-soft);
+  font-family:var(--sans); font-size:11px; color:var(--ink-faint); line-height:1.6;
+}
+
+/* ===== Main ===== */
+.main-col{flex:1;min-width:0; transition:max-width .25s ease;}
+
+/* ===== Hero ===== */
+.hero{
+  background:linear-gradient(135deg,#0d0f14 0%,#17103a 55%,#0d1a2a 100%);
+  border-bottom:1px solid var(--line-soft);
+  padding:56px 40px 40px; position:relative; overflow:hidden;
+}
+.hero::before{content:'';position:absolute; top:-100px; right:-60px; width:500px; height:500px;
+  background:radial-gradient(circle,rgba(124,106,247,0.12) 0%,transparent 70%); pointer-events:none;}
+.hero-inner{max-width:880px; margin:0 auto; position:relative; z-index:1;}
+.hero-tag{font-family:var(--mono);font-size:11px;letter-spacing:0.14em;text-transform:uppercase;color:var(--accent);margin-bottom:14px;display:flex;align-items:center;gap:10px;}
+.hero-tag::before{content:'';width:24px;height:1px;background:var(--accent);}
+h1.hero-title{font-size:clamp(28px,4.5vw,46px); line-height:1.12; margin-bottom:12px; max-width:760px;}
+h1.hero-title span{color:var(--accent); font-style:italic;}
+.hero-desc{font-family:var(--sans); font-size:15px; color:var(--ink-dim); max-width:600px; margin-bottom:26px;}
+.hero-stats{display:flex; gap:14px; flex-wrap:wrap;}
+.stat-pill{background:rgba(255,255,255,0.04); border:1px solid var(--line); border-radius:12px; padding:12px 18px; min-width:100px; text-align:center;}
+.stat-num{font-family:var(--mono); font-weight:700; font-size:22px; color:var(--accent); display:block;}
+.stat-label{font-family:var(--sans); font-size:10px; text-transform:uppercase; letter-spacing:0.08em; color:var(--ink-faint); margin-top:2px;}
+
+/* ===== Content wrapper ===== */
+.content{padding:0 0 60px 0;}
+.container{max-width:880px; margin:0 auto; padding:0 40px;}
+
+/* ===== Chapter / section head ===== */
+.sec-header{display:flex; gap:18px; align-items:flex-start; max-width:880px; margin:0 auto; padding:36px 40px 18px; border-bottom:1px solid var(--line-soft);}
+.sec-badge{font-family:var(--mono); font-size:11px; font-weight:700; color:#06080c; background:var(--gold); border-radius:6px; padding:5px 10px; flex-shrink:0; margin-top:4px; white-space:nowrap;}
+.sec-title{font-family:var(--serif); font-size:clamp(22px,3vw,28px); font-weight:700; color:#fff; margin-bottom:4px;}
+.sec-sub{color:var(--ink-dim); font-size:13.5px; margin-top:4px; max-width:620px;}
+.sec-pills{display:flex; gap:7px; flex-wrap:wrap; margin-top:10px;}
+.pill{font-family:var(--mono); font-size:10px; padding:3px 9px; border-radius:20px; font-weight:700; letter-spacing:.04em; white-space:nowrap;}
+.p-time{background:var(--accent-bg); color:var(--accent); border:1px solid rgba(124,106,247,.3);}
+.p-easy{background:var(--accent4-bg); color:var(--accent4); border:1px solid rgba(102,187,106,.3);}
+.p-med{background:var(--accent5-bg); color:var(--accent5); border:1px solid rgba(255,167,38,.3);}
+.p-hard{background:var(--accent6-bg); color:var(--accent6); border:1px solid rgba(239,83,80,.3);}
+.p-theory{background:var(--accent2-bg); color:var(--accent2); border:1px solid rgba(79,195,247,.3);}
+.p-math{background:var(--accent-bg); color:#a89cf7; border:1px solid rgba(124,106,247,.3);}
+.p-crit{background:var(--crit-bg); color:var(--crit);}
+.p-high{background:var(--high-bg); color:var(--high);}
+
+/* ===== Section body padding (re-used container) ===== */
+.sec-body{max-width:880px; margin:0 auto; padding:28px 40px 40px;}
+
+/* ===== Subtopic ===== */
+.subtopic{margin-bottom:28px; border-left:3px solid var(--line); padding-left:16px; scroll-margin-top:70px;}
+.sub-header{display:flex; align-items:center; gap:12px; margin-bottom:12px; flex-wrap:wrap;}
+.sub-dot{width:8px; height:8px; border-radius:50%; flex-shrink:0;}
+.sub-title{font-size:15px; font-weight:700; color:#dde2ea; letter-spacing:.01em; font-family:var(--sans);}
+.sub-time{font-family:var(--mono); font-size:10px; color:var(--ink-faint); background:var(--code-bg); border:1px solid var(--line); padding:2px 7px; border-radius:4px; white-space:nowrap;}
+
+/* ===== Blocks ===== */
+.block{border-radius:10px; padding:18px 20px; margin-bottom:14px;}
+.block-label{font-family:var(--mono); font-size:10.5px; font-weight:700; letter-spacing:.1em; text-transform:uppercase; margin-bottom:10px; display:flex; align-items:center; gap:7px;}
+.block-label::before{content:''; display:inline-block; width:12px; height:2px; border-radius:1px; flex-shrink:0;}
+
+.b-theory{background:var(--accent2-bg); border:1px solid rgba(79,195,247,.3);}
+.b-theory .block-label{color:var(--accent2);}
+.b-theory .block-label::before{background:var(--accent2);}
+
+.b-math{background:var(--accent-bg); border:1px solid rgba(124,106,247,.3);}
+.b-math .block-label{color:#a89cf7;}
+.b-math .block-label::before{background:#a89cf7;}
+
+.b-example{background:var(--accent4-bg); border:1px solid rgba(102,187,106,.3);}
+.b-example .block-label{color:var(--accent4);}
+.b-example .block-label::before{background:var(--accent4);}
+
+.b-warn{background:var(--accent5-bg); border:1px solid rgba(255,167,38,.3);}
+.b-warn .block-label{color:var(--accent5);}
+.b-warn .block-label::before{background:var(--accent5);}
+
+.b-video{background:var(--video-bg); border:1px solid rgba(240,98,146,.25);}
+.b-video .block-label{color:var(--video);}
+.b-video .block-label::before{background:var(--video);}
+
+.b-strat{background:rgba(255,255,255,.03); border:1px solid var(--line); border-left:3px solid var(--accent);}
+.b-strat .block-label{color:#c5bff9;}
+.b-strat .block-label::before{background:#c5bff9;}
+
+.block p{margin:0 0 10px 0; font-size:13px; color:#dbe0e8;}
+.block p:last-child{margin-bottom:0;}
+
+/* ===== Code / math box ===== */
+.mbox{background:var(--code-bg); border:1px solid var(--line); border-radius:8px; padding:14px 17px; font-family:var(--mono); font-size:12.5px; color:var(--accent2); margin:10px 0; overflow-x:auto; line-height:2;}
+.mbox .lbl{color:var(--ink-faint); font-size:10px; display:block; margin-bottom:3px; text-transform:uppercase; letter-spacing:.07em;}
+.mbox .hi{color:#fff;}
+.mbox .dim{color:var(--ink-faint);}
+.mbox .ok{color:var(--accent4);}
+.mbox .warn{color:var(--accent5);}
+.mbox .err{color:var(--accent6);}
+
+code{font-family:var(--mono); font-size:12.5px; background:var(--code-bg); border:1px solid var(--line); border-radius:4px; padding:2px 6px; color:var(--accent2);}
+
+/* ===== Steps ===== */
+.steps{display:flex; flex-direction:column; gap:0;}
+.step{display:flex; gap:14px; padding:11px 0; border-bottom:1px solid var(--line-soft);}
+.step:last-child{border-bottom:none;}
+.step-n{font-family:var(--mono); font-size:10px; color:var(--accent); background:var(--accent-bg); border-radius:4px; padding:3px 7px; height:fit-content; flex-shrink:0; margin-top:2px;}
+.step-body{flex:1; font-size:13px; color:#dbe0e8;}
+.step-lbl{font-size:10px; color:var(--ink-faint); font-family:var(--mono); text-transform:uppercase; letter-spacing:.07em; margin-bottom:2px;}
+
+/* ===== Tables ===== */
+table.t{width:100%; border-collapse:collapse; font-size:13px;}
+table.t th{background:var(--panel2); color:var(--accent2); font-family:var(--mono); font-size:10px; letter-spacing:.08em; text-transform:uppercase; padding:9px 13px; text-align:left; border-bottom:2px solid var(--line);}
+table.t td{padding:9px 13px; border-bottom:1px solid var(--line-soft); vertical-align:top; font-size:13px; color:var(--ink-dim);}
+table.t tr:last-child td{border-bottom:none;}
+table.t tr:hover td{background:rgba(255,255,255,.02);}
+table.t .mono{font-family:var(--mono); font-size:12px;}
+
+/* ===== Two col ===== */
+.two{display:grid; grid-template-columns:1fr 1fr; gap:13px;}
+
+/* ===== Video card ===== */
+.video-card{display:flex; align-items:center; gap:13px; padding:13px 14px; background:rgba(240,98,146,.06); border:1px solid rgba(240,98,146,.18); border-radius:9px; text-decoration:none; transition:background .2s, transform .15s; margin-bottom:9px;}
+.video-card:hover{background:rgba(240,98,146,.12); transform:translateY(-1px);}
+.video-card:focus-visible{outline:2px solid var(--med); outline-offset:2px;}
+.v-icon{width:34px; height:34px; background:rgba(240,98,146,.15); border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:13px; flex-shrink:0; color:var(--video);}
+.v-info{flex:1; min-width:0;}
+.v-title{font-size:13px; font-weight:600; color:var(--ink); margin-bottom:2px;}
+.v-meta{font-size:11px; color:var(--ink-dim); font-family:var(--mono);}
+
+/* ===== Strategy grid ===== */
+.strat-grid{display:grid; grid-template-columns:1fr 1fr; gap:12px;}
+.strat-card{background:var(--panel2); border:1px solid var(--line); border-radius:9px; padding:14px 16px;}
+.strat-head{font-size:11px; font-weight:700; color:var(--accent2); text-transform:uppercase; letter-spacing:.08em; margin-bottom:8px; display:flex; align-items:center; gap:7px;}
+.strat-type{font-size:10px; padding:2px 7px; border-radius:4px; font-weight:600;}
+.t-read{background:var(--accent2-bg); color:var(--accent2);}
+.t-prac{background:var(--accent-bg); color:#a89cf7;}
+.t-both{background:var(--accent4-bg); color:var(--accent4);}
+.strat-card p{font-size:13px; color:var(--ink-dim); margin:0;}
+
+/* ===== Schedule table ===== */
+.sch-table{width:100%; border-collapse:collapse;}
+.sch-table td,.sch-table th{padding:11px 15px; border-bottom:1px solid var(--line-soft); font-size:13px;}
+.sch-table th{font-family:var(--mono); font-size:10px; color:var(--ink-faint); letter-spacing:.08em; text-transform:uppercase; background:var(--code-bg);}
+.sch-table tr:last-child td{border-bottom:none;}
+.tn{color:var(--ink-faint); font-family:var(--mono); font-size:11px;}
+.tname{font-weight:600; color:var(--ink);}
+.thrs{font-family:var(--mono); color:var(--accent5); font-weight:700;}
+.de{color:var(--accent4); font-weight:700; font-size:11px;}
+.dm{color:var(--accent5); font-weight:700; font-size:11px;}
+.dh{color:var(--accent6); font-weight:700; font-size:11px;}
+
+/* ===== Truth table ===== */
+.tt{border-collapse:collapse; margin:0 auto;}
+.tt th,.tt td{border:1px solid var(--line); padding:7px 13px; font-family:var(--mono); font-size:12px; text-align:center; color:var(--ink-dim);}
+.tt th{background:var(--panel2); color:var(--accent2);}
+.tt .T{color:var(--accent4); font-weight:700;}
+.tt .F{color:var(--accent6); font-weight:700;}
+.tt .bold{color:#fff; font-weight:700; background:var(--accent-bg);}
+
+/* ===== Divider ===== */
+hr.div{border:none; border-top:1px solid var(--line-soft); margin:0;}
+
+/* ===== Footer ===== */
+footer{text-align:center; padding:40px 40px 10px; color:var(--ink-faint); font-family:var(--mono); font-size:11.5px;}
+
+/* ===== Pages: one chapter visible at a time ===== */
+.page{display:none;}
+.page.active{display:block; animation:fadeIn .2s ease;}
+@keyframes fadeIn{from{opacity:0; transform:translateY(4px);} to{opacity:1; transform:translateY(0);}}
+
+@media (prefers-reduced-motion: reduce){
+  html{scroll-behavior:auto;}
+  *{animation-duration:0.01ms !important; animation-iteration-count:1 !important; transition-duration:0.01ms !important;}
+}
+
+/* ===== Progress bar ===== */
+.progress-bar{position:sticky; top:0; height:4px; background:var(--line-soft); z-index:40;}
+.progress-bar-fill{height:100%; width:0%; background:linear-gradient(90deg,var(--accent),var(--med)); transition:width .15s;}
+
+/* ===== Back to top ===== */
+.back-to-top{
+  position:fixed; bottom:24px; right:24px; background:var(--accent); color:#06080c;
+  width:44px; height:44px; border-radius:50%; display:flex; align-items:center; justify-content:center;
+  text-decoration:none; font-weight:800; box-shadow:0 4px 14px rgba(0,0,0,.5); font-family:var(--sans);
+  opacity:0; pointer-events:none; transition:opacity .2s; z-index:50;
+}
+.back-to-top.show{opacity:1; pointer-events:auto;}
+.back-to-top:focus-visible{outline:2px solid var(--med); outline-offset:3px;}
+
+/* ===== Page nav buttons ===== */
+.page-nav{display:flex; justify-content:space-between; gap:12px; margin:36px auto 0; max-width:880px; padding:0 40px 40px; font-family:var(--sans);}
+.page-nav button{background:var(--panel); border:1px solid var(--line); color:var(--ink); padding:10px 18px; border-radius:8px; font-size:13.5px; cursor:pointer; font-family:inherit; transition:border-color .15s, background .15s;}
+.page-nav button:hover{border-color:var(--med); background:var(--panel2);}
+.page-nav button:focus-visible{outline:2px solid var(--med); outline-offset:2px;}
+.page-nav button:disabled{opacity:.35; cursor:default;}
+
+/* ===== Responsive ===== */
+@media (max-width:900px){
+  .sidebar{
+    position:fixed; top:0; left:0; z-index:75;
+    width:280px; height:100vh; transform:translateX(-100%);
+    padding:64px 16px 50px 24px; border-right:1px solid var(--line-soft);
+    opacity:1;
+  }
+  .sidebar.open{transform:translateX(0);}
+  body.sidebar-collapsed .sidebar{width:280px; overflow-y:auto;}
+  .main-col{margin-left:0 !important; width:100%; max-width:100% !important;}
+  .hero{padding:56px 20px 30px;}
+  .container,.sec-header,.sec-body,.page-nav{padding-left:20px;padding-right:20px;}
+  h1.hero-title{font-size:25px;}
+  .hero-desc{font-size:14px;}
+  .hero-stats{gap:10px;}
+  .stat-pill{min-width:90px; padding:10px 14px;}
+  .sec-title{font-size:21px;}
+  .strat-grid{grid-template-columns:1fr;}
+  .two{grid-template-columns:1fr;}
+  table.t,.sch-table{font-size:12px; display:block; overflow-x:auto; white-space:nowrap;}
+  .page-nav{flex-direction:column;}
+  .page-nav button{width:100%;}
+}
+@media (max-width:480px){
+  h1.hero-title{font-size:21px;}
+  .stat-pill{min-width:auto; flex:1 1 45%;}
+  .sec-header{flex-direction:column;}
+}
+</style>
+</head>
+<body>
+<div class="progress-bar"><div class="progress-bar-fill" id="progressFill"></div></div>
+<button class="sidebar-toggle" id="sidebarToggle" aria-label="Toggle sidebar">☰</button>
+<div class="sidebar-backdrop" id="sidebarBackdrop"></div>
+<div class="layout">
+
+<nav class="sidebar" id="sidebar" aria-label="Topic navigation">
+  <div class="side-logo">CSE 4302 · IUT</div>
+  <div class="side-title">Discrete Math<br>Study Guide</div>
+
+  <div class="side-section">
+    <div class="side-section-label">Plan</div>
+    <button class="side-link" data-target="overview" data-topic="" onclick="showSection('overview')"><span class="side-dot" style="background:var(--gold);"></span>Master Study Plan</button>
+  </div>
+
+  <div class="side-section">
+    <div class="side-section-label">LS01 — Logic, Proofs &amp; Sets</div>
+    <button class="side-link" data-target="t1" data-topic="s1-1" onclick="showSection('t1','s1-1')"><span class="side-dot" style="background:var(--accent2);"></span>1.1 Propositions &amp; Axioms</button>
+    <button class="side-link" data-target="t1" data-topic="s1-2" onclick="showSection('t1','s1-2')"><span class="side-dot" style="background:var(--accent2);"></span>1.2 Connectives &amp; Truth Tables</button>
+    <button class="side-link" data-target="t1" data-topic="s1-3" onclick="showSection('t1','s1-3')"><span class="side-dot" style="background:var(--accent2);"></span>1.3 Sets &amp; Notation</button>
+  </div>
+
+  <div class="side-section">
+    <div class="side-section-label">LS02 — Contradiction &amp; Induction</div>
+    <button class="side-link" data-target="t2" data-topic="s2-1" onclick="showSection('t2','s2-1')"><span class="side-dot" style="background:#a89cf7;"></span>2.1 Inference Rules</button>
+    <button class="side-link" data-target="t2" data-topic="s2-2" onclick="showSection('t2','s2-2')"><span class="side-dot" style="background:#a89cf7;"></span>2.2 The 5 Proof Techniques</button>
+    <button class="side-link" data-target="t2" data-topic="s2-3" onclick="showSection('t2','s2-3')"><span class="side-dot" style="background:#a89cf7;"></span>2.3 Proof by Contradiction</button>
+    <button class="side-link" data-target="t2" data-topic="s2-4" onclick="showSection('t2','s2-4')"><span class="side-dot" style="background:#a89cf7;"></span>2.4 Mathematical Induction</button>
+  </div>
+
+  <div class="side-section">
+    <div class="side-section-label">LS03 — Caseworks &amp; Strong Induction</div>
+    <button class="side-link" data-target="t3" data-topic="s3-1" onclick="showSection('t3','s3-1')"><span class="side-dot" style="background:var(--accent4);"></span>3.1 Proof by Cases</button>
+    <button class="side-link" data-target="t3" data-topic="s3-2" onclick="showSection('t3','s3-2')"><span class="side-dot" style="background:var(--accent4);"></span>3.2 Strong Induction</button>
+  </div>
+
+  <div class="side-section">
+    <div class="side-section-label">LS04 — Summations</div>
+    <button class="side-link" data-target="t4" data-topic="s4-1" onclick="showSection('t4','s4-1')"><span class="side-dot" style="background:var(--accent);"></span>4.1 Why Closed Forms Matter</button>
+    <button class="side-link" data-target="t4" data-topic="s4-2" onclick="showSection('t4','s4-2')"><span class="side-dot" style="background:var(--accent);"></span>4.2 Key Summation Formulas</button>
+    <button class="side-link" data-target="t4" data-topic="s4-3" onclick="showSection('t4','s4-3')"><span class="side-dot" style="background:var(--accent);"></span>4.3 Perturbation Method</button>
+    <button class="side-link" data-target="t4" data-topic="s4-4" onclick="showSection('t4','s4-4')"><span class="side-dot" style="background:var(--accent);"></span>4.4 Harmonic Numbers &amp; Bounds</button>
+  </div>
+
+  <div class="side-section">
+    <div class="side-section-label">LS05 — Asymptotics</div>
+    <button class="side-link" data-target="t5" data-topic="s5-1" onclick="showSection('t5','s5-1')"><span class="side-dot" style="background:var(--accent5);"></span>5.1 The 6 Asymptotic Notations</button>
+    <button class="side-link" data-target="t5" data-topic="s5-2" onclick="showSection('t5','s5-2')"><span class="side-dot" style="background:var(--accent5);"></span>5.2 Growth Hierarchy &amp; LOTs</button>
+  </div>
+
+  <div class="side-section">
+    <div class="side-section-label">LS06 — Recurrences</div>
+    <button class="side-link" data-target="t6" data-topic="s6-1" onclick="showSection('t6','s6-1')"><span class="side-dot" style="background:var(--accent3);"></span>6.1 What is a Recurrence?</button>
+    <button class="side-link" data-target="t6" data-topic="s6-2" onclick="showSection('t6','s6-2')"><span class="side-dot" style="background:var(--accent3);"></span>6.2 Guess and Check</button>
+    <button class="side-link" data-target="t6" data-topic="s6-3" onclick="showSection('t6','s6-3')"><span class="side-dot" style="background:var(--accent3);"></span>6.3 Plug &amp; Chug — Merge Sort</button>
+    <button class="side-link" data-target="t6" data-topic="s6-4" onclick="showSection('t6','s6-4')"><span class="side-dot" style="background:var(--accent3);"></span>6.4 Master Theorem</button>
+    <button class="side-link" data-target="t6" data-topic="s6-5" onclick="showSection('t6','s6-5')"><span class="side-dot" style="background:var(--accent3);"></span>6.5 Quick Reference</button>
+  </div>
+
+  <div class="side-section">
+    <div class="side-section-label">Wrap-up</div>
+    <button class="side-link" data-target="cheatsheet" data-topic="" onclick="showSection('cheatsheet')"><span class="side-dot" style="background:var(--gold);"></span>Formula Cheat Sheet</button>
+  </div>
+
+  <div class="side-foot">
+    Total study time: <b style="color:var(--gold)">≈ 22 hours</b><br><br>
+    Built from all 6 lecture slide decks — CSE 4302, Islamic University of Technology, Md. Bakhtiar Hasan.
+  </div>
+</nav>
+
+<main class="main-col">
+<header class="hero">
+  <div class="hero-inner">
+    <div class="hero-tag">CSE 4302 · Islamic University of Technology · Md. Bakhtiar Hasan</div>
+    <h1 class="hero-title">Discrete <span>Mathematics</span><br>Complete Study Guide</h1>
+    <p class="hero-desc">Every subtopic from all 6 lecture slides — fully elaborated with definitions, worked examples, formulas, study strategies, and verified YouTube links. Built directly from your course material.</p>
+    <div class="hero-stats">
+      <div class="stat-pill"><div class="stat-num">6</div><div class="stat-label">Topics</div></div>
+      <div class="stat-pill"><div class="stat-num">28</div><div class="stat-label">Subtopics</div></div>
+      <div class="stat-pill"><div class="stat-num">~22h</div><div class="stat-label">Total Study</div></div>
+      <div class="stat-pill"><div class="stat-num">18+</div><div class="stat-label">Video Links</div></div>
+    </div>
+  </div>
+</header>
+
+<div class="content">
+
+<div id="overview" class="page active">
+<div class="sec-header">
+  <div class="sec-badge">00</div>
+  <div>
+    <div class="sec-title">Master Study Plan</div>
+    <div class="sec-sub">Topic-by-topic time allocation with subtopic breakdowns and priority flags.</div>
+  </div>
+</div>
+<div class="sec-body">
+
+<div class="block b-warn" style="margin-bottom:18px;">
+  <div class="block-label">⚡ How to Use This Guide</div>
+  <p><strong>Theory topics</strong> (Logic, Sets, Proofs) → read + understand conceptually, then recall from memory without looking. <strong>Mathematical topics</strong> (Summations, Asymptotics, Recurrences) → study the formula/method, then close the guide and solve 3–5 problems from scratch. Do NOT just re-read math sections — you learn math by doing it.</p>
+</div>
+
+<div class="block" style="padding:0;overflow:hidden;background:var(--panel);border:1px solid var(--line);border-radius:10px;">
+  <table class="sch-table">
+    <thead><tr><th>#</th><th>Topic</th><th>Total Time</th><th>Type</th><th>Difficulty</th><th>Priority Subtopics</th></tr></thead>
+    <tbody>
+      <tr><td class="tn">LS01</td><td class="tname">Logic, Proofs &amp; Sets</td><td class="thrs">3 hrs</td><td><span style="font-size:11px;color:var(--accent2);">Theory</span></td><td class="de">● Easy</td><td style="font-size:12px;color:var(--ink-dim);">Propositions, Connectives, Implication, Set Ops</td></tr>
+      <tr><td class="tn">LS02</td><td class="tname">Contradiction &amp; Induction</td><td class="thrs">3.5 hrs</td><td><span style="font-size:11px;color:#a89cf7;">Mixed</span></td><td class="dm">● Medium</td><td style="font-size:12px;color:var(--ink-dim);">Proof templates, Induction 3-step, L-Tromino</td></tr>
+      <tr><td class="tn">LS03</td><td class="tname">Caseworks &amp; Strong Induction</td><td class="thrs">2.5 hrs</td><td><span style="font-size:11px;color:#a89cf7;">Mixed</span></td><td class="dm">● Medium</td><td style="font-size:12px;color:var(--ink-dim);">Cases template, Strong vs regular, Tournament</td></tr>
+      <tr><td class="tn">LS04</td><td class="tname">Summations</td><td class="thrs">3.5 hrs</td><td><span style="font-size:11px;color:#a89cf7;">Math</span></td><td class="dh">● Hard</td><td style="font-size:12px;color:var(--ink-dim);">Geometric series, Perturbation method, Integral bound</td></tr>
+      <tr><td class="tn">LS05</td><td class="tname">Asymptotics</td><td class="thrs">3 hrs</td><td><span style="font-size:11px;color:#a89cf7;">Math</span></td><td class="dh">● Hard</td><td style="font-size:12px;color:var(--ink-dim);">6 notations, Limit method, Growth hierarchy</td></tr>
+      <tr><td class="tn">LS06</td><td class="tname">Recurrences</td><td class="thrs">3.5 hrs</td><td><span style="font-size:11px;color:#a89cf7;">Math</span></td><td class="dh">● Hard</td><td style="font-size:12px;color:var(--ink-dim);">Guess &amp; Check, Plug &amp; Chug, Master Theorem</td></tr>
+      <tr><td></td><td style="font-weight:700;color:var(--ink);">TOTAL + REVISION</td><td class="thrs">~22 hrs</td><td></td><td></td><td style="font-size:12px;color:var(--ink-dim);">+3 hrs exam practice on past problems</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="page-nav"><button disabled>← Start</button><button onclick="showSection('t1')">Ch 1: Logic, Proofs &amp; Sets →</button></div>
+
+</div><!-- /.sec-body -->
+</div><!-- /#overview -->
+
+<div id="t1" class="page">
+<div class="sec-header">
+  <div class="sec-badge">LS01</div>
+  <div>
+    <div class="sec-title">Logic, Proofs &amp; Sets</div>
+    <div class="sec-pills">
+      <span class="pill p-time">⏱ 3 hours</span>
+      <span class="pill p-easy">Easy</span>
+      <span class="pill p-theory">Theory-Heavy</span>
+    </div>
+  </div>
+</div>
+<div class="sec-body">
+
+<div class="block b-strat">
+  <div class="block-label">🎯 Study Strategy — THEORY topic</div>
+  <div class="strat-grid">
+    <div class="strat-card">
+      <div class="strat-head"><span class="strat-type t-read">Step 1 – Read</span></div>
+      <p>Read each definition carefully. Don't rush. For each operator (AND, OR, NOT, →), visualize a real-life sentence that matches it.</p>
+    </div>
+    <div class="strat-card">
+      <div class="strat-head"><span class="strat-type t-prac">Step 2 – Recall</span></div>
+      <p>Close the guide. Try to write the truth table for implication from scratch. Write the 4 set operations with an example. If you can do this without looking, you know it.</p>
+    </div>
+    <div class="strat-card">
+      <div class="strat-head"><span class="strat-type t-both">Step 3 – Spot the traps</span></div>
+      <p>Exam questions love the contrapositive vs converse trick, and ∅ membership vs subset. Make sure you can distinguish these without hesitating.</p>
+    </div>
+    <div class="strat-card">
+      <div class="strat-head"><span class="strat-type t-read">Time Tip</span></div>
+      <p>Spend 1.5 hrs on Logic (propositions, operators, implication), 1 hr on Sets, 0.5 hrs reviewing Gödel/Axioms conceptually.</p>
+    </div>
+  </div>
+</div>
+
+<!-- Sub 1.1 -->
+<div class="subtopic" id="s1-1">
+  <div class="sub-header">
+    <div class="sub-dot" style="background:var(--accent2);"></div>
+    <div class="sub-title">1.1 — Propositions, Predicates &amp; Axioms</div>
+    <div class="sub-time">~40 min</div>
+  </div>
+  <div class="block b-theory">
+    <div class="block-label">Core Definitions</div>
+    <p>A <strong>proposition</strong> is any statement that is either True or False — no middle ground. A <strong>predicate</strong> is like a proposition but with a variable; it only becomes a proposition when a value is assigned. An <strong>axiom</strong> is a proposition we accept as true without proof — the bedrock assumptions of all math.</p>
+    <div class="mbox">
+      <span class="lbl">Examples from your slides</span>
+      <span class="ok">Proposition:</span>&nbsp;&nbsp;"6 + 7 = 13"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;→ TRUE (definite truth value)<br>
+      <span class="ok">Proposition:</span>&nbsp;&nbsp;"Today is Monday"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;→ FALSE<br>
+      <span class="err">NOT a prop:</span>&nbsp;&nbsp;"Hello"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;→ not T/F<br>
+      <span class="err">NOT a prop:</span>&nbsp;&nbsp;"p is prime"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;→ predicate! Needs p assigned<br>
+      <span class="ok">Predicate:</span>&nbsp;&nbsp;&nbsp;isPrime(p) — becomes prop when p = 7 → TRUE<br>
+      <br>
+      <span class="warn">∀n ∈ ℕ : n² + n + 41 is prime.</span>&nbsp;&nbsp;&nbsp;→ Proposition! (Has definite T/F)<br>
+      <span class="dim">→ True for n=0,1,2,...,39 but FALSE at n=40 (1681 = 41²)</span><br>
+      <span class="dim">→ Lesson: Even if 40 cases pass, ONE counterexample destroys ∀</span>
+    </div>
+  </div>
+
+  <div class="block b-warn">
+    <div class="block-label">⚡ Gödel's Incompleteness Theorem (Conceptual)</div>
+    <p>Any consistent set of axioms cannot be complete. This means: there are always TRUE statements that CANNOT be proved from your axioms. If you add more axioms to prove them, the bigger set still has other unprovable truths. Mathematics is fundamentally incomplete. (This is a concept question — understand the idea, not the proof.)</p>
+  </div>
+</div>
+
+<!-- Sub 1.2 -->
+<div class="subtopic" id="s1-2">
+  <div class="sub-header">
+    <div class="sub-dot" style="background:var(--accent2);"></div>
+    <div class="sub-title">1.2 — Logical Connectives &amp; Truth Tables</div>
+    <div class="sub-time">~50 min</div>
+  </div>
+  <div class="block b-theory">
+    <div class="block-label">All 4 Operators</div>
+    <table class="t" style="margin-bottom:12px;">
+      <thead><tr><th>Symbol</th><th>Name</th><th>Meaning</th><th>When TRUE</th></tr></thead>
+      <tbody>
+        <tr><td class="mono">¬A, Ā</td><td>NOT</td><td>A is False</td><td>When A is False</td></tr>
+        <tr><td class="mono">A ∧ B</td><td>AND</td><td>Both A and B are True</td><td>Only T∧T</td></tr>
+        <tr><td class="mono">A ∨ B</td><td>OR (inclusive)</td><td>At least one of A, B is True</td><td>T∨T, T∨F, F∨T</td></tr>
+        <tr><td class="mono">A ⊕ B</td><td>XOR (exclusive)</td><td>Exactly one of A, B is True</td><td>T⊕F, F⊕T only</td></tr>
+      </tbody>
+    </table>
+    <p style="font-size:12px;color:var(--ink-faint);margin:0;">Your lecturer's restaurant analogy: "Chicken or Beef?" = XOR. "Tea or Coffee?" = NAND (neither is allowed too). English "or" is NEVER the same as mathematical OR.</p>
+  </div>
+  <div class="block b-math">
+    <div class="block-label">Implication A ⟹ B — The Most Tested Topic</div>
+    <div style="overflow-x:auto;margin-bottom:12px;">
+      <table class="tt">
+        <thead><tr><th>A</th><th>B</th><th class="bold">A ⟹ B</th><th>A ⟺ B</th></tr></thead>
+        <tbody>
+          <tr><td class="T">T</td><td class="T">T</td><td class="T bold">T</td><td class="T">T</td></tr>
+          <tr><td class="T">T</td><td class="F">F</td><td class="F bold">F ← only false case!</td><td class="F">F</td></tr>
+          <tr><td class="F">F</td><td class="T">T</td><td class="T bold">T</td><td class="F">F</td></tr>
+          <tr><td class="F">F</td><td class="F">F</td><td class="T bold">T</td><td class="T">T</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="mbox">
+      <span class="lbl">The 4 implication variants — know all of these!</span>
+      A ⟹ B&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= Implication (original)<br>
+      B ⟹ A&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= Converse&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="err">NOT equivalent to original</span><br>
+      Ā ⟹ B̄&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= Inverse&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="err">NOT equivalent to original</span><br>
+      B̄ ⟹ Ā&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= Contrapositive&nbsp;&nbsp;&nbsp;&nbsp;<span class="ok">✓ EQUIVALENT to original</span><br>
+      <br>
+      <span class="dim">A ⟹ B  can be rewritten as  (B ∨ Ā)</span><br>
+      <span class="dim">Descartes: "I think → I am" is VALID. "I don't think → I don't am" is INVALID (inverse!)</span>
+    </div>
+  </div>
+  <div class="block b-warn">
+    <div class="block-label">⚠ Common Exam Trap</div>
+    <p>Implication is NOT causality. "A ⟹ B" doesn't mean A causes B or that A happens before B. It only says: if A is True, then B must be True. A False premise (A=F) makes the whole implication True regardless of B — this is called "vacuous truth."</p>
+  </div>
+</div>
+
+<!-- Sub 1.3 -->
+<div class="subtopic" id="s1-3">
+  <div class="sub-header">
+    <div class="sub-dot" style="background:var(--accent2);"></div>
+    <div class="sub-title">1.3 — Sets: Definitions, Operations &amp; Notation</div>
+    <div class="sub-time">~60 min</div>
+  </div>
+  <div class="block b-theory">
+    <div class="block-label">Set Properties</div>
+    <p>A set is an unordered collection of distinct objects. Order doesn't matter, duplicates are ignored. Sets vs Tuples: <strong>sets</strong> are unordered + no repeats; <strong>tuples</strong> are ordered + repeats allowed.</p>
+    <div class="mbox">
+      <span class="lbl">Key examples from slides:</span>
+      A = {4,2,0,3} = {0,2,3,4} = {4,2,0,3,3}&nbsp;&nbsp;&nbsp;<span class="dim">← all same set</span><br>
+      B = {2, {3,4}, ∅}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="dim">← sets can contain sets!</span><br>
+      Is 3 ∈ B?&nbsp;&nbsp;<span class="err">NO!</span>&nbsp;&nbsp;3 is inside {3,4} but {3,4} is the element, not 3.<br>
+      Is {3,4} ∈ B?&nbsp;&nbsp;<span class="ok">YES!</span><br>
+      <br>
+      ℕ = {0,1,2,3,...}&nbsp;&nbsp;&nbsp;ℤ = {...,-2,-1,0,1,2,...}&nbsp;&nbsp;&nbsp;ℚ = rationals&nbsp;&nbsp;&nbsp;ℝ = reals<br>
+      ∅ = {}  is the empty set
+    </div>
+    <div class="mbox" style="margin-top:8px;">
+      <span class="lbl">Operations — Given A={4,2,0,3}, B={2,{3,4},∅}</span>
+      Union:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;A ∪ B = {4,2,0,3,{3,4},∅}&nbsp;&nbsp;&nbsp;<span class="dim">← everything from both</span><br>
+      Intersection: A ∩ B = {2}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="dim">← only shared elements</span><br>
+      Difference:&nbsp;&nbsp;&nbsp;A − B = {4,0,3}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="dim">← in A but not in B</span><br>
+      Subset:&nbsp;&nbsp;P ⊆ Q  means every element of P is in Q<br>
+      Is ∅ ⊆ A?&nbsp;&nbsp;<span class="ok">YES!</span> Empty set is subset of every set (vacuous truth)<br>
+      Is ∅ ∈ A?&nbsp;&nbsp;<span class="err">NO!</span>&nbsp;&nbsp;∅ is not an element of A = {4,2,0,3}
+    </div>
+  </div>
+  <div class="block b-theory">
+    <div class="block-label">Set-Builder Notation &amp; Quantifiers</div>
+    <div class="mbox">
+      X = {n ∈ ℕ | isPrime(n)} = {2,3,5,7,11,...}&nbsp;&nbsp;<span class="dim">← "n in ℕ such that n is prime"</span><br>
+      <br>
+      ∀&nbsp;&nbsp;("for all")&nbsp;&nbsp;— universal quantifier<br>
+      ∃&nbsp;&nbsp;("there exists") — existential quantifier<br>
+      <br>
+      To DISPROVE ∀x: P(x) → find ONE x where P(x) is False (counterexample)<br>
+      To PROVE ∃x: P(x)&nbsp;&nbsp;→ find ONE specific x where P(x) is True
+    </div>
+  </div>
+</div>
+
+<!-- Videos LS01 -->
+<div class="block b-video">
+  <div class="block-label">📺 Curated Videos — LS01</div>
+  <a class="video-card" href="https://www.youtube.com/watch?v=fyua6cA-SCs" target="_blank">
+    <div class="v-icon">▶</div>
+    <div class="v-info"><div class="v-title">Truth Tables — TrevTutor</div><div class="v-meta">AND, OR, NOT, implication — verified ✓</div></div>
+  </a>
+  <a class="video-card" href="https://www.youtube.com/watch?v=dsByaZZYXGw" target="_blank">
+    <div class="v-icon">▶</div>
+    <div class="v-info"><div class="v-title">Converse, Contrapositive &amp; Inverse — Neso Academy</div><div class="v-meta">Implication variants with truth tables — verified ✓</div></div>
+  </a>
+  <a class="video-card" href="https://www.youtube.com/watch?v=tyDKR4FG3Yw" target="_blank">
+    <div class="v-icon">▶</div>
+    <div class="v-info"><div class="v-title">Introduction to Set Theory — TrevTutor</div><div class="v-meta">Sets, elements, set-builder notation — verified ✓</div></div>
+  </a>
+  <a class="video-card" href="https://www.youtube.com/watch?v=9OWdaaEE0L4" target="_blank">
+    <div class="v-icon">▶</div>
+    <div class="v-info"><div class="v-title">Subsets &amp; Power Sets — TrevTutor</div><div class="v-meta">Subsets, set membership, operations — verified ✓</div></div>
+  </a>
+</div>
+
+<div class="page-nav"><button onclick="showSection('overview')">← Plan</button><button onclick="showSection('t2')">Ch 2: Contradiction &amp; Induction →</button></div>
+
+</div><!-- /.sec-body -->
+</div><!-- /#t1 -->
+
+<div id="t2" class="page">
+<div class="sec-header">
+  <div class="sec-badge">LS02</div>
+  <div>
+    <div class="sec-title">Contradiction &amp; Induction</div>
+    <div class="sec-pills">
+      <span class="pill p-time">⏱ 3.5 hours</span>
+      <span class="pill p-med">Medium</span>
+      <span class="pill p-theory">Theory + Practice</span>
+    </div>
+  </div>
+</div>
+<div class="sec-body">
+
+<div class="block b-strat">
+  <div class="block-label">🎯 Study Strategy — MIXED topic</div>
+  <div class="strat-grid">
+    <div class="strat-card">
+      <div class="strat-head"><span class="strat-type t-read">Phase 1 – Templates</span></div>
+      <p>Memorize the 5 proof structures as fill-in templates. You need to recognize WHICH method to use from the problem statement.</p>
+    </div>
+    <div class="strat-card">
+      <div class="strat-head"><span class="strat-type t-prac">Phase 2 – Write proofs</span></div>
+      <p>Don't just read examples. Re-write the √2 proof and the sum induction proof completely from memory. The act of writing cements it.</p>
+    </div>
+    <div class="strat-card">
+      <div class="strat-head"><span class="strat-type t-both">Phase 3 – Pattern match</span></div>
+      <p>Ask yourself: is this ∃ or ∀? If ∀ over ℕ → induction. If it says "prove P or derive a contradiction" → contradiction. Practice identifying before writing.</p>
+    </div>
+    <div class="strat-card">
+      <div class="strat-head"><span class="strat-type t-read">Time Split</span></div>
+      <p>1 hr learning inference rules + proof types. 1 hr on contradiction (√2 proof). 1.5 hrs on induction (sum formula + L-Tromino).</p>
+    </div>
+  </div>
+</div>
+
+<!-- Sub 2.1 -->
+<div class="subtopic" id="s2-1">
+  <div class="sub-header">
+    <div class="sub-dot" style="background:#a89cf7;"></div>
+    <div class="sub-title">2.1 — Inference Rules</div>
+    <div class="sub-time">~30 min</div>
+  </div>
+  <div class="block b-theory">
+    <div class="block-label">The 4 Inference Rules</div>
+    <div class="two">
+      <div class="mbox">
+        <span class="lbl">Modus Ponens</span>
+        Given: P ⟹ Q  and  P<br>
+        ─────────────────────<br>
+        <span class="ok">Conclude: Q</span>
+      </div>
+      <div class="mbox">
+        <span class="lbl">Modus Tollens</span>
+        Given: P ⟹ Q  and  Q̄<br>
+        ─────────────────────<br>
+        <span class="ok">Conclude: P̄</span>
+      </div>
+      <div class="mbox">
+        <span class="lbl">Double Negative</span>
+        Given: P̄ ⟹ False<br>
+        ─────────────────────<br>
+        <span class="ok">Conclude: P</span>
+        <span class="dim">(basis of contradiction)</span>
+      </div>
+      <div class="mbox">
+        <span class="lbl">Hypothetical Syllogism</span>
+        Given: P ⟹ Q  and  Q ⟹ R<br>
+        ─────────────────────────<br>
+        <span class="ok">Conclude: P ⟹ R</span>
+      </div>
+    </div>
+    <div class="block b-warn" style="margin-top:10px;">
+      <div class="block-label">⚠ Proof by Intimidation</div>
+      <p>NEVER write "Clearly", "Obviously", or "Trivially" in a proof. This is called proof by intimidation and is not acceptable. Every step must be justified with a valid reason.</p>
+    </div>
+  </div>
+</div>
+
+<!-- Sub 2.2 -->
+<div class="subtopic" id="s2-2">
+  <div class="sub-header">
+    <div class="sub-dot" style="background:#a89cf7;"></div>
+    <div class="sub-title">2.2 — The 5 Fundamental Proof Techniques</div>
+    <div class="sub-time">~40 min</div>
+  </div>
+  <div class="block b-math">
+    <div class="block-label">Proof Strategy Chooser</div>
+    <table class="t">
+      <thead><tr><th>Proof Type</th><th>When to Use</th><th>Template</th></tr></thead>
+      <tbody>
+        <tr><td>Existential</td><td>Prove ∃x: P(x)</td><td>Take x = [specific value]. Check it satisfies S. Check P(x). ∎</td></tr>
+        <tr><td>Universal / Direct</td><td>Prove ∀x: P(x)</td><td>Let x be arbitrary in S. Show P(x) by calculation. ∎</td></tr>
+        <tr><td>Implication (Direct)</td><td>Prove P ⟹ Q</td><td>Assume P. Show Q follows. ∎</td></tr>
+        <tr><td>Contrapositive</td><td>Prove P ⟹ Q (hard)</td><td>Assume Q̄. Show P̄ follows. ∎</td></tr>
+        <tr><td>Contradiction</td><td>Prove P (no easy direct route)</td><td>Assume P̄. Derive R and R̄ (contradiction). So P̄ is False, ∴ P is True. ∎</td></tr>
+        <tr><td>Biconditional (iff)</td><td>Prove A ⟺ B</td><td>WTS A⟹B: [direct proof]. WTS B⟹A: [direct proof]. ∎</td></tr>
+        <tr><td>Induction</td><td>Prove ∀n ∈ ℕ: P(n)</td><td>Base case + Inductive step (see below). ∎</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="block b-example">
+    <div class="block-label">Worked Example — Direct Proof</div>
+    <div class="steps">
+      <div class="step"><div class="step-n">Goal</div><div class="step-body"><div class="step-lbl">Theorem</div>If n is a multiple of 10, then n is even.</div></div>
+      <div class="step"><div class="step-n">01</div><div class="step-body"><div class="step-lbl">Assume P</div>Assume n is a multiple of 10. So n = 10k for some k ∈ ℤ.</div></div>
+      <div class="step"><div class="step-n">02</div><div class="step-body"><div class="step-lbl">Show Q</div>Then n = 2·(5k). Since 5k ∈ ℤ, n = 2·(integer). Therefore n is even. ∎</div></div>
+    </div>
+  </div>
+  <div class="block b-example">
+    <div class="block-label">Worked Example — Contrapositive</div>
+    <div class="mbox">
+      <span class="lbl">Theorem: ∀n ∈ ℤ: isEven(n²) ⟹ isEven(n)</span>
+      Proof by Contrapositive. WTS: isOdd(n) ⟹ isOdd(n²)<br>
+      Assume n is odd → n = 2k+1 for k ∈ ℤ<br>
+      Then: n² = (2k+1)² = 4k²+4k+1 = 2(2k²+2k)+1<br>
+      This is odd. ∴ isOdd(n) ⟹ isOdd(n²). Contrapositive proven. ∎
+    </div>
+  </div>
+</div>
+
+<!-- Sub 2.3 -->
+<div class="subtopic" id="s2-3">
+  <div class="sub-header">
+    <div class="sub-dot" style="background:#a89cf7;"></div>
+    <div class="sub-title">2.3 — Proof by Contradiction</div>
+    <div class="sub-time">~45 min</div>
+  </div>
+  <div class="block b-math">
+    <div class="block-label">The Contradiction Template</div>
+    <div class="mbox">
+      <span class="lbl">Structure</span>
+      1. State: "For the sake of contradiction, assume P̄."<br>
+      2. Use P̄ to derive some fact R<br>
+      3. Show R is both True and False (contradiction!)<br>
+      4. Conclude: Our assumption P̄ must be wrong, so P is True. ∎
+    </div>
+  </div>
+  <div class="block b-example">
+    <div class="block-label">Classic Exam Example — √2 is Irrational</div>
+    <div class="steps">
+      <div class="step"><div class="step-n">Goal</div><div class="step-body"><div class="step-lbl">Theorem</div>√2 ∉ ℚ (√2 is irrational)</div></div>
+      <div class="step"><div class="step-n">01</div><div class="step-body"><div class="step-lbl">Assume Negation</div>Assume √2 ∈ ℚ. So √2 = a/b where a,b ∈ ℤ, b≠0, and gcd(a,b)=1 (lowest terms — no common divisors &gt; 1).</div></div>
+      <div class="step"><div class="step-n">02</div><div class="step-body"><div class="step-lbl">Derive R</div>Then a = √2·b so a² = 2b². So a² is even ⟹ a is even (by contrapositive proven above). Write a = 2c.</div></div>
+      <div class="step"><div class="step-n">03</div><div class="step-body"><div class="step-lbl">Derive R̄ (Contradiction)</div>(2c)² = 2b² → 4c² = 2b² → b² = 2c² → b is even. But now BOTH a and b are even → gcd(a,b) ≥ 2. This contradicts our assumption gcd(a,b)=1!</div></div>
+      <div class="step"><div class="step-n">04</div><div class="step-body"><div class="step-lbl">Conclude</div>Contradiction! So √2 ∉ ℚ. ∎</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- Sub 2.4 -->
+<div class="subtopic" id="s2-4">
+  <div class="sub-header">
+    <div class="sub-dot" style="background:#a89cf7;"></div>
+    <div class="sub-title">2.4 — Mathematical Induction</div>
+    <div class="sub-time">~65 min</div>
+  </div>
+  <div class="block b-math">
+    <div class="block-label">The Formal Induction Template — 3 Steps</div>
+    <div class="mbox">
+      <span class="lbl">Principle of Induction</span>
+      If P(0) is True  AND  ∀n ≥ 0: P(n) ⟹ P(n+1)<br>
+      THEN ∀n ∈ ℕ: P(n) is True<br>
+      <br>
+      <span class="hi">STEP 1 — BASE CASE:</span> Prove P(0) [or P(1)] is True.<br>
+      <span class="hi">STEP 2 — INDUCTIVE HYPOTHESIS (IH):</span> Assume P(n) is True for some n ≥ 0.<br>
+      <span class="hi">STEP 3 — INDUCTIVE STEP:</span> WTS P(n+1) is True. Use IH.<br>
+      CONCLUSION: By induction, P(n) is True for all n. ∎
+    </div>
+  </div>
+  <div class="block b-example">
+    <div class="block-label">Induction Example — Sum Formula (from your slides)</div>
+    <div class="mbox">
+      <span class="lbl">Theorem: ∀n ≥ 0: 1+2+3+...+n = n(n+1)/2</span>
+      <span class="hi">Base Case (n=0):</span>&nbsp;&nbsp;LHS = 0.  RHS = 0(0+1)/2 = 0.  ✓<br>
+      <br>
+      <span class="hi">Inductive Step:</span> Assume 1+2+...+n = n(n+1)/2  [IH]<br>
+      WTS: 1+2+...+n+(n+1) = (n+1)(n+2)/2<br>
+      <br>
+      LHS = [1+2+...+n] + (n+1)<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;= n(n+1)/2 + (n+1)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[by IH]<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;= (n+1)[n/2 + 1]<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;= (n+1)(n+2)/2  = RHS  ✓<br>
+      <br>
+      By induction, the formula holds for all n ∈ ℕ. ∎
+    </div>
+  </div>
+  <div class="block b-example">
+    <div class="block-label">Classic Induction Proof — L-Tromino Tiling (from your slides)</div>
+    <p>Theorem: A 2ⁿ×2ⁿ grid with one square removed can always be tiled by L-trominoes (L-shaped pieces covering 3 squares).</p>
+    <div class="steps">
+      <div class="step"><div class="step-n">Base</div><div class="step-body">n=1: 2×2 grid minus 1 square = 3 remaining squares = exactly one L-tromino. ✓</div></div>
+      <div class="step"><div class="step-n">IH</div><div class="step-body">Assume P(n): any 2ⁿ×2ⁿ grid minus one square can be tiled.</div></div>
+      <div class="step"><div class="step-n">Step</div><div class="step-body">For P(n+1): take a 2ⁿ⁺¹×2ⁿ⁺¹ grid. Divide into 4 quadrants of 2ⁿ×2ⁿ each. One quadrant has the missing square. Place ONE L-tromino at the center, covering one corner from each of the other 3 quadrants. Now each quadrant has exactly one missing square → apply P(n). ∎</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- Videos LS02 -->
+<div class="block b-video">
+  <div class="block-label">📺 Curated Videos — LS02</div>
+  <a class="video-card" href="https://www.youtube.com/watch?v=huGWXh4l1M0" target="_blank">
+    <div class="v-icon">▶</div>
+    <div class="v-info"><div class="v-title">Proof by Contradiction — Dr. Trefor Bazett</div><div class="v-meta">√2 irrational + general template — verified ✓</div></div>
+  </a>
+  <a class="video-card" href="https://www.youtube.com/watch?v=Tm2PJPvAULs" target="_blank">
+    <div class="v-icon">▶</div>
+    <div class="v-info"><div class="v-title">Mathematical Induction — TrevTutor (Discrete Math)</div><div class="v-meta">Base case, IH, inductive step with examples — verified ✓</div></div>
+  </a>
+  <a class="video-card" href="https://www.youtube.com/watch?v=vMwejR0bqwo" target="_blank">
+    <div class="v-icon">▶</div>
+    <div class="v-info"><div class="v-title">Proof by Contrapositive — Kimberly Brehm</div><div class="v-meta">Contrapositive method with worked examples — verified ✓</div></div>
+  </a>
+</div>
+
+<div class="page-nav"><button onclick="showSection('t1')">← Ch 1</button><button onclick="showSection('t3')">Ch 3: Caseworks &amp; Strong Induction →</button></div>
+
+</div><!-- /.sec-body -->
+</div><!-- /#t2 -->
+
+<div id="t3" class="page">
+<div class="sec-header">
+  <div class="sec-badge">LS03</div>
+  <div>
+    <div class="sec-title">Caseworks &amp; Strong Induction</div>
+    <div class="sec-pills">
+      <span class="pill p-time">⏱ 2.5 hours</span>
+      <span class="pill p-med">Medium</span>
+      <span class="pill p-theory">Theory + Practice</span>
+    </div>
+  </div>
+</div>
+<div class="sec-body">
+
+<div class="block b-strat">
+  <div class="block-label">🎯 Study Strategy — MIXED topic</div>
+  <div class="strat-grid">
+    <div class="strat-card">
+      <div class="strat-head"><span class="strat-type t-read">Casework trick</span></div>
+      <p>The key to proof by cases is choosing C wisely. Common choices: even/odd, positive/zero/negative, prime/composite. Once you pick C, it's mechanical.</p>
+    </div>
+    <div class="strat-card">
+      <div class="strat-head"><span class="strat-type t-prac">Strong vs Regular</span></div>
+      <p>The ONLY difference from regular induction is your IH: instead of assuming P(n), you assume P(k) for ALL k &lt; n. Use when P(n) depends on earlier values beyond just P(n-1).</p>
+    </div>
+  </div>
+</div>
+
+<!-- Sub 3.1 -->
+<div class="subtopic" id="s3-1">
+  <div class="sub-header">
+    <div class="sub-dot" style="background:var(--accent4);"></div>
+    <div class="sub-title">3.1 — Proof by Cases</div>
+    <div class="sub-time">~45 min</div>
+  </div>
+  <div class="block b-math">
+    <div class="block-label">Cases Template</div>
+    <div class="mbox">
+      <span class="lbl">Structure</span>
+      Proof by Cases on [chosen proposition C].<br>
+      Note: C ∨ C̄ is always True (tautology), so cases are exhaustive.<br>
+      <br>
+      Case 1: C is True → [use C to prove P]<br>
+      Case 2: C is False → [use C̄ to prove P]<br>
+      <br>
+      Since P is True in both cases, P must be True. ∎<br>
+      <br>
+      <span class="dim">Can generalize to k cases: C₁ or C₂ or ... or Cₖ is a tautology.</span>
+    </div>
+  </div>
+  <div class="block b-example">
+    <div class="block-label">Example 1 — Even+Odd (from slides)</div>
+    <div class="mbox">
+      <span class="lbl">Theorem: ∀n ∈ ℕ: n² + n is always even</span>
+      Proof by Cases: n is even or odd.<br>
+      <br>
+      Case 1: n = 2k → n²+n = 4k²+2k = 2(2k²+k) <span class="ok">← even ✓</span><br>
+      Case 2: n = 2k+1 → n²+n = (4k²+4k+1)+(2k+1) = 4k²+6k+2 = 2(2k²+3k+1) <span class="ok">← even ✓</span><br>
+      <br>
+      P(n) is True in both exhaustive cases. ∎
+    </div>
+  </div>
+  <div class="block b-example">
+    <div class="block-label">Example 2 — 3 Cases with Divisibility (from slides)</div>
+    <div class="mbox">
+      <span class="lbl">Theorem: ∀n ∈ ℕ: n(n+1)(n+2) is divisible by 3</span>
+      Proof by 3 Cases: any n has the form 3k, 3k+1, or 3k+2.<br>
+      <br>
+      Case 1: n=3k → 3k(3k+1)(3k+2) = 3·[k(3k+1)(3k+2)] <span class="ok">✓</span><br>
+      Case 2: n=3k+1 → (3k+1)(3k+2)(3k+3) = (3k+1)(3k+2)·3(k+1) = 3·[...] <span class="ok">✓</span><br>
+      Case 3: n=3k+2 → (3k+2)(3k+3)(3k+4) = (3k+2)·3(k+1)(3k+4) = 3·[...] <span class="ok">✓</span><br>
+      <br>
+      All 3 cases are exhaustive. ∎
+    </div>
+  </div>
+  <div class="block b-example">
+    <div class="block-label">Party Puzzle — 6 People (from slides — Ramsey Theory)</div>
+    <p>Theorem: In any group of 6 people where every pair is friends or strangers, there always exist either 3 mutual friends or 3 mutual strangers.</p>
+    <div class="mbox">
+      Pick person p. Other 5 are friends or not with p.<br>
+      Case 1: p has ≥3 friends q,r,s<br>
+      &nbsp;&nbsp;→ Sub-case 1a: some pair of q,r,s are friends → they + p = 3 mutual friends ✓<br>
+      &nbsp;&nbsp;→ Sub-case 1b: no pair of q,r,s are friends → q,r,s are 3 mutual strangers ✓<br>
+      Case 2: p has &lt;3 friends → p has ≥3 strangers q,r,s (same argument by symmetry) ✓<br>
+      <span class="dim">This is why R(3,3) = 6 in Ramsey Theory.</span>
+    </div>
+  </div>
+</div>
+
+<!-- Sub 3.2 -->
+<div class="subtopic" id="s3-2">
+  <div class="sub-header">
+    <div class="sub-dot" style="background:var(--accent4);"></div>
+    <div class="sub-title">3.2 — Strong Induction</div>
+    <div class="sub-time">~60 min</div>
+  </div>
+  <div class="block b-math">
+    <div class="block-label">Regular vs Strong Induction — Side-by-Side</div>
+    <div class="two">
+      <div class="mbox">
+        <span class="lbl">Regular Induction</span>
+        IH: Assume P(n) is True<br>
+        Step: Prove P(n+1)<br>
+        Uses: only P(n)
+      </div>
+      <div class="mbox">
+        <span class="lbl">Strong Induction</span>
+        IH: Assume P(k) ∀k &lt; n<br>
+        Step: Prove P(n)<br>
+        Uses: ALL of P(0), P(1), ..., P(n-1)
+      </div>
+    </div>
+    <div class="mbox" style="margin-top:8px;">
+      <span class="lbl">Strong Induction Template</span>
+      Proof by Strong Induction.<br>
+      Assume P(k) is True for all k &lt; n. WTS: P(n).<br>
+      Base Case: P(0) [or P(0)...P(b)] because [reasons].<br>
+      Strong Inductive Step: Assume P(k) ∀k &lt; n.<br>
+      [Use multiple earlier cases to prove P(n)] ∎
+    </div>
+  </div>
+  <div class="block b-example">
+    <div class="block-label">Example — Prime Factorization (from slides)</div>
+    <div class="mbox">
+      <span class="lbl">Theorem: Every integer n ≥ 2 can be written as a product of primes.</span>
+      Proof by Strong Induction.<br>
+      Base: n=2 is prime itself. ✓<br>
+      Strong Inductive Step: Assume P(k) for all 2 ≤ k &lt; n.<br>
+      Case A: n is prime → n = n×1 is a prime product. ✓<br>
+      Case B: n is composite → n = a×b where 2 ≤ a,b &lt; n<br>
+      &nbsp;&nbsp;By IH: a and b are each products of primes.<br>
+      &nbsp;&nbsp;So n = (primes)×(primes) = product of primes. ✓ ∎<br>
+      <span class="dim">Note: This combines Strong Induction + Proof by Cases!</span>
+    </div>
+  </div>
+  <div class="block b-example">
+    <div class="block-label">Example — Unstacking Game (from slides)</div>
+    <div class="mbox">
+      <span class="lbl">Theorem: Any strategy starting with n blocks scores exactly n(n-1)/2 points.</span>
+      [First move splits n into piles a and b where a+b=n, a,b≥1, earn a×b points]<br>
+      <br>
+      Base: n=1, score = 0 = 1(0)/2 ✓<br>
+      Strong IH: Assume P(k) for all k &lt; n.<br>
+      Since a,b &lt; n: by IH, pile-a scores a(a-1)/2, pile-b scores b(b-1)/2.<br>
+      Total = a×b + a(a-1)/2 + b(b-1)/2<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= [2ab + a²-a + b²-b] / 2<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= [(a+b)² - (a+b)] / 2<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= n(n-1)/2 ✓ ∎<br>
+      <span class="dim">Key insight: ANY split gives the same score — strategy doesn't matter!</span>
+    </div>
+  </div>
+  <div class="block b-example">
+    <div class="block-label">Example — Tournament Ordering (from slides)</div>
+    <div class="mbox">
+      <span class="lbl">Theorem: In any round-robin tournament (no ties), a "beats ordering" always exists.</span>
+      Base: n=0, empty list is valid. ✓<br>
+      Strong IH: Assume P(k) for all k &lt; n.<br>
+      Pick team t. Let W = {teams that beat t}, L = {teams t beat}.<br>
+      |W|, |L| &lt; n → by IH: orderings exist for W and L.<br>
+      Full ordering: [W-ordering], t, [L-ordering]<br>
+      This works because every team in W beats t, and t beats every team in L. ✓ ∎
+    </div>
+  </div>
+</div>
+
+<!-- Videos LS03 -->
+<div class="block b-video">
+  <div class="block-label">📺 Curated Videos — LS03</div>
+  <a class="video-card" href="https://www.youtube.com/watch?v=rfA0h9udl7E" target="_blank">
+    <div class="v-icon">▶</div>
+    <div class="v-info"><div class="v-title">Strong Induction — Dr. Trefor Bazett</div><div class="v-meta">Strong vs regular induction + full example — verified ✓</div></div>
+  </a>
+  <a class="video-card" href="https://www.youtube.com/watch?v=vuM3kkwINZw" target="_blank">
+    <div class="v-icon">▶</div>
+    <div class="v-info"><div class="v-title">Proof by Mathematical Induction — Kimberly Brehm</div><div class="v-meta">Induction examples including cases — verified ✓</div></div>
+  </a>
+</div>
+
+<div class="page-nav"><button onclick="showSection('t2')">← Ch 2</button><button onclick="showSection('t4')">Ch 4: Summations →</button></div>
+
+</div><!-- /.sec-body -->
+</div><!-- /#t3 -->
+
+<div id="t4" class="page">
+<div class="sec-header">
+  <div class="sec-badge">LS04</div>
+  <div>
+    <div class="sec-title">Summations</div>
+    <div class="sec-pills">
+      <span class="pill p-time">⏱ 3.5 hours</span>
+      <span class="pill p-hard">Hard</span>
+      <span class="pill p-math">Math-Heavy</span>
+    </div>
+  </div>
+</div>
+<div class="sec-body">
+
+<div class="block b-strat">
+  <div class="block-label">🎯 Study Strategy — MATH topic (do NOT just read!)</div>
+  <div class="strat-grid">
+    <div class="strat-card">
+      <div class="strat-head"><span class="strat-type t-read">Phase 1 – Memorize 5 formulas</span></div>
+      <p>Write the 5 key formulas on a flashcard. Close this guide and recite them. You should be able to write them from memory in &lt;60 seconds.</p>
+    </div>
+    <div class="strat-card">
+      <div class="strat-head"><span class="strat-type t-prac">Phase 2 – Derive, don't memorize</span></div>
+      <p>Derive the geometric series formula using the perturbation method from scratch. The derivation is what shows up in exams, not just the final formula.</p>
+    </div>
+    <div class="strat-card">
+      <div class="strat-head"><span class="strat-type t-prac">Phase 3 – Practice recognition</span></div>
+      <p>Given a sum, immediately ask: (1) Is it geometric? Check for constant ratio. (2) Is it arithmetic? (3) Is it harmonic? Each has different approach.</p>
+    </div>
+    <div class="strat-card">
+      <div class="strat-head"><span class="strat-type t-read">Time Split</span></div>
+      <p>45 min: formulas + annuity motivation. 60 min: perturbation method (derive + practice). 45 min: integral bounds + Harmonic numbers. 30 min: review convergence.</p>
+    </div>
+  </div>
+</div>
+
+<!-- Sub 4.1 -->
+<div class="subtopic" id="s4-1">
+  <div class="sub-header">
+    <div class="sub-dot" style="background:var(--accent);"></div>
+    <div class="sub-title">4.1 — Why Closed Forms Matter (Annuity Motivation)</div>
+    <div class="sub-time">~30 min</div>
+  </div>
+  <div class="block b-theory">
+    <div class="block-label">Real-World Context</div>
+    <p>Sums appear in algorithm analysis, machine learning, probability, and finance. A <strong>closed form</strong> gives you a formula that computes the result instantly instead of adding term by term. Your lecturer motivates this with the lottery annuity problem.</p>
+    <div class="mbox">
+      <span class="lbl">Annuity Problem (from slides)</span>
+      Win $1M. But lottery pays $50,000/year for 20 years. Which is better?<br>
+      Interest rate p = 0.10 (Bangladesh Bank repo rate)<br>
+      Present value of future money: $1 in n years = 1/(1+p)ⁿ today<br>
+      <br>
+      V = m + m/(1+p) + m/(1+p)² + ... + m/(1+p)ⁿ⁻¹<br>
+      V = m × Σxᵏ (k=0 to n-1)  where x = 1/(1+p)<br>
+      V = m × (1 - xⁿ)/(1-x)<br>
+      <br>
+      For m=$50k, n=20, p=0.1: V = $468,246&nbsp;&nbsp;&nbsp;<span class="err">← Only $468k, NOT $1M!</span><br>
+      <span class="ok">Take the lump sum!</span>
+    </div>
+  </div>
+</div>
+
+<!-- Sub 4.2 -->
+<div class="subtopic" id="s4-2">
+  <div class="sub-header">
+    <div class="sub-dot" style="background:var(--accent);"></div>
+    <div class="sub-title">4.2 — Key Summation Formulas</div>
+    <div class="sub-time">~40 min</div>
+  </div>
+  <div class="block b-math">
+    <div class="block-label">The 5 Formulas to Memorize</div>
+    <div class="mbox">
+      <span class="lbl">1. Arithmetic Sum (Gauss's Trick)</span>
+      Σk (k=1 to n) = n(n+1)/2<br>
+      <span class="dim">Gauss's insight: pair first+last: (1+n) + (2+n-1) + ... = n·(n+1)/2</span><br>
+      <br>
+      <span class="lbl">2. Geometric Series (MOST IMPORTANT)</span>
+      Σxᵏ (k=0 to n-1) = (1-xⁿ)/(1-x)&nbsp;&nbsp;&nbsp;[x ≠ 1]<br>
+      <br>
+      <span class="lbl">3. Infinite Geometric Series</span>
+      Σxᵏ (k=0 to ∞) = 1/(1-x)&nbsp;&nbsp;&nbsp;[|x| &lt; 1 only!]<br>
+      <br>
+      <span class="lbl">4. Sum of Squares</span>
+      Σk² (k=1 to n) = n(n+1)(2n+1)/6<br>
+      <br>
+      <span class="lbl">5. Harmonic Numbers (NO closed form!)</span>
+      Hₙ = Σ(1/k) (k=1 to n)  ≈  ln(n)&nbsp;&nbsp;&nbsp;&nbsp;[approximate only]
+    </div>
+  </div>
+</div>
+
+<!-- Sub 4.3 -->
+<div class="subtopic" id="s4-3">
+  <div class="sub-header">
+    <div class="sub-dot" style="background:var(--accent);"></div>
+    <div class="sub-title">4.3 — Perturbation Method</div>
+    <div class="sub-time">~50 min</div>
+  </div>
+  <div class="block b-math">
+    <div class="block-label">The Perturbation Method — How to Derive Geometric Series</div>
+    <p>Idea: Multiply the sum S by x (the ratio), then subtract from S. The interior terms cancel, leaving an equation you can solve for S.</p>
+    <div class="mbox">
+      S&nbsp;&nbsp;= 1 + x + x² + x³ + ... + xⁿ⁻¹<br>
+      xS =&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;x + x² + x³ + ... + xⁿ⁻¹ + xⁿ&nbsp;&nbsp;&nbsp;&nbsp;(multiply S by x, shift right)<br>
+      ────────────────────────────────────────<br>
+      S - xS = 1 - xⁿ&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(subtract: all middle terms cancel)<br>
+      S(1-x) = 1 - xⁿ<br>
+      <span class="hi">S = (1 - xⁿ) / (1 - x)</span>&nbsp;&nbsp;&nbsp;&nbsp;✓<br>
+      <br>
+      <span class="dim">Gauss's trick uses the same idea: write sum forward and backward, add them.</span>
+    </div>
+  </div>
+  <div class="block b-warn">
+    <div class="block-label">⚠ When to use which approach?</div>
+    <p>If the formula is <strong>already given</strong> → prove it by induction. If you need to <strong>find</strong> the formula → use the perturbation method or plug-and-chug. Never try to guess-and-check for summations.</p>
+  </div>
+</div>
+
+<!-- Sub 4.4 -->
+<div class="subtopic" id="s4-4">
+  <div class="sub-header">
+    <div class="sub-dot" style="background:var(--accent);"></div>
+    <div class="sub-title">4.4 — Harmonic Numbers &amp; Integral Bounds</div>
+    <div class="sub-time">~50 min</div>
+  </div>
+  <div class="block b-math">
+    <div class="block-label">Bounding a Sum with an Integral</div>
+    <p>When there's no closed form (like Harmonic Numbers), we bound the sum using an integral. This technique is called the <strong>Integral Bound Theorem</strong>.</p>
+    <div class="mbox">
+      <span class="lbl">If f(x) is weakly decreasing:</span>
+      ∫₁ⁿ f(x)dx  ≤  Σf(k) (k=1 to n)  ≤  f(1) + ∫₁ⁿ f(x)dx<br>
+      <br>
+      <span class="lbl">Apply to Hₙ = Σ(1/k), where f(x) = 1/x:</span>
+      I = ∫₁ⁿ (1/x)dx = [ln(x)]₁ⁿ = ln(n) - ln(1) = ln(n)<br>
+      f(n) = 1/n,  f(1) = 1<br>
+      <br>
+      ∴&nbsp;&nbsp;1/n + ln(n)  ≤  Hₙ  ≤  1 + ln(n)<br>
+      <span class="hi">Hₙ ∈ Θ(ln n)</span><br>
+      <br>
+      <span class="lbl">Real-world intuition (from slides):</span>
+      To stack blocks 10 units past a table edge: need n ≈ e²⁰ ≈ 485 million blocks.<br>
+      At 1 foot each, that's 4× around the Earth. Harmonic series diverges but SLOWLY.
+    </div>
+  </div>
+</div>
+
+<!-- Videos LS04 -->
+<div class="block b-video">
+  <div class="block-label">📺 Curated Videos — LS04</div>
+  <a class="video-card" href="https://www.youtube.com/watch?v=zRKZ0-kOUZM" target="_blank">
+    <div class="v-icon">▶</div>
+    <div class="v-info"><div class="v-title">Geometric Series &amp; Sequences — The Organic Chemistry Tutor</div><div class="v-meta">Geometric series formula, finite and infinite — verified ✓</div></div>
+  </a>
+  <a class="video-card" href="https://www.youtube.com/watch?v=XtfQYR7A2VM" target="_blank">
+    <div class="v-icon">▶</div>
+    <div class="v-info"><div class="v-title">Geometric Sequences &amp; Sums — Discrete Math Class</div><div class="v-meta">Closed form derivations for discrete math — verified ✓</div></div>
+  </a>
+  <a class="video-card" href="https://www.youtube.com/watch?v=KW5k7ZsQmwo" target="_blank">
+    <div class="v-icon">▶</div>
+    <div class="v-info"><div class="v-title">Mathematical Induction Examples — TrevTutor</div><div class="v-meta">Induction with summations, includes divisibility — verified ✓</div></div>
+  </a>
+</div>
+
+<div class="page-nav"><button onclick="showSection('t3')">← Ch 3</button><button onclick="showSection('t5')">Ch 5: Asymptotics →</button></div>
+
+</div><!-- /.sec-body -->
+</div><!-- /#t4 -->
+
+<div id="t5" class="page">
+<div class="sec-header">
+  <div class="sec-badge">LS05</div>
+  <div>
+    <div class="sec-title">Asymptotics</div>
+    <div class="sec-pills">
+      <span class="pill p-time">⏱ 3 hours</span>
+      <span class="pill p-hard">Hard</span>
+      <span class="pill p-math">Math-Heavy</span>
+    </div>
+  </div>
+</div>
+<div class="sec-body">
+
+<div class="block b-strat">
+  <div class="block-label">🎯 Study Strategy — MATH topic</div>
+  <div class="strat-grid">
+    <div class="strat-card">
+      <div class="strat-head"><span class="strat-type t-read">Phase 1 – 6 notations</span></div>
+      <p>Learn each notation's formal definition AND the analogy (O = ≤, Ω = ≥, Θ = =, etc.). These analogies make it intuitive to classify any function quickly.</p>
+    </div>
+    <div class="strat-card">
+      <div class="strat-head"><span class="strat-type t-prac">Phase 2 – Limit method</span></div>
+      <p>Practice computing lim f(n)/g(n) for 5-6 pairs. Map the result to the right notation. This is the technique for 80% of exam questions in this topic.</p>
+    </div>
+    <div class="strat-card">
+      <div class="strat-head"><span class="strat-type t-both">Phase 3 – Growth hierarchy</span></div>
+      <p>Memorize the growth order. Given any two functions, place them in the hierarchy. Then you can immediately write f ∈ O(g) or g ∈ O(f).</p>
+    </div>
+  </div>
+</div>
+
+<!-- Sub 5.1 -->
+<div class="subtopic" id="s5-1">
+  <div class="sub-header">
+    <div class="sub-dot" style="background:var(--accent5);"></div>
+    <div class="sub-title">5.1 — The 6 Asymptotic Notations</div>
+    <div class="sub-time">~60 min</div>
+  </div>
+  <div class="block b-math">
+    <div class="block-label">Full Reference Table</div>
+    <table class="t">
+      <thead><tr><th>Notation</th><th>Formal Definition</th><th>Limit Test</th><th>Analogy</th><th>Meaning</th></tr></thead>
+      <tbody>
+        <tr><td class="mono">f ~ g</td><td>lim f/g = 1</td><td>L = 1</td><td>f = g (approx)</td><td>f and g are asymptotically equal</td></tr>
+        <tr><td class="mono">f ∈ O(g)</td><td>∃c,n₀: f ≤ c·g for n≥n₀</td><td>L &lt; ∞</td><td>f ≤ g</td><td>f grows at MOST as fast as g (upper bound)</td></tr>
+        <tr><td class="mono">f ∈ o(g)</td><td>lim f/g = 0</td><td>L = 0</td><td>f &lt; g</td><td>f grows STRICTLY slower than g</td></tr>
+        <tr><td class="mono">f ∈ Ω(g)</td><td>g ∈ O(f)</td><td>L &gt; 0</td><td>f ≥ g</td><td>f grows at LEAST as fast as g (lower bound)</td></tr>
+        <tr><td class="mono">f ∈ ω(g)</td><td>lim f/g = ∞</td><td>L = ∞</td><td>f &gt; g</td><td>f grows STRICTLY faster than g</td></tr>
+        <tr><td class="mono">f ∈ Θ(g)</td><td>f ∈ O(g) AND f ∈ Ω(g)</td><td>0 &lt; L &lt; ∞</td><td>f = g (rate)</td><td>TIGHT bound — same growth rate</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="block b-math">
+    <div class="block-label">The Limit Method — How to Classify Any Two Functions</div>
+    <div class="mbox">
+      <span class="lbl">Compute L = lim(n→∞) f(n) / g(n)</span>
+      L = 0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;→&nbsp;&nbsp;f ∈ o(g)  and  f ∈ O(g)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;f is smaller<br>
+      0 &lt; L &lt; ∞&nbsp;&nbsp;→&nbsp;&nbsp;f ~ c·g,  f ∈ Θ(g), f ∈ O(g) and Ω(g)<br>
+      L = ∞&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;→&nbsp;&nbsp;f ∈ ω(g)  and  f ∈ Ω(g)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;f is bigger<br>
+      oscillates&nbsp;&nbsp;→  no O or Ω relationship <span class="dim">(Θ does NOT always exist!)</span><br>
+      <br>
+      <span class="lbl">Example from slides — oscillating function:</span>
+      f(n) = n,  g(n) = { 1/2 if n odd, n if n even }<br>
+      lim f/g alternates between 2 and 1 → f ∉ O(g) AND g ∉ O(f)<br>
+      ∴ f ∉ Θ(g) — Theta does NOT always exist between two functions!
+    </div>
+  </div>
+</div>
+
+<!-- Sub 5.2 -->
+<div class="subtopic" id="s5-2">
+  <div class="sub-header">
+    <div class="sub-dot" style="background:var(--accent5);"></div>
+    <div class="sub-title">5.2 — Growth Rate Hierarchy &amp; Lower Order Terms</div>
+    <div class="sub-time">~50 min</div>
+  </div>
+  <div class="block b-math">
+    <div class="block-label">Growth Order (Slowest → Fastest)</div>
+    <div class="mbox">
+      <span class="hi">1&nbsp;&nbsp;≪&nbsp;&nbsp;log n&nbsp;&nbsp;≪&nbsp;&nbsp;√n&nbsp;&nbsp;≪&nbsp;&nbsp;n&nbsp;&nbsp;≪&nbsp;&nbsp;n log n&nbsp;&nbsp;≪&nbsp;&nbsp;n²&nbsp;&nbsp;≪&nbsp;&nbsp;n³&nbsp;&nbsp;≪&nbsp;&nbsp;2ⁿ&nbsp;&nbsp;≪&nbsp;&nbsp;n!</span><br>
+      <br>
+      Each is o() of the next: e.g., log n ∈ o(√n), n² ∈ o(n³), 2ⁿ ∈ o(n!)<br>
+      <br>
+      <span class="lbl">Lower Order Terms (LOTs): h(n) is a LOT of f(n) if lim h(n)/f(n) = 0</span>
+      In f(n) = 3n² + 5n + 7:<br>
+      5n is a LOT of n²&nbsp;&nbsp;&nbsp;(lim 5n/n² = 5/n → 0) ✓<br>
+      7  is a LOT of n²&nbsp;&nbsp;&nbsp;(lim 7/n² → 0) ✓<br>
+      ∴ f(n) ~ 3n²  and  f(n) ∈ Θ(n²)
+    </div>
+  </div>
+  <div class="block b-theory">
+    <div class="block-label">Asymptotic Equivalence (f ~ g)</div>
+    <div class="mbox">
+      <span class="lbl">Definition: f(n) ~ g(n) iff lim f(n)/g(n) = 1</span>
+      f(n) ~ g(n) means they are equal up to lower order terms.<br>
+      <br>
+      Hₙ ~ ln(n)&nbsp;&nbsp;&nbsp;[Harmonic number is asymptotically equivalent to ln(n)]<br>
+      3n² + 5n ~ 3n²<br>
+      n! ~ √(2πn)·(n/e)ⁿ&nbsp;&nbsp;&nbsp;[Stirling's approximation]
+    </div>
+  </div>
+  <div class="block b-warn">
+    <div class="block-label">⚠ Big Exam Traps in Asymptotics</div>
+    <table class="t">
+      <thead><tr><th>Trap</th><th>Wrong</th><th>Correct</th></tr></thead>
+      <tbody>
+        <tr><td>Big-O vs Theta</td><td>n ∈ O(n²) means they have same rate</td><td>O is just an upper bound. Use Θ for tight bounds.</td></tr>
+        <tr><td>Constants</td><td>5n² ∈ Θ(5n²)</td><td>5n² ∈ Θ(n²) — constants don't change the class</td></tr>
+        <tr><td>Little-o vs Big-O</td><td>n ∈ o(n)</td><td>FALSE! n ∉ o(n). But n ∈ O(n). o requires strictly less.</td></tr>
+        <tr><td>Theta always exists</td><td>Every f,g pair has f ∈ Θ(g) or g ∈ Θ(f)</td><td>WRONG. Oscillating example shows Θ may not exist.</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- Videos LS05 -->
+<div class="block b-video">
+  <div class="block-label">📺 Curated Videos — LS05</div>
+  <a class="video-card" href="https://www.youtube.com/watch?v=A03oI0znAoc" target="_blank">
+    <div class="v-icon">▶</div>
+    <div class="v-info"><div class="v-title">Asymptotic Notations Big-O, Omega, Theta #1 — Abdul Bari</div><div class="v-meta">Big-O, Omega, Theta formal definitions — verified ✓</div></div>
+  </a>
+  <a class="video-card" href="https://www.youtube.com/watch?v=Nd0XDY-jVHs" target="_blank">
+    <div class="v-icon">▶</div>
+    <div class="v-info"><div class="v-title">Asymptotic Notations Big-O, Omega, Theta #2 — Abdul Bari</div><div class="v-meta">More examples with all notations — verified ✓</div></div>
+  </a>
+  <a class="video-card" href="https://www.youtube.com/watch?v=0oDAlMwTrLo" target="_blank">
+    <div class="v-icon">▶</div>
+    <div class="v-info"><div class="v-title">Big O, Omega &amp; Theta Bootcamp — Back to Back SWE</div><div class="v-meta">All 3 notations with intuition &amp; examples — verified ✓</div></div>
+  </a>
+</div>
+
+<div class="page-nav"><button onclick="showSection('t4')">← Ch 4</button><button onclick="showSection('t6')">Ch 6: Recurrences →</button></div>
+
+</div><!-- /.sec-body -->
+</div><!-- /#t5 -->
+
+<div id="t6" class="page">
+<div class="sec-header">
+  <div class="sec-badge">LS06</div>
+  <div>
+    <div class="sec-title">Recurrences</div>
+    <div class="sec-pills">
+      <span class="pill p-time">⏱ 3.5 hours</span>
+      <span class="pill p-hard">Hard</span>
+      <span class="pill p-math">Math-Heavy</span>
+    </div>
+  </div>
+</div>
+<div class="sec-body">
+
+<div class="block b-strat">
+  <div class="block-label">🎯 Study Strategy — MATH topic</div>
+  <div class="strat-grid">
+    <div class="strat-card">
+      <div class="strat-head"><span class="strat-type t-read">Phase 1 – Guess &amp; Check</span></div>
+      <p>For simple recurrences: compute 4-5 values, spot the pattern, guess closed form, then verify by induction. Practice this pipeline until it's automatic.</p>
+    </div>
+    <div class="strat-card">
+      <div class="strat-head"><span class="strat-type t-prac">Phase 2 – Plug &amp; Chug</span></div>
+      <p>For the Merge Sort recurrence: substitute T(n) into itself repeatedly. Look for the pattern at level k, then substitute k = log(n) at the base case.</p>
+    </div>
+    <div class="strat-card">
+      <div class="strat-head"><span class="strat-type t-prac">Phase 3 – Master Theorem</span></div>
+      <p>Identify a, b, f(n). Compute n^log_b(a). Compare f(n) to it. Say which case applies. Write the answer. Drill this with 5 examples until it's mechanical.</p>
+    </div>
+    <div class="strat-card">
+      <div class="strat-head"><span class="strat-type t-both">Phase 4 – When NOT to use MT</span></div>
+      <p>Memorize: if the subproblem reduces by subtraction (n-1, n-2) instead of division (n/b), Master Theorem does NOT apply. Towers of Hanoi and Fibonacci are classic non-examples.</p>
+    </div>
+  </div>
+</div>
+
+<!-- Sub 6.1 -->
+<div class="subtopic" id="s6-1">
+  <div class="sub-header">
+    <div class="sub-dot" style="background:var(--accent3);"></div>
+    <div class="sub-title">6.1 — What is a Recurrence? (Fibonacci &amp; Towers of Hanoi)</div>
+    <div class="sub-time">~40 min</div>
+  </div>
+  <div class="block b-theory">
+    <div class="block-label">Definition &amp; Motivation</div>
+    <p>A recurrence is a sequence where each term is defined by earlier terms. They appear naturally when analyzing recursive algorithms. The goal is always to find the closed form — a formula for T(n) without recursion.</p>
+    <div class="mbox">
+      <span class="lbl">Fibonacci Numbers</span>
+      F₀ = 1, F₁ = 1, Fₙ = Fₙ₋₁ + Fₙ₋₂ for n ≥ 2<br>
+      Closed form: Fₙ = (1/√5)·[(1+√5)/2)ⁿ − ((1−√5)/2)ⁿ]<br>
+      T(n) ∈ Θ(1.618ⁿ)&nbsp;&nbsp;[exponential — not divide-and-conquer!]<br>
+      <br>
+      <span class="lbl">Towers of Hanoi (from slides)</span>
+      T(1) = 1,  T(n) = 2T(n-1) + 1<br>
+      Values: 1, 3, 7, 15, 31, 63, ...  → Guess: T(n) = 2ⁿ - 1<br>
+      Verify by induction: T(n-1) = 2ⁿ⁻¹-1 → T(n) = 2(2ⁿ⁻¹-1)+1 = 2ⁿ-1 ✓<br>
+      <br>
+      For n=64 disks: T(64) = 2⁶⁴-1 ≈ 1.8×10¹⁹ moves<br>
+      At 1 move/second: ~585 billion years. Universe has ~0.5 trillion years left!
+    </div>
+  </div>
+</div>
+
+<!-- Sub 6.2 -->
+<div class="subtopic" id="s6-2">
+  <div class="sub-header">
+    <div class="sub-dot" style="background:var(--accent3);"></div>
+    <div class="sub-title">6.2 — Guess and Check Method</div>
+    <div class="sub-time">~30 min</div>
+  </div>
+  <div class="block b-math">
+    <div class="block-label">Guess &amp; Check Pipeline</div>
+    <div class="mbox">
+      <span class="lbl">Steps</span>
+      1. Compute T(1), T(2), T(3), T(4), T(5) by hand<br>
+      2. Look at the numbers: 1,3,7,15 → powers of 2 minus 1 → guess T(n)=2ⁿ-1<br>
+      3. Verify your guess using mathematical induction<br>
+      <br>
+      <span class="lbl">Worked: T(n) = 2T(n-1)+1, T(1)=1 → guess T(n) = 2ⁿ-1</span>
+      Base: T(1) = 2¹-1 = 1 ✓<br>
+      IH: Assume T(n-1) = 2ⁿ⁻¹-1<br>
+      T(n) = 2T(n-1)+1 = 2(2ⁿ⁻¹-1)+1 = 2ⁿ-2+1 = 2ⁿ-1 ✓
+    </div>
+  </div>
+</div>
+
+<!-- Sub 6.3 -->
+<div class="subtopic" id="s6-3">
+  <div class="sub-header">
+    <div class="sub-dot" style="background:var(--accent3);"></div>
+    <div class="sub-title">6.3 — Plug &amp; Chug (Substitution Method) — Merge Sort</div>
+    <div class="sub-time">~50 min</div>
+  </div>
+  <div class="block b-theory">
+    <div class="block-label">Context: Selection Sort vs Merge Sort</div>
+    <table class="t" style="margin-bottom:10px;">
+      <thead><tr><th>Algorithm</th><th>Recurrence</th><th>Complexity</th><th>For n=32</th></tr></thead>
+      <tbody>
+        <tr><td>Selection Sort</td><td>T(n) = T(n-1) + (n-1)</td><td>Θ(n²)</td><td>496 comparisons</td></tr>
+        <tr><td>Merge Sort</td><td>M(n) = 2M(n/2) + (n-1)</td><td>Θ(n log n)</td><td>129 comparisons</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="block b-math">
+    <div class="block-label">Plug &amp; Chug Derivation (n = 2ᵏ)</div>
+    <div class="mbox">
+      <span class="lbl">Start: M(n) = (n-1) + 2M(n/2)</span>
+      Level 0: M(n)&nbsp;&nbsp;&nbsp;= (n-1)&nbsp;&nbsp;&nbsp;+ 2M(n/2)<br>
+      Level 1: subst&nbsp;&nbsp;= (n-1)&nbsp;&nbsp;&nbsp;+ 2[(n/2-1) + 2M(n/4)]<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= (n-1)&nbsp;&nbsp;&nbsp;+ (n-2)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+ 4M(n/4)<br>
+      Level 2: subst&nbsp;&nbsp;= (n-1)&nbsp;&nbsp;&nbsp;+ (n-2)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+ (n-4)&nbsp;&nbsp;&nbsp;&nbsp;+ 8M(n/8)<br>
+      ...<br>
+      Level k: M(n)&nbsp;&nbsp;&nbsp;= (n-1) + (n-2) + ... + (n-2ᵏ⁻¹) + 2ᵏ·M(n/2ᵏ)<br>
+      <br>
+      When n/2ᵏ = 1: k = log₂(n) and M(1) = 0<br>
+      M(n) = kn - (1+2+4+...+2ᵏ⁻¹) = kn - (2ᵏ-1)<br>
+      Substituting k = log₂(n):<br>
+      <span class="hi">M(n) = n·log₂(n) - n + 1  ∈  Θ(n log n)</span>
+    </div>
+  </div>
+</div>
+
+<!-- Sub 6.4 -->
+<div class="subtopic" id="s6-4">
+  <div class="sub-header">
+    <div class="sub-dot" style="background:var(--accent3);"></div>
+    <div class="sub-title">6.4 — Master Theorem</div>
+    <div class="sub-time">~60 min</div>
+  </div>
+  <div class="block b-math">
+    <div class="block-label">The Master Theorem — Full Statement</div>
+    <div class="mbox">
+      <span class="lbl">For T(n) = a·T(⌊n/b⌋) + f(n), where a ≥ 1, b &gt; 1:</span>
+      Let c = log_b(a)&nbsp;&nbsp;&nbsp;[the "critical exponent"]<br>
+      <br>
+      <span class="hi">CASE 1 — Leaves dominate:</span><br>
+      If f(n) ∈ O(nᶜ⁻ᵋ) for some ε &gt; 0<br>
+      → T(n) ∈ Θ(nᶜ)<br>
+      <br>
+      <span class="hi">CASE 2 — Work is balanced at every level:</span><br>
+      If f(n) ∈ Θ(nᶜ)<br>
+      → T(n) ∈ Θ(nᶜ · log_b(n))<br>
+      <br>
+      <span class="hi">CASE 3 — Root dominates:</span><br>
+      If f(n) ∈ Ω(nᶜ⁺ᵋ) AND a·f(n/b) ≤ c·f(n) for c &lt; 1<br>
+      → T(n) ∈ Θ(f(n))<br>
+      <br>
+      <span class="dim">Works with ⌈n/b⌉ too.</span>
+    </div>
+  </div>
+  <div class="block b-example">
+    <div class="block-label">Master Theorem — 4 Worked Examples</div>
+    <div class="mbox">
+      <span class="lbl">Example 1: Merge Sort — T(n) = 2T(n/2) + n</span>
+      a=2, b=2, f(n)=n, c=log₂(2)=1, nᶜ=n¹=n<br>
+      f(n) = n ∈ Θ(n) → <span class="ok">CASE 2</span> → T(n) ∈ Θ(n·log₂n) ✓<br>
+      <br>
+      <span class="lbl">Example 2: Binary Search — T(n) = T(n/2) + 1</span>
+      a=1, b=2, f(n)=1, c=log₂(1)=0, nᶜ=1<br>
+      f(n) = 1 ∈ Θ(1) → <span class="ok">CASE 2</span> → T(n) ∈ Θ(log n) ✓<br>
+      <br>
+      <span class="lbl">Example 3: T(n) = 4T(n/2) + n</span>
+      a=4, b=2, c=log₂(4)=2, nᶜ=n²<br>
+      f(n)=n ∈ O(n²⁻¹) → <span class="ok">CASE 1</span> → T(n) ∈ Θ(n²)<br>
+      <br>
+      <span class="lbl">Example 4: T(n) = 4T(n/2) + n³</span>
+      a=4, b=2, c=2, nᶜ=n²<br>
+      f(n)=n³ ∈ Ω(n²⁺¹) → <span class="ok">CASE 3</span> → T(n) ∈ Θ(n³)
+    </div>
+  </div>
+  <div class="block b-warn">
+    <div class="block-label">⚠ When Master Theorem Does NOT Apply</div>
+    <div class="mbox">
+      <span class="lbl">Master Theorem ONLY works when subproblem size is n/b (division, not subtraction)</span>
+      <span class="err">Fibonacci: Fₙ = Fₙ₋₁ + Fₙ₋₂</span>&nbsp;&nbsp;&nbsp;&nbsp;← reduces by 1 and 2, not n/b. T(n) ∈ Θ(1.618ⁿ)<br>
+      <span class="err">Tower of Hanoi: T(n) = 2T(n-1)+1</span>&nbsp;&nbsp;← reduces by 1. T(n) ∈ Θ(2ⁿ)<br>
+      <br>
+      Rule: If you see T(n-k) inside the recurrence → Master Theorem FAILS<br>
+      If you see T(n/b) → Master Theorem applies
+    </div>
+  </div>
+</div>
+
+<!-- Sub 6.5 Quick Ref -->
+<div class="subtopic" id="s6-5">
+  <div class="sub-header">
+    <div class="sub-dot" style="background:var(--accent3);"></div>
+    <div class="sub-title">6.5 — Common Recurrences Quick Reference</div>
+    <div class="sub-time">~20 min review</div>
+  </div>
+  <div class="block b-math">
+    <div class="block-label">Exam Quick Reference Table</div>
+    <table class="t">
+      <thead><tr><th>Recurrence</th><th>Algorithm</th><th>Solution</th><th>MT Case</th></tr></thead>
+      <tbody>
+        <tr><td class="mono">T(n) = T(n/2) + 1</td><td>Binary Search</td><td>Θ(log n)</td><td>Case 2</td></tr>
+        <tr><td class="mono">T(n) = 2T(n/2) + n</td><td>Merge Sort</td><td>Θ(n log n)</td><td>Case 2</td></tr>
+        <tr><td class="mono">T(n) = 2T(n/2) + 1</td><td>Tree Traversal</td><td>Θ(n)</td><td>Case 1</td></tr>
+        <tr><td class="mono">T(n) = 4T(n/2) + n²</td><td>—</td><td>Θ(n² log n)</td><td>Case 2</td></tr>
+        <tr><td class="mono">T(n) = 3T(n/3) + n</td><td>—</td><td>Θ(n log n)</td><td>Case 2</td></tr>
+        <tr><td class="mono">T(n) = T(n-1) + 1</td><td>Linear Scan</td><td>Θ(n)</td><td>MT fails</td></tr>
+        <tr><td class="mono">T(n) = 2T(n-1) + 1</td><td>Towers of Hanoi</td><td>Θ(2ⁿ)</td><td>MT fails</td></tr>
+        <tr><td class="mono">Fₙ = Fₙ₋₁ + Fₙ₋₂</td><td>Fibonacci</td><td>Θ(1.618ⁿ)</td><td>MT fails</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- Videos LS06 -->
+<div class="block b-video">
+  <div class="block-label">📺 Curated Videos — LS06</div>
+  <a class="video-card" href="https://www.youtube.com/watch?v=OynWkEj0S-s" target="_blank">
+    <div class="v-icon">▶</div>
+    <div class="v-info"><div class="v-title">Master Theorem (Dividing Functions) — Abdul Bari</div><div class="v-meta">All 3 cases with worked examples — verified ✓</div></div>
+  </a>
+  <a class="video-card" href="https://www.youtube.com/watch?v=PdT2k7CCqVg" target="_blank">
+    <div class="v-icon">▶</div>
+    <div class="v-info"><div class="v-title">Recurrences 6 — Merge Sort Analysis</div><div class="v-meta">Solving recurrence for merge sort — verified ✓</div></div>
+  </a>
+  <a class="video-card" href="https://www.youtube.com/watch?v=LPfHV3xWwXg" target="_blank">
+    <div class="v-icon">▶</div>
+    <div class="v-info"><div class="v-title">Solving the MergeSort Recurrence — MIT style</div><div class="v-meta">Plug &amp; chug step-by-step for T(n)=2T(n/2)+n — verified ✓</div></div>
+  </a>
+  <a class="video-card" href="https://www.youtube.com/watch?v=-vJhahLdmLI" target="_blank">
+    <div class="v-icon">▶</div>
+    <div class="v-info"><div class="v-title">Proof by Strong Induction — Kimberly Brehm</div><div class="v-meta">Strong induction for recurrence problems — verified ✓</div></div>
+  </a>
+</div>
+
+<div class="page-nav"><button onclick="showSection('t5')">← Ch 5</button><button onclick="showSection('cheatsheet')">Formula Cheat Sheet →</button></div>
+
+</div><!-- /.sec-body -->
+</div><!-- /#t6 -->
+
+<div id="cheatsheet" class="page">
+<div class="sec-header">
+  <div class="sec-badge">∑</div>
+  <div>
+    <div class="sec-title">Formula Cheat Sheet — Print &amp; Keep</div>
+  </div>
+</div>
+<div class="sec-body">
+
+<div class="block b-math">
+  <div class="block-label">Everything in One Place</div>
+  <div class="mbox">
+    <span class="lbl">LOGIC</span>
+    A⟹B  ≡  B̄⟹Ā  (contrapositive — equivalent)<br>
+    A⟹B  ≡  B∨Ā   (material implication)<br>
+    A⟹B is FALSE only when A=T and B=F<br>
+    <br>
+    <span class="lbl">SUMMATIONS</span>
+    Σk (1→n)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= n(n+1)/2<br>
+    Σk² (1→n)&nbsp;&nbsp;&nbsp;&nbsp;= n(n+1)(2n+1)/6<br>
+    Σxᵏ (0→n-1) = (1−xⁿ)/(1−x)&nbsp;&nbsp;[geometric, x≠1]<br>
+    Σxᵏ (0→∞)&nbsp;&nbsp;&nbsp;= 1/(1−x)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[|x|&lt;1]<br>
+    Hₙ&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;≈ ln(n)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[harmonic, no closed form]<br>
+    <br>
+    <span class="lbl">ASYMPTOTICS — Limit L = lim f/g</span>
+    L=0 → f∈o(g)&nbsp;&nbsp;&nbsp;&nbsp;0&lt;L&lt;∞ → f∈Θ(g)&nbsp;&nbsp;&nbsp;&nbsp;L=∞ → f∈ω(g)<br>
+    Growth: 1 ≪ log n ≪ √n ≪ n ≪ n log n ≪ n² ≪ 2ⁿ ≪ n!<br>
+    <br>
+    <span class="lbl">MASTER THEOREM: T(n) = aT(n/b) + f(n), c = log_b(a)</span>
+    Case 1: f(n)∈O(nᶜ⁻ᵋ)&nbsp;&nbsp;→&nbsp;&nbsp;T(n)∈Θ(nᶜ)<br>
+    Case 2: f(n)∈Θ(nᶜ)&nbsp;&nbsp;&nbsp;&nbsp;→&nbsp;&nbsp;T(n)∈Θ(nᶜ log n)<br>
+    Case 3: f(n)∈Ω(nᶜ⁺ᵋ)&nbsp;&nbsp;→&nbsp;&nbsp;T(n)∈Θ(f(n))<br>
+    NOT applicable when subproblem reduces by subtraction (n-k).
+  </div>
+</div>
+
+<div class="page-nav"><button onclick="showSection('t6')">← Ch 6</button><button onclick="showSection('overview')">Back to Plan</button></div>
+
+</div><!-- /.sec-body -->
+</div><!-- /#cheatsheet -->
+
+</div><!-- /.content -->
+</main>
+</div><!-- /.layout -->
+
+<a href="#" class="back-to-top" id="backToTop" aria-label="Back to top">↑</a>
+
+<footer>CSE 4302 · Discrete Mathematics · Islamic University of Technology · Md. Bakhtiar Hasan</footer>
+
+<script>
+var PAGE_IDS = ['overview','t1','t2','t3','t4','t5','t6','cheatsheet'];
+
+function showSection(id, topicId){
+  PAGE_IDS.forEach(function(pid){
+    var el = document.getElementById(pid);
+    if(el) el.classList.toggle('active', pid === id);
+  });
+  document.querySelectorAll('.side-link').forEach(function(btn){
+    var isActive = btn.getAttribute('data-target') === id &&
+                   (!topicId ? true : btn.getAttribute('data-topic') === topicId);
+    btn.classList.toggle('active', isActive);
+    if(isActive){ btn.setAttribute('aria-current', 'true'); } else { btn.removeAttribute('aria-current'); }
+  });
+
+  if(topicId){
+    requestAnimationFrame(function(){
+      var topicEl = document.getElementById(topicId);
+      if(topicEl){
+        topicEl.scrollIntoView({behavior:'instant', block:'start'});
+      } else {
+        window.scrollTo({top:0, behavior:'instant'});
+      }
+    });
+  } else {
+    window.scrollTo({top:0, behavior:'instant'});
+  }
+
+  closeSidebarOnMobile();
+  updateProgress();
+}
+
+function isMobileView(){
+  return window.innerWidth <= 900;
+}
+
+function toggleSidebar(){
+  var sidebar = document.getElementById('sidebar');
+  if(isMobileView()){
+    var open = sidebar.classList.toggle('open');
+    document.getElementById('sidebarBackdrop').classList.toggle('show', open);
+  } else {
+    document.body.classList.toggle('sidebar-collapsed');
+  }
+}
+
+function closeSidebarOnMobile(){
+  if(isMobileView()){
+    document.getElementById('sidebar').classList.remove('open');
+    document.getElementById('sidebarBackdrop').classList.remove('show');
+  }
+}
+
+function updateProgress(){
+  var activeIdx = PAGE_IDS.findIndex(function(id){
+    var el = document.getElementById(id);
+    return el && el.classList.contains('active');
+  });
+  var pct = activeIdx >= 0 ? ((activeIdx + 1) / PAGE_IDS.length) * 100 : 0;
+  document.getElementById('progressFill').style.width = pct + '%';
+}
+
+document.getElementById('sidebarToggle').addEventListener('click', toggleSidebar);
+document.getElementById('sidebarBackdrop').addEventListener('click', closeSidebarOnMobile);
+
+document.getElementById('backToTop').addEventListener('click', function(e){
+  e.preventDefault();
+  window.scrollTo({top:0, behavior:'smooth'});
+});
+
+window.addEventListener('scroll', function(){
+  var btn = document.getElementById('backToTop');
+  if(window.scrollY > 400){ btn.classList.add('show'); } else { btn.classList.remove('show'); }
+});
+
+// init
+showSection('overview');
+</script>
+
+</body>
+</html>

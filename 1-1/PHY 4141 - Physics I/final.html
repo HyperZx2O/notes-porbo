@@ -1,0 +1,1019 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IUT Physics — Complete Study Reference</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Serif+Display:ital@0;1&family=JetBrains+Mono:wght@400;500;600&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet">
+<style>
+/* ═══════════════════════════════════════════════════════════════
+   DESIGN SYSTEM — Deep Obsidian + Ember Gold
+   ═══════════════════════════════════════════════════════════════ */
+:root {
+  --ink: #eae6de;
+  --paper: #090c11;
+  --cream: #10141c;
+  --warm: #161b27;
+  --card: #0e1219;
+  --card-hover: #131822;
+  --surface2: #141922;
+
+  --gold: #e8a84b;
+  --gold-light: #f5c96e;
+  --gold-dim: rgba(232,168,75,0.55);
+  --gold-glow: rgba(232,168,75,0.18);
+
+  --rust: #e0644a;
+  --teal: #3dbebe;
+  --blue: #5b9bd5;
+  --green: #5abf7a;
+  --purple: #9b7ec8;
+  --muted: #6a6a7e;
+  --line: rgba(232,228,220,0.07);
+  --border: rgba(232,228,220,0.09);
+
+  --shadow-sm:  0 2px 12px rgba(0,0,0,0.5);
+  --shadow-md:  0 6px 32px rgba(0,0,0,0.55);
+  --shadow-lg:  0 16px 56px rgba(0,0,0,0.65);
+  --shadow-gold: 0 0 32px rgba(232,168,75,0.12);
+
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 16px;
+}
+
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior: smooth; font-size: 15px; }
+
+body {
+  background: var(--paper);
+  color: var(--ink);
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 300;
+  line-height: 1.78;
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+}
+body::before {
+  content: '';
+  position: fixed; inset: 0;
+  background-image:
+    linear-gradient(rgba(232,168,75,0.018) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(232,168,75,0.018) 1px, transparent 1px);
+  background-size: 44px 44px;
+  pointer-events: none; z-index: 0;
+}
+body::after {
+  content: '';
+  position: fixed; inset: 0;
+  background: radial-gradient(ellipse at center, transparent 55%, rgba(0,0,0,0.55) 100%);
+  pointer-events: none; z-index: 0;
+}
+
+/* ══════════════════════════════════════════
+   MASTHEAD
+══════════════════════════════════════════ */
+.masthead {
+  background: linear-gradient(135deg, #050709 0%, #0c1018 35%, #111827 65%, #0b0f16 100%);
+  color: var(--ink);
+  padding: 68px 56px 56px;
+  position: relative;
+  overflow: hidden;
+  border-bottom: 1px solid rgba(232,168,75,0.2);
+}
+.masthead::after {
+  content: '';
+  position: absolute;
+  top: -80px; right: -80px;
+  width: 500px; height: 500px;
+  background: conic-gradient(from 220deg at 70% 30%, rgba(232,168,75,0.07) 0deg, transparent 60deg, rgba(232,168,75,0.04) 120deg, transparent 180deg);
+  border-radius: 50%;
+  pointer-events: none;
+}
+.masthead .ring1, .masthead .ring2 { position: absolute; border-radius: 50%; pointer-events: none; }
+.masthead .ring1 { top: -90px; right: -110px; width: 460px; height: 460px; border: 1px solid rgba(232,168,75,0.1); animation: ringRotate 22s linear infinite; }
+.masthead .ring2 { top: -24px; right: -50px; width: 260px; height: 260px; border: 1px solid rgba(232,168,75,0.06); animation: ringRotate 14s linear infinite reverse; }
+@keyframes ringRotate { from{transform:rotate(0deg) scale(1)} 50%{transform:rotate(180deg) scale(1.05)} to{transform:rotate(360deg) scale(1)} }
+.masthead .glow-orb { position: absolute; bottom: -140px; right: 100px; width: 380px; height: 380px; background: radial-gradient(circle, rgba(232,168,75,0.09) 0%, transparent 68%); border-radius: 50%; pointer-events: none; animation: orbPulse 6s ease-in-out infinite; }
+@keyframes orbPulse { 0%,100%{opacity:.5;transform:scale(1)} 50%{opacity:1;transform:scale(1.14)} }
+
+.masthead-tag { font-family: 'JetBrains Mono', monospace; font-size: 10.5px; letter-spacing: 3.5px; text-transform: uppercase; color: var(--gold-light); margin-bottom: 20px; display: flex; align-items: center; gap: 12px; position: relative; z-index: 1; opacity: .85; }
+.masthead-tag::before { content:''; display:inline-block; width:32px; height:1px; background:linear-gradient(90deg,var(--gold),transparent); }
+.masthead h1 { font-family: 'Syne', sans-serif; font-weight: 700; font-size: clamp(30px,4.8vw,54px); line-height: 1.08; color: #fff; max-width: 800px; position: relative; z-index: 1; letter-spacing: -0.03em; }
+.masthead h1 em { font-style: italic; font-family: 'DM Serif Display', serif; color: var(--gold-light); font-weight: 400; }
+.masthead-meta { margin-top: 28px; display: flex; gap: 32px; flex-wrap: wrap; font-family: 'JetBrains Mono', monospace; font-size: 10.5px; color: rgba(232,228,220,0.32); position: relative; z-index: 1; }
+.masthead-meta span { color: rgba(232,228,220,0.65); }
+
+/* ══════════════════════════════════════════
+   TOP-LEVEL SUBJECT TABS
+══════════════════════════════════════════ */
+.subject-tabs {
+  background: rgba(5,7,9,0.95);
+  border-bottom: 1px solid rgba(232,168,75,0.12);
+  padding: 0 56px;
+  display: flex; gap: 0;
+  overflow-x: auto;
+  position: sticky; top: 0; z-index: 200;
+  scrollbar-width: none;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+}
+.subject-tabs::-webkit-scrollbar { display: none; }
+.subject-tab {
+  font-family: 'Syne', sans-serif; font-weight: 600;
+  font-size: 12px; letter-spacing: 1px; text-transform: uppercase;
+  padding: 16px 28px;
+  color: rgba(232,228,220,0.32);
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  white-space: nowrap;
+  transition: color .22s, border-color .22s, background .22s;
+  background: none; border-left:none; border-right:none; border-top:none;
+  position: relative;
+}
+.subject-tab:hover { color: rgba(232,228,220,0.72); background: rgba(232,168,75,0.04); }
+.subject-tab.active { color: var(--gold-light); border-bottom-color: var(--gold); }
+.subject-tab.active::after { content:''; position:absolute; bottom:-2px; left:50%; transform:translateX(-50%); width:55%; height:2px; background:var(--gold-light); filter:blur(5px); animation:tabGlow 2.2s ease-in-out infinite; }
+@keyframes tabGlow { 0%,100%{opacity:.35;width:35%} 50%{opacity:1;width:78%} }
+
+/* ══════════════════════════════════════════
+   SUBJECT PANELS
+══════════════════════════════════════════ */
+.subject-panel { display: none; }
+.subject-panel.active { display: block; }
+
+/* ══════════════════════════════════════════
+   CHAPTER TABS (sub-nav)
+══════════════════════════════════════════ */
+.chapter-nav {
+  background: rgba(10,13,18,0.92);
+  border-bottom: 1px solid rgba(232,168,75,0.07);
+  padding: 0 56px;
+  display: flex; gap: 0;
+  overflow-x: auto;
+  position: sticky; top: 49px; z-index: 150;
+  scrollbar-width: none;
+  backdrop-filter: blur(12px);
+}
+.chapter-nav::-webkit-scrollbar { display: none; }
+.chapter-tab {
+  font-family: 'JetBrains Mono', monospace; font-size: 10.5px; letter-spacing: 1px; text-transform: uppercase;
+  padding: 12px 20px;
+  color: rgba(232,228,220,0.3);
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  white-space: nowrap;
+  transition: color .2s, border-color .2s;
+  background: none; border-left:none; border-right:none; border-top:none;
+}
+.chapter-tab:hover { color: rgba(232,228,220,0.6); }
+.chapter-tab.active { color: var(--teal); border-bottom-color: var(--teal); }
+
+/* ══════════════════════════════════════════
+   CONTENT AREA
+══════════════════════════════════════════ */
+.content-area { padding: 32px 56px 64px; max-width: 1200px; margin: 0 auto; position: relative; z-index: 1; }
+.chapter-pane { display: none; }
+.chapter-pane.active { display: block; }
+
+/* ══════════════════════════════════════════
+   CHAPTER BANNER
+══════════════════════════════════════════ */
+.chapter-banner {
+  background: linear-gradient(135deg, var(--surface2) 0%, #141922 100%);
+  border: 1px solid rgba(232,168,75,0.1);
+  border-radius: var(--radius-lg);
+  padding: 28px 32px;
+  margin-bottom: 28px;
+  position: relative; overflow: hidden;
+}
+.chapter-banner::after { content:''; position:absolute; top:-50px; right:-50px; width:200px; height:200px; border-radius:50%; background:radial-gradient(circle,rgba(232,168,75,0.07) 0%,transparent 70%); }
+.chapter-banner .ch-num { font-family:'JetBrains Mono',monospace; font-size:10px; color:var(--gold-dim); letter-spacing:.15em; text-transform:uppercase; margin-bottom:6px; }
+.chapter-banner h2 { font-family:'Syne',sans-serif; font-weight:700; font-size:clamp(1.4rem,3vw,1.9rem); color:#fff; letter-spacing:-.02em; margin-bottom:8px; }
+.chapter-banner p { font-size:.88rem; color:rgba(232,228,220,0.55); }
+
+/* ══════════════════════════════════════════
+   SECTION BLOCKS (collapsible)
+══════════════════════════════════════════ */
+.section-block { margin-bottom: 18px; border: 1px solid rgba(232,168,75,0.08); border-radius: var(--radius-lg); overflow: hidden; box-shadow: var(--shadow-md); transition: border-color .22s, box-shadow .22s; }
+.section-block:hover { border-color: rgba(232,168,75,0.2); box-shadow: var(--shadow-lg), var(--shadow-gold); }
+.section-header { display:flex; align-items:center; justify-content:space-between; padding:18px 26px; cursor:pointer; background:var(--card); border-bottom:1px solid transparent; user-select:none; transition:background .18s; position:relative; }
+.section-header::before { content:''; position:absolute; left:0; top:50%; transform:translateY(-50%); width:3px; height:0; background:linear-gradient(to bottom,var(--gold),transparent); border-radius:0 3px 3px 0; transition:height .3s ease; }
+.section-header:hover { background: var(--warm); }
+.section-header:hover::before { height: 60%; }
+.section-block.open .section-header { border-bottom:1px solid rgba(232,168,75,0.1); background:var(--warm); }
+.section-block.open .section-header::before { height:80%; }
+.section-header h2 { font-family:'Syne',sans-serif; font-weight:600; font-size:1rem; letter-spacing:.02em; display:flex; align-items:center; gap:12px; color:var(--ink); }
+.section-icon { width:28px; height:28px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-family:'JetBrains Mono',monospace; font-size:.82rem; font-weight:600; flex-shrink:0; }
+.icon-def   { background:rgba(61,190,190,.12); color:var(--teal);   border:1px solid rgba(61,190,190,.3); }
+.icon-deriv { background:rgba(90,191,122,.12); color:var(--green);  border:1px solid rgba(90,191,122,.3); }
+.icon-prob  { background:rgba(155,126,200,.12); color:var(--purple); border:1px solid rgba(155,126,200,.3); }
+.icon-ref   { background:rgba(232,168,75,.1);   color:var(--gold);   border:1px solid rgba(232,168,75,.25); }
+.icon-law   { background:rgba(91,155,213,.12);  color:var(--blue);   border:1px solid rgba(91,155,213,.3); }
+.section-toggle { color:var(--gold-dim); font-size:11px; transition:transform .3s cubic-bezier(.22,1,.36,1); opacity:.6; flex-shrink:0; }
+.section-block.open .section-toggle { transform:rotate(180deg); opacity:1; }
+.section-body { display:none; padding:24px 26px 30px; background:var(--card); }
+.section-block.open .section-body { display:block; }
+
+/* ══════════════════════════════════════════
+   DEFINITION CARD
+══════════════════════════════════════════ */
+.def-card { margin-bottom:18px; padding:16px 20px; border-left:2px solid var(--teal); background:rgba(61,190,190,.04); border-radius:0 var(--radius-sm) var(--radius-sm) 0; }
+.def-card h3 { font-family:'Syne',sans-serif; font-weight:600; font-size:.98rem; color:rgba(61,190,190,.9); margin-bottom:8px; letter-spacing:.01em; }
+.def-card p, .def-card ul { color:rgba(232,228,220,.78); font-size:.9rem; }
+.def-card ul { padding-left:1.2rem; }
+.def-card ul li { margin-bottom:4px; }
+.def-card p+p { margin-top:6px; }
+
+/* ══════════════════════════════════════════
+   DERIVATION CARD
+══════════════════════════════════════════ */
+.deriv-card { margin-bottom:24px; border:1px solid rgba(90,191,122,.18); border-radius:var(--radius-md); overflow:hidden; }
+.deriv-card-title { background:rgba(90,191,122,.07); padding:10px 18px; font-family:'Syne',sans-serif; font-weight:600; font-size:.92rem; color:var(--green); border-bottom:1px solid rgba(90,191,122,.15); letter-spacing:.01em; }
+.deriv-card-body { padding:18px 20px; font-size:.9rem; }
+.deriv-card-body p { margin-bottom:10px; color:rgba(232,228,220,.78); }
+.deriv-card-body p:last-child { margin-bottom:0; }
+
+/* ══════════════════════════════════════════
+   FORMULA ELEMENTS
+══════════════════════════════════════════ */
+.formula-box { display:block; background:rgba(232,168,75,.055); border:1px solid rgba(232,168,75,.18); border-radius:var(--radius-sm); padding:12px 18px; margin:12px 0; font-family:'JetBrains Mono',monospace; font-size:.86rem; color:var(--gold-light); line-height:2; position:relative; }
+.formula-box::before { content:''; position:absolute; top:0; left:0; right:0; height:1px; background:linear-gradient(90deg,var(--gold-glow),transparent 70%); }
+.formula-box .f-label { display:block; font-family:'DM Sans',sans-serif; font-size:.74rem; color:var(--gold-dim); letter-spacing:.08em; text-transform:uppercase; margin-bottom:5px; }
+.highlight-formula { display:block; background:rgba(232,168,75,.1); border:1.5px solid var(--gold); border-radius:var(--radius-sm); padding:12px 20px; margin:14px 0; font-family:'JetBrains Mono',monospace; font-size:.97rem; color:var(--gold-light); text-align:center; font-weight:500; letter-spacing:.03em; }
+.two-col { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+.three-col { display:grid; grid-template-columns:1fr 1fr 1fr; gap:10px; }
+@media(max-width:640px) { .two-col,.three-col { grid-template-columns:1fr; } }
+.condition-box { display:inline-block; padding:.25rem .75rem; border-radius:3px; font-family:'JetBrains Mono',monospace; font-size:.8rem; margin:.25rem .25rem .25rem 0; }
+.cond-bright { background:rgba(232,168,75,.1); border:1px solid rgba(232,168,75,.3); color:var(--gold-light); }
+.cond-dark   { background:rgba(224,100,74,.08); border:1px solid rgba(224,100,74,.3); color:#d88080; }
+.cond-cyan   { background:rgba(61,190,190,.1);  border:1px solid rgba(61,190,190,.3);  color:var(--teal); }
+.cond-amber  { background:rgba(232,168,75,.1);  border:1px solid rgba(232,168,75,.2);  color:var(--gold-light); }
+
+/* ══════════════════════════════════════════
+   DIAGRAM
+══════════════════════════════════════════ */
+.diagram-wrap { margin:14px 0; background:rgba(255,255,255,.015); border:1px solid var(--border); border-radius:var(--radius-sm); padding:14px; text-align:center; }
+.diagram-wrap figcaption { font-size:.76rem; color:var(--muted); margin-top:8px; letter-spacing:.04em; font-family:'JetBrains Mono',monospace; }
+
+/* ══════════════════════════════════════════
+   PROBLEM CARD
+══════════════════════════════════════════ */
+.prob-card { margin-bottom:20px; border:1px solid rgba(155,126,200,.2); border-radius:var(--radius-md); overflow:hidden; transition:border-color .2s; }
+.prob-card:hover { border-color:rgba(155,126,200,.35); }
+.prob-card-header { background:rgba(155,126,200,.07); padding:10px 18px; border-bottom:1px solid rgba(155,126,200,.15); display:flex; align-items:center; gap:10px; }
+.prob-num { background:rgba(155,126,200,.2); color:#c4b0e8; font-family:'JetBrains Mono',monospace; font-size:.76rem; font-weight:600; padding:.18rem .6rem; border-radius:3px; }
+.prob-card-header span { font-family:'DM Serif Display',serif; font-size:.88rem; color:#c4b0e8; font-style:italic; }
+.prob-card-body { padding:16px 20px; font-size:.9rem; background:var(--card); }
+.prob-q { color:var(--ink); margin-bottom:12px; font-weight:400; }
+.prob-given { background:rgba(255,255,255,.025); border:1px solid var(--border); border-radius:var(--radius-sm); padding:9px 14px; margin-bottom:12px; font-family:'JetBrains Mono',monospace; font-size:.8rem; color:rgba(232,228,220,.6); line-height:1.8; }
+.prob-given span { color:rgba(61,190,190,.9); }
+.prob-solution h4 { font-family:'Syne',sans-serif; font-weight:600; font-size:.88rem; color:var(--green); margin-bottom:8px; margin-top:14px; }
+.prob-solution h4:first-child { margin-top:0; }
+.prob-solution h4.sub { margin-top:14px; }
+.prob-solution p { color:rgba(232,228,220,.78); margin-bottom:6px; font-size:.88rem; }
+
+/* steps */
+.step { display:flex; gap:10px; margin-bottom:8px; align-items:flex-start; font-size:.88rem; color:rgba(232,228,220,.78); }
+.step-num { min-width:22px; height:22px; background:rgba(232,168,75,.12); border:1px solid rgba(232,168,75,.25); border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:.68rem; color:var(--gold-dim); font-family:'JetBrains Mono',monospace; font-weight:600; flex-shrink:0; margin-top:2px; }
+.step-body { flex:1; color:rgba(232,228,220,.78); font-size:.9rem; }
+.ans-box { display:flex; align-items:center; gap:10px; background:rgba(90,191,122,.07); border:1px solid rgba(90,191,122,.28); border-radius:var(--radius-sm); padding:8px 14px; margin-top:10px; }
+.ans-label { font-family:'JetBrains Mono',monospace; font-size:.73rem; color:var(--green); letter-spacing:.06em; font-weight:600; white-space:nowrap; }
+.ans-value { font-family:'JetBrains Mono',monospace; font-size:.88rem; color:var(--green); font-weight:500; }
+
+/* ══════════════════════════════════════════
+   MODERN PHYSICS SPECIFIC — TOGGLE SOLUTIONS
+══════════════════════════════════════════ */
+.sol-toggle { font-family:'Syne',sans-serif; font-size:.75rem; font-weight:600; letter-spacing:1px; text-transform:uppercase; background:rgba(155,126,200,.08); border:1px solid rgba(155,126,200,.25); color:#c4b0e8; border-radius:var(--radius-sm); padding:5px 14px; cursor:pointer; transition:background .18s,color .18s; margin-bottom:10px; display:inline-block; }
+.sol-toggle:hover { background:rgba(155,126,200,.18); color:#fff; }
+.solution, .sol { display:none; }
+.solution.open, .sol.open { display:block; }
+.sol-step, .ss { font-size:.88rem; color:rgba(232,228,220,.7); margin:.3rem 0; }
+.sol-eq, .se, .eq { background:rgba(90,191,122,.07); border-radius:var(--radius-sm); padding:.45rem 1rem; margin:.4rem 0; font-style:italic; font-weight:500; color:var(--green); font-size:.9rem; }
+.ans, .res, .result-box { background:rgba(90,191,122,.12); border:1px solid rgba(90,191,122,.35); color:var(--green); border-radius:var(--radius-sm); padding:.6rem 1.2rem; margin-top:10px; font-weight:600; font-size:.9rem; text-align:center; font-family:'JetBrains Mono',monospace; }
+
+/* Modern physics callout */
+.callout { background:rgba(232,168,75,.05); border:1px solid rgba(232,168,75,.2); border-left:2px solid var(--gold); border-radius:var(--radius-sm); padding:12px 18px; font-size:.88rem; color:rgba(232,228,220,.7); margin:12px 0; }
+.callout strong { color:var(--gold-light); }
+
+/* Note */
+.note { background:rgba(232,168,75,.04); border-left:2px solid rgba(232,168,75,.3); padding:9px 14px; font-size:.83rem; color:rgba(232,228,220,.6); margin:10px 0; font-style:italic; }
+
+/* ══════════════════════════════════════════
+   QUICK-REF GRID
+══════════════════════════════════════════ */
+.qref-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(200px,1fr)); gap:8px; margin:10px 0; }
+.qref-item { background:rgba(232,168,75,.045); border:1px solid rgba(232,168,75,.15); border-radius:var(--radius-sm); padding:10px 14px; }
+.qref-item .qr-name { font-family:'JetBrains Mono',monospace; font-size:.72rem; color:var(--gold-dim); letter-spacing:.06em; text-transform:uppercase; margin-bottom:5px; }
+.qref-item .qr-formula { font-family:'JetBrains Mono',monospace; font-size:.86rem; color:var(--gold-light); }
+
+/* ══════════════════════════════════════════
+   TABLES
+══════════════════════════════════════════ */
+table.data-table, .merged-table { width:100%; border-collapse:collapse; font-size:.88rem; margin:12px 0; border-radius:var(--radius-sm); overflow:hidden; }
+table.data-table th, .merged-table th, table th { background:rgba(5,7,9,.9); color:var(--gold-light); padding:10px 16px; text-align:left; font-family:'Syne',sans-serif; font-weight:600; font-size:.76rem; letter-spacing:1.5px; text-transform:uppercase; border-bottom:1px solid rgba(232,168,75,.15); }
+table.data-table td, .merged-table td, table td { padding:10px 16px; border-bottom:1px solid var(--line); vertical-align:top; color:rgba(232,228,220,.78); }
+table.data-table tr:nth-child(even) td, table tr:nth-child(even) td { background:rgba(255,255,255,.018); }
+table.data-table tr:hover td, table tr:hover td { background:rgba(232,168,75,.035); }
+table.data-table tr:last-child td, table tr:last-child td { border-bottom:none; }
+th.tick { color:var(--green); } th.cross { color:var(--rust); }
+td .tick { color:var(--green); font-weight:600; }
+td .cross { color:var(--rust); font-weight:600; }
+
+/* ══════════════════════════════════════════
+   LAW / APP / DEF BLOCKS (modern physics style)
+══════════════════════════════════════════ */
+.law-block { margin-bottom:14px; padding:16px 20px; border-left:2px solid var(--blue); background:rgba(91,155,213,.04); border-radius:0 var(--radius-sm) var(--radius-sm) 0; }
+.law-block h3 { font-family:'Syne',sans-serif; font-weight:600; font-size:.98rem; color:rgba(91,155,213,.9); margin-bottom:8px; }
+.law-block p { color:rgba(232,228,220,.78); font-size:.9rem; }
+.law-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:10px; }
+@media(max-width:560px){ .law-grid{grid-template-columns:1fr;} }
+.law-card { background:rgba(255,255,255,.025); border:1px solid rgba(91,155,213,.18); border-radius:var(--radius-sm); padding:10px 14px; }
+.law-card .num { font-family:'JetBrains Mono',monospace; font-size:.7rem; font-weight:600; text-transform:uppercase; letter-spacing:.08em; color:rgba(91,155,213,.7); margin-bottom:5px; }
+.law-card p { font-size:.88rem; color:rgba(232,228,220,.7); }
+
+.app-block { margin-bottom:14px; padding:16px 20px; border-left:2px solid var(--teal); background:rgba(61,190,190,.04); border-radius:0 var(--radius-sm) var(--radius-sm) 0; }
+.app-block h3 { font-family:'Syne',sans-serif; font-weight:600; font-size:.98rem; color:rgba(61,190,190,.9); margin-bottom:8px; }
+.app-block p { color:rgba(232,228,220,.78); font-size:.9rem; }
+.app-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(180px,1fr)); gap:8px; margin-top:10px; }
+.app-pill { background:rgba(255,255,255,.025); border:1px solid rgba(61,190,190,.2); border-radius:var(--radius-sm); padding:10px 14px; font-size:.88rem; color:rgba(61,190,190,.9); }
+.app-pill strong { display:block; font-size:.76rem; font-weight:600; margin-bottom:3px; font-family:'JetBrains Mono',monospace; letter-spacing:.05em; text-transform:uppercase; opacity:.7; }
+
+/* obs items (modern physics) */
+.obs-item { display:flex; gap:12px; margin-bottom:8px; align-items:flex-start; }
+.obs-icon { width:24px; height:24px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:600; flex-shrink:0; margin-top:1px; }
+.obs-text { font-size:.88rem; color:rgba(232,228,220,.7); }
+
+/* Section label (modern physics inline) */
+.section-label { font-family:'Syne',sans-serif; font-weight:700; font-size:.72rem; letter-spacing:.14em; text-transform:uppercase; margin:28px 0 14px; color:var(--muted); display:flex; align-items:center; gap:10px; }
+.section-label::after { content:''; flex:1; height:1px; background:rgba(232,228,220,.07); }
+
+/* Steps numbered list */
+.steps-list { padding-left:0; list-style:none; margin:10px 0; counter-reset:steps; }
+.steps-list li { counter-increment:steps; padding:10px 14px 10px 52px; position:relative; font-size:.9rem; color:rgba(232,228,220,.78); border-bottom:1px solid rgba(232,228,220,.04); line-height:1.72; background:rgba(255,255,255,.01); margin-bottom:4px; border-radius:var(--radius-sm); transition:background .15s; }
+.steps-list li:hover { background:rgba(232,168,75,.04); }
+.steps-list li::before { content:counter(steps); position:absolute; left:14px; top:10px; width:24px; height:24px; background:rgba(232,168,75,.14); color:var(--gold-light); font-family:'JetBrains Mono',monospace; font-size:.72rem; font-weight:600; border-radius:50%; display:flex; align-items:center; justify-content:center; }
+
+hr.divider { border:none; border-top:1px solid var(--border); margin:18px 0; }
+
+code { font-family:'JetBrains Mono',monospace; font-size:.83rem; color:var(--teal); background:rgba(61,190,190,.09); padding:1px 7px; border-radius:4px; }
+mark { background:rgba(232,168,75,.17); color:var(--gold-light); padding:1px 5px; border-radius:3px; }
+strong { font-weight:500; color:rgba(232,228,220,.95); }
+
+.formula { background:rgba(232,168,75,.06); border:1px solid rgba(232,168,75,.15); border-radius:var(--radius-sm); padding:8px 14px; margin-top:10px; font-family:'JetBrains Mono',monospace; font-size:.88rem; color:var(--gold-light); }
+.fml { background:rgba(232,168,75,.07); border-radius:var(--radius-sm); padding:7px 14px; font-style:italic; font-weight:500; color:var(--gold-light); font-size:.9rem; margin-top:8px; font-family:'JetBrains Mono',monospace; }
+
+.formula-row { display:flex; flex-wrap:wrap; gap:20px; align-items:center; margin:8px 0; }
+.tag { display:inline-block; padding:.15rem .6rem; border-radius:3px; font-size:.72rem; font-family:'JetBrains Mono',monospace; letter-spacing:.05em; margin-right:5px; vertical-align:middle; }
+.tag-def { background:rgba(61,190,190,.15); color:var(--teal); border:1px solid rgba(61,190,190,.3); }
+.tag-key { background:rgba(232,168,75,.12); color:var(--gold-light); border:1px solid rgba(232,168,75,.25); }
+
+/* ══════════════════════════════════════════
+   BACK TO TOP
+══════════════════════════════════════════ */
+#back-to-top { position:fixed; bottom:30px; right:30px; z-index:300; width:46px; height:46px; border-radius:50%; background:rgba(232,168,75,.1); border:1px solid rgba(232,168,75,.32); color:var(--gold-light); font-size:18px; cursor:pointer; display:flex; align-items:center; justify-content:center; opacity:0; transform:translateY(14px); transition:opacity .3s,transform .3s,background .2s,box-shadow .2s; pointer-events:none; backdrop-filter:blur(8px); }
+#back-to-top.visible { opacity:1; transform:translateY(0); pointer-events:auto; }
+#back-to-top:hover { background:rgba(232,168,75,.2); box-shadow:0 6px 28px rgba(232,168,75,.25); transform:translateY(-2px); }
+
+/* ══════════════════════════════════════════
+   SCROLLBAR
+══════════════════════════════════════════ */
+::-webkit-scrollbar { width:5px; height:5px; }
+::-webkit-scrollbar-track { background:var(--cream); }
+::-webkit-scrollbar-thumb { background:rgba(232,168,75,.22); border-radius:3px; }
+::-webkit-scrollbar-thumb:hover { background:rgba(232,168,75,.38); }
+
+/* ══════════════════════════════════════════
+   FOOTER
+══════════════════════════════════════════ */
+footer { border-top:1px solid rgba(232,168,75,.1); padding:30px 56px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; font-family:'JetBrains Mono',monospace; font-size:10.5px; color:var(--muted); position:relative; z-index:1; background:#050709; }
+footer span { color:var(--gold); }
+
+/* ══════════════════════════════════════════
+   MOBILE
+══════════════════════════════════════════ */
+@media(max-width:768px) {
+  .masthead { padding:38px 20px 32px; }
+  .subject-tabs, .chapter-nav { padding:0; }
+  .subject-tab { padding:13px 14px; font-size:10px; }
+  .chapter-tab { padding:10px 12px; font-size:9.5px; }
+  .content-area { padding:14px 14px 40px; }
+  .section-header { padding:14px 18px; }
+  .section-body { padding:16px 16px 22px; }
+  pre { font-size:11.5px; padding:14px; }
+  footer { padding:20px; flex-direction:column; text-align:center; }
+  .qref-grid { grid-template-columns:1fr 1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════════
+     MASTHEAD
+══════════════════════════════════════════ -->
+<div class="masthead">
+  <div class="ring1"></div>
+  <div class="ring2"></div>
+  <div class="glow-orb"></div>
+  <div class="masthead-tag">IUT · Physics · Complete Study Reference</div>
+  <h1>Physics — <em>Study Notes</em></h1>
+  <div class="masthead-meta">
+    SUBJECTS · <span>Electromagnetism · Modern Physics · Optics</span>
+    &nbsp;|&nbsp; COVERAGE · <span>Handout Pages 20–26, 36–48, 68–107</span>
+    &nbsp;|&nbsp; TYPE · <span>Definitions · Derivations · Problems</span>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     SUBJECT NAVIGATION TABS
+══════════════════════════════════════════ -->
+<div class="subject-tabs">
+  <button class="subject-tab active" onclick="showSubject('sub-em', this)">Electromagnetism</button>
+  <button class="subject-tab" onclick="showSubject('sub-mp1', this)">Modern Physics · pp 20–26</button>
+  <button class="subject-tab" onclick="showSubject('sub-mp2', this)">Modern Physics · pp 36–48</button>
+  <button class="subject-tab" onclick="showSubject('sub-opt', this)">Optics</button>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════════════
+     SUBJECT 1: ELECTROMAGNETISM
+══════════════════════════════════════════════════════════════════════ -->
+<div class="subject-panel active" id="sub-em">
+
+  <div class="chapter-nav">
+    <button class="chapter-tab active" onclick="showChapter('em', 'em-ch1', this)">Ch I — Magnetic Fields</button>
+    <button class="chapter-tab" onclick="showChapter('em', 'em-ch2', this)">Ch II — Fields Due to Currents</button>
+    <button class="chapter-tab" onclick="showChapter('em', 'em-ch3', this)">Ch III — Induction &amp; Inductance</button>
+  </div>
+
+  <div class="content-area">
+
+    <!-- ── CHAPTER 1 ── -->
+    <div class="chapter-pane active" id="em-ch1">
+      <div class="chapter-banner">
+        <div class="ch-num">Chapter One · Electromagnetism</div>
+        <h2>Magnetic Fields</h2>
+        <p>Sources of magnetic fields, force on charges and currents, motion in magnetic fields, Lorentz force applications, and torque on current loops.</p>
+      </div>
+
+      <div class="section-block open" id="em-sb1d">
+        <div class="section-header" onclick="toggleBlock('em-sb1d')">
+          <h2><span class="section-icon icon-def">D</span> Definitions &amp; Concepts</h2>
+          <span class="section-toggle">▼</span>
+        </div>
+        <div class="section-body">
+          <div class="def-card"><h3>Sources of Magnetic Fields</h3><ul><li><strong>Moving charged particles</strong> (e.g. current in a wire) → electromagnets.</li><li><strong>Intrinsic spin of elementary particles</strong> (e.g. electrons) → permanent magnets.</li><li>Individual magnetic charges (monopoles) predicted by some theories but never confirmed to exist.</li></ul></div>
+          <div class="def-card"><h3>The Magnetic Field B — Definition</h3><p>Defined via the force it exerts on a moving test charge q with velocity v:</p><div class="highlight-formula">F = qv × B</div><ul><li>F is perpendicular to both v and B.</li><li>|F| = qvB sinθ, where θ is the angle between v and B.</li><li>SI unit of B: <strong>Tesla (T)</strong> = N/(C·m/s) = N·A⁻¹·m⁻¹. Also: 1 T = 10⁴ gauss.</li></ul></div>
+          <div class="def-card"><h3>Magnetic Field Lines</h3><ul><li>Closed loops entering one end (south pole) and exiting the other (north pole).</li><li>A magnet with two poles is a <strong>magnetic dipole</strong>.</li><li>Unlike electric field lines, magnetic field lines <em>never start or end</em> — there are no magnetic monopoles.</li></ul></div>
+          <div class="def-card"><h3>The Lorentz Force</h3><p>A charge q in both an electric field <em>E</em> and magnetic field <em>B</em> experiences both forces:</p><div class="highlight-formula">F = qE + qv × B</div><p>When E and B are perpendicular ("crossed fields"), special applications arise: velocity selector, mass spectrometer, Hall effect.</p></div>
+          <div class="def-card"><h3>Hall Effect (1879)</h3><p>When a current-carrying conductor is in a magnetic field B, charges accumulate on its edges, producing a transverse <strong>Hall voltage ΔV_H</strong>.</p><ul><li>Sign of ΔV_H → identifies the <strong>sign of charge carriers</strong>.</li><li>Magnitude → gives the <strong>drift speed v_d</strong>.</li><li>Used to measure <strong>magnetic field strength</strong>.</li></ul></div>
+          <div class="def-card"><h3>Magnetic Dipole Moment</h3><p>For a current loop of area A carrying current I with N turns:</p><div class="highlight-formula">m = NIA</div><p>Unit: A·m². Potential energy in external field: U = −m · B</p></div>
+        </div>
+      </div>
+
+      <div class="section-block" id="em-sb1r">
+        <div class="section-header" onclick="toggleBlock('em-sb1r')">
+          <h2><span class="section-icon icon-deriv">∂</span> Derivations</h2>
+          <span class="section-toggle">▼</span>
+        </div>
+        <div class="section-body">
+          <div class="deriv-card"><div class="deriv-card-title">1 · Motion of a Charged Particle in a Uniform Magnetic Field</div><div class="deriv-card-body"><div class="diagram-wrap"><svg width="360" height="160" viewBox="0 0 360 160"><g fill="#3dbebe" opacity="0.5"><text x="20" y="30" font-size="14">·</text><text x="60" y="30" font-size="14">·</text><text x="100" y="30" font-size="14">·</text><text x="140" y="30" font-size="14">·</text><text x="20" y="70" font-size="14">·</text><text x="60" y="70" font-size="14">·</text><text x="100" y="70" font-size="14">·</text><text x="140" y="70" font-size="14">·</text><text x="20" y="110" font-size="14">·</text><text x="60" y="110" font-size="14">·</text><text x="100" y="110" font-size="14">·</text><text x="140" y="110" font-size="14">·</text></g><text x="5" y="150" fill="#3dbebe" font-size="10">B (out)</text><circle cx="210" cy="85" r="55" fill="none" stroke="#e8a84b" stroke-width="1.5" stroke-dasharray="6,3"/><circle cx="265" cy="85" r="5" fill="#f5c96e"/><line x1="265" y1="85" x2="265" y2="50" stroke="#f5c96e" stroke-width="1.5" marker-end="url(#earr1)"/><text x="270" y="65" fill="#f5c96e" font-size="10">v</text><line x1="265" y1="85" x2="220" y2="85" stroke="#e0644a" stroke-width="1.5" marker-end="url(#earr2)"/><text x="230" y="78" fill="#e0644a" font-size="10">F</text><line x1="210" y1="85" x2="265" y2="85" stroke="#555" stroke-width="1" stroke-dasharray="3,2"/><text x="232" y="100" fill="#888" font-size="10">r</text><text x="190" y="22" fill="#e8a84b" font-size="10">circular path</text><defs><marker id="earr1" markerWidth="6" markerHeight="6" refX="3" refY="3" orient="auto-start-reverse"><path d="M0,0 L6,3 L0,6" fill="none" stroke="#f5c96e" stroke-width="1.5"/></marker><marker id="earr2" markerWidth="6" markerHeight="6" refX="3" refY="3" orient="auto-start-reverse"><path d="M0,0 L6,3 L0,6" fill="none" stroke="#e0644a" stroke-width="1.5"/></marker></defs></svg><figcaption>Positive charge moving in uniform B (out of page) → circular path</figcaption></div><p><strong>Case 1 — Velocity perpendicular to B (circular motion):</strong></p><p>Magnetic force = centripetal force:</p><div class="formula-box">qvB = mv²/r</div><div class="two-col"><div><span class="condition-box cond-cyan">RADIUS</span><div class="highlight-formula">r = mv / qB</div></div><div><span class="condition-box cond-cyan">PERIOD</span><div class="highlight-formula">T = 2πm / qB</div></div></div><p><strong>Cyclotron (angular) frequency</strong> — independent of speed:</p><div class="highlight-formula">ω = qB / m</div><hr class="divider"><p><strong>Case 2 — Velocity at angle to B (helical motion):</strong></p><div class="formula-box">v⊥ = v sinθ → circular motion at cyclotron frequency<br>v‖ = v cosθ → uniform linear motion parallel to B<br>Combined → helix</div><div class="note">T and ω are independent of the particle's speed — the basis of the cyclotron particle accelerator.</div></div></div>
+          <div class="deriv-card"><div class="deriv-card-title">2 · Applications of Crossed Fields (E ⊥ B)</div><div class="deriv-card-body"><p><strong>① Velocity Selector:</strong></p><div class="formula-box">Electric force qE (down) balances magnetic force qvB (up):<br>qE = qvB</div><div class="highlight-formula">v = E / B</div><hr class="divider"><p><strong>② Mass Spectrometer:</strong></p><p>After velocity selection, particles enter a second field B₀ and travel a semicircle of radius r:</p><div class="formula-box">r = mv / qB₀ = mE / qBB₀</div><div class="highlight-formula">m/q = rBB₀ / E</div><div class="note">J. J. Thomson used this method in 1897 to measure the mass-to-charge ratio of electrons.</div><hr class="divider"><p><strong>③ Hall Effect:</strong></p><div class="formula-box">Equilibrium condition: qE_H = qv_d B<br>E_H = v_d B  →  ΔV_H = v_d Bd</div><div class="highlight-formula">v_d = E_H / B = ΔV_H / (Bd)</div></div></div>
+          <div class="deriv-card"><div class="deriv-card-title">3 · Magnetic Force on a Current-Carrying Conductor</div><div class="deriv-card-body"><p>For a straight wire segment of length L, cross-section A, carrying current I in field B:</p><div class="formula-box">Force on one charge: F = qv_d × B<br>Total force = (nqAL)(v_d × B) where n = charge density<br>Since I = nqv_d A:</div><div class="highlight-formula">F = IL × B</div><p>For an arbitrarily shaped wire:</p><div class="formula-box">F = I ∫ ds × B</div><p><strong>Key result:</strong> Closed loop in uniform B: <em>net force = 0</em></p></div></div>
+          <div class="deriv-card"><div class="deriv-card-title">4 · Torque on a Rectangular Current Loop — Magnetic Dipole</div><div class="deriv-card-body"><p>Loop of sides a × b, N turns, current I, in uniform field B:</p><div class="formula-box">Force on each a-side: F = NIaB<br>Moment arm = (b/2)sinθ each side</div><div class="highlight-formula">τ = NIAB sinθ = m × B</div><p>Potential Energy:</p><div class="highlight-formula">U = −m · B = −mB cosθ</div><div class="note">This is the principle behind electric motors — torque on a current loop drives rotation against the field.</div></div></div>
+        </div>
+      </div>
+
+      <div class="section-block" id="em-sb1q">
+        <div class="section-header" onclick="toggleBlock('em-sb1q')">
+          <h2><span class="section-icon icon-ref">≡</span> Chapter I Quick Reference</h2>
+          <span class="section-toggle">▼</span>
+        </div>
+        <div class="section-body">
+          <div class="qref-grid">
+            <div class="qref-item"><div class="qr-name">Magnetic Force</div><div class="qr-formula">F = qv × B</div></div>
+            <div class="qref-item"><div class="qr-name">Radius (circle)</div><div class="qr-formula">r = mv / qB</div></div>
+            <div class="qref-item"><div class="qr-name">Period</div><div class="qr-formula">T = 2πm / qB</div></div>
+            <div class="qref-item"><div class="qr-name">Cyclotron freq</div><div class="qr-formula">ω = qB / m</div></div>
+            <div class="qref-item"><div class="qr-name">Lorentz Force</div><div class="qr-formula">F = q(E + v×B)</div></div>
+            <div class="qref-item"><div class="qr-name">Velocity Selector</div><div class="qr-formula">v = E / B</div></div>
+            <div class="qref-item"><div class="qr-name">Force on Wire</div><div class="qr-formula">F = IL × B</div></div>
+            <div class="qref-item"><div class="qr-name">Torque on Loop</div><div class="qr-formula">τ = NIAB sinθ</div></div>
+            <div class="qref-item"><div class="qr-name">Dipole Moment</div><div class="qr-formula">m = NIA</div></div>
+            <div class="qref-item"><div class="qr-name">PE of Dipole</div><div class="qr-formula">U = −m · B</div></div>
+            <div class="qref-item"><div class="qr-name">Hall Voltage</div><div class="qr-formula">ΔVH = vd·B·d</div></div>
+            <div class="qref-item"><div class="qr-name">m/q (spectrometer)</div><div class="qr-formula">m/q = rBB₀/E</div></div>
+          </div>
+        </div>
+      </div>
+    </div><!-- end em-ch1 -->
+
+    <!-- ── CHAPTER 2 ── -->
+    <div class="chapter-pane" id="em-ch2">
+      <div class="chapter-banner">
+        <div class="ch-num">Chapter Two · Electromagnetism</div>
+        <h2>Magnetic Fields Due to Currents</h2>
+        <p>Biot-Savart Law, Ampère's Law, fields of wires, loops, solenoids, toroids, and infinite sheets.</p>
+      </div>
+
+      <div class="section-block open" id="em-sb2d">
+        <div class="section-header" onclick="toggleBlock('em-sb2d')">
+          <h2><span class="section-icon icon-def">D</span> Definitions &amp; Concepts</h2>
+          <span class="section-toggle">▼</span>
+        </div>
+        <div class="section-body">
+          <div class="def-card"><h3>Biot-Savart Law</h3><p>The magnetic field dB produced at a point P by a current element ids at distance r:</p><div class="highlight-formula">dB = (μ₀/4π) · (I ds × r̂) / r²</div><ul><li>μ₀ = 4π × 10⁻⁷ T·m/A (permeability of free space)</li><li>Direction: right-hand rule on ds × r̂</li><li>Total field: B = (μ₀/4π) ∫ (I ds × r̂) / r²</li></ul></div>
+          <div class="def-card"><h3>Ampère's Law</h3><p>For any closed Amperian loop, the line integral of B around the loop equals μ₀ times the total enclosed current:</p><div class="highlight-formula">∮ B · ds = μ₀ I_enc</div><p>Most powerful when the problem has <strong>high symmetry</strong> (cylindrical, planar, toroidal).</p></div>
+          <div class="def-card"><h3>Solenoid</h3><p>A tightly wound helical coil of wire. For an <em>ideal solenoid</em>:</p><ul><li>B = 0 outside</li><li>B is uniform inside, parallel to axis</li><li>n = N/l = turns per unit length</li></ul></div>
+          <div class="def-card"><h3>Toroid</h3><p>A solenoid bent into a closed doughnut shape. By symmetry B forms concentric circles inside only. B = 0 in the central hole and outside.</p></div>
+          <div class="def-card"><h3>Force Between Parallel Wires</h3><ul><li><strong>Parallel currents attract</strong></li><li><strong>Anti-parallel currents repel</strong></li><li>Force per unit length: F/L = μ₀I₁I₂ / 2πd</li><li>Definition of the Ampere: 1 A produces a force of 2 × 10⁻⁷ N/m between infinite parallel wires 1 m apart.</li></ul></div>
+        </div>
+      </div>
+
+      <div class="section-block" id="em-sb2r">
+        <div class="section-header" onclick="toggleBlock('em-sb2r')">
+          <h2><span class="section-icon icon-deriv">∂</span> Derivations</h2>
+          <span class="section-toggle">▼</span>
+        </div>
+        <div class="section-body">
+          <div class="deriv-card"><div class="deriv-card-title">1 · Long Straight Wire (Biot-Savart / Ampère)</div><div class="deriv-card-body"><p>Using Ampère's law with circular loop of radius r:</p><div class="formula-box">∮ B · ds = B(2πr) = μ₀I</div><div class="highlight-formula">B = μ₀I / 2πr &nbsp; (outside wire, r ≥ R)</div><p>Inside the wire (r ≤ R, uniform current density):</p><div class="formula-box">I_enc = I₀(r/R)²  →  B(2πr) = μ₀I₀(r/R)²</div><div class="highlight-formula">B = (μ₀I₀ / 2πR²) r &nbsp; (inside wire, r ≤ R)</div><div class="note">B grows linearly inside the wire, peaks at the surface, then falls as 1/r outside.</div></div></div>
+          <div class="deriv-card"><div class="deriv-card-title">2 · Circular Current Loop (Biot-Savart)</div><div class="deriv-card-body"><p>For a loop of radius R, axial point P at distance x from centre:</p><div class="highlight-formula">B = μ₀IR² / [2(R² + x²)^(3/2)]</div><div class="two-col"><div><span class="condition-box cond-cyan">At centre (x=0)</span><div class="formula-box">B = μ₀I / 2R</div></div><div><span class="condition-box cond-amber">Far field (x≫R)</span><div class="formula-box">B ≈ μ₀IR² / 2x³ = μ₀m / 2πx³<br>(magnetic dipole)</div></div></div></div></div>
+          <div class="deriv-card"><div class="deriv-card-title">3 · Solenoid (Ampère's Law)</div><div class="deriv-card-body"><p>Rectangular Amperian path of length L inside solenoid — only the side parallel to B inside contributes:</p><div class="formula-box">∮ B · ds = BL = μ₀(nL)I</div><div class="highlight-formula">B = μ₀nI = μ₀(N/l)I &nbsp; (inside solenoid)</div><p style="font-size:.84rem;color:var(--muted);">B is uniform and independent of position inside an ideal solenoid.</p></div></div>
+          <div class="deriv-card"><div class="deriv-card-title">4 · Toroid (Ampère's Law)</div><div class="deriv-card-body"><p>Circular Amperian path of radius r inside the toroid, enclosing total current NI:</p><div class="formula-box">∮ B · ds = B(2πr) = μ₀NI</div><div class="highlight-formula">B = μ₀NI / (2πr) &nbsp; (a ≤ r ≤ b)</div><div class="two-col"><div><span class="condition-box cond-dark">Outside (r &gt; b)</span><div class="formula-box">B = 0</div></div><div><span class="condition-box cond-dark">Inside hole (r &lt; a)</span><div class="formula-box">B = 0</div></div></div></div></div>
+          <div class="deriv-card"><div class="deriv-card-title">5 · Infinite Conducting Sheet (Ampère's Law)</div><div class="deriv-card-body"><p>Sheet in yz-plane, surface current density Js (A/m). Rectangular Amperian path of width w:</p><div class="formula-box">∮ B · ds = 2Bw = μ₀Jsw</div><div class="highlight-formula">B = μ₀Js / 2 &nbsp; (uniform, independent of distance)</div></div></div>
+        </div>
+      </div>
+
+      <div class="section-block" id="em-sb2q">
+        <div class="section-header" onclick="toggleBlock('em-sb2q')">
+          <h2><span class="section-icon icon-ref">≡</span> Chapter II Quick Reference</h2>
+          <span class="section-toggle">▼</span>
+        </div>
+        <div class="section-body">
+          <div class="qref-grid">
+            <div class="qref-item"><div class="qr-name">Biot-Savart</div><div class="qr-formula">dB=(μ₀/4π)Ids×r̂/r²</div></div>
+            <div class="qref-item"><div class="qr-name">Ampère's Law</div><div class="qr-formula">∮B·ds = μ₀I_enc</div></div>
+            <div class="qref-item"><div class="qr-name">Wire (outside)</div><div class="qr-formula">B = μ₀I / 2πr</div></div>
+            <div class="qref-item"><div class="qr-name">Wire (inside)</div><div class="qr-formula">B = μ₀I₀r / 2πR²</div></div>
+            <div class="qref-item"><div class="qr-name">Loop (centre)</div><div class="qr-formula">B = μ₀I / 2R</div></div>
+            <div class="qref-item"><div class="qr-name">Loop (axial)</div><div class="qr-formula">B=μ₀IR²/2(R²+x²)^(3/2)</div></div>
+            <div class="qref-item"><div class="qr-name">Solenoid</div><div class="qr-formula">B = μ₀nI</div></div>
+            <div class="qref-item"><div class="qr-name">Toroid</div><div class="qr-formula">B = μ₀NI / 2πr</div></div>
+            <div class="qref-item"><div class="qr-name">Infinite sheet</div><div class="qr-formula">B = μ₀Js / 2</div></div>
+            <div class="qref-item"><div class="qr-name">Parallel wires</div><div class="qr-formula">F/L = μ₀I₁I₂/2πd</div></div>
+          </div>
+        </div>
+      </div>
+    </div><!-- end em-ch2 -->
+
+    <!-- ── CHAPTER 3 ── -->
+    <div class="chapter-pane" id="em-ch3">
+      <div class="chapter-banner">
+        <div class="ch-num">Chapter Three · Electromagnetism</div>
+        <h2>Induction &amp; Inductance</h2>
+        <p>Faraday's law, Lenz's law, motional EMF, self/mutual inductance, RL circuits, energy in magnetic fields, and 9 worked problems.</p>
+      </div>
+
+      <div class="section-block open" id="em-sb3d">
+        <div class="section-header" onclick="toggleBlock('em-sb3d')">
+          <h2><span class="section-icon icon-def">D</span> Definitions &amp; Concepts</h2>
+          <span class="section-toggle">▼</span>
+        </div>
+        <div class="section-body">
+          <div class="def-card"><h3>Magnetic Flux</h3><p>The flux of B through a surface S:</p><div class="highlight-formula">Φ_B = ∫∫_S B · dA</div><p>SI unit: <strong>Weber (Wb)</strong> = T·m². For uniform B at angle θ: Φ_B = BA cosθ.</p></div>
+          <div class="def-card"><h3>Faraday's Law of Electromagnetic Induction</h3><p>An EMF is induced in a circuit whenever the magnetic flux through it changes:</p><div class="highlight-formula">ε = −dΦ_B / dt</div><ul><li>Faster flux change → greater induced EMF.</li><li>The minus sign comes from <strong>Lenz's law</strong>.</li><li>For N turns: ε = −N dΦ_B/dt</li></ul></div>
+          <div class="def-card"><h3>Lenz's Law</h3><p><em>"An induced current has a direction such that its magnetic field opposes the change in flux that caused it."</em></p></div>
+          <div class="def-card"><h3>Self-Inductance</h3><p>When a circuit's own current changes, the changing flux induces a "back EMF" opposing the change:</p><div class="highlight-formula">ε_L = −L dI/dt</div><p>SI unit: <strong>Henry (H)</strong>. L depends only on geometry.</p></div>
+          <div class="def-card"><h3>Mutual Inductance</h3><p>When current i₁ in coil 1 changes, it induces an EMF in coil 2:</p><div class="highlight-formula">ε₂ = −M di₁/dt</div><p>M = mutual inductance (H). M₁₂ = M₂₁ = M.</p></div>
+          <div class="def-card"><h3>RL Circuit Behaviour</h3><ul><li>Inductor opposes instantaneous changes in current.</li><li>Current rises exponentially from 0 to I₀ = ε/R.</li><li>Time constant τ = L/R (time to reach 63.2% of final value).</li></ul></div>
+          <div class="def-card"><h3>Ampère-Maxwell Law (Displacement Current)</h3><p>Maxwell extended Ampère's law to handle time-varying electric fields. Displacement current: I_d = ε₀ dΦ_E/dt</p><div class="highlight-formula">∮ B · ds = μ₀(I_c + I_d)</div></div>
+        </div>
+      </div>
+
+      <div class="section-block" id="em-sb3r">
+        <div class="section-header" onclick="toggleBlock('em-sb3r')">
+          <h2><span class="section-icon icon-deriv">∂</span> Key Derivations</h2>
+          <span class="section-toggle">▼</span>
+        </div>
+        <div class="section-body">
+          <div class="deriv-card"><div class="deriv-card-title">1 · Motional EMF — Conducting Bar on Rails</div><div class="deriv-card-body"><p>A bar of length L moves at velocity v along rails in uniform B (into page):</p><div class="formula-box">Work per unit charge = force per unit charge × L = v_d B L</div><div class="highlight-formula">ε = BLv</div><p>If the bar has resistance R:</p><div class="formula-box">I = ε/R = BLv/R</div><p><strong>Rotating bar:</strong> One end fixed, length l, angular velocity ω:</p><div class="highlight-formula">ε = ½Bωl²</div></div></div>
+          <div class="deriv-card"><div class="deriv-card-title">2 · Inductance of a Solenoid</div><div class="deriv-card-body"><p>For a solenoid with N turns, length l, cross-section A:</p><div class="formula-box">Flux linkage = N Φ_B = N B A = N (μ₀nI) A = μ₀N²A I / l</div><div class="highlight-formula">L = μ₀N²A / l = μ₀n²Al</div></div></div>
+          <div class="deriv-card"><div class="deriv-card-title">3 · Energy Stored in an Inductor</div><div class="deriv-card-body"><p>Work done against back-EMF to build up current from 0 to I:</p><div class="formula-box">dU = P dt = ε_L · I dt = L I dI</div><div class="highlight-formula">U = ½LI²</div><p>Energy density in magnetic field:</p><div class="highlight-formula">u_B = B²/2μ₀</div></div></div>
+          <div class="deriv-card"><div class="deriv-card-title">4 · RL Circuit — Current Growth</div><div class="deriv-card-body"><p>With EMF ε, resistance R, inductance L — Kirchhoff's voltage law gives:</p><div class="formula-box">ε = IR + L dI/dt  →  dI/(I₀−I) = (R/L)dt</div><p>Integrating from 0 to t:</p><div class="highlight-formula">I(t) = I₀(1 − e^(−t/τ)) &nbsp; where τ = L/R</div></div></div>
+        </div>
+      </div>
+
+      <div class="section-block" id="em-sb3p">
+        <div class="section-header" onclick="toggleBlock('em-sb3p')">
+          <h2><span class="section-icon icon-prob">∑</span> Worked Problems (P1–P9)</h2>
+          <span class="section-toggle">▼</span>
+        </div>
+        <div class="section-body">
+          <div class="prob-card"><div class="prob-card-header"><span class="prob-num">P 1</span><span>Charge Passing Through a Flipping Coil</span></div><div class="prob-card-body"><p class="prob-q">A coil of 1000 turns, area 0.2 m², R = 500 Ω, flipped from B = 1.2 T (perpendicular) to opposite direction. Find total charge q.</p><div class="prob-given"><span>N</span>=1000 | <span>A</span>=0.2 m² | <span>R</span>=500 Ω | <span>B</span>=1.2 T → −1.2 T</div><div class="prob-solution"><h4>Solution — Using q = NΔΦ/R</h4><div class="step"><span class="step-num">1</span><span>ΔΦ = 2BA = 2 × 1.2 × 0.2 = 0.48 Wb</span></div><div class="step"><span class="step-num">2</span><span>q = NΔΦ/R = 1000 × 0.48/500</span></div><div class="ans-box"><span class="ans-label">ANSWER</span><span class="ans-value">q = 0.96 C</span></div></div></div></div>
+          <div class="prob-card"><div class="prob-card-header"><span class="prob-num">P 2</span><span>Motional EMF — Bar on Rails</span></div><div class="prob-card-body"><p class="prob-q">A conducting bar of length L = 1.2 m moves at v = 2.5 m/s in B = 0.80 T (perpendicular). Find ε and, if R = 3.2 Ω, find I.</p><div class="prob-given"><span>L</span>=1.2 m | <span>v</span>=2.5 m/s | <span>B</span>=0.80 T | <span>R</span>=3.2 Ω</div><div class="prob-solution"><h4>Solution</h4><div class="step"><span class="step-num">1</span><span>ε = BLv = 0.80 × 1.2 × 2.5 = 2.4 V</span></div><div class="step"><span class="step-num">2</span><span>I = ε/R = 2.4/3.2 = 0.75 A</span></div><div class="ans-box"><span class="ans-label">ANSWER</span><span class="ans-value">ε = 2.4 V | I = 0.75 A</span></div></div></div></div>
+          <div class="prob-card"><div class="prob-card-header"><span class="prob-num">P 3</span><span>Inductance of a Toroid</span></div><div class="prob-card-body"><p class="prob-q">A toroid has a square cross-section (inner radius a = 5.0 cm, outer b = 10 cm, height h = 5.0 cm, N = 1000 turns). Find L.</p><div class="prob-given"><span>a</span>=0.050 m | <span>b</span>=0.100 m | <span>h</span>=0.050 m | <span>N</span>=1000</div><div class="prob-solution"><h4>Solution — Using L = μ₀N²h·ln(b/a)/(2π)</h4><div class="step"><span class="step-num">1</span><span>L = (4π×10⁻⁷ × 10⁶ × 0.05) / (2π) × ln(0.1/0.05)</span></div><div class="step"><span class="step-num">2</span><span>= (4π×10⁻⁷ × 10⁶ × 0.05 × ln2) / (2π)</span></div><div class="step"><span class="step-num">3</span><span>= (2×10⁻⁷ × 10⁶ × 0.05 × 0.693) = 0.693 × 10⁻² = 6.93 × 10⁻³ H</span></div><div class="ans-box"><span class="ans-label">ANSWER</span><span class="ans-value">L ≈ 6.93 mH</span></div></div></div></div>
+          <div class="prob-card"><div class="prob-card-header"><span class="prob-num">P 4</span><span>Inductance and Energy of a Coaxial Cable</span></div><div class="prob-card-body"><p class="prob-q">Coaxial cable: inner radius a = 1.2 mm, outer radius b = 3.5 mm, length l = 1.0 m. (a) Find L. (b) Find energy stored at I = 3.4 A.</p><div class="prob-solution"><h4>Solution</h4><div class="step"><span class="step-num">1</span><span>L = (μ₀l/2π)ln(b/a) = (4π×10⁻⁷/2π) × ln(3.5/1.2)</span></div><div class="step"><span class="step-num">2</span><span>= 2×10⁻⁷ × ln(2.917) = 2×10⁻⁷ × 1.070 = 2.14×10⁻⁷ H</span></div><div class="step"><span class="step-num">3</span><span>U = ½LI² = ½ × 2.14×10⁻⁷ × (3.4)² = ½ × 2.14×10⁻⁷ × 11.56 = 1.24×10⁻⁶ J</span></div><div class="ans-box"><span class="ans-label">ANSWER</span><span class="ans-value">L ≈ 0.214 μH | U ≈ 1.24 μJ</span></div></div></div></div>
+          <div class="prob-card"><div class="prob-card-header"><span class="prob-num">P 5</span><span>Self-Induced EMF in an Inductor</span></div><div class="prob-card-body"><p class="prob-q">A 10-henry inductor carries a steady current of 2.0 A. How can a 100 V self-induced EMF be made to appear in the inductor?</p><div class="prob-given"><span>L</span>=10 H | <span>ε_L</span>=100 V</div><div class="prob-solution"><h4>Solution — Using ε_L = L(dI/dt)</h4><div class="step"><span class="step-num">1</span><span>dI/dt = ε_L / L = 100 / 10 = 10 A/s</span></div><div class="ans-box"><span class="ans-label">ANSWER</span><span class="ans-value">dI/dt = 10 A/s (interrupt the current at this rate)</span></div></div></div></div>
+          <div class="prob-card"><div class="prob-card-header"><span class="prob-num">P 6 &amp; 7</span><span>Series and Parallel Inductors</span></div><div class="prob-card-body"><p class="prob-q">P6: L₁ and L₂ in series (far apart) — show L_eq = L₁ + L₂. P7: Two equal L in parallel — show L_eq = L/2.</p><div class="prob-solution"><h4>P6 — Series:</h4><div class="step"><span class="step-num">1</span><span>ε₁ = −L₁ dI/dt and ε₂ = −L₂ dI/dt (same current)</span></div><div class="step"><span class="step-num">2</span><span>Total ε = −(L₁+L₂) dI/dt = −L_eq dI/dt</span></div><div class="ans-box"><span class="ans-label">P6</span><span class="ans-value">L_eq = L₁ + L₂</span></div><h4 class="sub">▶ P7 — Parallel (L₁=L₂=L):</h4><div class="step"><span class="step-num">3</span><span>Each branch carries I/2. Same EMF across both.</span></div><div class="step"><span class="step-num">4</span><span>ε = −L d(I/2)/dt = −(L/2) dI/dt</span></div><div class="ans-box"><span class="ans-label">P7</span><span class="ans-value">L_eq = L/2</span></div></div></div></div>
+          <div class="prob-card"><div class="prob-card-header"><span class="prob-num">P 8</span><span>Inductance per Unit Length of a Solenoid</span></div><div class="prob-card-body"><p class="prob-q">Solenoid wound with #10 wire (diameter 0.10 in = 2.54×10⁻³ m), solenoid diameter 4.0 cm, length 2.0 m. Adjacent wires touch. Find L/l.</p><div class="prob-solution"><h4>Solution</h4><div class="step"><span class="step-num">1</span><span>n = 1/wire dia = 1/2.54×10⁻³ ≈ 394 turns/m</span></div><div class="step"><span class="step-num">2</span><span>A = π(0.02)² = 1.257×10⁻³ m²</span></div><div class="step"><span class="step-num">3</span><span>L/l = μ₀n²A = 4π×10⁻⁷ × 394² × 1.257×10⁻³ ≈ 2.45×10⁻⁴ H/m</span></div><div class="ans-box"><span class="ans-label">ANSWER</span><span class="ans-value">L/l ≈ 0.245 mH/m</span></div></div></div></div>
+          <div class="prob-card"><div class="prob-card-header"><span class="prob-num">P 9</span><span>RL Circuit Time Constant</span></div><div class="prob-card-body"><p class="prob-q">The current in an RL circuit builds up to one-third of its steady-state value in 5.0 s. Find the inductive time constant.</p><div class="prob-given"><span>I/I₀</span>=1/3 | <span>t</span>=5.0 s</div><div class="prob-solution"><h4>Solution — Using I(t) = I₀(1 − e^(−t/τ))</h4><div class="step"><span class="step-num">1</span><span>1 − e^(−t/τ) = 1/3 → e^(−t/τ) = 2/3</span></div><div class="step"><span class="step-num">2</span><span>τ = −t/ln(2/3) = 5.0/0.405</span></div><div class="ans-box"><span class="ans-label">ANSWER</span><span class="ans-value">τ ≈ 12.3 s</span></div></div></div></div>
+        </div>
+      </div>
+
+      <div class="section-block" id="em-sb3q">
+        <div class="section-header" onclick="toggleBlock('em-sb3q')">
+          <h2><span class="section-icon icon-ref">≡</span> Chapter III Quick Reference</h2>
+          <span class="section-toggle">▼</span>
+        </div>
+        <div class="section-body">
+          <div class="qref-grid">
+            <div class="qref-item"><div class="qr-name">Magnetic Flux</div><div class="qr-formula">Φ_B = ∫B·dA</div></div>
+            <div class="qref-item"><div class="qr-name">Faraday's Law</div><div class="qr-formula">ε = −NdΦ_B/dt</div></div>
+            <div class="qref-item"><div class="qr-name">Motional EMF</div><div class="qr-formula">ε = BLv</div></div>
+            <div class="qref-item"><div class="qr-name">Rotating bar</div><div class="qr-formula">ε = ½Bωl²</div></div>
+            <div class="qref-item"><div class="qr-name">Self-Inductance</div><div class="qr-formula">ε_L = −L dI/dt</div></div>
+            <div class="qref-item"><div class="qr-name">L (solenoid)</div><div class="qr-formula">L = μ₀N²A/l</div></div>
+            <div class="qref-item"><div class="qr-name">L (toroid)</div><div class="qr-formula">L = μ₀N²h·ln(b/a)/2π</div></div>
+            <div class="qref-item"><div class="qr-name">L (coaxial)</div><div class="qr-formula">L = (μ₀l/2π)ln(b/a)</div></div>
+            <div class="qref-item"><div class="qr-name">RL current</div><div class="qr-formula">I = I₀(1−e^(−t/τ))</div></div>
+            <div class="qref-item"><div class="qr-name">Time constant</div><div class="qr-formula">τ = L/R</div></div>
+            <div class="qref-item"><div class="qr-name">Stored energy</div><div class="qr-formula">U = ½LI²</div></div>
+            <div class="qref-item"><div class="qr-name">Energy density</div><div class="qr-formula">u_B = B²/2μ₀</div></div>
+            <div class="qref-item"><div class="qr-name">Mutual inductance</div><div class="qr-formula">ε₂ = −M di₁/dt</div></div>
+            <div class="qref-item"><div class="qr-name">Charge (flux)</div><div class="qr-formula">q = NΔΦ/R</div></div>
+            <div class="qref-item"><div class="qr-name">Displacement I</div><div class="qr-formula">I_d = ε₀ dΦ_E/dt</div></div>
+            <div class="qref-item"><div class="qr-name">AC generator E₀</div><div class="qr-formula">E₀ = NBAω</div></div>
+          </div>
+        </div>
+      </div>
+    </div><!-- end em-ch3 -->
+
+  </div><!-- end content-area -->
+</div><!-- end sub-em -->
+
+
+<!-- ══════════════════════════════════════════════════════════════════════
+     SUBJECT 2: MODERN PHYSICS pp 20–26
+══════════════════════════════════════════════════════════════════════ -->
+<div class="subject-panel" id="sub-mp1">
+
+  <div class="chapter-nav">
+    <button class="chapter-tab active" onclick="showChapter('mp1','mp1-defs',this)">Definitions</button>
+    <button class="chapter-tab" onclick="showChapter('mp1','mp1-derivs',this)">Derivations</button>
+    <button class="chapter-tab" onclick="showChapter('mp1','mp1-probs',this)">Problems</button>
+  </div>
+
+  <div class="content-area">
+    <div class="chapter-banner">
+      <div class="ch-num">Modern Physics · Pages 20–26</div>
+      <h2>Quantum Theory of Light · Photoelectric &amp; Compton Effects</h2>
+      <p>Definitions, derivations of Einstein's photoelectric equation and Compton scattering formula, photon momentum, and 10 worked problems.</p>
+    </div>
+
+    <!-- Definitions -->
+    <div class="chapter-pane active" id="mp1-defs">
+      <div class="section-block open" id="mp1-sb-d">
+        <div class="section-header" onclick="toggleBlock('mp1-sb-d')">
+          <h2><span class="section-icon icon-def">D</span> Definitions</h2>
+          <span class="section-toggle">▼</span>
+        </div>
+        <div class="section-body">
+          <div class="def-card"><h3>1. Electromagnetic Wave</h3><p>A wave consisting of oscillating electric and magnetic fields perpendicular to each other and to the direction of propagation. Travel at speed c = 3 × 10⁸ m/s with no medium required.</p></div>
+          <div class="def-card"><h3>2. Photon (Quantum of Light)</h3><p>A discrete packet (quantum) of electromagnetic energy. Light is made of photons. A photon has no rest mass but carries energy proportional to its frequency.</p><div class="formula">E = hν &nbsp;|&nbsp; h = 6.625 × 10⁻³⁴ J·s (Planck's constant)</div></div>
+          <div class="def-card"><h3>3. Photoelectric Effect</h3><p>The ejection of electrons from a metal surface when light of sufficient frequency shines on it. The emitted electrons are called <strong>photoelectrons</strong>. Discovered by Hertz; electrons identified by Thomson.</p></div>
+          <div class="def-card"><h3>4. Work Function (φ)</h3><p>The <strong>minimum energy</strong> required to remove an electron from the surface of a metal. A fixed property of the material.</p><div class="formula">φ = hν₀ &nbsp;|&nbsp; where ν₀ is the threshold frequency</div></div>
+          <div class="def-card"><h3>5. Threshold Frequency (ν₀)</h3><p>The <strong>minimum frequency</strong> of light that can eject electrons from a metal surface. If ν &lt; ν₀, no photoelectrons are emitted regardless of intensity.</p><div class="formula">ν₀ = φ/h &nbsp;|&nbsp; No emission if ν &lt; ν₀</div></div>
+          <div class="def-card"><h3>6. Stopping Potential (V₀)</h3><p>The minimum reverse voltage that reduces photocurrent to zero. Used to measure maximum kinetic energy of emitted electrons.</p><div class="formula">K_max = eV₀ = ½mv²_max &nbsp;|&nbsp; e = 1.6 × 10⁻¹⁹ C</div></div>
+          <div class="def-card"><h3>7. Compton Effect</h3><p>The scattering of a photon by a free electron, in which the photon loses energy (wavelength increases) and the electron recoils. Direct proof that photons behave as particles with momentum. Discovered by A.H. Compton.</p></div>
+          <div class="def-card"><h3>8. Compton Wavelength</h3><p>The characteristic length scale appearing in the Compton scattering formula. Represents the maximum wavelength shift per scattering event.</p><div class="formula">λ_C = h/(m₀c) = 0.0024 nm &nbsp;(for an electron)</div></div>
+          <div class="def-card"><h3>9. Photon Momentum</h3><p>Although a photon has zero rest mass, it carries momentum — making the Compton effect possible.</p><div class="formula">p = E/c = hν/c = h/λ</div></div>
+          <div class="def-card"><h3>10. Rest Energy (E₀)</h3><p>The energy an electron possesses by virtue of its mass, appearing in the Compton derivation.</p><div class="formula">E₀ = m₀c² &nbsp;|&nbsp; For electron: m₀c² = 0.511 MeV = 511 keV</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Derivations -->
+    <div class="chapter-pane" id="mp1-derivs">
+      <div class="section-block open" id="mp1-sb-r">
+        <div class="section-header" onclick="toggleBlock('mp1-sb-r')">
+          <h2><span class="section-icon icon-deriv">∂</span> Derivations</h2>
+          <span class="section-toggle">▼</span>
+        </div>
+        <div class="section-body">
+          <div class="deriv-card"><div class="deriv-card-title">Derivation 1 — Einstein's Photoelectric Equation</div><div class="deriv-card-body"><div class="step"><div class="step-num">1</div><div class="step-body"><strong>Energy conservation.</strong> A photon carries energy E = hν. When it hits the metal, all this energy is absorbed by one electron.</div></div><div class="step"><div class="step-num">2</div><div class="step-body"><strong>Escape energy.</strong> The electron needs minimum energy φ (work function) just to get out.</div></div><div class="step"><div class="step-num">3</div><div class="step-body"><strong>Conservation of energy:</strong><div class="eq">hν = φ + K_max</div><div class="eq">∴ K_max = hν − φ &nbsp;→&nbsp; ½mv²_max = hν − φ</div></div></div><div class="step"><div class="step-num">4</div><div class="step-body"><strong>Substitute φ = hν₀:</strong><div class="eq">½mv²_max = h(ν − ν₀)</div></div></div><div class="step"><div class="step-num">5</div><div class="step-body"><strong>Using stopping potential:</strong><div class="eq">eV₀ = hν − hν₀</div></div></div><div class="ans" style="margin-top:12px;">½mv²_max = hν − φ &nbsp;|&nbsp; eV₀ = hν − hν₀ &nbsp;&nbsp;← Einstein's Photoelectric Equation</div><div class="callout" style="margin-top:10px;"><strong>Key insight:</strong> K_max depends only on frequency ν, not intensity. Intensity only affects number of photoelectrons.</div></div></div>
+
+          <div class="deriv-card"><div class="deriv-card-title">Derivation 2 — Compton Scattering Formula</div><div class="deriv-card-body"><div class="step"><div class="step-num">1</div><div class="step-body"><strong>Setup:</strong> Photon of frequency ν hits stationary electron. After: photon scatters at angle φ with frequency ν', electron recoils at angle θ.</div></div><div class="step"><div class="step-num">2</div><div class="step-body"><strong>Energy conservation:</strong><div class="eq">hν + m₀c² = hν' + E_electron &nbsp;→&nbsp; T = hν − hν'</div></div></div><div class="step"><div class="step-num">3</div><div class="step-body"><strong>Momentum conservation (x):</strong><div class="eq">p·cosθ = hν/c − (hν'/c)cosφ &nbsp;… (i)</div></div></div><div class="step"><div class="step-num">4</div><div class="step-body"><strong>Momentum conservation (y):</strong><div class="eq">p·sinθ = (hν'/c)sinφ &nbsp;… (ii)</div></div></div><div class="step"><div class="step-num">5</div><div class="step-body"><strong>Eliminate θ</strong> — square and add (i)+(ii):<div class="eq">p²c² = (hν)² + (hν')² − 2(hν)(hν')cosφ &nbsp;… (iii)</div></div></div><div class="step"><div class="step-num">6</div><div class="step-body"><strong>Relativistic energy-momentum for electron:</strong><div class="eq">p²c² = (hν−hν')² + 2m₀c²(hν−hν') &nbsp;… (iv)</div></div></div><div class="step"><div class="step-num">7</div><div class="step-body"><strong>Equate (iii)=(iv) and simplify:</strong><div class="eq">2m₀c²(hν − hν') = 2(hν)(hν')(1 − cosφ)</div></div></div><div class="step"><div class="step-num">8</div><div class="step-body"><strong>Divide and convert to wavelengths:</strong><div class="eq">λ' − λ = (h/m₀c)(1 − cosφ)</div></div></div><div class="ans" style="margin-top:12px;">Δλ = λ' − λ = (h/m₀c)(1 − cosφ) &nbsp;← Compton Scattering Formula</div>
+          <div style="margin-top:12px;"><table><thead><tr><th>Angle φ</th><th>cosφ</th><th>1 − cosφ</th><th>Δλ</th></tr></thead><tbody><tr><td>0°</td><td>1</td><td>0</td><td>0 nm</td></tr><tr><td>45°</td><td>0.707</td><td>0.293</td><td>0.00070 nm</td></tr><tr><td>90°</td><td>0</td><td>1</td><td>0.0024 nm</td></tr><tr><td>135°</td><td>−0.707</td><td>1.707</td><td>0.0041 nm</td></tr><tr><td>180°</td><td>−1</td><td>2</td><td>0.0048 nm (max)</td></tr></tbody></table></div><div class="callout"><strong>Key:</strong> Δλ depends only on scattering angle φ, not on original wavelength λ.</div></div></div>
+
+          <div class="deriv-card"><div class="deriv-card-title">Derivation 3 — Photon Momentum from Relativity</div><div class="deriv-card-body"><div class="step"><div class="step-num">1</div><div class="step-body"><strong>Relativistic energy-momentum relation:</strong><div class="eq">E² = (m₀c²)² + (pc)²</div></div></div><div class="step"><div class="step-num">2</div><div class="step-body"><strong>For a photon, m₀ = 0:</strong><div class="eq">E = pc &nbsp;⟹&nbsp; p = E/c</div></div></div><div class="step"><div class="step-num">3</div><div class="step-body"><strong>Substitute E = hν:</strong><div class="eq">p = hν/c</div></div></div><div class="step"><div class="step-num">4</div><div class="step-body"><strong>Use c = νλ:</strong><div class="eq">p = h/λ</div></div></div><div class="ans" style="margin-top:12px;">p = hν/c = h/λ &nbsp;← Photon Momentum</div></div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Problems -->
+    <div class="chapter-pane" id="mp1-probs">
+      <div class="section-block open" id="mp1-sb-p">
+        <div class="section-header" onclick="toggleBlock('mp1-sb-p')">
+          <h2><span class="section-icon icon-prob">∑</span> Worked Problems (P1–P10)</h2>
+          <span class="section-toggle">▼</span>
+        </div>
+        <div class="section-body">
+          <div class="prob-card"><div class="prob-card-header"><span class="prob-num">P 1</span><span>Max velocity of photoelectrons (Copper)</span></div><div class="prob-card-body"><p class="prob-q">Work function of copper = 4.7 eV. Find max velocity of photoelectrons for UV light λ = 100 nm. (hc = 1240 eV·nm; m = 9.1×10⁻³¹ kg)</p><button class="sol-toggle" onclick="toggleSol(this)">Show Solution</button><div class="solution"><div class="sol-step"><strong>Step 1:</strong> E = hc/λ = 1240/100 = 12.4 eV</div><div class="sol-eq">K_max = E − φ = 12.4 − 4.7 = 7.7 eV = 1.232 × 10⁻¹⁸ J</div><div class="sol-step"><strong>Step 2:</strong> v = √(2K_max/m) = √(2.707 × 10¹²)</div><div class="ans">v_max ≈ 1.65 × 10⁶ m/s</div></div></div></div>
+          <div class="prob-card"><div class="prob-card-header"><span class="prob-num">P 2</span><span>Wavelength for given max velocity (Iron)</span></div><div class="prob-card-body"><p class="prob-q">What wavelength produces photoelectrons of max velocity v = 10⁶ m/s from iron? (φ = 4.5 eV; m = 9.1×10⁻³¹ kg)</p><button class="sol-toggle" onclick="toggleSol(this)">Show Solution</button><div class="solution"><div class="sol-step"><strong>Step 1:</strong> K_max = ½mv² = ½×9.1×10⁻³¹×(10⁶)² = 4.55×10⁻¹⁹ J = 2.84 eV</div><div class="sol-step"><strong>Step 2:</strong> hν = K_max + φ = 2.84 + 4.5 = 7.34 eV</div><div class="sol-eq">λ = 1240/7.34 ≈ 169 nm</div><div class="ans">λ ≈ 169 nm (ultraviolet region)</div></div></div></div>
+          <div class="prob-card"><div class="prob-card-header"><span class="prob-num">P 3</span><span>Stopping potential experiment</span></div><div class="prob-card-body"><p class="prob-q">A reverse potential of 1.25 V reduces photocurrent to zero. Find (a) max KE, (b) max speed.</p><button class="sol-toggle" onclick="toggleSol(this)">Show Solution</button><div class="solution"><div class="sol-step"><strong>(a)</strong> K_max = eV₀ = 1.25 eV = 2.0 × 10⁻¹⁹ J</div><div class="sol-step"><strong>(b)</strong> v = √(2K_max/m) = √(4.396 × 10¹¹)</div><div class="ans">(a) K_max = 1.25 eV | (b) v_max ≈ 6.63 × 10⁵ m/s</div></div></div></div>
+          <div class="prob-card"><div class="prob-card-header"><span class="prob-num">P 4</span><span>Frequency of an X-ray photon from momentum</span></div><div class="prob-card-body"><p class="prob-q">What is the frequency of an X-ray photon with momentum p = 1.2×10⁻²³ kg·m/s?</p><button class="sol-toggle" onclick="toggleSol(this)">Show Solution</button><div class="solution"><div class="sol-eq">ν = pc/h = (1.2×10⁻²³ × 3×10⁸) / (6.625×10⁻³⁴) = 5.43×10¹⁸ Hz</div><div class="ans">ν ≈ 5.43 × 10¹⁸ Hz (X-ray range)</div></div></div></div>
+          <div class="prob-card"><div class="prob-card-header"><span class="prob-num">P 5</span><span>Compton shift at 90°</span></div><div class="prob-card-body"><p class="prob-q">X-ray photon ν = 3×10¹⁹ Hz collides with electron, scattered through 90°. Find new frequency ν'.</p><button class="sol-toggle" onclick="toggleSol(this)">Show Solution</button><div class="solution"><div class="sol-step"><strong>Step 1:</strong> λ = c/ν = 0.01 nm</div><div class="sol-step"><strong>Step 2:</strong> Δλ = 0.0024×(1−cos90°) = 0.0024 nm</div><div class="sol-step"><strong>Step 3:</strong> λ' = 0.01 + 0.0024 = 0.0124 nm</div><div class="sol-eq">ν' = c/λ' = 3×10⁸ / 1.24×10⁻¹¹ ≈ 2.42×10¹⁹ Hz</div><div class="ans">ν' ≈ 2.42 × 10¹⁹ Hz</div></div></div></div>
+          <div class="prob-card"><div class="prob-card-header"><span class="prob-num">P 6</span><span>Compton: Find wavelength of direct beam</span></div><div class="prob-card-body"><p class="prob-q">Scattered X-rays at 45° have λ' = 0.0022 nm. What is λ of the direct beam?</p><button class="sol-toggle" onclick="toggleSol(this)">Show Solution</button><div class="solution"><div class="sol-step"><strong>Step 1:</strong> Δλ = 0.0024×(1−cos45°) = 0.0024×0.293 = 0.0007 nm</div><div class="sol-eq">λ = λ' − Δλ = 0.0022 − 0.0007 = 0.0015 nm</div><div class="ans">λ = 0.0015 nm</div></div></div></div>
+          <div class="prob-card"><div class="prob-card-header"><span class="prob-num">P 7</span><span>KE given to electron in Compton scattering</span></div><div class="prob-card-body"><p class="prob-q">X-ray photon changes from ν = 1.5×10¹⁹ Hz to ν' = 1.2×10¹⁹ Hz after collision. How much KE was imparted to the electron?</p><button class="sol-toggle" onclick="toggleSol(this)">Show Solution</button><div class="solution"><div class="sol-eq">T = h(ν−ν') = 6.625×10⁻³⁴ × 0.3×10¹⁹ = 1.988×10⁻¹⁵ J ≈ 12.4 keV</div><div class="ans">T ≈ 1.99 × 10⁻¹⁵ J ≈ 12.4 keV</div></div></div></div>
+          <div class="prob-card"><div class="prob-card-header"><span class="prob-num">P 8</span><span>Compton shift at 46°</span></div><div class="prob-card-body"><p class="prob-q">X-ray beam λ = 0.0558 nm scattered through 46°. Find λ'. (cos46° ≈ 0.6947)</p><button class="sol-toggle" onclick="toggleSol(this)">Show Solution</button><div class="solution"><div class="sol-eq">Δλ = 0.0024×(1−0.6947) = 0.0024×0.3053 = 0.000733 nm</div><div class="sol-eq">λ' = 0.0558 + 0.000733 ≈ 0.0565 nm</div><div class="ans">λ' ≈ 0.0565 nm</div></div></div></div>
+          <div class="prob-card"><div class="prob-card-header"><span class="prob-num">P 9</span><span>Work function of sodium</span></div><div class="prob-card-body"><p class="prob-q">Calculate the work function of sodium when threshold wavelength λ₀ = 680 nm.</p><button class="sol-toggle" onclick="toggleSol(this)">Show Solution</button><div class="solution"><div class="sol-eq">φ = hc/λ₀ = 1240/680 ≈ 1.824 eV</div><div class="ans">φ ≈ 1.82 eV</div></div></div></div>
+          <div class="prob-card"><div class="prob-card-header"><span class="prob-num">P 10</span><span>KE from threshold wavelength</span></div><div class="prob-card-body"><p class="prob-q">Threshold wavelength for a metal λ₀ = 300 nm. Find KE of electron ejected by λ = 120 nm radiation.</p><button class="sol-toggle" onclick="toggleSol(this)">Show Solution</button><div class="solution"><div class="sol-step"><strong>Step 1:</strong> φ = hc/λ₀ = 1240/300 ≈ 4.13 eV</div><div class="sol-step"><strong>Step 2:</strong> hν = 1240/120 ≈ 10.33 eV</div><div class="sol-eq">K_max = 10.33 − 4.13 = 6.2 eV</div><div class="ans">K_max = 6.2 eV</div></div></div></div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- end content-area -->
+</div><!-- end sub-mp1 -->
+
+
+<!-- ══════════════════════════════════════════════════════════════════════
+     SUBJECT 3: MODERN PHYSICS pp 36–48
+══════════════════════════════════════════════════════════════════════ -->
+<div class="subject-panel" id="sub-mp2">
+
+  <div class="chapter-nav">
+    <button class="chapter-tab active" onclick="showChapter('mp2','mp2-defs',this)">Definitions</button>
+    <button class="chapter-tab" onclick="showChapter('mp2','mp2-laws',this)">Laws</button>
+    <button class="chapter-tab" onclick="showChapter('mp2','mp2-derivs',this)">Derivations</button>
+    <button class="chapter-tab" onclick="showChapter('mp2','mp2-apps',this)">Applications</button>
+    <button class="chapter-tab" onclick="showChapter('mp2','mp2-probs',this)">Problems</button>
+  </div>
+
+  <div class="content-area">
+    <div class="chapter-banner">
+      <div class="ch-num">Modern Physics · Pages 36–48</div>
+      <h2>Photoelectric Effect — Full Lecture Notes</h2>
+      <p>Laws, definitions, derivations, applications, and 15 worked problems on the photoelectric effect.</p>
+    </div>
+
+    <!-- Definitions -->
+    <div class="chapter-pane active" id="mp2-defs">
+      <div class="section-block open" id="mp2-sb-d">
+        <div class="section-header" onclick="toggleBlock('mp2-sb-d')">
+          <h2><span class="section-icon icon-def">D</span> Definitions</h2>
+          <span class="section-toggle">▼</span>
+        </div>
+        <div class="section-body">
+          <div class="def-card"><h3>1. Photoelectric Effect</h3><p>The phenomenon of ejection of electrons from a metal surface when light of <strong>suitable frequency</strong> falls upon it. The ejected electrons are called <strong>photoelectrons</strong>. J.J. Thomson confirmed these are identical to ordinary electrons.</p></div>
+          <div class="def-card"><h3>2. Threshold Frequency (ν₀)</h3><p>The minimum frequency of light needed to eject electrons from a given metal. Below this frequency, no photoelectrons are emitted regardless of intensity.</p><div class="fml">ν₀ = φ / h</div></div>
+          <div class="def-card"><h3>3. Threshold / Cut-off Wavelength (λ₀)</h3><p>The maximum wavelength of incident light that can eject photoelectrons.</p><div class="fml">λ₀ = c / ν₀ = hc / φ</div></div>
+          <div class="def-card"><h3>4. Work Function (φ)</h3><p>The minimum energy required to eject an electron from a metal surface. Depends on the nature of the material and its surface condition.</p></div>
+          <div class="def-card"><h3>5. Stopping Potential / Retarding Potential (V₀)</h3><p>The minimum retarding potential applied to the anode to stop the most energetic photoelectrons and reduce photocurrent to zero.</p><div class="fml">eV₀ = K_max = ½mv²_max</div></div>
+          <div class="def-card"><h3>6. Saturation Current</h3><p>The maximum photocurrent obtained when all emitted photoelectrons are collected. Proportional to the intensity of incident light (more photons → more electrons).</p></div>
+          <div class="def-card"><h3>7. Photocurrent</h3><p>The electric current produced due to the photoelectric effect. Depends on the intensity of incident light (not frequency) for frequencies above ν₀.</p></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Laws -->
+    <div class="chapter-pane" id="mp2-laws">
+      <div class="section-block open" id="mp2-sb-l">
+        <div class="section-header" onclick="toggleBlock('mp2-sb-l')">
+          <h2><span class="section-icon icon-law">⚖</span> Laws of Photoelectric Effect</h2>
+          <span class="section-toggle">▼</span>
+        </div>
+        <div class="section-body">
+          <div class="law-block"><h3>Five Laws of Photoelectric Emission</h3>
+          <div class="law-grid">
+            <div class="law-card"><div class="num">Law 1</div><p>For a given material, photoelectric emission occurs only if the incident light frequency ν ≥ ν₀ (threshold frequency). Below ν₀, no emission even with very intense light.</p></div>
+            <div class="law-card"><div class="num">Law 2</div><p>The photoelectric emission is an instantaneous process. There is no time delay between incidence of light and emission of electrons (≲ 10⁻⁹ s).</p></div>
+            <div class="law-card"><div class="num">Law 3</div><p>The maximum kinetic energy of photoelectrons is directly proportional to the frequency of incident light and independent of its intensity.</p></div>
+            <div class="law-card"><div class="num">Law 4</div><p>The number of photoelectrons emitted per second (photocurrent) is directly proportional to the intensity of incident light.</p></div>
+            <div class="law-card"><div class="num">Law 5</div><p>The maximum kinetic energy of photoelectrons is independent of the intensity of incident light; it depends only on the frequency.</p></div>
+          </div></div>
+          <div class="section-label">Classical vs. Quantum Explanation</div>
+          <table><thead><tr><th>Observation</th><th>Classical Wave Theory</th><th>Quantum (Einstein)</th></tr></thead><tbody><tr><td>No emission below ν₀</td><td class="cross">✗ Cannot explain</td><td class="tick">✓ hν must exceed φ</td></tr><tr><td>Instantaneous emission</td><td class="cross">✗ Expects time delay</td><td class="tick">✓ Single photon-electron interaction</td></tr><tr><td>K_max independent of intensity</td><td class="cross">✗ More intensity → more energy</td><td class="tick">✓ One photon per electron</td></tr><tr><td>Photocurrent ∝ intensity</td><td class="tick">✓ More energy → more electrons</td><td class="tick">✓ More photons → more electrons</td></tr></tbody></table>
+        </div>
+      </div>
+    </div>
+
+    <!-- Derivations -->
+    <div class="chapter-pane" id="mp2-derivs">
+      <div class="section-block open" id="mp2-sb-r">
+        <div class="section-header" onclick="toggleBlock('mp2-sb-r')">
+          <h2><span class="section-icon icon-deriv">∂</span> Derivations</h2>
+          <span class="section-toggle">▼</span>
+        </div>
+        <div class="section-body">
+          <div class="deriv-card"><div class="deriv-card-title">Einstein's Photoelectric Equation</div><div class="deriv-card-body"><p>By quantum theory, a photon has energy E = hν. When it hits the metal, it transfers all its energy to one electron. The electron uses minimum energy φ to escape and the rest becomes kinetic energy.</p><div class="step"><div class="step-num">1</div><div class="step-body">Energy conservation: hν = φ + K_max</div></div><div class="step"><div class="step-num">2</div><div class="step-body">Substitute φ = hν₀:<div class="eq">K_max = h(ν − ν₀)</div></div></div><div class="step"><div class="step-num">3</div><div class="step-body">In terms of wavelength (use c = νλ):<div class="eq">K_max = hc(1/λ − 1/λ₀)</div></div></div><div class="ans" style="margin-top:12px;">½mv²_max = hν − φ = h(ν − ν₀) &nbsp;|&nbsp; eV₀ = hν − hν₀</div></div></div>
+          <div class="deriv-card"><div class="deriv-card-title">Stopping Potential vs. Frequency (Millikan's Relation)</div><div class="deriv-card-body"><p>From Einstein's equation: eV₀ = hν − φ</p><div class="step"><div class="step-num">1</div><div class="step-body">Rearrange: V₀ = (h/e)ν − φ/e</div></div><div class="step"><div class="step-num">2</div><div class="step-body">This is a linear equation: V₀ vs ν is a straight line with slope h/e and y-intercept −φ/e.</div></div><div class="ans" style="margin-top:10px;">V₀ = (h/e)ν − φ/e &nbsp;← V₀ vs. ν graph gives slope = h/e, intercept = −φ/e</div></div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Applications -->
+    <div class="chapter-pane" id="mp2-apps">
+      <div class="section-block open" id="mp2-sb-a">
+        <div class="section-header" onclick="toggleBlock('mp2-sb-a')">
+          <h2><span class="section-icon icon-law">💡</span> Applications</h2>
+          <span class="section-toggle">▼</span>
+        </div>
+        <div class="section-body">
+          <div class="app-block"><h3>Practical Applications of the Photoelectric Effect</h3><p>The photoelectric effect underlies many modern technologies:</p>
+          <div class="app-grid">
+            <div class="app-pill"><strong>Photocell / Phototube</strong>Light control circuits, automatic doors</div>
+            <div class="app-pill"><strong>Solar Cells</strong>Convert sunlight → electrical energy (photovoltaics)</div>
+            <div class="app-pill"><strong>Photomultiplier Tubes</strong>Extremely sensitive light detectors</div>
+            <div class="app-pill"><strong>CCD Sensors</strong>Digital cameras, telescopes, scanners</div>
+            <div class="app-pill"><strong>Burglar Alarms</strong>Interrupted beam triggers alarm</div>
+            <div class="app-pill"><strong>Photodiodes</strong>Optical fiber communications</div>
+            <div class="app-pill"><strong>Night Vision</strong>Converts IR photons to electrons then visible light</div>
+            <div class="app-pill"><strong>XPS / ESCA</strong>Measure binding energies of electrons in materials</div>
+          </div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Problems -->
+    <div class="chapter-pane" id="mp2-probs">
+      <div class="section-block open" id="mp2-sb-p">
+        <div class="section-header" onclick="toggleBlock('mp2-sb-p')">
+          <h2><span class="section-icon icon-prob">∑</span> Worked Problems (P1–P15 + Bonus)</h2>
+          <span class="section-toggle">▼</span>
+        </div>
+        <div class="section-body">
+          <div class="prob-card"><div class="prob-card-header"><span class="prob-num">P 1</span><span>Threshold frequency and wavelength for cesium</span></div><div class="prob-card-body"><p class="prob-q">Work function of cesium φ = 1.8 eV. Find (a) threshold frequency ν₀, (b) threshold wavelength λ₀. (h = 6.625×10⁻³⁴ J·s; hc = 1240 eV·nm)</p><button class="sol-toggle" onclick="toggleSol(this)">Show Solution</button><div class="solution"><div class="sol-step"><strong>(a)</strong> ν₀ = φ/h = (1.8 × 1.6×10⁻¹⁹) / (6.625×10⁻³⁴) = 2.88×10⁻¹⁹ / 6.625×10⁻³⁴ ≈ 4.35×10¹⁴ Hz</div><div class="sol-step"><strong>(b)</strong> λ₀ = hc/φ = 1240/1.8 ≈ 689 nm (visible red)</div><div class="ans">(a) ν₀ ≈ 4.35 × 10¹⁴ Hz | (b) λ₀ ≈ 689 nm</div></div></div></div>
+          <div class="prob-card"><div class="prob-card-header"><span class="prob-num">P 3</span><span>Stopping potential for Na with violet light</span></div><div class="prob-card-body"><p class="prob-q">Sodium threshold wavelength λ₀ = 680 nm. Violet light λ = 400 nm shines on it. Find stopping potential V₀.</p><button class="sol-toggle" onclick="toggleSol(this)">Show Solution</button><div class="solution"><div class="sol-step"><strong>Step 1:</strong> φ = hc/λ₀ = 1240/680 ≈ 1.82 eV</div><div class="sol-step"><strong>Step 2:</strong> hν = hc/λ = 1240/400 = 3.10 eV</div><div class="sol-eq">eV₀ = hν − φ = 3.10 − 1.82 = 1.28 eV</div><div class="ans">V₀ = 1.28 V</div></div></div></div>
+          <div class="prob-card"><div class="prob-card-header"><span class="prob-num">P 14</span><span>Multi-part: UV 240 nm, stopping 1.40 V</span></div><div class="prob-card-body"><p class="prob-q">UV light λ = 240 nm shines on metal. Stopping potential V₀ = 1.40 V. Find: (a) photon energy in eV, (b) max KE, (c) work function, (d) longest wavelength for emission, (e) spectral region.</p><button class="sol-toggle" onclick="toggleSol(this)">Show Solution</button><div class="solution"><div class="sol-step"><strong>(a)</strong> E = hc/λ = 1240/240 ≈ 5.17 eV</div><div class="sol-step"><strong>(b)</strong> K_max = eV₀ = 1.40 eV</div><div class="sol-step"><strong>(c)</strong> φ = E − K_max = 5.17 − 1.40 = 3.77 eV</div><div class="sol-step"><strong>(d)</strong> λ₀ = hc/φ = 1240/3.77 ≈ 329 nm</div><div class="sol-step"><strong>(e)</strong> 329 nm is in the ultraviolet region (UV: 10–400 nm)</div><div class="ans">(a) 5.17 eV | (b) 1.40 eV | (c) 3.77 eV | (d) 329 nm | (e) UV region</div></div></div></div>
+          <div class="prob-card"><div class="prob-card-header"><span class="prob-num">P 15</span><span>Red vs blue light on same metal</span></div><div class="prob-card-body"><p class="prob-q">A metal emits electrons under red light. (a) Will blue light also cause emission? (b) With same intensity, same number of electrons per second?</p><button class="sol-toggle" onclick="toggleSol(this)">Show Solution</button><div class="solution"><div class="sol-step"><strong>(a)</strong> ν_blue &gt; ν_red &gt; ν₀ → yes, blue will emit electrons with even greater K_max.</div><div class="sol-step"><strong>(b)</strong> Same intensity but blue photons have more energy → fewer photons per second → fewer electrons per second.</div><div class="ans">(a) Yes | (b) No — fewer electrons with blue light (each photon has more energy)</div></div></div></div>
+          <div class="prob-card"><div class="prob-card-header"><span class="prob-num">Bonus</span><span>Tungsten: cutoff wavelength, K_max, stopping potential</span></div><div class="prob-card-body"><p class="prob-q">Work function of tungsten φ_W = 4.52 eV. (a) Longest λ for photocurrent, (b) K_max at λ = 200 nm, (c) stopping potential at λ = 200 nm.</p><button class="sol-toggle" onclick="toggleSol(this)">Show Solution</button><div class="solution"><div class="sol-step"><strong>(a)</strong> λ_c = hc/φ = 1240/4.52 ≈ 274.3 nm</div><div class="sol-step"><strong>(b)</strong> hν = 1240/200 = 6.2 eV → K_max = 6.2 − 4.52 = 1.68 eV</div><div class="sol-step"><strong>(c)</strong> V₀ = K_max/e = 1.68 V</div><div class="ans">(a) 274.3 nm | (b) 1.68 eV | (c) 1.68 V</div></div></div></div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- end content-area -->
+</div><!-- end sub-mp2 -->
+
+
+<!-- ══════════════════════════════════════════════════════════════════════
+     SUBJECT 4: OPTICS
+══════════════════════════════════════════════════════════════════════ -->
+<div class="subject-panel" id="sub-opt">
+
+  <div class="chapter-nav">
+    <button class="chapter-tab active" onclick="showChapter('opt','opt-ch1',this)">Chapter I — Interference</button>
+    <button class="chapter-tab" onclick="showChapter('opt','opt-ch2',this)">Chapter II — Diffraction</button>
+  </div>
+
+  <div class="content-area">
+
+    <!-- ── CHAPTER 1 — INTERFERENCE ── -->
+    <div class="chapter-pane active" id="opt-ch1">
+      <div class="chapter-banner">
+        <div class="ch-num">Chapter One · Optics</div>
+        <h2>Interference of Light</h2>
+        <p>Wave superposition, coherence, Young's experiment, fringe formation, Newton's rings, and related problems.</p>
+      </div>
+
+      <div class="section-block open" id="opt-sb-ch1-def">
+        <div class="section-header" onclick="toggleBlock('opt-sb-ch1-def')">
+          <h2><span class="section-icon icon-def">D</span> Definitions &amp; Concepts</h2>
+          <span class="section-toggle">▼</span>
+        </div>
+        <div class="section-body">
+          <div class="def-card"><h3>Nature of Light — Historical Theories</h3><ul><li><strong>Corpuscular Theory (Newton, 1704):</strong> Light as tiny particles. Explained reflection and refraction only.</li><li><strong>Wave Theory (Huygens, 17th c.):</strong> Light as waves spreading in all directions. Disproved by interference (Young, 1802).</li><li><strong>Electromagnetic Wave Theory (Maxwell, 1865–73):</strong> Light as EM disturbance; c = νλ. Explained reflection, refraction, diffraction, interference, polarization — but not photoelectric effect.</li><li><strong>Quantum Theory (Planck, 1900):</strong> Light as energy packets (photons).</li><li><strong>Dual Nature (Einstein, 1905):</strong> Wave when transmitted; particle when emitted or absorbed.</li></ul></div>
+          <div class="def-card"><h3>Interference</h3><p>Modification of intensity obtained by the <strong>superposition of two or more beams of light</strong>.</p><ul><li><strong>Constructive interference:</strong> Resultant amplitude/intensity is greater — waves add in phase.</li><li><strong>Destructive interference:</strong> Resultant amplitude is zero — waves are out of phase.</li></ul></div>
+          <div class="def-card"><h3>Principle of Superposition</h3><p>When two or more waves overlap, the resultant displacement at any point is the <strong>algebraic sum of the instantaneous displacements</strong> each wave would produce independently.</p></div>
+          <div class="def-card"><h3>Coherent Sources</h3><p>Two sources are coherent if they emit waves of same <strong>frequency</strong>, nearly same <strong>amplitude</strong>, always in <strong>phase</strong>, same wavelength. Essential for a stable interference pattern.</p></div>
+          <div class="def-card"><h3>Young's Double-Slit Experiment (1802)</h3><p>Sunlight through pinhole S₀, then through two pinholes S₁ and S₂. Alternating bright (constructive) and dark (destructive) fringes produced on screen.</p><ul><li>Closer slits → <strong>wider</strong> fringes</li><li>Red light → <strong>wider</strong> fringes than green (longer λ)</li></ul></div>
+          <div class="def-card"><h3>Fringe Width (β)</h3><p>The distance between two consecutive bright (or dark) fringes:</p><div class="highlight-formula">β = λD / d</div><p style="font-size:.85rem;color:var(--muted);">λ = wavelength, D = screen distance, d = slit separation</p></div>
+          <div class="def-card"><h3>Newton's Rings</h3><p>When a plano-convex lens is placed on a plane glass plate, an air film forms. Monochromatic light produces <strong>concentric circular interference fringes</strong>. The centre is dark.</p></div>
+        </div>
+      </div>
+
+      <div class="section-block" id="opt-sb-ch1-deriv">
+        <div class="section-header" onclick="toggleBlock('opt-sb-ch1-deriv')">
+          <h2><span class="section-icon icon-deriv">∂</span> Derivations</h2>
+          <span class="section-toggle">▼</span>
+        </div>
+        <div class="section-body">
+          <div class="deriv-card"><div class="deriv-card-title">1 · Resultant Intensity in Interference</div><div class="deriv-card-body"><div class="diagram-wrap"><svg width="380" height="160" viewBox="0 0 380 160"><line x1="310" y1="10" x2="310" y2="150" stroke="#555" stroke-width="2"/><circle cx="30" cy="80" r="5" fill="#e8a84b"/><text x="15" y="76" fill="#e8a84b" font-size="11">S₀</text><line x1="110" y1="20" x2="110" y2="60" stroke="#5b9bd5" stroke-width="2"/><line x1="110" y1="75" x2="110" y2="85" stroke="#5b9bd5" stroke-width="2" stroke-dasharray="4,2"/><line x1="110" y1="100" x2="110" y2="140" stroke="#5b9bd5" stroke-width="2"/><circle cx="110" cy="60" r="3" fill="#5b9bd5"/><circle cx="110" cy="100" r="3" fill="#5b9bd5"/><text x="95" y="56" fill="#7ab8d8" font-size="11">S₂</text><text x="95" y="112" fill="#7ab8d8" font-size="11">S₁</text><line x1="110" y1="60" x2="310" y2="40" stroke="#5abf7a" stroke-width="1" stroke-dasharray="5,3"/><line x1="110" y1="100" x2="310" y2="40" stroke="#5abf7a" stroke-width="1" stroke-dasharray="5,3"/><circle cx="310" cy="40" r="3" fill="#5abf7a"/><text x="316" y="44" fill="#5abf7a" font-size="11">P</text><circle cx="310" cy="80" r="3" fill="#e8a84b"/><text x="316" y="84" fill="#e8a84b" font-size="11">C</text><line x1="310" y1="80" x2="310" y2="40" stroke="#e8a84b" stroke-width="1" stroke-dasharray="3,2"/><text x="318" y="62" fill="#e8a84b" font-size="10">x</text><line x1="110" y1="152" x2="310" y2="152" stroke="#555" stroke-width="1"/><text x="200" y="148" fill="#888" font-size="10" text-anchor="middle">D</text></svg><figcaption>Young's double-slit geometry — path difference = xd/D</figcaption></div>
+          <p>Two waves with same amplitude <em>a</em> and phase difference δ:</p><div class="formula-box">y₁ = a sin(ωt)<br>y₂ = a sin(ωt + δ)</div><p>Resultant: y = R sin(ωt + θ), where:</p><div class="formula-box">R² = 4a² cos²(δ/2)</div><div class="highlight-formula">I = 4I₀ cos²(δ/2)</div><p>Path difference Δ = xd/D, Phase difference δ = 2πΔ/λ</p><div class="two-col"><div><span class="condition-box cond-bright">CONSTRUCTIVE (bright)</span><div class="formula-box">Δ = mλ (m = 0,1,2,…)<br>x_bright = mλD/d<br>I = 4I₀ (maximum)</div></div><div><span class="condition-box cond-dark">DESTRUCTIVE (dark)</span><div class="formula-box">Δ = (m + ½)λ<br>x_dark = (2m+1)λD/2d<br>I = 0</div></div></div></div></div>
+
+          <div class="deriv-card"><div class="deriv-card-title">2 · Fringe Width β in Young's Experiment</div><div class="deriv-card-body"><p>Distance between consecutive bright fringes:</p><div class="formula-box">y_m = mλD/d &nbsp; and &nbsp; y_{m+1} = (m+1)λD/d</div><div class="highlight-formula">β = y_{m+1} − y_m = λD/d</div><p>Both bright and dark fringes have the same width β.</p><div class="note">β ∝ λ (red light gives wider fringes) and β ∝ D (wider screen distance → wider fringes) and β ∝ 1/d (closer slits → wider fringes).</div></div></div>
+
+          <div class="deriv-card"><div class="deriv-card-title">3 · Newton's Rings — Radius Formula</div><div class="deriv-card-body"><p>Air film thickness at radius r from centre: t = r²/2R (R = radius of curvature of lens).</p><p>Condition for dark rings (destructive): 2t = mλ</p><div class="highlight-formula">r_m = √(mλR) &nbsp; (dark rings)</div><p>Condition for bright rings (constructive): 2t = (2m−1)λ/2</p><div class="highlight-formula">r_m = √((2m−1)λR/2) &nbsp; (bright rings)</div><div class="note">The centre is dark because at the point of contact, t = 0, and there is a phase reversal at the lower surface.</div></div></div>
+        </div>
+      </div>
+
+      <div class="section-block" id="opt-sb-ch1-prob">
+        <div class="section-header" onclick="toggleBlock('opt-sb-ch1-prob')">
+          <h2><span class="section-icon icon-prob">∑</span> Worked Problems</h2>
+          <span class="section-toggle">▼</span>
+        </div>
+        <div class="section-body">
+          <div class="prob-card"><div class="prob-card-header"><span class="prob-num">EX 1</span><span>Fringe Width in Young's Experiment</span></div><div class="prob-card-body"><p class="prob-q">In Young's double-slit experiment, slit separation d = 0.2 mm, screen distance D = 1 m, λ = 589 nm. Find fringe width β.</p><div class="prob-given"><span>d</span>=0.2×10⁻³ m | <span>D</span>=1 m | <span>λ</span>=589×10⁻⁹ m</div><div class="prob-solution"><h4>Solution</h4><div class="step"><span class="step-num">1</span><span>β = λD/d = (589×10⁻⁹ × 1) / (0.2×10⁻³)</span></div><div class="ans-box"><span class="ans-label">ANSWER</span><span class="ans-value">β = 2.945 mm ≈ 2.95 mm</span></div></div></div></div>
+          <div class="prob-card"><div class="prob-card-header"><span class="prob-num">EX 2</span><span>Path Difference for Given Fringe Order</span></div><div class="prob-card-body"><p class="prob-q">Two coherent sources d = 0.3 mm apart, D = 1.2 m, λ = 600 nm. Find position of 3rd bright fringe from centre.</p><div class="prob-solution"><h4>Solution</h4><div class="step"><span class="step-num">1</span><span>x = mλD/d = 3 × 600×10⁻⁹ × 1.2 / (0.3×10⁻³)</span></div><div class="ans-box"><span class="ans-label">ANSWER</span><span class="ans-value">x = 7.2 mm</span></div></div></div></div>
+        </div>
+      </div>
+    </div><!-- end opt-ch1 -->
+
+    <!-- ── CHAPTER 2 — DIFFRACTION ── -->
+    <div class="chapter-pane" id="opt-ch2">
+      <div class="chapter-banner">
+        <div class="ch-num">Chapter Two · Optics</div>
+        <h2>Diffraction of Light</h2>
+        <p>Single-slit and double-slit Fraunhofer diffraction, intensity patterns, missing orders, and 5 worked problems.</p>
+      </div>
+
+      <div class="section-block open" id="opt-sb-ch2-def">
+        <div class="section-header" onclick="toggleBlock('opt-sb-ch2-def')">
+          <h2><span class="section-icon icon-def">D</span> Definitions &amp; Concepts</h2>
+          <span class="section-toggle">▼</span>
+        </div>
+        <div class="section-body">
+          <div class="def-card"><h3>Diffraction</h3><p>The bending of light waves around obstacles or through narrow openings. Becomes significant when the slit width is comparable to the wavelength of light.</p><ul><li><strong>Fresnel diffraction:</strong> Either source or screen (or both) are at finite distance from the slit.</li><li><strong>Fraunhofer diffraction:</strong> Both source and screen are effectively at infinity (parallel rays — achieved with lenses).</li></ul></div>
+          <div class="def-card"><h3>Single-Slit Fraunhofer Diffraction</h3><p>For a slit of width b, the intensity pattern on a distant screen is:</p><div class="highlight-formula">I = I₀ (sinα / α)² &nbsp; where α = (π b sinθ) / λ</div><ul><li>Central maximum at α = 0 (θ = 0)</li><li>Minima at b sinθ = mλ (m = ±1, ±2, …)</li><li>Secondary maxima at approximately α = ±3π/2, ±5π/2, …</li></ul></div>
+          <div class="def-card"><h3>Half-Angular Width of Central Maximum</h3><p>The central maximum extends from θ = −θ₁ to θ = +θ₁, where:</p><div class="highlight-formula">sinθ₁ = λ/b</div></div>
+          <div class="def-card"><h3>Missing Orders in Double-Slit Diffraction</h3><p>When d/b = m/p (integer ratio), the m-th interference maximum falls at the p-th diffraction minimum and <strong>disappears</strong>.</p><div class="formula-box">d/b = 2 → missing orders: m = 2, 4, 6, …<br>d/b = 3 → missing orders: m = 3, 6, 9, …</div></div>
+        </div>
+      </div>
+
+      <div class="section-block" id="opt-sb-ch2-deriv">
+        <div class="section-header" onclick="toggleBlock('opt-sb-ch2-deriv')">
+          <h2><span class="section-icon icon-deriv">∂</span> Derivations</h2>
+          <span class="section-toggle">▼</span>
+        </div>
+        <div class="section-body">
+          <div class="deriv-card"><div class="deriv-card-title">1 · Single-Slit Intensity Pattern (Fraunhofer)</div><div class="deriv-card-body"><p>Divide the slit of width b into N small segments, each acting as a Huygens source. For a point at angle θ:</p><div class="formula-box">Total phase difference: 2α = (2π/λ) b sinθ<br>so α = (π/λ) b sinθ</div><p>Sum of N phasors spaced 2α/N apart (as N→∞):</p><div class="formula-box">A = A₀ · sin(α)/α</div><div class="highlight-formula">I = I₀ (sinα / α)²</div><hr class="divider"><p><strong>Minima:</strong> sin α = 0, but α ≠ 0:</p><div class="formula-box">α = mπ &nbsp;→&nbsp; b sinθ = mλ &nbsp; (m = ±1, ±2, …)</div><p><strong>Secondary maxima:</strong> tan α = α, approximately at α = ±3π/2, ±5π/2:</p><div class="formula-box">I₁ ≈ I₀/22.2 &nbsp; (first secondary max, ~4.5% of central)</div></div></div>
+
+          <div class="deriv-card"><div class="deriv-card-title">2 · Double-Slit Fraunhofer Diffraction</div><div class="deriv-card-body"><p>For two slits each of width b, separated centre-to-centre by d = b + c:</p><div class="formula-box">β = (π/λ) b sinθ &nbsp;(single-slit diffraction parameter)<br>γ = (π/λ) d sinθ &nbsp;(two-slit interference parameter)</div><div class="highlight-formula">I = 4A₀² (sin²β / β²) cos²γ</div><hr class="divider"><p><strong>Interference Maxima:</strong></p><div class="formula-box">d sinθ = mλ &nbsp; (m = 0, ±1, ±2, …)</div><p><strong>Interference Minima:</strong></p><div class="formula-box">d sinθ = (m + ½)λ</div><p><strong>Diffraction Minima:</strong></p><div class="formula-box">b sinθ = pλ &nbsp; (p = ±1, ±2, …)</div><hr class="divider"><p><strong>Missing Orders:</strong> When d/b = m/p (integer), the m-th interference maximum coincides with the p-th diffraction minimum and disappears.</p></div></div>
+        </div>
+      </div>
+
+      <div class="section-block" id="opt-sb-ch2-prob">
+        <div class="section-header" onclick="toggleBlock('opt-sb-ch2-prob')">
+          <h2><span class="section-icon icon-prob">∑</span> Worked Problems</h2>
+          <span class="section-toggle">▼</span>
+        </div>
+        <div class="section-body">
+          <div class="prob-card"><div class="prob-card-header"><span class="prob-num">EX 1</span><span>Slit Width to Wavelength Ratio for First Minimum</span></div><div class="prob-card-body"><p class="prob-q">What must be the ratio of slit width to wavelength for a single slit to have the first diffraction minimum at θ = 45.0°?</p><div class="prob-given"><span>θ</span>=45.0° | <span>m</span>=1</div><div class="prob-solution"><h4>Solution</h4><div class="step"><span class="step-num">1</span><span>b sinθ = mλ → b/λ = m/sinθ = 1/sin45° = 1/0.7071</span></div><div class="ans-box"><span class="ans-label">ANSWER</span><span class="ans-value">b/λ = 1.41</span></div></div></div></div>
+          <div class="prob-card"><div class="prob-card-header"><span class="prob-num">EX 2</span><span>Slit Width and Angle from Minima Separation</span></div><div class="prob-card-body"><p class="prob-q">Distance between 1st and 5th minima of single-slit diffraction = 0.35 mm, screen 40 cm away, λ = 550 nm. (a) Slit width. (b) Angle θ of first minimum.</p><div class="prob-given"><span>Δy</span>=0.35 mm | <span>D</span>=400 mm | <span>λ</span>=550 nm | m₂−m₁=4</div><div class="prob-solution"><h4>(a) Slit Width</h4><div class="step"><span class="step-num">1</span><span>d = Dλ(m₂−m₁)/Δy = (400 × 550×10⁻⁶ × 4) / 0.35</span></div><div class="ans-box"><span class="ans-label">PART (a)</span><span class="ans-value">d ≈ 2.51 mm</span></div><h4>▶ (b) Angle</h4><div class="step"><span class="step-num">1</span><span>sinθ = λ/d = 550×10⁻⁶/2.5 = 2.2×10⁻⁴</span></div><div class="ans-box"><span class="ans-label">PART (b)</span><span class="ans-value">θ ≈ 2.2 × 10⁻⁴ rad</span></div></div></div></div>
+          <div class="prob-card"><div class="prob-card-header"><span class="prob-num">EX 3</span><span>Angle and Width from Second Minimum</span></div><div class="prob-card-body"><p class="prob-q">λ = 441 nm, screen D = 2.00 m, distance from 2nd minimum to centre = 1.50 cm. (a) angle θ, (b) slit width.</p><div class="prob-given"><span>λ</span>=441 nm | <span>D</span>=2 m | <span>y</span>=1.50 cm | <span>m</span>=2</div><div class="prob-solution"><h4>(a) Angle</h4><div class="step"><span class="step-num">1</span><span>θ = sin⁻¹(y/D) = sin⁻¹(0.015/2) = sin⁻¹(0.0075)</span></div><div class="ans-box"><span class="ans-label">PART (a)</span><span class="ans-value">θ = 0.430°</span></div><h4>▶ (b) Slit Width</h4><div class="step"><span class="step-num">1</span><span>a = mλ/sinθ = 2×441nm / 0.007505</span></div><div class="ans-box"><span class="ans-label">PART (b)</span><span class="ans-value">a = 0.118 mm</span></div></div></div></div>
+          <div class="prob-card"><div class="prob-card-header"><span class="prob-num">EX 4</span><span>Slit Width from Symmetric Minima</span></div><div class="prob-card-body"><p class="prob-q">λ = 633 nm. Angle between first diffraction minimum on each side = 1.20°. Find slit width.</p><div class="prob-given"><span>λ</span>=633 nm | total angle=1.20° → <span>θ</span>=0.60° each side</div><div class="prob-solution"><h4>Solution</h4><div class="step"><span class="step-num">1</span><span>a = λ/sinθ = 633×10⁻⁹ / sin(0.60°) = 633×10⁻⁹ / 0.01047</span></div><div class="ans-box"><span class="ans-label">ANSWER</span><span class="ans-value">a = 6.04 × 10⁻⁵ m ≈ 60.4 μm</span></div></div></div></div>
+          <div class="prob-card"><div class="prob-card-header"><span class="prob-num">EX 5</span><span>Intensity Ratio at a Screen Point</span></div><div class="prob-card-body"><p class="prob-q">λ = 538 nm, slit width 0.025 mm, screen D = 3.5 m, point y = 1.1 cm from centre. Find (a) θ, (b) α, (c) I/Iₘ.</p><div class="prob-given"><span>λ</span>=538 nm | <span>a</span>=0.025 mm | <span>D</span>=3.5 m | <span>y</span>=1.1 cm</div><div class="prob-solution"><h4>(a) θ</h4><div class="step"><span class="step-num">1</span><span>θ = sin⁻¹(0.011/3.5) = sin⁻¹(3.143×10⁻³)</span></div><div class="ans-box"><span class="ans-label">PART (a)</span><span class="ans-value">θ = 0.18°</span></div><h4>▶ (b) α</h4><div class="step"><span class="step-num">1</span><span>α = (πa/λ) sinθ = π × 0.025×10⁻³ × sin(0.18°) / (538×10⁻⁹)</span></div><div class="ans-box"><span class="ans-label">PART (b)</span><span class="ans-value">α = 0.46 rad</span></div><h4>▶ (c) I/Iₘ</h4><div class="step"><span class="step-num">1</span><span>I/Iₘ = (sin0.46/0.46)² = (0.4439/0.46)²</span></div><div class="ans-box"><span class="ans-label">PART (c)</span><span class="ans-value">I/Iₘ = 0.93 (93% of peak intensity)</span></div></div></div></div>
+        </div>
+      </div>
+    </div><!-- end opt-ch2 -->
+
+  </div><!-- end content-area -->
+</div><!-- end sub-opt -->
+
+<button id="back-to-top" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
+
+<footer>
+  <span>IUT Physics — Complete Study Reference</span> · Electromagnetism · Modern Physics · Optics
+  <div>Study Smart · Good Luck 🎯</div>
+</footer>
+
+<script>
+/* ── Subject switching ── */
+function showSubject(id, btn) {
+  document.querySelectorAll('.subject-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.subject-tab').forEach(b => b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  btn.classList.add('active');
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+/* ── Chapter switching ── */
+function showChapter(subjectKey, id, btn) {
+  const panel = btn.closest('.subject-panel');
+  panel.querySelectorAll('.chapter-pane').forEach(p => p.classList.remove('active'));
+  panel.querySelectorAll('.chapter-tab').forEach(b => b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  btn.classList.add('active');
+  window.scrollTo({top:80, behavior:'smooth'});
+}
+
+/* ── Section block toggle ── */
+function toggleBlock(id) {
+  document.getElementById(id).classList.toggle('open');
+}
+
+/* ── Show/hide solution toggle ── */
+function toggleSol(btn) {
+  const sol = btn.nextElementSibling;
+  sol.classList.toggle('open');
+  btn.textContent = sol.classList.contains('open') ? 'Hide Solution' : 'Show Solution';
+}
+/* mp2 uses t() */
+function t(btn){ toggleSol(btn); }
+
+/* ── Back to top ── */
+const btt = document.getElementById('back-to-top');
+window.addEventListener('scroll', () => {
+  btt.classList.toggle('visible', window.scrollY > 320);
+}, { passive: true });
+</script>
+</body>
+</html>

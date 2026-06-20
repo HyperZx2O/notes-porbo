@@ -1,0 +1,1322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KH Sir — Final Exam Notes</title>
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;1,400&family=JetBrains+Mono:wght@400;500&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0f0f13;
+    --bg2: #16161d;
+    --bg3: #1e1e28;
+    --bg4: #252532;
+    --accent: #e8c97a;
+    --accent2: #7eb8c9;
+    --accent3: #c97ab4;
+    --text: #e8e6df;
+    --text2: #9e9b91;
+    --text3: #6b6960;
+    --border: #2a2a38;
+    --green: #7ecf9e;
+    --red: #cf7e7e;
+    --blue: #7ea8cf;
+    --purple: #a07ecf;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    display: flex;
+  }
+
+  /* SIDEBAR */
+  #sidebar {
+    width: 260px;
+    min-width: 260px;
+    background: var(--bg2);
+    border-right: 1px solid var(--border);
+    height: 100vh;
+    position: sticky;
+    top: 0;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+  }
+
+  #sidebar::-webkit-scrollbar { width: 4px; }
+  #sidebar::-webkit-scrollbar-track { background: transparent; }
+  #sidebar::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+  .sidebar-header {
+    padding: 28px 20px 20px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .sidebar-header .badge {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--accent);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+    display: block;
+  }
+
+  .sidebar-header h1 {
+    font-family: 'Lora', serif;
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--text);
+    line-height: 1.4;
+  }
+
+  .batch-selector {
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    gap: 6px;
+  }
+
+  .batch-btn {
+    padding: 5px 10px;
+    border-radius: 20px;
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--text2);
+    font-size: 11px;
+    font-family: 'JetBrains Mono', monospace;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .batch-btn.active {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: var(--bg);
+    font-weight: 500;
+  }
+
+  .batch-btn:hover:not(.active) { border-color: var(--accent); color: var(--accent); }
+
+  nav { padding: 12px 0; flex: 1; }
+
+  .nav-section-label {
+    font-size: 10px;
+    font-family: 'JetBrains Mono', monospace;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--text3);
+    padding: 12px 20px 6px;
+  }
+
+  .nav-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 9px 20px;
+    cursor: pointer;
+    transition: all 0.15s;
+    border-left: 2px solid transparent;
+    font-size: 13.5px;
+    color: var(--text2);
+  }
+
+  .nav-item:hover { background: var(--bg3); color: var(--text); border-left-color: var(--border); }
+  .nav-item.active { background: var(--bg3); color: var(--accent); border-left-color: var(--accent); }
+
+  .nav-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--text3);
+    flex-shrink: 0;
+    transition: background 0.15s;
+  }
+
+  .nav-item.active .nav-dot { background: var(--accent); }
+
+  /* MAIN */
+  #main {
+    flex: 1;
+    overflow-y: auto;
+    padding: 40px 48px;
+    max-width: 900px;
+  }
+
+  #main::-webkit-scrollbar { width: 5px; }
+  #main::-webkit-scrollbar-track { background: transparent; }
+  #main::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+  .section { display: none; }
+  .section.active { display: block; }
+
+  .section-header {
+    margin-bottom: 36px;
+    padding-bottom: 24px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .section-tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 10px;
+    display: block;
+  }
+
+  .section-title {
+    font-family: 'Lora', serif;
+    font-size: 28px;
+    font-weight: 600;
+    color: var(--text);
+    line-height: 1.3;
+    margin-bottom: 10px;
+  }
+
+  .section-subtitle {
+    color: var(--text2);
+    font-size: 14px;
+    line-height: 1.6;
+  }
+
+  /* CARDS */
+  .card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 20px;
+  }
+
+  .card-title {
+    font-family: 'Lora', serif;
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .q-tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    padding: 2px 8px;
+    border-radius: 4px;
+    background: var(--bg4);
+    color: var(--accent);
+    border: 1px solid var(--border);
+    letter-spacing: 1px;
+  }
+
+  p { font-size: 14.5px; line-height: 1.75; color: var(--text2); margin-bottom: 12px; }
+
+  strong { color: var(--text); font-weight: 500; }
+
+  /* ANSWER BOX */
+  .answer-block {
+    background: var(--bg3);
+    border-radius: 8px;
+    padding: 16px 18px;
+    margin-top: 12px;
+    border-left: 3px solid var(--accent2);
+  }
+
+  .answer-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--accent2);
+    margin-bottom: 8px;
+    display: block;
+  }
+
+  /* CODE */
+  pre {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 16px;
+    overflow-x: auto;
+    margin: 12px 0;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12.5px;
+    line-height: 1.7;
+    color: #c5c0b0;
+  }
+
+  code {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12.5px;
+    background: var(--bg4);
+    padding: 2px 6px;
+    border-radius: 4px;
+    color: var(--accent2);
+  }
+
+  /* LISTS */
+  ul, ol { padding-left: 20px; margin: 10px 0 14px; }
+  li { font-size: 14.5px; line-height: 1.75; color: var(--text2); margin-bottom: 6px; }
+  li strong { color: var(--text); }
+
+  /* NESTED LISTS */
+  ul ul, ol ul { margin: 4px 0 6px; }
+
+  /* TABLE */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 16px 0;
+    font-size: 13.5px;
+  }
+
+  th {
+    background: var(--bg4);
+    color: var(--text);
+    font-weight: 500;
+    padding: 10px 14px;
+    text-align: left;
+    border: 1px solid var(--border);
+  }
+
+  td {
+    padding: 9px 14px;
+    border: 1px solid var(--border);
+    color: var(--text2);
+  }
+
+  tr:nth-child(even) td { background: var(--bg3); }
+
+  /* FLOW DIAGRAM */
+  .flow {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0;
+    margin: 16px 0;
+    padding: 16px;
+    background: var(--bg);
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+  }
+
+  .flow-step {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 6px 0;
+  }
+
+  .flow-box {
+    background: var(--bg4);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 6px 14px;
+    color: var(--text);
+    font-size: 12px;
+  }
+
+  .flow-box.highlight { border-color: var(--accent); color: var(--accent); }
+  .flow-box.blue { border-color: var(--accent2); color: var(--accent2); }
+  .flow-box.green { border-color: var(--green); color: var(--green); }
+  .flow-box.purple { border-color: var(--purple); color: var(--purple); }
+
+  .flow-arrow { color: var(--text3); font-size: 14px; padding: 0 4px; }
+
+  /* KEY TERMS */
+  .key-term-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 10px;
+    margin: 14px 0;
+  }
+
+  .key-term {
+    background: var(--bg4);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 12px 14px;
+  }
+
+  .key-term-name {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--accent);
+    margin-bottom: 4px;
+    display: block;
+  }
+
+  .key-term-def {
+    font-size: 12.5px;
+    color: var(--text2);
+    line-height: 1.5;
+  }
+
+  /* HIGHLIGHT BOX */
+  .tip-box {
+    background: rgba(232, 201, 122, 0.07);
+    border: 1px solid rgba(232, 201, 122, 0.25);
+    border-radius: 8px;
+    padding: 14px 16px;
+    margin: 14px 0;
+  }
+
+  .tip-box p { color: var(--text); margin: 0; }
+
+  .info-box {
+    background: rgba(126, 184, 201, 0.07);
+    border: 1px solid rgba(126, 184, 201, 0.25);
+    border-radius: 8px;
+    padding: 14px 16px;
+    margin: 14px 0;
+  }
+
+  .info-box p { color: var(--text); margin: 0; }
+
+  h3 {
+    font-family: 'Lora', serif;
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--text);
+    margin: 20px 0 8px;
+  }
+
+  h4 {
+    font-size: 13px;
+    font-weight: 500;
+    font-family: 'JetBrains Mono', monospace;
+    color: var(--accent2);
+    margin: 16px 0 6px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  .divider {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 24px 0;
+  }
+
+  /* WELCOME */
+  .welcome-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 14px;
+    margin: 28px 0;
+  }
+
+  .welcome-card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .welcome-card:hover {
+    border-color: var(--accent);
+    background: var(--bg3);
+  }
+
+  .welcome-card-icon {
+    font-size: 22px;
+    margin-bottom: 10px;
+    display: block;
+  }
+
+  .welcome-card-title {
+    font-family: 'Lora', serif;
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 6px;
+  }
+
+  .welcome-card-desc {
+    font-size: 12.5px;
+    color: var(--text2);
+    line-height: 1.5;
+  }
+
+  .progress-bar-wrap {
+    background: var(--bg4);
+    border-radius: 4px;
+    height: 4px;
+    margin-top: 10px;
+    overflow: hidden;
+  }
+
+  .progress-bar-fill {
+    height: 100%;
+    border-radius: 4px;
+    background: var(--accent);
+  }
+
+  @media (max-width: 768px) {
+    #sidebar { display: none; }
+    #main { padding: 24px 20px; }
+    .welcome-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<div id="sidebar">
+  <div class="sidebar-header">
+    <span class="badge">CSE · IUT</span>
+    <h1>Final Exam<br>Study Notes</h1>
+  </div>
+
+  <nav id="nav">
+    <div class="nav-section-label">Start Here</div>
+    <div class="nav-item active" onclick="showSection('home')"><div class="nav-dot"></div> Overview</div>
+
+    <div class="nav-section-label">Q1 · Operating Systems</div>
+    <div class="nav-item" onclick="showSection('os-states')"><div class="nav-dot"></div> Process States</div>
+    <div class="nav-item" onclick="showSection('os-scheduling')"><div class="nav-dot"></div> CPU Scheduling</div>
+    <div class="nav-item" onclick="showSection('os-filesystem')"><div class="nav-dot"></div> File System & Move</div>
+    <div class="nav-item" onclick="showSection('os-bash')"><div class="nav-dot"></div> Bash & ls -l</div>
+    <div class="nav-item" onclick="showSection('os-control')"><div class="nav-dot"></div> OS Regains CPU Control</div>
+
+    <div class="nav-section-label">Q2 · Software & Python</div>
+    <div class="nav-item" onclick="showSection('sw-manmonth')"><div class="nav-dot"></div> Man-Month & Brooks's Law</div>
+    <div class="nav-item" onclick="showSection('sw-cloud')"><div class="nav-dot"></div> Cloud (IaaS, PaaS, SaaS)</div>
+    <div class="nav-item" onclick="showSection('sw-numpy')"><div class="nav-dot"></div> NumPy & 2D Arrays</div>
+
+    <div class="nav-section-label">Q3 · Cybersecurity</div>
+    <div class="nav-item" onclick="showSection('sec-pe')"><div class="nav-dot"></div> PE File Structure</div>
+    <div class="nav-item" onclick="showSection('sec-slack')"><div class="nav-dot"></div> Slack Space & Virus</div>
+    <div class="nav-item" onclick="showSection('sec-polymorphism')"><div class="nav-dot"></div> Polymorphism & IAT</div>
+    <div class="nav-item" onclick="showSection('sec-xss-sql')"><div class="nav-dot"></div> XSS & SQL Injection</div>
+
+    <div class="nav-section-label">Q4 · Blockchain</div>
+    <div class="nav-item" onclick="showSection('bc-hipaa')"><div class="nav-dot"></div> HIPAA & FISMA</div>
+    <div class="nav-item" onclick="showSection('bc-miner')"><div class="nav-dot"></div> Blockchain Mining</div>
+    <div class="nav-item" onclick="showSection('bc-consensus')"><div class="nav-dot"></div> Double Spending & PoW</div>
+    <div class="nav-item" onclick="showSection('bc-merkle')"><div class="nav-dot"></div> Merkle Tree</div>
+
+    <div class="nav-section-label">Extra Topics</div>
+    <div class="nav-item" onclick="showSection('extra-patent')"><div class="nav-dot"></div> Patent Law (5 Clauses)</div>
+    <div class="nav-item" onclick="showSection('extra-cyberlaw')"><div class="nav-dot"></div> US Cyber Laws</div>
+    <div class="nav-item" onclick="showSection('extra-numbers')"><div class="nav-dot"></div> Number Systems</div>
+    <div class="nav-item" onclick="showSection('extra-fat')"><div class="nav-dot"></div> FAT & File Systems</div>
+    <div class="nav-item" onclick="showSection('extra-linker')"><div class="nav-dot"></div> Compiler, Linker, Loader</div>
+  </nav>
+</div>
+
+<!-- MAIN CONTENT -->
+<div id="main">
+
+  <!-- HOME -->
+  <div id="sec-home" class="section active">
+    <div class="section-header">
+      <span class="section-tag">Welcome</span>
+      <div class="section-title">KH Sir — Final Exam Notes</div>
+      <p class="section-subtitle">All batches (23, 22, 21) compiled into one clean study guide. Click any topic from the sidebar to begin.</p>
+    </div>
+    <div class="welcome-grid">
+      <div class="welcome-card" onclick="showSection('os-states')">
+        <span class="welcome-card-icon">⚙️</span>
+        <div class="welcome-card-title">Operating Systems</div>
+        <div class="welcome-card-desc">Process states, scheduling, file systems, bash, kernel control</div>
+        <div class="progress-bar-wrap"><div class="progress-bar-fill" style="width:100%"></div></div>
+      </div>
+      <div class="welcome-card" onclick="showSection('sw-manmonth')">
+        <span class="welcome-card-icon">🐍</span>
+        <div class="welcome-card-title">Software & Python</div>
+        <div class="welcome-card-desc">Brooks's Law, cloud models, NumPy slicing, interpreted vs compiled</div>
+        <div class="progress-bar-wrap"><div class="progress-bar-fill" style="width:100%"></div></div>
+      </div>
+      <div class="welcome-card" onclick="showSection('sec-pe')">
+        <span class="welcome-card-icon">🔐</span>
+        <div class="welcome-card-title">Cybersecurity</div>
+        <div class="welcome-card-desc">PE files, slack space, polymorphism, IAT hooking, XSS, SQLi</div>
+        <div class="progress-bar-wrap"><div class="progress-bar-fill" style="width:100%"></div></div>
+      </div>
+      <div class="welcome-card" onclick="showSection('bc-hipaa')">
+        <span class="welcome-card-icon">⛓️</span>
+        <div class="welcome-card-title">Blockchain</div>
+        <div class="welcome-card-desc">HIPAA, FISMA, mining, double spending, PoW, Merkle Tree</div>
+        <div class="progress-bar-wrap"><div class="progress-bar-fill" style="width:100%"></div></div>
+      </div>
+    </div>
+    <div class="tip-box"><p>💡 <strong>Tip:</strong> The sidebar has ALL topics organized by question number. Start from Q1 and work your way down for exam prep.</p></div>
+  </div>
+
+  <!-- OS: PROCESS STATES -->
+  <div id="sec-os-states" class="section">
+    <div class="section-header">
+      <span class="section-tag">Q1 · Operating Systems</span>
+      <div class="section-title">Process States: I/O Bound vs CPU Bound</div>
+      <p class="section-subtitle">Why does Word.exe take 0% CPU while Fibonacci eats it all?</p>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span class="q-tag">B23 Q1a(i)</span> Word.exe vs Fibonacci</div>
+      <p>Two programs behave very differently in terms of CPU usage — this is explained by <strong>process states</strong> and the I/O Bound vs CPU Bound distinction.</p>
+      <div class="answer-block">
+        <span class="answer-label">Word.exe — I/O Bound</span>
+        <p>Word sits in a <strong>Waiting / Blocked state</strong> when you're just viewing a static page. It waits for external events (keypress, mouse click). The OS puts the process to sleep → it consumes <strong>virtually 0% CPU</strong>. No work = no CPU time.</p>
+      </div>
+      <div class="answer-block">
+        <span class="answer-label">Fibonacci — CPU Bound</span>
+        <p>Fibonacci is pure computation. The process stays in <strong>Running or Ready state</strong>, constantly requesting CPU cycles for arithmetic. No waiting involved → the OS scheduler allocates maximum CPU time to it.</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Process State Diagram</div>
+      <div class="flow">
+        <div class="flow-step"><div class="flow-box">New</div><span class="flow-arrow">→</span><div class="flow-box green">Ready</div><span class="flow-arrow">→</span><div class="flow-box highlight">Running</div></div>
+        <div class="flow-step" style="margin-left:60px"><span style="color:var(--text3)">↓ I/O request</span></div>
+        <div class="flow-step" style="margin-left:60px"><div class="flow-box blue">Waiting / Blocked</div><span class="flow-arrow">→</span><span style="color:var(--text2);font-size:12px">I/O done → back to Ready</span></div>
+        <div class="flow-step" style="margin-left:120px"><span style="color:var(--text3)">↓ task done</span></div>
+        <div class="flow-step" style="margin-left:120px"><div class="flow-box" style="color:var(--red);border-color:var(--red)">Terminated</div></div>
+      </div>
+    </div>
+
+    <div class="key-term-grid">
+      <div class="key-term"><span class="key-term-name">I/O Bound</span><div class="key-term-def">Process spends most time waiting for input/output — low CPU usage</div></div>
+      <div class="key-term"><span class="key-term-name">CPU Bound</span><div class="key-term-def">Process spends most time computing — high CPU usage constantly</div></div>
+      <div class="key-term"><span class="key-term-name">Blocked State</span><div class="key-term-def">Process is paused waiting for an event; gets 0 CPU time slices</div></div>
+      <div class="key-term"><span class="key-term-name">Ready State</span><div class="key-term-def">Process is ready to run but waiting for CPU scheduler to pick it</div></div>
+    </div>
+  </div>
+
+  <!-- OS: SCHEDULING & DELAY -->
+  <div id="sec-os-scheduling" class="section">
+    <div class="section-header">
+      <span class="section-tag">Q1 · Operating Systems</span>
+      <div class="section-title">CPU Scheduling & Typing Delay</div>
+      <p class="section-subtitle">Why does text appear late in Word when the system is busy?</p>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span class="q-tag">B23 Q1a(ii) · B22 Q3c</span> Typing Delay Explained</div>
+      <p>When many programs run simultaneously, the CPU must share time among all active processes. Here's why Word feels laggy:</p>
+      <ol>
+        <li><strong>CPU Scheduling / Starvation:</strong> The Ready Queue fills up with CPU-intensive processes. Word waits multiple time quanta before getting a turn.</li>
+        <li><strong>Process Priority:</strong> Compilers and renderers may have equal or higher priority, repeatedly pushing Word back.</li>
+        <li><strong>Interrupt Overload:</strong> Your keyboard interrupt queues behind many other pending interrupts. It takes time for the OS to even notice your keypress.</li>
+        <li><strong>Context Switch Overhead:</strong> Saving/restoring process state (registers → PCB) for N processes wastes significant CPU time.</li>
+        <li><strong>Thrashing / Paging:</strong> If RAM is full, Word's data is swapped to disk. When it finally runs, page faults cause massive additional delays.</li>
+      </ol>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Full Delay Flow</div>
+      <div class="flow">
+        <div class="flow-step"><div class="flow-box highlight">You press a key</div></div>
+        <div class="flow-step"><span class="flow-arrow" style="margin-left:10px">↓</span></div>
+        <div class="flow-step"><div class="flow-box">Keyboard interrupt generated</div></div>
+        <div class="flow-step"><span class="flow-arrow" style="margin-left:10px">↓</span></div>
+        <div class="flow-step"><div class="flow-box blue">Interrupt queue backed up</div><span style="margin-left:10px;color:var(--red);font-size:11px">← DELAY 1</span></div>
+        <div class="flow-step"><span class="flow-arrow" style="margin-left:10px">↓</span></div>
+        <div class="flow-step"><div class="flow-box">OS handles interrupt → Word enters Ready Queue</div></div>
+        <div class="flow-step"><span class="flow-arrow" style="margin-left:10px">↓</span></div>
+        <div class="flow-step"><div class="flow-box blue">Ready Queue full — Word waits</div><span style="margin-left:10px;color:var(--red);font-size:11px">← DELAY 2</span></div>
+        <div class="flow-step"><span class="flow-arrow" style="margin-left:10px">↓</span></div>
+        <div class="flow-step"><div class="flow-box blue">Context switches waste CPU</div><span style="margin-left:10px;color:var(--red);font-size:11px">← DELAY 3</span></div>
+        <div class="flow-step"><span class="flow-arrow" style="margin-left:10px">↓</span></div>
+        <div class="flow-step"><div class="flow-box blue">Page fault — memory was swapped to disk</div><span style="margin-left:10px;color:var(--red);font-size:11px">← DELAY 4</span></div>
+        <div class="flow-step"><span class="flow-arrow" style="margin-left:10px">↓</span></div>
+        <div class="flow-step"><div class="flow-box green">Word processes keystroke → you see the character ✓</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- OS: FILE SYSTEM & MOVE -->
+  <div id="sec-os-filesystem" class="section">
+    <div class="section-header">
+      <span class="section-tag">Q1 · Operating Systems</span>
+      <div class="section-title">File System: Move vs Cut/Paste</div>
+      <p class="section-subtitle">Why does moving a folder take milliseconds but cut/pasting 5000 files is slow?</p>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span class="q-tag">B23 Q1a(iii)</span> Moving a Folder (Fast)</div>
+      <p>When you move a folder on the <strong>same partition</strong>, the OS only updates a single pointer in the <strong>Master File Table (MFT)</strong>. It changes the parent directory reference of "X" to "Y". <strong>No actual data is ever moved on disk.</strong></p>
+      <div class="tip-box"><p>Think of it like changing the label on a shelf — the actual books don't move, just the address changes.</p></div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span class="q-tag">B23 Q1a(iii)</span> Cut/Paste 5000 Files (Slow)</div>
+      <p>Even on the same drive, cut/pasting individual files forces the OS to:</p>
+      <ul>
+        <li>Update directory entries and metadata for <strong>each of the 5000 files</strong> individually</li>
+        <li>Perform <strong>5000 separate metadata writes</strong> — one per file</li>
+        <li>Perform lock checks on each file</li>
+      </ul>
+      <p>The overhead of 5000 individual operations is significantly higher than updating a single folder reference.</p>
+    </div>
+
+    <table>
+      <tr><th>Operation</th><th>What happens on disk</th><th>Speed</th></tr>
+      <tr><td>Move folder</td><td>1 pointer/MFT entry updated</td><td style="color:var(--green)">Instant</td></tr>
+      <tr><td>Cut/paste 5000 files</td><td>5000 individual metadata writes</td><td style="color:var(--red)">Slow</td></tr>
+    </table>
+  </div>
+
+  <!-- OS: BASH -->
+  <div id="sec-os-bash" class="section">
+    <div class="section-header">
+      <span class="section-tag">Q1 · Operating Systems</span>
+      <div class="section-title">Linux Bash, cd Error & ls -l</div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span class="q-tag">B23 Q1b</span> "Not a Directory" Error</div>
+      <p><strong>Cause:</strong> The user tried <code>cd myfileDirDev</code> but <code>myfileDirDev</code> is a regular <em>file</em>, not a folder. The <code>cd</code> command only works on directories.</p>
+      <p><strong>Investigation commands:</strong></p>
+      <pre>ls -l myfileDirDev     # Shows file type in first character
+file myfileDirDev      # Tells you what type of file it is
+cat myfileDirDev       # Read the file contents</pre>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Reading ls -l Output</div>
+      <p>The first character of each line tells you the file type:</p>
+      <pre>-rw-r--r--  1 user group  1024 Oct 12 10:00 myfileDirDev   ← FILE (-)
+drwxr-xr-x  2 user group  4096 Oct 12 10:05 bin            ← DIR  (d)</pre>
+      <div class="info-box"><p><strong>- </strong> = regular file &nbsp;|&nbsp; <strong>d</strong> = directory &nbsp;|&nbsp; <strong>l</strong> = symbolic link</p></div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span class="q-tag">B23 Q1b(iii)</span> Count Files & Directories from ls -l</div>
+      <pre>fileCount = 0
+dirCount  = 0
+
+while (line = getLine()):
+    if line.startsWith("-"):
+        fileCount += 1
+    elif line.startsWith("d"):
+        dirCount += 1
+
+print("Files:", fileCount)
+print("Directories:", dirCount)</pre>
+      <p style="margin-top:10px">Also, using grep directly in bash:</p>
+      <pre>ls -l /home | grep "^d"    # print only directories</pre>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span class="q-tag">B22 Q3d</span> Linux Permission — 0755</div>
+      <table>
+        <tr><th>Who</th><th>Value</th><th>Permissions</th><th>Meaning</th></tr>
+        <tr><td>Owner</td><td>7</td><td>rwx</td><td>Read + Write + Execute</td></tr>
+        <tr><td>Group</td><td>5</td><td>r-x</td><td>Read + Execute only</td></tr>
+        <tr><td>Others</td><td>5</td><td>r-x</td><td>Read + Execute only</td></tr>
+      </table>
+      <p>7 = 4+2+1 (r+w+x) &nbsp;|&nbsp; 5 = 4+0+1 (r+x). Typical for executable programs and public folders.</p>
+    </div>
+  </div>
+
+  <!-- OS: CONTROL -->
+  <div id="sec-os-control" class="section">
+    <div class="section-header">
+      <span class="section-tag">Q1 · Operating Systems</span>
+      <div class="section-title">How the OS Regains CPU Control</div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span class="q-tag">B23 Q1c · B22 Q3b</span> Two Mechanisms</div>
+      <p>Once the CPU starts running a program, how does the OS get back in charge? Two ways:</p>
+      <div class="answer-block">
+        <span class="answer-label">1. Hardware Timer Interrupt (Preemption)</span>
+        <p>The OS sets a <strong>hardware timer</strong> before handing CPU to any program. When the timer fires (e.g., every 10ms), the CPU is forcibly interrupted — the program cannot prevent this. Control jumps to the OS's <strong>Interrupt Service Routine (ISR)</strong>.</p>
+      </div>
+      <div class="answer-block">
+        <span class="answer-label">2. System Call / Software Trap</span>
+        <p>If a program needs I/O (file read, network), it executes a <strong>System Call (Trap)</strong>, voluntarily handing control back. CPU switches from User Mode → Kernel Mode. OS handles the request, then gives CPU back.</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">The Process (5 Key Steps)</div>
+      <ol>
+        <li><strong>Timer Interrupt fires</strong> — OS-programmed hardware timer chip sends interrupt signal</li>
+        <li><strong>CPU stops mid-instruction</strong> — hardware enforced, program cannot stop this</li>
+        <li><strong>Process state saved</strong> — PC, registers, stack pointer all saved to PCB (Process Control Block)</li>
+        <li><strong>ISR runs</strong> — control jumps to OS's Interrupt Service Routine in kernel mode</li>
+        <li><strong>Scheduler decides</strong> — resume same process, or context switch to a different one</li>
+      </ol>
+    </div>
+
+    <div class="key-term-grid">
+      <div class="key-term"><span class="key-term-name">Timer Interrupt</span><div class="key-term-def">Hardware signal that forces CPU to give control to OS</div></div>
+      <div class="key-term"><span class="key-term-name">Preemption</span><div class="key-term-def">Forcibly stopping a process before it finishes</div></div>
+      <div class="key-term"><span class="key-term-name">PCB</span><div class="key-term-def">Process Control Block — stores saved state of paused process</div></div>
+      <div class="key-term"><span class="key-term-name">Kernel Mode</span><div class="key-term-def">Privileged CPU mode where only OS code runs</div></div>
+      <div class="key-term"><span class="key-term-name">ISR</span><div class="key-term-def">Interrupt Service Routine — OS code that handles interrupts</div></div>
+      <div class="key-term"><span class="key-term-name">System Call</span><div class="key-term-def">Voluntary trap by program to request OS services</div></div>
+    </div>
+  </div>
+
+  <!-- SW: MAN-MONTH -->
+  <div id="sec-sw-manmonth" class="section">
+    <div class="section-header">
+      <span class="section-tag">Q2 · Software Engineering</span>
+      <div class="section-title">Man-Month & Brooks's Law</div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span class="q-tag">B23 Q2a</span> What is a Man-Month?</div>
+      <p>A <strong>man-month</strong> is a unit of measurement representing the amount of work one person can complete in one month. It's used to estimate total project effort.</p>
+      <p>Example: A 6-person-month project could be done by 1 person in 6 months, or 3 people in 2 months — but NOT 6 people in 1 month.</p>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Brooks's Law</div>
+      <div class="tip-box"><p><em>"Adding manpower to a late software project makes it later."</em> — Fred Brooks</p></div>
+      <p>Why? Two reasons:</p>
+      <ul>
+        <li><strong>Training overhead:</strong> New people need existing members to train them, reducing current productivity</li>
+        <li><strong>Communication overhead:</strong> With N people, there are N(N-1)/2 communication channels — grows exponentially</li>
+      </ul>
+      <div class="info-box"><p>Classic analogy: <em>"Nine women cannot make a baby in one month."</em> Some tasks can't be parallelized.</p></div>
+    </div>
+  </div>
+
+  <!-- SW: CLOUD -->
+  <div id="sec-sw-cloud" class="section">
+    <div class="section-header">
+      <span class="section-tag">Q2 · Software Engineering</span>
+      <div class="section-title">Cloud Service Models: IaaS, PaaS, SaaS</div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span class="q-tag">B23 Q2b · B22 Q1d</span> The Three -aaS Models</div>
+      <table>
+        <tr><th>Model</th><th>Stands For</th><th>What you get</th><th>Examples</th></tr>
+        <tr><td><strong>IaaS</strong></td><td>Infrastructure as a Service</td><td>Raw computing resources (VMs, storage, networking)</td><td>AWS EC2, Azure VMs</td></tr>
+        <tr><td><strong>PaaS</strong></td><td>Platform as a Service</td><td>Platform to build/deploy apps (no managing servers)</td><td>Heroku, Google App Engine</td></tr>
+        <tr><td><strong>SaaS</strong></td><td>Software as a Service</td><td>Ready-to-use software over the internet</td><td>Gmail, Dropbox, MS 365</td></tr>
+      </table>
+      <div class="tip-box"><p><strong>Which reaches end users?</strong> → <strong>SaaS</strong>. End users interact directly with finished software — they never touch servers or platforms.</p></div>
+    </div>
+  </div>
+
+  <!-- SW: NUMPY -->
+  <div id="sec-sw-numpy" class="section">
+    <div class="section-header">
+      <span class="section-tag">Q2 · Python & NumPy</span>
+      <div class="section-title">NumPy 2D Arrays & Slicing</div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span class="q-tag">B23 Q2c</span> Creating the Array</div>
+      <pre>import numpy as np
+
+myarray = np.array([[1, 2, 3],
+                    [4, 5, 6],
+                    [7, 8, 9]])
+
+# Index reference:
+#        col0 col1 col2
+# row0: [  1,   2,   3 ]
+# row1: [  4,   5,   6 ]
+# row2: [  7,   8,   9 ]</pre>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Slicing Operations — All Answers</div>
+      <table>
+        <tr><th>Operation</th><th>What it means</th><th>Output</th></tr>
+        <tr><td><code>myarray[:, 1]</code></td><td>All rows, column index 1</td><td><strong>[2, 5, 8]</strong></td></tr>
+        <tr><td><code>myarray[2, :]</code></td><td>Row index 2, all columns</td><td><strong>[7, 8, 9]</strong></td></tr>
+        <tr><td><code>myarray[1:3, 1:3]</code></td><td>Rows 1–2, columns 1–2</td><td><strong>[[5,6],[8,9]]</strong></td></tr>
+        <tr><td><code>myarray[1:3, -1]</code></td><td>Rows 1–2, last column</td><td><strong>[6, 9]</strong></td></tr>
+        <tr><td><code>myarray[:, -1]</code></td><td>All rows, last column</td><td><strong>[3, 6, 9]</strong></td></tr>
+      </table>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span class="q-tag">B23 Q2d</span> Python is Interpreted — Proof</div>
+      <p>Python executes line-by-line. If line 3 has an error, lines 1 and 2 already ran before the crash.</p>
+      <pre>print("This line executes first.")    # ← runs OK
+print("This line also executes.")     # ← runs OK
+1/0                                   # ← ZeroDivisionError here
+print("This line will never run.")    # ← never reached</pre>
+      <div class="info-box"><p>A <strong>compiled language</strong> (like C) would catch the error before running anything. Python runs each line as it goes.</p></div>
+    </div>
+  </div>
+
+  <!-- SEC: PE FILE -->
+  <div id="sec-sec-pe" class="section">
+    <div class="section-header">
+      <span class="section-tag">Q3 · Cybersecurity</span>
+      <div class="section-title">PE File Structure — The Loader</div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span class="q-tag">B23 Q3a · B22 Q4b</span> Four Section Header Fields</div>
+      <table>
+        <tr><th>Field</th><th>Where it is</th><th>What it tells the loader</th></tr>
+        <tr><td><strong>PointerToRawData</strong></td><td>On disk (file)</td><td>File offset where section data starts — where to READ from</td></tr>
+        <tr><td><strong>SizeOfRawData</strong></td><td>On disk (file)</td><td>How many bytes to read from disk</td></tr>
+        <tr><td><strong>VirtualAddress</strong></td><td>In memory</td><td>Offset in virtual memory (from ImageBase) — where to PLACE the section</td></tr>
+        <tr><td><strong>VirtualSize</strong></td><td>In memory</td><td>How much space the section needs in RAM (may be larger than SizeOfRawData)</td></tr>
+      </table>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Moving Company Analogy 🚚</div>
+      <p>Think of the disk as a <strong>warehouse</strong> and RAM as an <strong>apartment</strong>. The loader is the moving company:</p>
+      <ul>
+        <li><strong>PointerToRawData</strong> → Where is the box in the warehouse?</li>
+        <li><strong>SizeOfRawData</strong> → How big is the box in the warehouse?</li>
+        <li><strong>VirtualAddress</strong> → Which room does it go in the apartment?</li>
+        <li><strong>VirtualSize</strong> → How much space does it need in the room?</li>
+      </ul>
+      <pre>FILE ON DISK                       IN MEMORY (RAM)
+────────────────────               ──────────────────────
+PointerToRawData → read from       VirtualAddress → place here
+SizeOfRawData    → how much        VirtualSize    → space to occupy
+                                   (zero-pad if VirtualSize > SizeOfRawData)</pre>
+    </div>
+  </div>
+
+  <!-- SEC: SLACK SPACE -->
+  <div id="sec-sec-slack" class="section">
+    <div class="section-header">
+      <span class="section-tag">Q3 · Cybersecurity</span>
+      <div class="section-title">Slack Space & Virus Injection</div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span class="q-tag">B23 Q3b · B22 Q4c</span> How FileAlignment Creates Slack Space</div>
+      <p><strong>FileAlignment</strong> (in the PE Optional Header) forces every section to start at a fixed byte boundary (typically 512 bytes). Because section content is often smaller than this boundary, <strong>padding bytes</strong> are left over at the end of each section.</p>
+      <pre>Section on Disk:
+┌──────────────────────────┬──────────────┐
+│   Actual Code/Data       │   PADDING    │
+│   (VirtualSize)          │   (empty gap)│
+└──────────────────────────┴──────────────┘
+←────── SizeOfRawData (rounded to FileAlignment) ──────→</pre>
+    </div>
+
+    <div class="card">
+      <div class="card-title">How a Virus Exploits Slack Space</div>
+      <ol>
+        <li>The OS loader <strong>ignores</strong> padding bytes — they're never checked</li>
+        <li>Virus <strong>injects its code</strong> into this padding — file size stays the same</li>
+        <li>Virus modifies the <strong>entry point</strong> or a jump instruction to redirect execution to the hidden code</li>
+        <li>Antivirus tools checking only file size see nothing unusual</li>
+        <li>The legitimate program still runs normally — infection is hidden</li>
+      </ol>
+      <div class="tip-box"><p><strong>One-liner:</strong> FileAlignment creates unavoidable slack space → virus hides there → file size unchanged → very hard to detect.</p></div>
+    </div>
+  </div>
+
+  <!-- SEC: POLYMORPHISM & IAT -->
+  <div id="sec-sec-polymorphism" class="section">
+    <div class="section-header">
+      <span class="section-tag">Q3 · Cybersecurity</span>
+      <div class="section-title">Polymorphism & IAT Hooking</div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span class="q-tag">B23 Q3c</span> Virus Obfuscation & Polymorphism</div>
+      <div class="answer-block">
+        <span class="answer-label">Obfuscation</span>
+        <p>Uses <strong>dead code</strong> (useless instructions) or code shuffling to confuse static analysis tools. The virus looks different on the surface but does the same thing.</p>
+      </div>
+      <div class="answer-block">
+        <span class="answer-label">Polymorphism</span>
+        <p>The virus uses an <strong>encryption engine</strong> to encrypt its own body. Each time it infects a new file, it uses a <strong>different key or algorithm</strong>. The virus signature changes every time → invisible to signature-based antivirus scanners.</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span class="q-tag">B23 Q3d</span> IAT Virus — Why So Hard to Detect</div>
+      <p>The <strong>Import Address Table (IAT)</strong> is a "phonebook" inside every Windows EXE listing addresses of OS functions (like CreateFile, SaveFile).</p>
+      <p>An IAT virus <strong>replaces the real address</strong> of a system function with the virus's address. Now whenever the legitimate program calls <code>SaveFile</code>, it accidentally runs the virus first.</p>
+      <div class="key-term-grid">
+        <div class="key-term"><span class="key-term-name">Standard OS Behavior</span><div class="key-term-def">No new suspicious threads or processes — hides inside trusted programs</div></div>
+        <div class="key-term"><span class="key-term-name">Normal Control Flow</span><div class="key-term-def">Looks like a normal system call — antivirus sees nothing suspicious</div></div>
+        <div class="key-term"><span class="key-term-name">No New Activity</span><div class="key-term-def">No new permissions requested, no alerts triggered</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SEC: XSS & SQL -->
+  <div id="sec-sec-xss-sql" class="section">
+    <div class="section-header">
+      <span class="section-tag">Q3 · Cybersecurity</span>
+      <div class="section-title">XSS & SQL Injection</div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span class="q-tag">B23 Q3e · B22 Q4d · B21 Q3b</span> XSS — Cross-Site Scripting</div>
+      <p><strong>Target:</strong> The user's browser.</p>
+      <p>Attacker injects malicious JavaScript into a website's comment/input field. Other users visit the page → browser executes the script thinking it's from a trusted site.</p>
+      <h4>Attack Scenario</h4>
+      <pre>&lt;script&gt;document.cookie&lt;/script&gt;   ← submitted as a "comment"</pre>
+      <p>If the site doesn't sanitize input, every visitor runs this script → attacker steals their session cookies → can log in as them.</p>
+      <h4>Types</h4>
+      <ul>
+        <li><strong>Stored XSS:</strong> Script saved in database, served repeatedly</li>
+        <li><strong>Reflected XSS:</strong> Script embedded in URL, reflected back immediately</li>
+        <li><strong>DOM-based XSS:</strong> Script manipulates DOM directly in browser</li>
+      </ul>
+      <h4>Prevention</h4>
+      <ul>
+        <li>Sanitize and escape all user inputs</li>
+        <li>Use Content Security Policy (CSP) headers</li>
+        <li>Validate input on both client and server side</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <div class="card-title">SQL Injection</div>
+      <p><strong>Target:</strong> The website's database.</p>
+      <p>Attacker inserts SQL commands into input fields. If the app doesn't sanitize, the database executes the injected code.</p>
+      <h4>Classic Login Bypass</h4>
+      <pre>Username: admin' OR '1'='1
+Password: anything</pre>
+      <p>The database sees: <em>"Is username = admin OR is 1=1?"</em> → 1 always equals 1 → login accepted with no real password.</p>
+      <h4>Prevention</h4>
+      <ul>
+        <li>Use <strong>Prepared Statements</strong> (Parameterized Queries)</li>
+        <li>Input validation and sanitization</li>
+        <li>Least-privilege DB accounts</li>
+      </ul>
+    </div>
+
+    <table>
+      <tr><th>Feature</th><th>XSS</th><th>SQL Injection</th></tr>
+      <tr><td>Code runs in</td><td>User's browser</td><td>Web server's database</td></tr>
+      <tr><td>Language</td><td>JavaScript</td><td>SQL</td></tr>
+      <tr><td>Main danger</td><td>Steal user sessions/identity</td><td>Steal/destroy entire datasets</td></tr>
+      <tr><td>Simple memory</td><td>Attacking the person</td><td>Attacking the brain (database)</td></tr>
+    </table>
+  </div>
+
+  <!-- BC: HIPAA & FISMA -->
+  <div id="sec-bc-hipaa" class="section">
+    <div class="section-header">
+      <span class="section-tag">Q4 · Blockchain & Compliance</span>
+      <div class="section-title">HIPAA & FISMA</div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span class="q-tag">B23 Q4a · B21 Q4c</span> HIPAA</div>
+      <p><strong>Full name:</strong> Health Insurance Portability and Accountability Act (1996)</p>
+      <p><strong>Core:</strong> The "Privacy Wall" for your medical records. Protects <strong>PHI (Protected Health Information)</strong> — diagnoses, prescriptions, billing info.</p>
+      <ul>
+        <li><strong>Who must follow it:</strong> Doctors, hospitals, pharmacies, insurance companies</li>
+        <li><strong>Penalties:</strong> Fines up to $2.2M/year, up to 10 years in prison for selling patient data</li>
+        <li><strong>Enforcement:</strong> Dept. of Health (OCR) performs audits</li>
+      </ul>
+      <div class="tip-box"><p><strong>Example:</strong> If a nurse leaks a celebrity's medical chart → HIPAA violation.</p></div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">FISMA</div>
+      <p><strong>Full name:</strong> Federal Information Security Management Act (2002, updated 2014)</p>
+      <p><strong>Core:</strong> The "Security Blueprint" for the US Government. Protects federal information systems.</p>
+      <ul>
+        <li><strong>Who must follow it:</strong> All federal agencies (FBI, NASA, etc.) and private contractors doing government work</li>
+        <li><strong>Requires:</strong> Regular risk assessments, security plans, incident reporting, continuous monitoring</li>
+        <li><strong>Penalties:</strong> Loss of government funding, contract cancellation, federal blacklisting</li>
+        <li><strong>Framework:</strong> NIST provides the security standards agencies must follow</li>
+      </ul>
+      <div class="tip-box"><p><strong>Example:</strong> Contractor builds a government site with weak passwords → hackers get in → FISMA failure.</p></div>
+    </div>
+
+    <table>
+      <tr><th>Law</th><th>Enforcement</th><th>Consequence</th></tr>
+      <tr><td><strong>HIPAA</strong></td><td>Dept. of Health (OCR), public audits</td><td>Fines up to $2.2M/year + prison</td></tr>
+      <tr><td><strong>FISMA</strong></td><td>OMB + DHS oversight</td><td>Loss of funding + contract cancellation</td></tr>
+    </table>
+  </div>
+
+  <!-- BC: MINER -->
+  <div id="sec-bc-miner" class="section">
+    <div class="section-header">
+      <span class="section-tag">Q4 · Blockchain</span>
+      <div class="section-title">What Does a Blockchain Miner Do?</div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span class="q-tag">B23 Q4b · B21 Q6a</span> The Miner's 3 Tasks</div>
+      <div class="answer-block">
+        <span class="answer-label">Step 1 — The Bundler</span>
+        <p>Transactions sit in the <strong>Mempool</strong> (waiting room). The miner picks a group, verifies the senders have sufficient funds, and bundles them into a <strong>Candidate Block</strong>.</p>
+      </div>
+      <div class="answer-block">
+        <span class="answer-label">Step 2 — Proof of Work (Hard Math)</span>
+        <p>Miner must find a <strong>Nonce</strong> (a number) that, when combined with block data, produces a <strong>Hash</strong> starting with a certain number of zeros. No formula — pure brute force guessing (trillions of attempts/second).</p>
+      </div>
+      <div class="answer-block">
+        <span class="answer-label">Step 3 — Broadcaster & Reward</span>
+        <p>First miner to find the correct hash <strong>broadcasts</strong> the solution. Others instantly verify it. The block is added to the chain forever. The winner gets <strong>block reward + transaction fees</strong>.</p>
+      </div>
+    </div>
+
+    <div class="key-term-grid">
+      <div class="key-term"><span class="key-term-name">Validation</span><div class="key-term-def">Checking that transactions are legitimate before including them</div></div>
+      <div class="key-term"><span class="key-term-name">Nonce</span><div class="key-term-def">A number miners iterate through to find the correct hash</div></div>
+      <div class="key-term"><span class="key-term-name">Proof of Work</span><div class="key-term-def">The "expensive" puzzle — makes faking blocks computationally impossible</div></div>
+      <div class="key-term"><span class="key-term-name">Consensus</span><div class="key-term-def">Network-wide agreement that the new block is valid</div></div>
+    </div>
+  </div>
+
+  <!-- BC: CONSENSUS -->
+  <div id="sec-bc-consensus" class="section">
+    <div class="section-header">
+      <span class="section-tag">Q4 · Blockchain</span>
+      <div class="section-title">Double Spending & PoW Byzantine Fault Tolerance</div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span class="q-tag">B23 Q4c · B21 Q6c(i)</span> How Blockchain Prevents Double Spending</div>
+      <p>Every block contains the <strong>hash of the previous block</strong> — creating a chronological chain. When a user tries to spend the same coin twice:</p>
+      <ol>
+        <li>The network checks the full history of the coin</li>
+        <li>The first transaction is already confirmed in a previous block</li>
+        <li>Nodes <strong>reject the second transaction</strong> — the coin was already spent</li>
+        <li>Changing an old block would break all subsequent hashes, making tampering obvious</li>
+      </ol>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span class="q-tag">B23 Q4d · B21 Q6c(ii)</span> PoW & Byzantine Fault Tolerance</div>
+      <p>The Byzantine Generals Problem: how do distributed nodes agree when some might be lying? PoW solves this:</p>
+      <ul>
+        <li><strong>Cost of entry:</strong> Solving the puzzle requires massive electricity + hardware (Hash Power)</li>
+        <li><strong>Longest chain rule:</strong> The network always follows the longest valid chain</li>
+        <li><strong>51% threshold:</strong> A hacker needs >51% of total network hash power to rewrite history — economically infeasible on large networks</li>
+        <li><strong>Economic incentive:</strong> Cheaper to play by the rules and earn block rewards than to spend billions trying to hack</li>
+      </ul>
+      <div class="tip-box"><p><strong>Why "tolerant"?</strong> You don't need to trust other nodes — you only trust the math. As long as >50% of hash power is honest, traitors can never build a longer chain.</p></div>
+    </div>
+
+    <div class="key-term-grid">
+      <div class="key-term"><span class="key-term-name">51% Attack</span><div class="key-term-def">The theoretical point where PoW fails — attacker controls majority of hash power</div></div>
+      <div class="key-term"><span class="key-term-name">Hash Power</span><div class="key-term-def">The "weapon" that secures the network — more = more secure</div></div>
+      <div class="key-term"><span class="key-term-name">Longest Chain Rule</span><div class="key-term-def">Nodes always accept the longest valid chain as the true history</div></div>
+    </div>
+  </div>
+
+  <!-- BC: MERKLE -->
+  <div id="sec-bc-merkle" class="section">
+    <div class="section-header">
+      <span class="section-tag">Q4 · Blockchain</span>
+      <div class="section-title">Merkle Tree</div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span class="q-tag">B23 Q4e · B21 Q6b</span> What is a Merkle Tree?</div>
+      <p>A <strong>Merkle Tree</strong> is a hash tree where:</p>
+      <ul>
+        <li>Every <strong>leaf node</strong> = hash of one transaction</li>
+        <li>Every <strong>non-leaf node</strong> = hash of its two children</li>
+        <li>The <strong>Merkle Root</strong> = single hash representing ALL transactions in the block</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Visual Structure</div>
+      <pre>              [ Merkle Root ]
+             /               \
+        [Hash AB]           [Hash CD]
+        /      \            /      \
+  [Hash A]  [Hash B]  [Hash C]  [Hash D]
+      |          |        |          |
+   [Tx A]    [Tx B]   [Tx C]    [Tx D]</pre>
+    </div>
+
+    <div class="card">
+      <div class="card-title">How it's Used in Blockchain</div>
+      <p>The Merkle Root is stored in each block's header. This allows <strong>Simplified Payment Verification (SPV)</strong>:</p>
+      <ul>
+        <li>Instead of downloading the full block, you only need a small <strong>branch</strong> of the tree</li>
+        <li>You can verify if a specific transaction is in the block without downloading all transactions</li>
+        <li>Saves massive amounts of data and time for lightweight clients</li>
+        <li>Any change to even one transaction changes the Merkle Root → data tampering is instantly detectable</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- EXTRA: PATENT -->
+  <div id="sec-extra-patent" class="section">
+    <div class="section-header">
+      <span class="section-tag">Extra · Law</span>
+      <div class="section-title">US Patent Law — 5 Clauses (Title 35)</div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span class="q-tag">B22 Q5a · B21 Q4a</span> Five Key Sections</div>
+      <table>
+        <tr><th>Section</th><th>Name</th><th>Core Requirement</th></tr>
+        <tr><td><strong>§101</strong></td><td>Patentable Subject Matter</td><td>Must be a process, machine, manufacture, or composition of matter. No abstract ideas, laws of nature.</td></tr>
+        <tr><td><strong>§102</strong></td><td>Novelty</td><td>Must be NEW. Not previously known, used, or published (prior art). First-to-file system in USA.</td></tr>
+        <tr><td><strong>§103</strong></td><td>Non-Obviousness</td><td>Must NOT be obvious to a person with ordinary skill in that field.</td></tr>
+        <tr><td><strong>§112</strong></td><td>Specification / Disclosure</td><td>Must fully describe the invention so any skilled person can reproduce it.</td></tr>
+        <tr><td><strong>§154</strong></td><td>Patent Term & Rights</td><td>Utility patent lasts 20 years from filing. Holder has exclusive make/use/sell rights.</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <!-- EXTRA: CYBER LAWS -->
+  <div id="sec-extra-cyberlaw" class="section">
+    <div class="section-header">
+      <span class="section-tag">Extra · Law</span>
+      <div class="section-title">US Cybersecurity Laws</div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span class="q-tag">B22 Q5b</span> Major Laws</div>
+      <table>
+        <tr><th>Law</th><th>Year</th><th>Focus</th></tr>
+        <tr><td><strong>CFAA</strong></td><td>1986</td><td>Primary federal cybercrime law — prosecutes hacking, unauthorized access. Up to 20 years prison.</td></tr>
+        <tr><td><strong>ECPA</strong></td><td>1986</td><td>Protects electronic communications from unauthorized interception/surveillance.</td></tr>
+        <tr><td><strong>CISA</strong></td><td>2015</td><td>Encourages private-government threat intelligence sharing. Companies get liability protection.</td></tr>
+        <tr><td><strong>FISMA</strong></td><td>2014</td><td>Federal agencies must implement cybersecurity programs per NIST standards.</td></tr>
+        <tr><td><strong>HIPAA</strong></td><td>1996</td><td>Protects patient health information (PHI). Heavy fines + prison for violations.</td></tr>
+        <tr><td><strong>GLBA</strong></td><td>1999</td><td>Financial institutions must protect customer financial data.</td></tr>
+        <tr><td><strong>COPPA</strong></td><td>1998</td><td>Protects children under 13 online. Parental consent required for data collection.</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <!-- EXTRA: NUMBER SYSTEMS -->
+  <div id="sec-extra-numbers" class="section">
+    <div class="section-header">
+      <span class="section-tag">Extra · Number Systems</span>
+      <div class="section-title">Number Conversions & 2's Complement</div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span class="q-tag">B22 Q2a</span> Convert 57 to Different Bases</div>
+      <table>
+        <tr><th>Base</th><th>Division steps</th><th>Result</th></tr>
+        <tr><td>Binary (2)</td><td>57 = 32+16+8+1</td><td><strong>111001₂</strong></td></tr>
+        <tr><td>Base 3</td><td>57÷3=19r0, 19÷3=6r1, 6÷3=2r0, 2÷3=0r2 → read up</td><td><strong>2010₃</strong></td></tr>
+        <tr><td>Base 4</td><td>57÷4=14r1, 14÷4=3r2, 3÷4=0r3 → read up</td><td><strong>321₄</strong></td></tr>
+      </table>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span class="q-tag">B22 Q2b</span> 4-bit 2's Complement — Overflow Detection</div>
+      <p>Range of 4-bit 2's complement: <strong>-8 to +7</strong></p>
+      <table>
+        <tr><th>Operation</th><th>Result</th><th>In range?</th><th>Verdict</th></tr>
+        <tr><td>-6 - 3</td><td>-9</td><td style="color:var(--red)">No (-9 &lt; -8)</td><td style="color:var(--red)">OVERFLOW ✗</td></tr>
+        <tr><td>5 + 3</td><td>8</td><td style="color:var(--red)">No (8 &gt; 7)</td><td style="color:var(--red)">OVERFLOW ✗</td></tr>
+        <tr><td>-4 - 4</td><td>-8</td><td style="color:var(--green)">Yes (-8 = min)</td><td style="color:var(--green)">CORRECT ✓</td></tr>
+      </table>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Important Bit/Byte Facts</div>
+      <table>
+        <tr><th>Question</th><th>Answer</th></tr>
+        <tr><td>Bits in 1 KB</td><td>1024 × 8 = <strong>8,192 bits</strong></td></tr>
+        <tr><td>8-bit unsigned range</td><td><strong>0 to 255</strong> (2⁸ - 1)</td></tr>
+        <tr><td>8-bit signed (2's complement)</td><td><strong>-128 to +127</strong></td></tr>
+        <tr><td>Bitcoin hash algorithm</td><td><strong>SHA-256</strong></td></tr>
+        <tr><td>Linux login hash</td><td><strong>SHA-512</strong> or bcrypt</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <!-- EXTRA: FAT -->
+  <div id="sec-extra-fat" class="section">
+    <div class="section-header">
+      <span class="section-tag">Extra · File Systems</span>
+      <div class="section-title">FAT vs FAT32 — File Systems</div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span class="q-tag">B22 Q6a</span> Comparison</div>
+      <table>
+        <tr><th>Feature</th><th>FAT (FAT16)</th><th>FAT32</th></tr>
+        <tr><td>Max File Size</td><td>2 GB</td><td>4 GB</td></tr>
+        <tr><td>Max Partition</td><td>2 GB</td><td>2 TB</td></tr>
+        <tr><td>Security</td><td>None</td><td>None</td></tr>
+        <tr><td>Journaling</td><td>No</td><td>No</td></tr>
+        <tr><td>Compatibility</td><td>Very High (old devices)</td><td>Universal (USB, cameras, consoles)</td></tr>
+        <tr><td>Best For</td><td>Very old / tiny devices</td><td>USB drives, memory cards</td></tr>
+      </table>
+      <div class="tip-box"><p><strong>FAT32 weakness:</strong> Cannot store any single file larger than 4GB — a problem for large video files. Neither FAT nor FAT32 have file permissions or journaling.</p></div>
+    </div>
+  </div>
+
+  <!-- EXTRA: LINKER -->
+  <div id="sec-extra-linker" class="section">
+    <div class="section-header">
+      <span class="section-tag">Extra · Compilation</span>
+      <div class="section-title">Compiler, Assembler, Linker & Loader</div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span class="q-tag">B22 Q4a · B21 Q5b</span> The Toolchain Steps</div>
+      <table>
+        <tr><th>Tool</th><th>Input</th><th>Output</th><th>What it does</th></tr>
+        <tr><td><strong>Compiler</strong></td><td>C/C++ source (.c)</td><td>Assembly (.asm)</td><td>Translates high-level code to assembly language</td></tr>
+        <tr><td><strong>Assembler</strong></td><td>Assembly (.asm)</td><td>Object code (.o/.obj)</td><td>Translates assembly to machine code (relocatable format)</td></tr>
+        <tr><td><strong>Linker</strong></td><td>Multiple .obj files + libraries</td><td>Executable (.exe/ELF)</td><td>Resolves symbols, relocates addresses, combines sections</td></tr>
+        <tr><td><strong>Loader</strong></td><td>Executable file</td><td>Running process in RAM</td><td>Loads file into memory using PE section headers</td></tr>
+      </table>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Linker Tasks in Detail</div>
+      <ul>
+        <li><strong>Symbol Resolution:</strong> Connects function/variable references across object files (e.g., links your code's call to <code>printf</code> to the library's actual implementation)</li>
+        <li><strong>Relocation:</strong> Assigns actual memory addresses to all code and data sections</li>
+        <li><strong>Section Combining:</strong> Merges all <code>.text</code>, <code>.data</code>, <code>.bss</code> sections from multiple files</li>
+        <li><strong>Library Linking:</strong> Embeds static library code directly (static linking) or sets up references for DLLs (dynamic linking)</li>
+      </ul>
+    </div>
+  </div>
+
+</div><!-- end #main -->
+
+<script>
+function showSection(id) {
+  // Hide all sections
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+
+  // Remove active from all nav items
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+
+  // Show selected section
+  const target = document.getElementById('sec-' + id);
+  if (target) target.classList.add('active');
+
+  // Highlight correct nav item (better method)
+  document.querySelectorAll('.nav-item').forEach(item => {
+    if (item.onclick && item.onclick.toString().includes(`'${id}'`)) {
+      item.classList.add('active');
+    }
+  });
+
+  // Scroll to top
+  document.getElementById('main').scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function filterBatch(batch, el) {
+  // Remove active class from all buttons
+  document.querySelectorAll('.batch-btn').forEach(b => b.classList.remove('active'));
+
+  // Add active to clicked button
+  if (el) el.classList.add('active');
+
+  // (Optional) filtering logic can be added here later
+}
+</script>
+</body>
+</html>

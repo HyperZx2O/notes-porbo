@@ -1,0 +1,47 @@
+/* Notes Porbo · design tokens
+ * Hallmark · theme: Brutal · genre: editorial
+ * axes: light paper · display-heavy · warm accent
+ */
+
+:root {
+  --font-display: "Bricolage Grotesque", ui-sans-serif, system-ui, sans-serif;
+  --font-body: "Geist", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "Geist Mono", ui-monospace, monospace;
+
+  --color-paper: oklch(97% 0.008 80);
+  --color-paper-2: oklch(92% 0.012 80);
+  --color-rule: oklch(22% 0.01 70);
+  --color-rule-light: oklch(72% 0.008 70);
+  --color-muted: oklch(50% 0.006 70);
+  --color-ink: oklch(18% 0.012 60);
+  --color-accent: oklch(62% 0.14 45);
+  --color-accent-hover: oklch(52% 0.18 45);
+  --color-focus: oklch(55% 0.19 55);
+
+  --space-xs: 0.25rem;
+  --space-sm: 0.5rem;
+  --space-md: 1rem;
+  --space-lg: 2rem;
+  --space-xl: 3rem;
+  --space-2xl: 4rem;
+  --space-3xl: 6rem;
+
+  --text-xs: 0.64rem;
+  --text-sm: 0.8rem;
+  --text-base: 1rem;
+  --text-md: 1.25rem;
+  --text-lg: 1.563rem;
+  --text-xl: 1.953rem;
+  --text-2xl: 2.441rem;
+  --text-3xl: 3.052rem;
+
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in: cubic-bezier(0.4, 0, 1, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --dur-fast: 150ms;
+  --dur-normal: 250ms;
+  --dur-slow: 400ms;
+
+  --radius-none: 0;
+  --border-thick: 3px;
+}
