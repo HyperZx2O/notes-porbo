@@ -315,7 +315,6 @@ function init() {
   var overlay = document.createElement("div");
   overlay.className = "changelog-overlay";
   overlay.id = "changelog-overlay";
-  overlay.style.display = "none";
   overlay.innerHTML = '<div class="changelog-panel">'
     + '<div class="changelog-head">'
     + '<h2>Changelog</h2>'
