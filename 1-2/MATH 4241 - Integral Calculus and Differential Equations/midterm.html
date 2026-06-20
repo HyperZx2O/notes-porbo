@@ -10,7 +10,14 @@
 <script>
 window.MathJax = {
   tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]']] },
-  options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] },
+  startup: {
+    pageReady: function(){
+      return MathJax.startup.defaultPageReady().then(function(){
+        document.querySelectorAll('.page').forEach(function(p){ p.dataset.mjDone = '1'; });
+      });
+    }
+  }
 };
 </script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.min.js"></script>
@@ -59,15 +66,19 @@ a{color:var(--med);}
 code, .mono{font-family:var(--mono);}
 
 /* ===== Layout ===== */
-.wrap{display:flex;max-width:1400px;margin:0 auto;}
+.wrap{display:flex;max-width:1400px;margin:0 auto;position:relative;}
 .sidebar{
   width:280px;flex-shrink:0;position:sticky;top:0;align-self:flex-start;
   height:100vh;overflow-y:auto;padding:24px 16px 40px 24px;
   border-right:1px solid var(--border-soft);
   scrollbar-width:thin;
+  transition:margin-left 0.25s ease, opacity 0.2s ease;
+  z-index:40;
+  background:var(--bg);
 }
 .sidebar::-webkit-scrollbar{width:6px;}
 .sidebar::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px;}
+.side-top{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin-bottom:4px;}
 .side-logo{font-family:var(--mono);font-size:11px;letter-spacing:0.12em;color:var(--gold);text-transform:uppercase;margin-bottom:4px;}
 .side-title{font-family:var(--sans);font-weight:800;font-size:17px;color:#fff;margin-bottom:20px;line-height:1.3;}
 .side-section{margin-bottom:18px;}
@@ -76,16 +87,50 @@ code, .mono{font-family:var(--mono);}
   display:flex;align-items:center;gap:8px;padding:6px 8px;border-radius:7px;
   color:var(--text-dim);text-decoration:none;font-family:var(--sans);font-size:13.5px;font-weight:500;
   transition:background 0.15s, color 0.15s;
+  cursor:pointer;
 }
 .side-link:hover{background:var(--card-alt);color:var(--text);}
+.side-link.active{background:var(--card-alt);color:#fff;}
+.side-link.active .side-dot{box-shadow:0 0 0 3px rgba(255,255,255,0.08);}
 .side-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0;}
 .dot-crit{background:var(--crit);}
 .dot-high{background:var(--high);}
 .dot-med{background:var(--med);}
 .dot-gold{background:var(--gold);}
 
-.main{flex:1;min-width:0;padding:0 0 80px 0;}
+/* Sidebar collapse (desktop) */
+.wrap.sidebar-collapsed .sidebar{
+  margin-left:-280px;opacity:0;pointer-events:none;
+}
+
+.main{flex:1;min-width:0;padding:0 0 80px 0;transition:max-width 0.25s ease;}
 .container{max-width:880px;margin:0 auto;padding:0 40px;}
+
+/* Sidebar toggle button */
+.sidebar-toggle{
+  position:sticky;top:18px;z-index:50;
+  display:inline-flex;align-items:center;gap:8px;
+  background:var(--card);border:1px solid var(--border);border-radius:10px;
+  padding:9px 13px;margin:18px 0 0 20px;cursor:pointer;
+  font-family:var(--sans);font-size:12.5px;font-weight:600;color:var(--text-dim);
+  transition:background 0.15s,color 0.15s,border-color 0.15s;
+  float:left;
+}
+.sidebar-toggle:hover{background:var(--card-alt);color:#fff;border-color:var(--border);}
+.sidebar-toggle svg{width:15px;height:15px;flex-shrink:0;}
+.sidebar-toggle .st-label{white-space:nowrap;}
+
+/* Mobile sidebar overlay */
+.sidebar-overlay{
+  display:none;position:fixed;inset:0;background:rgba(5,6,9,0.6);z-index:35;
+}
+.sidebar-overlay.show{display:block;}
+
+/* ===== Page switching ===== */
+.page{display:none;}
+.page.active{display:block;}
+.hero-page{display:none;}
+.hero-page.active{display:block;}
 
 /* ===== Hero ===== */
 .hero{padding:56px 40px 40px;max-width:880px;margin:0 auto;}
@@ -249,11 +294,63 @@ table.sched tr:last-child td{border-bottom:none;}
 .tag-pill{font-family:var(--mono);font-size:10.5px;padding:2px 8px;border-radius:10px;}
 footer{text-align:center;padding:50px 40px;color:var(--text-faint);font-family:var(--sans);font-size:13px;}
 
+/* ===== Mobile topbar ===== */
+.mobile-topbar{
+  display:none;position:sticky;top:0;z-index:45;align-items:center;gap:12px;
+  background:var(--bg);border-bottom:1px solid var(--border-soft);
+  padding:12px 16px;
+}
+.mobile-topbar .mt-menu-btn{
+  display:flex;align-items:center;justify-content:center;
+  width:38px;height:38px;border-radius:9px;flex-shrink:0;
+  background:var(--card);border:1px solid var(--border);color:var(--text-dim);cursor:pointer;
+}
+.mobile-topbar .mt-menu-btn svg{width:18px;height:18px;}
+.mobile-topbar .mt-title{font-family:var(--sans);font-weight:800;font-size:14.5px;color:#fff;line-height:1.25;}
+.mobile-topbar .mt-sub{font-family:var(--mono);font-size:10px;color:var(--gold);letter-spacing:0.08em;text-transform:uppercase;}
+
 @media(max-width:900px){
-  .sidebar{display:none;}
-  .container,.section,.hero,.day-banner{padding-left:20px;padding-right:20px;}
+  .mobile-topbar{display:flex;}
+  .sidebar-toggle{display:none;}
+  .sidebar{
+    position:fixed;top:0;left:0;height:100vh;width:84vw;max-width:300px;
+    margin-left:-100%;opacity:1;box-shadow:0 0 40px rgba(0,0,0,0.5);
+    transition:margin-left 0.25s ease;
+  }
+  /* Default closed on mobile until JS explicitly opens it */
+  .wrap .sidebar{margin-left:-100%;}
+  .wrap:not(.sidebar-collapsed) .sidebar{margin-left:0;}
+  .wrap.sidebar-collapsed .sidebar{margin-left:-100%;opacity:1;pointer-events:none;}
+  .wrap:not(.sidebar-collapsed) .sidebar{pointer-events:auto;}
+  .container,.section,.hero,.day-banner{padding-left:18px;padding-right:18px;}
+  .hero{padding-top:28px;}
+  h1.hero-title{font-size:28px;line-height:1.18;}
+  .hero-sub{font-size:15.5px;}
+  .hero-stats{gap:10px;}
+  .stat-pill{min-width:100px;padding:10px 14px;flex:1 1 100px;}
+  .stat-num{font-size:18px;}
+  h2.section-title{font-size:21px;}
+  .topic{padding:20px 18px;}
+  h3.topic-title{font-size:18.5px;}
+  body{font-size:15.5px;}
+  .day-banner{margin:32px auto 18px;gap:10px;}
+  .day-banner-text{font-size:13px;}
+  .flash-grid,.topic-flash-grid{grid-template-columns:1fr 1fr;gap:10px;}
+  .flash-card{height:155px;}
+  table.sched{font-size:13px;}
+  .progress-fab{left:14px;right:14px;bottom:14px;min-width:auto;}
+}
+@media(max-width:480px){
+  h1.hero-title{font-size:24px;}
+  .hero-stats{flex-direction:row;}
+  .stat-pill{min-width:90px;}
+  .flash-grid,.topic-flash-grid{grid-template-columns:1fr;}
+  .mcq-qhead{flex-direction:column;gap:4px;}
+  .topic{padding:18px 14px;}
+  .container,.section,.hero,.day-banner{padding-left:14px;padding-right:14px;}
 }
 .mjx-chtml{font-size:103% !important;}
+@media(max-width:480px){ .mjx-chtml{font-size:96% !important;} }
 
 /* ===== Progress tracker (floating) ===== */
 .progress-fab{
@@ -266,7 +363,6 @@ footer{text-align:center;padding:50px 40px;color:var(--text-faint);font-family:v
 .progress-fab .pf-bar{height:6px;background:var(--card-alt);border-radius:4px;overflow:hidden;}
 .progress-fab .pf-fill{height:100%;background:linear-gradient(90deg,var(--gold),var(--good));width:0%;transition:width 0.3s;}
 .progress-fab .pf-pct{color:var(--gold);font-weight:700;}
-@media(max-width:600px){.progress-fab{display:none;}}
 
 /* ===== Topic checklist ===== */
 .topic-checklist{
@@ -360,60 +456,82 @@ footer{text-align:center;padding:50px 40px;color:var(--text-faint);font-family:v
 <div class="pf-label"><span>Study Progress</span><span class="pf-pct" id="pfPct">0%</span></div>
 <div class="pf-bar"><div class="pf-fill" id="pfFill"></div></div>
 </div>
-<div class="wrap">
-<nav class="sidebar">
+<div class="mobile-topbar">
+<button class="mt-menu-btn" id="mobileMenuBtn" aria-label="Open sidebar menu">
+<svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24"><line x1="3" x2="21" y1="6" y2="6"></line><line x1="3" x2="21" y1="12" y2="12"></line><line x1="3" x2="21" y1="18" y2="18"></line></svg>
+</button>
+<div>
+<div class="mt-sub">240041235 · CSE</div>
+<div class="mt-title">Math Midterm Study Guide</div>
+</div>
+</div>
+<div class="sidebar-overlay" id="sidebarOverlay"></div>
+<div class="wrap" id="wrap">
+<nav class="sidebar" id="sidebar">
+<div class="side-top">
+<div>
 <div class="side-logo">240041235 · CSE</div>
 <div class="side-title">Math Midterm<br/>Study Guide</div>
+</div>
+</div>
+<div class="side-section">
+<a class="side-link" data-page="home" href="#home"><span class="side-dot dot-gold"></span>Home / Overview</a>
+</div>
 <div class="side-section">
 <div class="side-section-label">Plan</div>
-<a class="side-link" href="#schedule"><span class="side-dot dot-gold"></span>Schedule &amp; Time Budget</a>
-<a class="side-link" href="#cheatsheet"><span class="side-dot dot-gold"></span>Master Formula Sheet</a>
+<a class="side-link" data-page="schedule" href="#schedule"><span class="side-dot dot-gold"></span>Schedule &amp; Time Budget</a>
+<a class="side-link" data-page="cheatsheet" href="#cheatsheet"><span class="side-dot dot-gold"></span>Master Formula Sheet</a>
 </div>
 <div class="side-section">
 <div class="side-section-label">Block 1 — Integral Foundations</div>
-<a class="side-link" href="#t1"><span class="side-dot dot-crit"></span>Antiderivatives</a>
-<a class="side-link" href="#t2"><span class="side-dot dot-high"></span>Area &amp; Riemann Sums</a>
-<a class="side-link" href="#t3"><span class="side-dot dot-crit"></span>Definite Integrals &amp; FTC</a>
+<a class="side-link" data-page="t1" href="#t1"><span class="side-dot dot-crit"></span>Antiderivatives</a>
+<a class="side-link" data-page="t2" href="#t2"><span class="side-dot dot-high"></span>Area &amp; Riemann Sums</a>
+<a class="side-link" data-page="t3" href="#t3"><span class="side-dot dot-crit"></span>Definite Integrals &amp; FTC</a>
 </div>
 <div class="side-section">
 <div class="side-section-label">Block 2 — Integration Techniques</div>
-<a class="side-link" href="#t4"><span class="side-dot dot-crit"></span>u-Substitution</a>
-<a class="side-link" href="#t5"><span class="side-dot dot-crit"></span>Integration by Parts</a>
-<a class="side-link" href="#t6"><span class="side-dot dot-high"></span>Trig Integrals</a>
-<a class="side-link" href="#t7"><span class="side-dot dot-high"></span>Trig Substitution</a>
-<a class="side-link" href="#t8"><span class="side-dot dot-crit"></span>Partial Fractions</a>
+<a class="side-link" data-page="t4" href="#t4"><span class="side-dot dot-crit"></span>u-Substitution</a>
+<a class="side-link" data-page="t5" href="#t5"><span class="side-dot dot-crit"></span>Integration by Parts</a>
+<a class="side-link" data-page="t6" href="#t6"><span class="side-dot dot-high"></span>Trig Integrals</a>
+<a class="side-link" data-page="t7" href="#t7"><span class="side-dot dot-high"></span>Trig Substitution</a>
+<a class="side-link" data-page="t8" href="#t8"><span class="side-dot dot-crit"></span>Partial Fractions</a>
 </div>
 <div class="side-section">
 <div class="side-section-label">Block 3 — Advanced Topics</div>
-<a class="side-link" href="#t9"><span class="side-dot dot-high"></span>Reduction Formulas</a>
-<a class="side-link" href="#t10"><span class="side-dot dot-med"></span>Beta &amp; Gamma Functions</a>
+<a class="side-link" data-page="t9" href="#t9"><span class="side-dot dot-high"></span>Reduction Formulas</a>
+<a class="side-link" data-page="t10" href="#t10"><span class="side-dot dot-med"></span>Beta &amp; Gamma Functions</a>
 </div>
 <div class="side-section">
 <div class="side-section-label">Block 4 — Differential Equations</div>
-<a class="side-link" href="#t11"><span class="side-dot dot-high"></span>ODE Basics &amp; Classification</a>
-<a class="side-link" href="#t12"><span class="side-dot dot-crit"></span>Separation of Variables</a>
-<a class="side-link" href="#t13"><span class="side-dot dot-high"></span>Homogeneous Equations</a>
-<a class="side-link" href="#t14"><span class="side-dot dot-crit"></span>Linear DE &amp; Bernoulli</a>
-<a class="side-link" href="#t15"><span class="side-dot dot-high"></span>Exact Equations</a>
+<a class="side-link" data-page="t11" href="#t11"><span class="side-dot dot-high"></span>ODE Basics &amp; Classification</a>
+<a class="side-link" data-page="t12" href="#t12"><span class="side-dot dot-crit"></span>Separation of Variables</a>
+<a class="side-link" data-page="t13" href="#t13"><span class="side-dot dot-high"></span>Homogeneous Equations</a>
+<a class="side-link" data-page="t14" href="#t14"><span class="side-dot dot-crit"></span>Linear DE &amp; Bernoulli</a>
+<a class="side-link" data-page="t15" href="#t15"><span class="side-dot dot-high"></span>Exact Equations</a>
 </div>
 <div class="side-section">
 <div class="side-section-label">Block 5 — Applications</div>
-<a class="side-link" href="#t16"><span class="side-dot dot-med"></span>Area Between Curves</a>
-<a class="side-link" href="#t17"><span class="side-dot dot-high"></span>Disk &amp; Washer Method</a>
-<a class="side-link" href="#t18"><span class="side-dot dot-med"></span>Shell Method</a>
+<a class="side-link" data-page="t16" href="#t16"><span class="side-dot dot-med"></span>Area Between Curves</a>
+<a class="side-link" data-page="t17" href="#t17"><span class="side-dot dot-high"></span>Disk &amp; Washer Method</a>
+<a class="side-link" data-page="t18" href="#t18"><span class="side-dot dot-med"></span>Shell Method</a>
 </div>
 <div class="side-section">
 <div class="side-section-label">Quick Revision</div>
-<a class="side-link" href="#flashcards"><span class="side-dot dot-med"></span>All Flashcards (Full Deck)</a>
-<a class="side-link" href="#quiz"><span class="side-dot dot-med"></span>All Questions (Full Quiz)</a>
+<a class="side-link" data-page="flashcards" href="#flashcards"><span class="side-dot dot-med"></span>All Flashcards (Full Deck)</a>
+<a class="side-link" data-page="quiz" href="#quiz"><span class="side-dot dot-med"></span>All Questions (Full Quiz)</a>
 </div>
 <div class="side-section">
 <div class="side-section-label">Wrap-up</div>
-<a class="side-link" href="#review"><span class="side-dot dot-gold"></span>Final Review Checklist</a>
-<a class="side-link" href="#examday"><span class="side-dot dot-gold"></span>Exam Day Tips</a>
+<a class="side-link" data-page="review" href="#review"><span class="side-dot dot-gold"></span>Final Review Checklist</a>
+<a class="side-link" data-page="examday" href="#examday"><span class="side-dot dot-gold"></span>Exam Day Tips</a>
 </div>
 </nav>
 <div class="main">
+<button class="sidebar-toggle" id="sidebarToggleBtn" type="button">
+<svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24"><rect height="18" rx="2" width="18" x="3" y="3"></rect><line x1="9" x2="9" y1="3" y2="21"></line></svg>
+<span class="st-label" id="sidebarToggleLabel">Hide sidebar</span>
+</button>
+<div class="page hero-page active" data-page-id="home">
 <div class="hero">
 <div class="hero-eyebrow">Math Mid · 262-slide deck, fully condensed</div>
 <h1 class="hero-title">Everything you need for the exam — one guide, zero extra reading.</h1>
@@ -425,8 +543,11 @@ footer{text-align:center;padding:50px 40px;color:var(--text-faint);font-family:v
 <div class="stat-pill"><div class="stat-num">1.5</div><div class="stat-label">Days left</div></div>
 <div class="stat-pill"><div class="stat-num">54+24</div><div class="stat-label">Flashcards + MCQs</div></div>
 </div>
+<p class="small-note" style="margin-top:22px;">👈 Use the sidebar to jump straight to any topic. Each click loads just that section — nothing else loads or scrolls underneath it.</p>
 </div>
-<section class="section" id="schedule">
+</div>
+<div class="page" data-page-id="schedule">
+<section class="section" id="schedule" style="border-top:none;">
 <div class="section-head">
 <div class="section-kicker">Plan before you study</div>
 <h2 class="section-title">Your 1.5-Day Schedule</h2>
@@ -466,7 +587,9 @@ footer{text-align:center;padding:50px 40px;color:var(--text-faint);font-family:v
     Cut in this order first: Beta/Gamma deep proofs (keep just the formulas), Shell-vs-Disk comparison theory, the harder reduction-formula derivations (keep the final formulas, skip re-deriving them). <strong>Never cut:</strong> u-substitution, integration by parts, partial fractions, separation of variables, linear DE — these four techniques are the building blocks every other technique reduces to.
   </div>
 </section>
-<section class="section" id="cheatsheet">
+</div>
+<div class="page" data-page-id="cheatsheet">
+<section class="section" id="cheatsheet" style="border-top:none;">
 <div class="section-head">
 <div class="section-kicker">Reference — bookmark this</div>
 <h2 class="section-title">Master Formula Sheet</h2>
@@ -541,7 +664,9 @@ footer{text-align:center;padding:50px 40px;color:var(--text-faint);font-family:v
 <tr><td>Known cross-sections</td><td>\(\displaystyle V=\int_a^b A(x)\,dx\)</td></tr>
 </table>
 </section>
-<div class="day-banner">
+</div>
+<div class="page" data-page-id="t1">
+<div class="day-banner" style="margin-top:0;">
 <div class="day-banner-num">SESSION 1 · TODAY</div>
 <div class="day-banner-line"></div>
 <div class="day-banner-text">Integral Foundations</div>
@@ -625,7 +750,9 @@ footer{text-align:center;padding:50px 40px;color:var(--text-faint);font-family:v
 </div>
 <div class="mcq-explain"><b>Explanation:</b> Power rule: \(\int x^n dx=\frac{x^{n+1}}{n+1}+C\), so \(\int 3x^2dx=3\cdot\frac{x^3}{3}+C=x^3+C\).</div>
 <button class="mcq-reset">↺ try again</button>
-</div></div></div></div>
+</div></div></div></div></div>
+<div class="page" data-page-id="t2">
+
 <div class="topic" id="t2">
 <div class="topic-head">
 <span class="badge badge-high">High</span>
@@ -699,7 +826,9 @@ footer{text-align:center;padding:50px 40px;color:var(--text-faint);font-family:v
 </div>
 <div class="mcq-explain"><b>Explanation:</b> Upper sum = \(\sum f(M_i)\Delta x\) where \(M_i\) is the maximum value on that subinterval (circumscribed rectangles).</div>
 <button class="mcq-reset">↺ try again</button>
-</div></div></div></div>
+</div></div></div></div></div>
+<div class="page" data-page-id="t3">
+
 <div class="topic" id="t3">
 <div class="topic-head">
 <span class="badge badge-crit">Critical</span>
@@ -852,7 +981,9 @@ footer{text-align:center;padding:50px 40px;color:var(--text-faint);font-family:v
 <div class="mcq-explain"><b>Explanation:</b> Average value \(=\frac{1}{b-a}\int_a^b f(x)dx=\frac{20}{4}=5\).</div>
 <button class="mcq-reset">↺ try again</button>
 </div></div></div></div>
-</section>
+</section></div>
+
+<div class="page" data-page-id="t4">
 <div class="day-banner">
 <div class="day-banner-num">STILL SESSION 1</div>
 <div class="day-banner-line"></div>
@@ -982,7 +1113,9 @@ footer{text-align:center;padding:50px 40px;color:var(--text-faint);font-family:v
 </div>
 <div class="mcq-explain"><b>Explanation:</b> u=x²+1, limits become 1→2: \(\frac12\int_1^2 u^3du=\frac12\cdot\frac{16-1}{4}=\frac{15}{8}\).</div>
 <button class="mcq-reset">↺ try again</button>
-</div></div></div></div>
+</div></div></div></div></div>
+<div class="page" data-page-id="t5">
+
 <div class="topic" id="t5">
 <div class="topic-head">
 <span class="badge badge-crit">Critical</span>
@@ -1078,7 +1211,9 @@ footer{text-align:center;padding:50px 40px;color:var(--text-faint);font-family:v
 <div class="mcq-explain"><b>Explanation:</b> LIATE ranks Logarithmic above Algebraic, so \(u=\ln x,\ dv=x\,dx\).</div>
 <button class="mcq-reset">↺ try again</button>
 </div></div></div></div>
-</section>
+</section></div>
+
+<div class="page" data-page-id="t6">
 <div class="day-banner">
 <div class="day-banner-num">SESSION 2 · TOMORROW</div>
 <div class="day-banner-line"></div>
@@ -1191,7 +1326,9 @@ footer{text-align:center;padding:50px 40px;color:var(--text-faint);font-family:v
 </div>
 <div class="mcq-explain"><b>Explanation:</b> \(du=\sec^2x\,dx\) matches exactly, turning the integral into \(\int u^3du\).</div>
 <button class="mcq-reset">↺ try again</button>
-</div></div></div></div>
+</div></div></div></div></div>
+<div class="page" data-page-id="t7">
+
 <div class="topic" id="t7">
 <div class="topic-head">
 <span class="badge badge-high">High</span>
@@ -1274,7 +1411,9 @@ footer{text-align:center;padding:50px 40px;color:var(--text-faint);font-family:v
 </div>
 <div class="mcq-explain"><b>Explanation:</b> Form \(\sqrt{a^2-u^2}\) with a=3 calls for \(u=a\sin\theta\).</div>
 <button class="mcq-reset">↺ try again</button>
-</div></div></div></div>
+</div></div></div></div></div>
+<div class="page" data-page-id="t8">
+
 <div class="topic" id="t8">
 <div class="topic-head">
 <span class="badge badge-crit">Critical</span>
@@ -1367,7 +1506,9 @@ footer{text-align:center;padding:50px 40px;color:var(--text-faint);font-family:v
 </div>
 <div class="mcq-explain"><b>Explanation:</b> An irreducible quadratic factor gets a linear numerator (Bx + C) over it.</div>
 <button class="mcq-reset">↺ try again</button>
-</div></div></div></div>
+</div></div></div></div></div>
+<div class="page" data-page-id="t9">
+
 <div class="topic" id="t9">
 <div class="topic-head">
 <span class="badge badge-high">High</span>
@@ -1505,7 +1646,9 @@ footer{text-align:center;padding:50px 40px;color:var(--text-faint);font-family:v
 </div>
 <div class="mcq-explain"><b>Explanation:</b> \(\int\cos^nx\,dx=\dfrac{+\cos^{n-1}x\sin x}{n}+\dfrac{n-1}{n}\int\cos^{n-2}x\,dx\) — a plus sign, vs minus for sine.</div>
 <button class="mcq-reset">↺ try again</button>
-</div></div></div></div>
+</div></div></div></div></div>
+<div class="page" data-page-id="t10">
+
 <div class="topic" id="t10">
 <div class="topic-head">
 <span class="badge badge-med">Medium</span>
@@ -1623,7 +1766,9 @@ footer{text-align:center;padding:50px 40px;color:var(--text-faint);font-family:v
 </div>
 <div class="mcq-explain"><b>Explanation:</b> \(\Gamma(n+1)=n!\), so \(\Gamma(6)=\Gamma(5+1)=5!=120\).</div>
 <button class="mcq-reset">↺ try again</button>
-</div></div></div></div>
+</div></div></div></div></div>
+<div class="page" data-page-id="t11">
+
 <div class="topic" id="t11">
 <div class="topic-head">
 <span class="badge badge-high">High</span>
@@ -1720,7 +1865,9 @@ footer{text-align:center;padding:50px 40px;color:var(--text-faint);font-family:v
 </div>
 <div class="mcq-explain"><b>Explanation:</b> Highest derivative is d²y/dx² (order 2), raised to the 3rd power (degree 3).</div>
 <button class="mcq-reset">↺ try again</button>
-</div></div></div></div>
+</div></div></div></div></div>
+<div class="page" data-page-id="t12">
+
 <div class="topic" id="t12">
 <div class="topic-head">
 <span class="badge badge-crit">Critical</span>
@@ -1804,7 +1951,9 @@ footer{text-align:center;padding:50px 40px;color:var(--text-faint);font-family:v
 </div>
 <div class="mcq-explain"><b>Explanation:</b> \(dy/dx=x^2y^3\) splits cleanly into \(dy/y^3=x^2dx\); the others mix x and y inseparably.</div>
 <button class="mcq-reset">↺ try again</button>
-</div></div></div></div>
+</div></div></div></div></div>
+<div class="page" data-page-id="t13">
+
 <div class="topic" id="t13">
 <div class="topic-head">
 <span class="badge badge-high">High</span>
@@ -1869,7 +2018,9 @@ footer{text-align:center;padding:50px 40px;color:var(--text-faint);font-family:v
 </div>
 <div class="mcq-explain"><b>Explanation:</b> \(y=vx\) gives \(dy/dx=v+x\,dv/dx\), turning f(y/x)=f(v) into a separable equation in v and x.</div>
 <button class="mcq-reset">↺ try again</button>
-</div></div></div></div>
+</div></div></div></div></div>
+<div class="page" data-page-id="t14">
+
 <div class="topic" id="t14">
 <div class="topic-head">
 <span class="badge badge-crit">Critical</span>
@@ -1989,7 +2140,9 @@ footer{text-align:center;padding:50px 40px;color:var(--text-faint);font-family:v
 </div>
 <div class="mcq-explain"><b>Explanation:</b> n=2 here, so \(z=y^{1-n}=y^{-1}\).</div>
 <button class="mcq-reset">↺ try again</button>
-</div></div></div></div>
+</div></div></div></div></div>
+<div class="page" data-page-id="t15">
+
 <div class="topic" id="t15">
 <div class="topic-head">
 <span class="badge badge-high">High</span>
@@ -2117,7 +2270,9 @@ footer{text-align:center;padding:50px 40px;color:var(--text-faint);font-family:v
 <div class="mcq-explain"><b>Explanation:</b> Rule 3 specifically applies to this M=yf(xy), N=xg(xy) pattern.</div>
 <button class="mcq-reset">↺ try again</button>
 </div></div></div></div>
-</section>
+</section></div>
+
+<div class="page" data-page-id="t16">
 <div class="day-banner">
 <div class="day-banner-num">SESSION 3 · EXAM MORNING</div>
 <div class="day-banner-line"></div>
@@ -2196,7 +2351,9 @@ footer{text-align:center;padding:50px 40px;color:var(--text-faint);font-family:v
 </div>
 <div class="mcq-explain"><b>Explanation:</b> Intersection points become the limits of integration: \(2-x^2=x \Rightarrow x=-2,1\).</div>
 <button class="mcq-reset">↺ try again</button>
-</div></div></div></div>
+</div></div></div></div></div>
+<div class="page" data-page-id="t17">
+
 <div class="topic" id="t17">
 <div class="topic-head">
 <span class="badge badge-high">High</span>
@@ -2315,7 +2472,9 @@ footer{text-align:center;padding:50px 40px;color:var(--text-faint);font-family:v
 </div>
 <div class="mcq-explain"><b>Explanation:</b> The region has a "hole" between the two curves on [0,1], so subtract inner² from outer².</div>
 <button class="mcq-reset">↺ try again</button>
-</div></div></div></div>
+</div></div></div></div></div>
+<div class="page" data-page-id="t18">
+
 <div class="topic" id="t18">
 <div class="topic-head">
 <span class="badge badge-med">Medium</span>
@@ -2408,7 +2567,9 @@ footer{text-align:center;padding:50px 40px;color:var(--text-faint);font-family:v
 <div class="mcq-explain"><b>Explanation:</b> Shells: 2π × radius × height, integrated over the thickness direction.</div>
 <button class="mcq-reset">↺ try again</button>
 </div></div></div></div>
-</section>
+</section></div>
+
+<div class="page" data-page-id="flashcards">
 <section class="section" id="flashcards">
 <div class="section-head">
 <div class="section-kicker">Quick revision — click any card to flip</div>
@@ -2754,7 +2915,9 @@ footer{text-align:center;padding:50px 40px;color:var(--text-faint);font-family:v
 </div>
 </div>
 </div>
-</section>
+</section></div>
+
+<div class="page" data-page-id="quiz">
 <section class="section" id="quiz">
 <div class="section-head">
 <div class="section-kicker">Click an option to check yourself — click "try again" to retry</div>
@@ -3025,7 +3188,9 @@ footer{text-align:center;padding:50px 40px;color:var(--text-faint);font-family:v
 <div class="mcq-explain"><b>Explanation:</b> Shells: 2π × radius × height, integrated over the thickness direction.</div>
 <button class="mcq-reset">↺ try again</button>
 </div>
-</section>
+</section></div>
+
+<div class="page" data-page-id="review">
 <div class="day-banner">
 <div class="day-banner-num">FINAL PASS</div>
 <div class="day-banner-line"></div>
@@ -3056,7 +3221,9 @@ footer{text-align:center;padding:50px 40px;color:var(--text-faint);font-family:v
 <div class="callout" style="background:rgba(232,196,104,0.08);border:1px solid rgba(232,196,104,0.3);border-radius:10px;padding:14px 18px;margin:18px 0;font-size:14.5px;">
     💡 <strong>Last-resort triage:</strong> if you're still shaky on something at this point, prioritize re-reading <strong>u-substitution, integration by parts, partial fractions, linear DE (integrating factor), and the disk/washer/shell formulas</strong> — these five ideas cover the largest share of likely exam points relative to time invested.
   </div>
-</section>
+</section></div>
+
+<div class="page" data-page-id="examday">
 <section class="section" id="examday">
 <div class="section-head">
 <div class="section-kicker">Mechanics, not math</div>
@@ -3074,7 +3241,8 @@ footer{text-align:center;padding:50px 40px;color:var(--text-faint);font-family:v
 <div class="callout" style="background:rgba(81,207,102,0.08);border:1px solid rgba(81,207,102,0.3);border-radius:10px;padding:14px 18px;margin:18px 0;font-size:14.5px;">
     You've now got every definition, theorem, worked solution, and a timed plan to get through all 262 slides in 1.5 days. Trust the schedule, take the breaks and the sleep seriously — a rested brain that knows 80% of this cold will outscore an exhausted one that "covered" 100%. Good luck, Zafnah. 🎯
   </div>
-</section>
+</section></div>
+
 <footer>
   Built from your uploaded slide deck (Math_Mid.pdf, 262 slides) · Larson Calculus + Beta/Gamma + Intro ODE track · 240041235
 </footer>
@@ -3148,6 +3316,126 @@ document.addEventListener('click', function(e){
     var explain2 = card2.querySelector('.mcq-explain');
     if(explain2) explain2.classList.remove('show');
     resetBtn.classList.remove('show');
+  }
+});
+
+// ===== Modular page switching =====
+var allPages = Array.prototype.slice.call(document.querySelectorAll('.page'));
+var allSideLinks = Array.prototype.slice.call(document.querySelectorAll('.side-link[data-page]'));
+var mainEl = document.querySelector('.main');
+
+// Sidebar refs declared up-front so showPage() can safely call closeSidebar() on initial load
+var wrapEl = document.getElementById('wrap');
+var sidebarToggleBtn = document.getElementById('sidebarToggleBtn');
+var sidebarToggleLabel = document.getElementById('sidebarToggleLabel');
+var mobileMenuBtn = document.getElementById('mobileMenuBtn');
+var sidebarOverlay = document.getElementById('sidebarOverlay');
+
+function isMobile(){ return window.innerWidth <= 900; }
+
+function openSidebar(){
+  wrapEl.classList.remove('sidebar-collapsed');
+  if(isMobile() && sidebarOverlay) sidebarOverlay.classList.add('show');
+  if(sidebarToggleLabel) sidebarToggleLabel.textContent = 'Hide sidebar';
+  try{ localStorage.setItem('sidebarHidden','0'); }catch(e){}
+}
+function closeSidebar(){
+  wrapEl.classList.add('sidebar-collapsed');
+  if(sidebarOverlay) sidebarOverlay.classList.remove('show');
+  if(sidebarToggleLabel) sidebarToggleLabel.textContent = 'Show sidebar';
+  try{ localStorage.setItem('sidebarHidden','1'); }catch(e){}
+}
+function toggleSidebar(){
+  if(wrapEl.classList.contains('sidebar-collapsed')) openSidebar();
+  else closeSidebar();
+}
+
+function showPage(pageId, opts){
+  opts = opts || {};
+  var found = false;
+  allPages.forEach(function(p){
+    var match = p.getAttribute('data-page-id') === pageId;
+    p.classList.toggle('active', match);
+    if(match) found = true;
+  });
+  if(!found){
+    // fallback to home if an unknown/missing id is requested
+    allPages.forEach(function(p){
+      p.classList.toggle('active', p.getAttribute('data-page-id') === 'home');
+    });
+    pageId = 'home';
+  }
+  allSideLinks.forEach(function(a){
+    a.classList.toggle('active', a.getAttribute('data-page') === pageId);
+  });
+  if(!opts.skipHistory){
+    if(history.replaceState) history.replaceState(null, '', '#' + pageId);
+  }
+  if(!opts.skipScroll && mainEl){
+    mainEl.scrollTo({top:0, behavior:'instant' in window ? 'instant' : 'auto'});
+    window.scrollTo(0,0);
+  }
+  // Re-typeset MathJax for the newly shown page only (much faster than full-page typeset)
+  if(window.MathJax && window.MathJax.typesetPromise){
+    var activeEl = document.querySelector('.page[data-page-id="' + pageId + '"]');
+    if(activeEl && !activeEl.dataset.mjDone){
+      window.MathJax.typesetPromise([activeEl]).then(function(){
+        activeEl.dataset.mjDone = '1';
+      }).catch(function(err){ console.warn('MathJax typeset error', err); });
+    }
+  }
+  // Close mobile sidebar after navigating
+  if(window.innerWidth <= 900){
+    closeSidebar();
+  }
+}
+
+allSideLinks.forEach(function(a){
+  a.addEventListener('click', function(e){
+    e.preventDefault();
+    showPage(a.getAttribute('data-page'));
+  });
+});
+
+// Initial page load: honor a deep link hash if it matches a known page, else home
+(function initialPage(){
+  var hash = window.location.hash ? window.location.hash.slice(1) : '';
+  var validIds = allPages.map(function(p){ return p.getAttribute('data-page-id'); });
+  var startId = validIds.indexOf(hash) !== -1 ? hash : 'home';
+  showPage(startId, {skipHistory:true, skipScroll:true});
+})();
+
+window.addEventListener('hashchange', function(){
+  var hash = window.location.hash ? window.location.hash.slice(1) : 'home';
+  showPage(hash, {skipHistory:true});
+});
+
+// ===== Sidebar toggle: bind events (vars/functions declared above) =====
+if(sidebarToggleBtn) sidebarToggleBtn.addEventListener('click', toggleSidebar);
+if(mobileMenuBtn) mobileMenuBtn.addEventListener('click', function(){
+  // On mobile the button always opens; closing happens via overlay tap or nav click
+  openSidebar();
+});
+if(sidebarOverlay) sidebarOverlay.addEventListener('click', closeSidebar);
+
+// On mobile, start with the sidebar closed (drawer hidden); on desktop start open
+(function initSidebarState(){
+  if(isMobile()){
+    closeSidebar();
+  }else{
+    var saved = null;
+    try{ saved = localStorage.getItem('sidebarHidden'); }catch(e){}
+    if(saved === '1') closeSidebar(); else openSidebar();
+  }
+})();
+
+// Re-evaluate drawer state on resize crossing the mobile breakpoint
+var lastIsMobile = isMobile();
+window.addEventListener('resize', function(){
+  var nowMobile = isMobile();
+  if(nowMobile !== lastIsMobile){
+    lastIsMobile = nowMobile;
+    if(nowMobile) closeSidebar(); else openSidebar();
   }
 });
 </script>

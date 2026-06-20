@@ -244,10 +244,7 @@ function switchSemester(semester) {
   });
 
   const searchInput = document.getElementById("search-input");
-  if (searchInput) {
-    searchInput.value = "";
-    searchInput.focus();
-  }
+  if (searchInput) searchInput.value = "";
 }
 
 function init() {
