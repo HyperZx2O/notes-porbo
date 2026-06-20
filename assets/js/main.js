@@ -384,15 +384,13 @@ function escapeHtml(str) {
   return div.innerHTML;
 }
 
-document.addEventListener("DOMContentLoaded", function () {
-  init();
+init();
 
-  document.addEventListener("keydown", function (e) {
-    var t = e.target;
-    if (t.tagName === "INPUT" || t.tagName === "TEXTAREA" || t.isContentEditable) return;
-    if (e.key === "Escape") {
-      var o = document.getElementById("changelog-overlay");
-      if (o && o.classList.contains("open")) closeChangelog();
-    }
-  });
+document.addEventListener("keydown", function (e) {
+  var t = e.target;
+  if (t.tagName === "INPUT" || t.tagName === "TEXTAREA" || t.isContentEditable) return;
+  if (e.key === "Escape") {
+    var o = document.getElementById("changelog-overlay");
+    if (o && o.classList.contains("open")) closeChangelog();
+  }
 });
