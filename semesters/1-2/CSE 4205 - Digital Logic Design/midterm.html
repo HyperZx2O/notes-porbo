@@ -1,0 +1,2459 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DLD Midterm — 1-Day Survival Guide</title>
+<style>
+:root{
+  --bg:#0a0e14;
+  --bg-panel:#10151d;
+  --bg-card:#141a23;
+  --bg-raised:#1a212c;
+  --border:#222b38;
+  --border-soft:#1b2330;
+  --text:#dbe4ee;
+  --text-dim:#8893a3;
+  --text-faint:#5a6577;
+  --cyan:#3dd6c5;
+  --cyan-dim:#2a8f84;
+  --amber:#ffb454;
+  --amber-dim:#a87530;
+  --red:#ff6b6b;
+  --green:#5fd97a;
+  --violet:#a78bfa;
+  --mono: 'JetBrains Mono', 'SF Mono', Consolas, monospace;
+  --sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --sidebar-w: 290px;
+}
+
+*{box-sizing:border-box; margin:0; padding:0;}
+
+@media (prefers-reduced-motion: reduce){
+  *{animation-duration:0.01ms !important; transition-duration:0.01ms !important;}
+}
+
+html, body{ height:100%; }
+body{
+  background:
+    radial-gradient(ellipse 900px 500px at 15% -5%, rgba(61,214,197,0.08), transparent),
+    radial-gradient(ellipse 700px 500px at 100% 10%, rgba(255,180,84,0.05), transparent),
+    var(--bg);
+  color:var(--text);
+  font-family:var(--sans);
+  line-height:1.55;
+  min-height:100vh;
+}
+
+::selection{ background:rgba(61,214,197,0.3); color:#fff; }
+::-webkit-scrollbar{ width:10px; height:10px; }
+::-webkit-scrollbar-track{ background:var(--bg); }
+::-webkit-scrollbar-thumb{ background:#26313f; border-radius:5px; }
+::-webkit-scrollbar-thumb:hover{ background:var(--cyan-dim); }
+
+a{ color:var(--cyan); }
+:focus-visible{ outline:2px solid var(--cyan); outline-offset:2px; border-radius:4px; }
+
+/* ================= APP SHELL ================= */
+.app{ display:flex; min-height:100vh; }
+
+/* ---------- SIDEBAR ---------- */
+.sidebar{
+  width:var(--sidebar-w); min-width:var(--sidebar-w);
+  background:var(--bg-panel);
+  border-right:1px solid var(--border);
+  height:100vh; position:sticky; top:0;
+  display:flex; flex-direction:column;
+  overflow-y:auto;
+  z-index:50;
+}
+.sidebar-brand{
+  padding:18px 18px 14px;
+  font-family:var(--mono); font-size:12.5px; color:var(--cyan); letter-spacing:0.5px;
+  display:flex; align-items:center; gap:8px;
+  border-bottom:1px solid var(--border-soft);
+}
+.sidebar-brand .dot{ width:7px;height:7px;border-radius:50%; background:var(--green); box-shadow:0 0 8px var(--green); animation:pulse 2s infinite; }
+@keyframes pulse{ 0%,100%{opacity:1} 50%{opacity:0.4} }
+
+.sidebar-progress{ padding:14px 18px; border-bottom:1px solid var(--border-soft); }
+.sidebar-progress .lbl{ font-family:var(--mono); font-size:10px; color:var(--text-faint); text-transform:uppercase; letter-spacing:1px; display:flex; justify-content:space-between; margin-bottom:7px; }
+.sidebar-progress .track{ height:6px; background:#1b2330; border-radius:4px; overflow:hidden; border:1px solid var(--border-soft); }
+.sidebar-progress .fill{ height:100%; border-radius:4px; background:linear-gradient(90deg, var(--cyan-dim), var(--cyan)); width:0%; transition:width 0.4s ease; box-shadow:0 0 10px rgba(61,214,197,0.5); }
+
+.sidebar-nav{ flex:1; padding:10px 10px 20px; }
+.sidebar-group-label{
+  font-family:var(--mono); font-size:10px; color:var(--text-faint); text-transform:uppercase; letter-spacing:1.5px;
+  padding:14px 10px 6px;
+}
+.sidebar-link{
+  display:flex; align-items:center; gap:10px; padding:9px 10px; border-radius:8px; cursor:pointer;
+  text-decoration:none; color:var(--text-dim); transition:all .15s; font-size:13.5px; position:relative;
+}
+.sidebar-link:hover{ background:var(--bg-raised); color:var(--text); }
+.sidebar-link.active{ background:rgba(61,214,197,0.1); color:var(--cyan); }
+.sidebar-link.active::before{
+  content:''; position:absolute; left:-10px; top:0; bottom:0; width:3px; background:var(--cyan); border-radius:0 3px 3px 0;
+}
+.sidebar-link .snum{
+  font-family:var(--mono); font-size:10.5px; width:22px; height:22px; min-width:22px; border-radius:6px;
+  background:var(--bg-card); display:flex; align-items:center; justify-content:center; color:var(--text-faint);
+}
+.sidebar-link.active .snum{ background:var(--cyan); color:var(--bg); font-weight:700; }
+.sidebar-link .sring{ margin-left:auto; width:16px; height:16px; position:relative; flex-shrink:0; }
+.sidebar-link .sring svg{ transform:rotate(-90deg); }
+.sidebar-link .sring .bgr{ fill:none; stroke:#222b38; stroke-width:2.5; }
+.sidebar-link .sring .fgr{ fill:none; stroke:var(--cyan); stroke-width:2.5; stroke-linecap:round; transition:stroke-dashoffset .3s; }
+.sidebar-link .stext{ flex:1; min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+
+.sidebar-foot{ padding:14px 18px; border-top:1px solid var(--border-soft); }
+.sidebar-foot button{
+  width:100%; font-family:var(--mono); font-size:11px; padding:8px; border-radius:7px; border:1px solid var(--border);
+  background:var(--bg-card); color:var(--text-faint); cursor:pointer; transition:all .15s;
+}
+.sidebar-foot button:hover{ border-color:var(--red); color:var(--red); }
+
+.sidebar-toggle{
+  display:none; position:fixed; top:14px; left:14px; z-index:200;
+  width:40px; height:40px; border-radius:10px; background:var(--bg-panel); border:1px solid var(--border);
+  color:var(--cyan); align-items:center; justify-content:center; cursor:pointer;
+}
+.sidebar-backdrop{ display:none; }
+
+/* ---------- MAIN CONTENT ---------- */
+.main{ flex:1; min-width:0; display:flex; flex-direction:column; min-height:100vh; }
+.main-scroll{ flex:1; }
+.page{ max-width:880px; margin:0 auto; padding:44px 32px 40px; min-height:60vh; }
+.page.is-hidden{ display:none; }
+
+.pager{
+  position:sticky; bottom:0; z-index:40;
+  background:rgba(10,14,20,0.92); backdrop-filter:blur(10px);
+  border-top:1px solid var(--border);
+  padding:14px 32px;
+  display:flex; align-items:center; justify-content:space-between; gap:14px;
+}
+.pager-btn{
+  display:flex; align-items:center; gap:10px; padding:10px 16px; border-radius:10px; border:1px solid var(--border);
+  background:var(--bg-card); color:var(--text); cursor:pointer; transition:all .15s; text-decoration:none;
+  font-size:13.5px; max-width:42%;
+}
+.pager-btn:hover{ border-color:var(--cyan-dim); background:var(--bg-raised); }
+.pager-btn.disabled{ opacity:0.3; pointer-events:none; }
+.pager-btn .pdir{ font-family:var(--mono); font-size:10px; color:var(--text-faint); text-transform:uppercase; letter-spacing:1px; }
+.pager-btn .ptitle{ font-weight:600; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.pager-btn.next{ flex-direction:row-reverse; text-align:right; margin-left:auto; }
+.pager-center{ font-family:var(--mono); font-size:11.5px; color:var(--text-faint); white-space:nowrap; }
+
+/* ================= HERO (home page) ================= */
+.hero-eyebrow{
+  font-family:var(--mono); font-size:12px; color:var(--amber); letter-spacing:2px; text-transform:uppercase;
+  display:flex; align-items:center; gap:10px; margin-bottom:18px;
+}
+.hero-eyebrow::before{ content:''; width:24px; height:1px; background:var(--amber); }
+.hero h1{
+  font-size:clamp(30px,4.4vw,46px); font-weight:800; letter-spacing:-0.02em; line-height:1.08;
+  color:#f3f6fa;
+}
+.hero h1 .hl{ color:var(--cyan); }
+.hero-sub{ color:var(--text-dim); font-size:16px; max-width:640px; margin-top:14px; }
+.hero-meta{ display:flex; flex-wrap:wrap; gap:10px; margin-top:24px; }
+.meta-chip{
+  font-family:var(--mono); font-size:12px; padding:7px 12px; border-radius:7px;
+  background:var(--bg-card); border:1px solid var(--border); color:var(--text-dim);
+  display:flex; align-items:center; gap:6px;
+}
+.meta-chip b{ color:var(--text); }
+.meta-chip.warn{ border-color:rgba(255,180,84,0.35); color:var(--amber); }
+
+.toc{ display:grid; grid-template-columns:repeat(auto-fill, minmax(250px,1fr)); gap:10px; margin-top:18px; }
+.toc-item{
+  text-decoration:none; display:flex; align-items:center; gap:10px; padding:12px 14px; cursor:pointer;
+  background:var(--bg-card); border:1px solid var(--border); border-radius:9px; transition:all .15s;
+}
+.toc-item:hover{ border-color:var(--cyan-dim); transform:translateX(2px); }
+.toc-item .tn{ font-family:var(--mono); font-size:11px; color:var(--bg); background:var(--cyan); padding:3px 7px; border-radius:5px; font-weight:700; }
+.toc-item .tt{ font-size:13px; color:var(--text); }
+.toc-item .tc{ margin-left:auto; font-family:var(--mono); font-size:10.5px; color:var(--text-faint); }
+
+.btn{
+  font-family:var(--mono); font-size:12.5px; padding:9px 16px; border-radius:8px; border:1px solid var(--border);
+  background:var(--bg-card); color:var(--text-dim); cursor:pointer; transition:all .15s; text-decoration:none; display:inline-flex; align-items:center;
+}
+.btn:hover{ border-color:var(--cyan-dim); color:var(--cyan); }
+.btn.primary{ background:var(--cyan); color:#04211d; border-color:var(--cyan); font-weight:700; }
+.btn.primary:hover{ background:#4fe3d1; color:#04211d; }
+.btn-row{ display:flex; gap:10px; flex-wrap:wrap; margin-top:14px; }
+
+.section-label{
+  font-family:var(--mono); font-size:11px; color:var(--text-faint); text-transform:uppercase; letter-spacing:2px;
+  margin-bottom:6px;
+}
+.section-heading{ font-size:26px; font-weight:800; color:#f3f6fa; margin-bottom:6px; }
+.section-desc{ color:var(--text-dim); font-size:14.5px; max-width:680px; margin-bottom:22px; }
+
+.panel{ background:var(--bg-panel); border:1px solid var(--border); border-radius:14px; padding:28px; }
+.panel + .panel{ margin-top:18px; }
+
+/* ================= CHAPTER PAGE HEADER ================= */
+.ch-page-head{ margin-bottom:30px; }
+.ch-page-eyebrow{
+  font-family:var(--mono); font-size:11.5px; color:var(--cyan); text-transform:uppercase; letter-spacing:2px;
+  display:flex; align-items:center; gap:10px; margin-bottom:14px;
+}
+.ch-page-eyebrow .chnum{ font-family:var(--mono); font-size:12px; color:var(--bg); background:var(--cyan); padding:3px 9px; border-radius:5px; font-weight:700; }
+.ch-page-title{ font-size:clamp(24px,3.4vw,34px); font-weight:800; color:#f3f6fa; line-height:1.15; }
+.ch-page-sub{ font-size:14.5px; color:var(--text-dim); margin-top:8px; }
+.ch-page-meta{ display:flex; gap:10px; margin-top:16px; flex-wrap:wrap; }
+
+/* ============ CHECKLIST ============ */
+.checklist{ display:flex; flex-direction:column; gap:2px; }
+.checklist-title{
+  font-family:var(--mono); font-size:11px; color:var(--text-faint); text-transform:uppercase; letter-spacing:1.5px;
+  margin-bottom:10px; display:flex; align-items:center; gap:8px;
+}
+.checklist-title::after{ content:''; flex:1; height:1px; background:var(--border-soft); }
+.check-item{
+  display:flex; align-items:center; gap:11px; padding:9px 10px; border-radius:8px; cursor:pointer;
+  transition:background .15s;
+}
+.check-item:hover{ background:var(--bg-raised); }
+.check-item input{ display:none; }
+.check-box{
+  width:19px; height:19px; min-width:19px; border-radius:5px; border:1.5px solid #3a4456;
+  display:flex; align-items:center; justify-content:center; transition:all .15s; background:var(--bg-card);
+}
+.check-item input:checked + .check-box{ background:var(--cyan); border-color:var(--cyan); }
+.check-box svg{ width:12px; height:12px; opacity:0; transition:opacity .1s; }
+.check-item input:checked + .check-box svg{ opacity:1; }
+.check-label{ font-size:14.5px; color:var(--text); }
+.check-item input:checked ~ .check-label{ color:var(--text-faint); text-decoration:line-through; }
+
+/* ============ CONTENT BLOCKS ============ */
+.content{ margin-top:28px; }
+.content h4{
+  font-size:14px; color:var(--cyan); font-family:var(--mono); letter-spacing:0.5px;
+  margin:18px 0 8px; text-transform:uppercase;
+}
+.content h4:first-child{ margin-top:0; }
+.content p{ color:var(--text); font-size:14.5px; margin-bottom:8px; }
+.content ul{ padding-left:20px; margin-bottom:10px; }
+.content li{ font-size:14.5px; color:var(--text); margin-bottom:5px; }
+.content .dim{ color:var(--text-dim); }
+.formula{
+  font-family:var(--mono); background:var(--bg-card); border:1px solid var(--border);
+  border-left:3px solid var(--cyan); padding:10px 14px; border-radius:6px; margin:10px 0;
+  font-size:14px; color:var(--amber); overflow-x:auto; white-space:nowrap;
+}
+.tbl{ width:100%; border-collapse:collapse; margin:10px 0; font-size:13.5px; }
+.tbl th{
+  background:var(--bg-raised); color:var(--cyan); text-align:left; padding:8px 10px;
+  font-family:var(--mono); font-size:11.5px; text-transform:uppercase; letter-spacing:0.5px;
+  border-bottom:1px solid var(--border);
+}
+.tbl td{ padding:7px 10px; border-bottom:1px solid var(--border-soft); color:var(--text); font-family:var(--mono); }
+.tbl tr:hover td{ background:rgba(61,214,197,0.04); }
+.note{
+  background:rgba(255,180,84,0.06); border:1px solid rgba(255,180,84,0.25); border-radius:8px;
+  padding:10px 14px; font-size:13.5px; color:var(--amber); margin:10px 0;
+}
+.note b{ color:#ffc97a; }
+.example{ background:var(--bg-card); border:1px solid var(--border); border-radius:8px; padding:12px 14px; margin:10px 0; }
+.example .ex-label{ font-family:var(--mono); font-size:10.5px; color:var(--violet); text-transform:uppercase; letter-spacing:1px; margin-bottom:6px; }
+
+/* ============ VIDEO LINK ============ */
+.video-block{
+  display:flex; align-items:center; gap:14px; background:var(--bg-card); border:1px solid var(--border);
+  border-radius:10px; padding:14px 16px; text-decoration:none; transition:all .15s;
+}
+.video-block:hover{ border-color:var(--cyan-dim); background:var(--bg-raised); }
+.video-icon{
+  width:38px; height:38px; min-width:38px; border-radius:9px; background:rgba(61,214,197,0.1);
+  display:flex; align-items:center; justify-content:center; color:var(--cyan);
+}
+.video-text{ flex:1; }
+.video-title{ font-size:13.5px; color:var(--text); font-weight:600; }
+.video-sub{ font-size:12px; color:var(--text-faint); font-family:var(--mono); margin-top:2px; }
+.video-arrow{ color:var(--text-faint); }
+
+/* ============ FLASHCARDS ============ */
+.fc-grid{ display:grid; grid-template-columns:repeat(auto-fill, minmax(230px,1fr)); gap:14px; }
+.fc{ perspective:1200px; height:188px; cursor:pointer; }
+.fc-inner{ position:relative; width:100%; height:100%; transition:transform .5s cubic-bezier(.4,.2,.2,1); transform-style:preserve-3d; }
+.fc.flipped .fc-inner{ transform:rotateY(180deg); }
+.fc-face{
+  position:absolute; inset:0; backface-visibility:hidden; border-radius:11px; padding:16px;
+  display:flex; flex-direction:column; border:1px solid var(--border);
+}
+.fc-front{ background:var(--bg-card); }
+.fc-front .fc-tag{ font-family:var(--mono); font-size:9.5px; color:var(--text-faint); text-transform:uppercase; letter-spacing:1px; }
+.fc-front .fc-q{ font-size:14px; color:var(--text); margin-top:8px; flex:1; display:flex; align-items:center; }
+.fc-front .fc-hint{ font-family:var(--mono); font-size:10px; color:var(--cyan-dim); margin-top:auto; }
+.fc-back{ background:linear-gradient(160deg, #122421, var(--bg-card)); transform:rotateY(180deg); border-color:var(--cyan-dim); cursor:default; }
+.fc-back .fc-tag{ font-family:var(--mono); font-size:9.5px; color:var(--cyan); text-transform:uppercase; letter-spacing:1px; }
+.fc-back .fc-a{ font-size:13px; color:#e8f5f2; margin-top:8px; flex:1; overflow-y:auto; }
+.fc-grade-row{ display:flex; gap:6px; margin-top:8px; }
+.fc-grade-btn{
+  flex:1; font-family:var(--mono); font-size:10.5px; padding:7px 6px; border-radius:7px; cursor:pointer;
+  border:1px solid var(--border); background:var(--bg-panel); color:var(--text-dim); transition:all .15s;
+  display:flex; align-items:center; justify-content:center; gap:5px;
+}
+.fc-grade-btn:hover{ filter:brightness(1.15); }
+.fc-grade-btn.got-it{ border-color:rgba(95,217,122,0.4); color:var(--green); }
+.fc-grade-btn.got-it:hover{ background:rgba(95,217,122,0.1); }
+.fc-grade-btn.review-again{ border-color:rgba(255,180,84,0.4); color:var(--amber); }
+.fc-grade-btn.review-again:hover{ background:rgba(255,180,84,0.1); }
+.fc-grade-btn.active.got-it{ background:rgba(95,217,122,0.16); }
+.fc-grade-btn.active.review-again{ background:rgba(255,180,84,0.16); }
+.fc-status-row{ display:none; align-items:center; gap:8px; margin-top:8px; font-family:var(--mono); font-size:10px; }
+.fc.graded .fc-status-row{ display:flex; }
+.fc.graded .fc-grade-row{ display:none; }
+.fc-status-tag{ padding:3px 8px; border-radius:5px; }
+.fc-status-tag.got-it{ background:rgba(95,217,122,0.15); color:var(--green); }
+.fc-status-tag.review-again{ background:rgba(255,180,84,0.15); color:var(--amber); }
+.fc-retry-link{ color:var(--text-faint); cursor:pointer; text-decoration:underline; margin-left:auto; }
+.fc-retry-link:hover{ color:var(--cyan); }
+.fc-reviewed-badge{
+  position:absolute; top:8px; right:8px; width:20px; height:20px; border-radius:50%;
+  background:var(--green); display:none; align-items:center; justify-content:center; z-index:3;
+  cursor:pointer; transition:all .15s; border:none; padding:0; margin:0; font:inherit; outline-offset:2px;
+}
+.fc.reviewed .fc-reviewed-badge{ display:flex; }
+.fc.reviewed.needs-review .fc-reviewed-badge{ background:var(--amber); }
+.fc-reviewed-badge .icon-check{ display:block; }
+.fc-reviewed-badge .icon-undo{ display:none; }
+.fc-reviewed-badge:hover{ background:var(--red) !important; transform:scale(1.12); }
+.fc-reviewed-badge:hover .icon-check{ display:none; }
+.fc-reviewed-badge:hover .icon-undo{ display:block; }
+.fc-reviewed-badge svg{ width:11px; height:11px; pointer-events:none; }
+
+/* ============ MCQ ============ */
+.mcq-list{ display:flex; flex-direction:column; gap:16px; }
+.mcq{ background:var(--bg-card); border:1px solid var(--border); border-radius:10px; padding:16px 18px; }
+.mcq-q{ font-size:14.5px; color:var(--text); margin-bottom:12px; display:flex; gap:8px; align-items:baseline; }
+.mcq-q .qn{ font-family:var(--mono); color:var(--amber); white-space:nowrap; }
+.mcq-attempts{ margin-left:auto; font-family:var(--mono); font-size:10px; color:var(--text-faint); white-space:nowrap; }
+.mcq-opts{ display:flex; flex-direction:column; gap:8px; }
+.mcq-opt{
+  display:flex; align-items:center; gap:10px; padding:9px 12px; border-radius:7px; border:1px solid var(--border);
+  cursor:pointer; font-size:13.5px; color:var(--text-dim); transition:all .15s; background:var(--bg-panel);
+}
+.mcq-opt:hover{ border-color:var(--cyan-dim); color:var(--text); }
+.mcq-opt .letter{
+  font-family:var(--mono); font-size:11px; width:20px; height:20px; min-width:20px; border-radius:5px;
+  background:var(--bg-raised); display:flex; align-items:center; justify-content:center; color:var(--text-faint);
+}
+.mcq-opt.correct{ border-color:var(--green); background:rgba(95,217,122,0.08); color:#cdebd2; }
+.mcq-opt.correct .letter{ background:var(--green); color:#08210f; }
+.mcq-opt.wrong{ border-color:var(--red); background:rgba(255,107,107,0.08); color:#f3c9c9; }
+.mcq-opt.wrong .letter{ background:var(--red); color:#2b0a0a; }
+.mcq-opt.disabled{ pointer-events:none; }
+.mcq-expl{
+  margin-top:10px; padding:10px 12px; border-radius:7px; background:var(--bg-panel); border:1px solid var(--border-soft);
+  font-size:13px; color:var(--text-dim); display:none;
+}
+.mcq.answered .mcq-expl{ display:block; }
+.mcq-footer{ display:none; margin-top:10px; align-items:center; gap:10px; }
+.mcq.answered .mcq-footer{ display:flex; }
+.mcq-result-tag{ font-family:var(--mono); font-size:10.5px; padding:3px 9px; border-radius:5px; }
+.mcq-result-tag.ok{ background:rgba(95,217,122,0.15); color:var(--green); }
+.mcq-result-tag.bad{ background:rgba(255,107,107,0.15); color:var(--red); }
+.mcq-retry-btn{
+  font-family:var(--mono); font-size:11px; padding:6px 12px; border-radius:7px; border:1px solid var(--cyan-dim);
+  background:rgba(61,214,197,0.08); color:var(--cyan); cursor:pointer; transition:all .15s;
+}
+.mcq-retry-btn:hover{ background:rgba(61,214,197,0.16); }
+
+/* ============ SCHEDULE ============ */
+.sched-grid{ display:flex; flex-direction:column; gap:10px; }
+.sched-row{
+  display:grid; grid-template-columns:120px 1fr auto; gap:14px; align-items:center;
+  padding:13px 16px; background:var(--bg-card); border:1px solid var(--border); border-radius:9px;
+}
+.sched-time{ font-family:var(--mono); font-size:12.5px; color:var(--amber); }
+.sched-task b{ color:var(--text); font-size:14px; }
+.sched-task div{ color:var(--text-dim); font-size:12.5px; margin-top:2px; }
+.sched-dur{ font-family:var(--mono); font-size:11.5px; color:var(--text-faint); background:var(--bg-raised); padding:4px 9px; border-radius:6px; white-space:nowrap; }
+.sched-row.break{ border-style:dashed; opacity:0.75; }
+.sched-row.break .sched-time{ color:var(--violet); }
+
+/* ============ PROGRESS DASHBOARD ============ */
+.dash-grid{ display:grid; grid-template-columns:repeat(auto-fit, minmax(220px,1fr)); gap:14px; }
+.dash-card{ background:var(--bg-card); border:1px solid var(--border); border-radius:11px; padding:18px; }
+.dash-card .dlabel{ font-family:var(--mono); font-size:11px; color:var(--text-faint); text-transform:uppercase; letter-spacing:1px; }
+.dash-card .dval{ font-size:30px; font-weight:800; color:var(--text); margin-top:6px; font-family:var(--mono); }
+.dash-card .dval .unit{ font-size:14px; color:var(--text-faint); font-weight:400; }
+.dash-bar-track{ height:6px; background:#1b2330; border-radius:4px; margin-top:10px; overflow:hidden; }
+.dash-bar-fill{ height:100%; border-radius:4px; transition:width .4s; }
+.dash-chapter-list{ display:flex; flex-direction:column; gap:8px; margin-top:18px; }
+.dash-chapter-row{
+  display:flex; align-items:center; gap:12px; padding:10px 14px; background:var(--bg-card); border:1px solid var(--border); border-radius:9px;
+  cursor:pointer; transition:all .15s;
+}
+.dash-chapter-row:hover{ border-color:var(--cyan-dim); }
+.dash-chapter-row .dcr-num{ font-family:var(--mono); font-size:11px; color:var(--bg); background:var(--cyan); width:24px; height:24px; border-radius:6px; display:flex; align-items:center; justify-content:center; font-weight:700; }
+.dash-chapter-row .dcr-title{ font-size:13.5px; color:var(--text); flex:1; }
+.dash-chapter-row .dcr-track{ width:120px; height:6px; background:#1b2330; border-radius:4px; overflow:hidden; }
+.dash-chapter-row .dcr-fill{ height:100%; background:linear-gradient(90deg,var(--cyan-dim),var(--cyan)); border-radius:4px; }
+.dash-chapter-row .dcr-pct{ font-family:var(--mono); font-size:11.5px; color:var(--text-faint); width:36px; text-align:right; }
+
+.binary-rule{ font-family:var(--mono); font-size:10px; color:#2a3441; letter-spacing:3px; word-break:break-all; user-select:none; line-height:1.8; opacity:0.5; }
+
+footer.page-footer{ text-align:center; padding:30px 20px 10px; color:var(--text-faint); font-size:12px; font-family:var(--mono); }
+
+@media (max-width:900px){
+  :root{ --sidebar-w: 260px; }
+  .sidebar{ position:fixed; left:0; top:0; transform:translateX(-100%); transition:transform .25s ease; box-shadow:0 0 40px rgba(0,0,0,0.5); }
+  .sidebar.open{ transform:translateX(0); }
+  .sidebar-toggle{ display:flex; }
+  .sidebar-backdrop{ display:none; position:fixed; inset:0; background:rgba(0,0,0,0.55); z-index:49; }
+  .sidebar-backdrop.show{ display:block; }
+  .page{ padding:70px 18px 30px; }
+  .pager{ padding:12px 14px; }
+  .pager-btn{ max-width:46%; padding:9px 12px; }
+  .pager-btn .ptitle{ font-size:12.5px; }
+  .pager-center{ display:none; }
+  .dash-grid{ grid-template-columns:1fr 1fr; }
+  .dash-chapter-row .dcr-track{ width:60px; }
+}
+</style>
+</head>
+<body>
+
+<button class="sidebar-toggle" id="sidebarToggle" aria-label="Open menu">
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M3 6h18M3 12h18M3 18h18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+</button>
+<div class="sidebar-backdrop" id="sidebarBackdrop"></div>
+
+<div class="app">
+  <nav class="sidebar" id="sidebar">
+    <div class="sidebar-brand"><span class="dot"></span> DLD://midterm</div>
+    <div class="sidebar-progress">
+      <div class="lbl"><span>Overall progress</span><span id="sidebarPct">0%</span></div>
+      <div class="track"><div class="fill" id="sidebarFill"></div></div>
+    </div>
+    <div class="sidebar-nav" id="sidebarNav"></div>
+    <div class="sidebar-foot">
+      <button id="resetBtn">⟲ Reset all progress</button>
+    </div>
+  </nav>
+
+  <div class="main">
+    <div class="main-scroll" id="mainScroll">
+      <div id="pages-root"></div>
+    </div>
+    <div class="pager" id="pager">
+      <a class="pager-btn prev" id="pagerPrev">
+        <span style="font-size:16px;">←</span>
+        <span><div class="pdir">Previous</div><div class="ptitle" id="pagerPrevTitle">—</div></span>
+      </a>
+      <div class="pager-center" id="pagerCenter">1 / 13</div>
+      <a class="pager-btn next" id="pagerNext">
+        <span><div class="pdir">Next</div><div class="ptitle" id="pagerNextTitle">—</div></span>
+        <span style="font-size:16px;">→</span>
+      </a>
+    </div>
+  </div>
+</div>
+
+<script>
+// ============================================================
+// DLD Midterm Study Guide — Content Data
+// Source: DLD_Mid_all_slides.pdf (CSE 4205, IUT)
+// ============================================================
+
+const NESO_PLAYLIST = "https://www.youtube.com/playlist?list=PLBlnK6fEyqRjMH3mWf6kwqiTbT798eAOm";
+
+const CHAPTERS = [
+// ============================================================
+// CHAPTER 1
+// ============================================================
+{
+  id: "ch1",
+  num: "01",
+  title: "Digital Systems & Number Systems",
+  sub: "What digital means, and the 4 number systems you'll live in",
+  time: "35 min",
+  video: {
+    title: "Neso Academy — Digital Electronics (full playlist)",
+    sub: "Search within: \"Introduction to Number Systems\", \"Binary Number System\"",
+    url: NESO_PLAYLIST
+  },
+  checklist: [
+    "Define a digital system vs analog system",
+    "Explain why digital data is preferred (noise, precision, storage)",
+    "List differences: Digital vs Analog (representation, signal form, noise, processing, storage)",
+    "Name the 4 common number systems and their bases",
+    "State the relationship between base and number of digits needed"
+  ],
+  content: `
+    <h4>What is a Digital System?</h4>
+    <p>A <b>digital system</b> is an electronic system that processes, stores, and communicates information using <b>digital data</b> — data represented by <b>discrete</b> (countable, distinct) values, as opposed to continuous ones.</p>
+    <p class="dim">Examples of discrete information: voltages (HIGH/LOW), switch states (ON/OFF), a 24-hour clock, the 26 letters of the alphabet, number systems.</p>
+
+    <h4>Digital vs Analog</h4>
+    <table class="tbl">
+      <tr><th>Property</th><th>Digital</th><th>Analog</th></tr>
+      <tr><td>Representation</td><td>Discrete</td><td>Continuous, varying magnitude</td></tr>
+      <tr><td>Signal form</td><td>Square waves</td><td>Sine waves</td></tr>
+      <tr><td>Response to noise</td><td>Less affected</td><td>More affected</td></tr>
+      <tr><td>Processing</td><td>Simple, programmable</td><td>Complex, less flexible</td></tr>
+      <tr><td>Storage</td><td>Easy, accurate</td><td>Hard to store without loss</td></tr>
+    </table>
+    <div class="note"><b>Why digital wins:</b> analog signals mirror real-world phenomena closely but degrade easily (noise, distortion). Digital is easier to store/transmit precisely and supports error detection & correction.</div>
+
+    <h4>The 4 Common Number Systems</h4>
+    <table class="tbl">
+      <tr><th>System</th><th>Base (radix)</th><th>Digits used</th></tr>
+      <tr><td>Binary</td><td>2</td><td>0, 1</td></tr>
+      <tr><td>Octal</td><td>8</td><td>0–7</td></tr>
+      <tr><td>Decimal</td><td>10</td><td>0–9</td></tr>
+      <tr><td>Hexadecimal</td><td>16</td><td>0–9, A–F</td></tr>
+    </table>
+    <p><b>Base / radix</b> = number of unique digits (including 0) the system uses.</p>
+    <div class="note">📌 <b>Trade-off rule:</b> higher base → fewer digits needed to represent the same value, but more symbols to remember/process. This is a favorite quick conceptual MCQ.</div>
+
+    <h4>Quick historical color (low-yield but occasionally asked)</h4>
+    <ul>
+      <li>Decimal (base 10) is widely believed to come from counting on 10 fingers.</li>
+      <li>Mayans used base 20 (fingers + toes).</li>
+      <li>Babylonians used base 60 — highly divisible by 1,2,3,4,5,6,10,12,15,20,30,60 — which is why we still have 60 seconds/minute and 60 minutes/hour today.</li>
+    </ul>
+  `,
+  flashcards: [
+    {q:"What makes a system 'digital'?", a:"It represents and processes data using discrete (distinct, countable) values rather than continuous ones."},
+    {q:"Name 2 advantages of digital over analog signals.", a:"Less affected by noise/distortion, and easier to store/process/transmit with high precision (supports error detection & correction)."},
+    {q:"What is the 'base' or 'radix' of a number system?", a:"The number of unique digits (including 0) used to represent numbers in that system."},
+    {q:"List the 4 common number systems with their bases.", a:"Binary (2), Octal (8), Decimal (10), Hexadecimal (16)."},
+    {q:"What digits does Hexadecimal use?", a:"0–9 and A–F (A=10, B=11, C=12, D=13, E=14, F=15)."},
+    {q:"What signal shape is typical of digital vs analog signals?", a:"Digital → square waves. Analog → sine waves (continuous)."},
+    {q:"Why did Babylonians use base 60?", a:"High divisibility (by 1,2,3,4,5,6,10,12,15,20,30,60) — useful for precise fractions in astronomy and time."},
+    {q:"Trade-off of increasing the base of a number system?", a:"Fewer digits needed per value, but more symbols to learn/write/process — harder to remember."}
+  ],
+  mcqs: [
+    {q:"Which of these is NOT a property typically associated with digital signals?", opts:["Discrete values","Square wave form","Continuous varying magnitude","Less affected by noise"], correct:2, expl:"Continuous varying magnitude describes analog signals, not digital."},
+    {q:"What is the base of the Hexadecimal number system?", opts:["8","10","16","2"], correct:2, expl:"Hexadecimal uses 16 digits: 0–9 and A–F."},
+    {q:"The Babylonian number system used base:", opts:["10","20","60","12"], correct:2, expl:"Base 60 — chosen for its high divisibility, still echoed in our time units today."},
+    {q:"As the base of a number system increases, the number of digits needed to represent a given value:", opts:["Increases","Decreases","Stays the same","Becomes zero"], correct:1, expl:"Higher base = fewer digits needed, but more symbols to manage — a direct trade-off."},
+    {q:"Which number system uses only digits 0–7?", opts:["Binary","Octal","Decimal","Hexadecimal"], correct:1, expl:"Octal (base 8) uses digits 0 through 7."},
+    {q:"A core reason digital systems are preferred for long-distance transmission is:", opts:["They use sine waves","They support error detection and correction","They cannot be amplified","They are always analog-compatible"], correct:1, expl:"Digital signals can be regenerated and error-checked, unlike analog signals which degrade."}
+  ]
+},
+
+// ============================================================
+// CHAPTER 2
+// ============================================================
+{
+  id: "ch2",
+  num: "02",
+  title: "Number System Conversions",
+  sub: "Decimal ⇄ Binary ⇄ Octal ⇄ Hexadecimal — the core exam skill",
+  time: "70 min",
+  video: {
+    title: "Neso Academy — Number System Conversions",
+    sub: "Search within playlist: \"Decimal to Binary Conversion\", \"Octal to Binary & Binary to Octal\"",
+    url: NESO_PLAYLIST
+  },
+  checklist: [
+    "Convert Decimal integer → Binary/Octal/Hex (repeated division)",
+    "Convert Decimal fraction → Binary/Octal/Hex (repeated multiplication)",
+    "Convert any base → Decimal (positional weighted sum)",
+    "Convert Binary ⇄ Octal (group bits in 3s)",
+    "Convert Binary ⇄ Hexadecimal (group bits in 4s)",
+    "Convert Octal ⇄ Hexadecimal (via Binary as bridge)",
+    "Solve a 'find the base r' style algebra question"
+  ],
+  content: `
+    <h4>The Golden Rules (memorize these, not the examples)</h4>
+    <table class="tbl">
+      <tr><th>Conversion</th><th>Method</th></tr>
+      <tr><td>Decimal → Any base</td><td><b>Integer part:</b> divide repeatedly by target base, read remainders bottom→top (MSB last computed = top). <b>Fraction part:</b> multiply repeatedly by target base, take integer part each time, read top→bottom.</td></tr>
+      <tr><td>Any base → Decimal</td><td>Sum of (digit × base<sup>position</sup>) for every digit, where position counts from 0 at the radix point, negative going right.</td></tr>
+      <tr><td>Binary → Octal</td><td>Group bits in <b>3s</b> from the radix point outward (pad with zeros), convert each group to 1 octal digit.</td></tr>
+      <tr><td>Binary → Hex</td><td>Group bits in <b>4s</b> from the radix point outward (pad with zeros), convert each group to 1 hex digit.</td></tr>
+      <tr><td>Octal/Hex → Binary</td><td>Reverse: expand each digit into its 3-bit (octal) or 4-bit (hex) binary equivalent.</td></tr>
+      <tr><td>Octal ⇄ Hex</td><td>No direct shortcut — convert through Binary as the bridge.</td></tr>
+    </table>
+
+    <div class="example">
+      <div class="ex-label">Worked Example — Decimal → Binary</div>
+      <p>Convert (75.625)<sub>10</sub> to binary.</p>
+      <p><b>Integer 75:</b> 75÷2=37 r1, 37÷2=18 r1, 18÷2=9 r0, 9÷2=4 r1, 4÷2=2 r0, 2÷2=1 r0, 1÷2=0 r1 → read bottom-to-top: <b>1001011</b></p>
+      <p><b>Fraction .625:</b> .625×2=1.25 → 1, .25×2=0.5 → 0, .5×2=1.0 → 1 → read top-to-bottom: <b>.101</b></p>
+      <div class="formula">(75.625)₁₀ = (1001011.101)₂</div>
+    </div>
+
+    <div class="example">
+      <div class="ex-label">Worked Example — Decimal → Octal</div>
+      <p>Convert (75.45)<sub>10</sub> to octal.</p>
+      <p>Integer: 75÷8=9 r3, 9÷8=1 r1, 1÷8=0 r1 → <b>113</b></p>
+      <p>Fraction: .45×8=3.6→3, .6×8=4.8→4 → <b>.34</b></p>
+      <div class="formula">(75.45)₁₀ = (113.34)₈</div>
+    </div>
+
+    <div class="example">
+      <div class="ex-label">Worked Example — Decimal → Hexadecimal</div>
+      <p>Convert (75.45)<sub>10</sub> to hex.</p>
+      <p>Integer: 75÷16=4 r11(B), 4÷16=0 r4 → <b>4B</b></p>
+      <p>Fraction: .45×16=7.2→7, .2×16=3.2→3 → <b>.73...</b></p>
+      <div class="formula">(75.45)₁₀ = (4B.733...)₁₆</div>
+    </div>
+
+    <div class="example">
+      <div class="ex-label">Worked Example — Any base → Decimal</div>
+      <p>Convert (1001011.01)<sub>2</sub> to decimal:</p>
+      <div class="formula">1×2⁶+0×2⁵+0×2⁴+1×2³+0×2²+1×2¹+1×2⁰+0×2⁻¹+1×2⁻² = 64+8+2+1+0.25 = 75.25</div>
+      <p>Convert (113.34)<sub>8</sub> to decimal: 1×8²+1×8¹+3×8⁰+3×8⁻¹+4×8⁻² = 64+8+3+0.375+0.0625 = <b>75.4375</b></p>
+      <p>Convert (4B.73)<sub>16</sub> to decimal: 4×16¹+11×16⁰+7×16⁻¹+3×16⁻² = 64+11+0.4375+0.0117 = <b>75.449</b></p>
+    </div>
+
+    <div class="example">
+      <div class="ex-label">Worked Example — Binary ⇄ Octal / Hex (grouping)</div>
+      <p>Convert (10110101.11110)<sub>2</sub> → Octal: group in 3s from the point: <code>010 110 101 . 111 100</code> → <b>265.74</b></p>
+      <p>Same binary → Hex: group in 4s: <code>1011 0101 . 1111 0000</code> → <b>B5.F0</b></p>
+      <p>Reverse direction works the same way — expand each octal digit to 3 bits, each hex digit to 4 bits.</p>
+    </div>
+
+    <div class="example">
+      <div class="ex-label">Worked Example — Octal ⇄ Hex (via binary bridge)</div>
+      <p>(265.74)<sub>8</sub> → binary: <code>010 110 101 . 111 100</code> → group in 4s → <code>1011 0101.1111 00</code> → Hex: <b>B5.F0</b></p>
+    </div>
+
+    <div class="note">📌 <b>Classic trick question:</b> "Find r such that (121)ᵣ = (144)₈." Convert (144)₈ to decimal first (=100), then solve 1·r² + 2·r + 1 = 100 → r² + 2r − 99 = 0 → r = 9.</div>
+  `,
+  flashcards: [
+    {q:"How do you convert a decimal integer to another base?", a:"Repeatedly divide by the target base; the remainders read from bottom (last) to top (first) give the digits, MSB first."},
+    {q:"How do you convert a decimal fraction to another base?", a:"Repeatedly multiply the fraction by the target base; take the integer part each time as the next digit, read top to bottom."},
+    {q:"How do you convert any base number to decimal?", a:"Multiply each digit by (base)^position and sum — positions count from 0 at the radix point, going negative to the right."},
+    {q:"How do you convert Binary to Octal?", a:"Group the binary digits into sets of 3 starting from the radix point (pad with zeros as needed), convert each group to its octal digit."},
+    {q:"How do you convert Binary to Hexadecimal?", a:"Group the binary digits into sets of 4 starting from the radix point, convert each group to its hex digit."},
+    {q:"How do you convert between Octal and Hexadecimal directly?", a:"There's no direct shortcut — convert through Binary as an intermediate step."},
+    {q:"(1101)₂ = ? in decimal", a:"1×8 + 1×4 + 0×2 + 1×1 = 13"},
+    {q:"What's the binary grouping size used for Hex conversion, and why?", a:"4 bits, because 2⁴=16, matching hex's base exactly (each hex digit = 4 bits)."}
+  ],
+  mcqs: [
+    {q:"Convert (1101)₂ to decimal.", opts:["11","13","14","15"], correct:1, expl:"1×8+1×4+0×2+1×1 = 8+4+0+1 = 13."},
+    {q:"To convert binary to octal, you group bits into sets of:", opts:["2","3","4","5"], correct:1, expl:"Octal is base 8 = 2³, so group binary digits in 3s."},
+    {q:"To convert binary to hexadecimal, you group bits into sets of:", opts:["2","3","4","8"], correct:2, expl:"Hex is base 16 = 2⁴, so group binary digits in 4s."},
+    {q:"When converting a decimal fraction to binary by repeated multiplication, the digits are read:", opts:["Bottom to top","Top to bottom","Left to right only on the last step","Doesn't matter"], correct:1, expl:"For fractions, the first integer obtained is the most significant digit — read top to bottom."},
+    {q:"What is the most direct way to convert Octal to Hexadecimal?", opts:["Direct digit mapping","Through decimal only","Through binary as a bridge","It's not possible"], correct:2, expl:"Convert octal → binary → hexadecimal (binary is the common bridge)."},
+    {q:"(75)₁₀ converted to binary integer part is:", opts:["1001011","1001001","1011011","1000111"], correct:0, expl:"75 = 64+8+2+1 = 1001011₂."},
+    {q:"In the conversion of decimal integers via repeated division, what determines when to stop?", opts:["When remainder is 0","When quotient becomes 0","After exactly 8 steps","Never, it's infinite"], correct:1, expl:"You stop dividing once the quotient reaches 0; the final remainder is the MSB."}
+  ]
+},
+
+// ============================================================
+// CHAPTER 3
+// ============================================================
+{
+  id: "ch3",
+  num: "03",
+  title: "Binary Codes & Alphanumeric Codes",
+  sub: "BCD, Excess-3, Gray Code, ASCII, parity",
+  time: "55 min",
+  video: {
+    title: "Neso Academy — Binary Codes",
+    sub: "Search within playlist: \"BCD Code\", \"Gray Code\", \"ASCII Character Codes\", \"Error Detecting Codes\"",
+    url: NESO_PLAYLIST
+  },
+  checklist: [
+    "Explain what a 'binary code' is (mapping of n bits to 2ⁿ values)",
+    "Convert decimal digits to 8421 BCD (weighted)",
+    "Know alternate BCD weightings exist (84-2-1, 2421)",
+    "Convert decimal/BCD to Excess-3 (BCD + 3) — self-complementing",
+    "Explain Gray Code and why it changes only 1 bit at a time",
+    "Convert Binary ⇄ Gray Code using XOR",
+    "Describe ASCII (7-bit, 128 characters) and EBCDIC, Unicode at a high level",
+    "Explain even/odd parity bits for error detection"
+  ],
+  content: `
+    <h4>What is a Binary Code?</h4>
+    <p>Given <b>n</b> bits, a binary code is a mapping from a set of represented elements to a subset of the 2ⁿ possible binary numbers. Relationship: <span class="formula" style="display:inline;padding:2px 8px;">n = log₂(M)</span> where M = number of elements to represent.</p>
+    <p class="dim"><b>Number</b> represents a quantity (process: conversion). <b>Code</b> represents information/data in a specific format for storage/communication (process: encoding). E.g., 5 (number) vs 101 in binary or 01000001 ASCII for 'A' (code).</p>
+
+    <h4>Binary Coded Decimal (BCD) — weighted</h4>
+    <p>Each decimal digit (0–9) gets its own 4-bit binary equivalent (standard weight 8-4-2-1).</p>
+    <table class="tbl">
+      <tr><th>Decimal</th><th>Binary</th><th>BCD</th></tr>
+      <tr><td>5</td><td>101</td><td>0101</td></tr>
+      <tr><td>12</td><td>1100</td><td>0001 0010</td></tr>
+      <tr><td>93</td><td>1011101</td><td>1001 0011</td></tr>
+    </table>
+    <div class="note">📌 BCD codes 1010–1111 (10–15) are <b>invalid/unused</b> — common trap in MCQs.</div>
+    <p>Other weightings exist for the same digit: <b>8421</b> (standard), <b>84-2-1</b>, <b>2421</b> — all valid BCD schemes, just different bit-weight assignments.</p>
+
+    <h4>Excess-3 Code (unweighted, self-complementing)</h4>
+    <p>Obtained by adding <b>3</b> (0011) to the 8421-BCD value of each decimal digit.</p>
+    <div class="example">
+      <div class="ex-label">Worked Example</div>
+      <p>Convert (15)<sub>10</sub> to Excess-3:</p>
+      <p>Step 1 — BCD of 15: <code>0001 0101</code></p>
+      <p>Step 2 — Add 0011 to each 4-bit group: <code>0100 1000</code></p>
+    </div>
+    <div class="note">📌 Excess-3 is <b>self-complementing</b>: the 9's complement of a digit can be obtained by simply inverting all bits (1's complement) of its Excess-3 code.</div>
+
+    <h4>Gray Code (unweighted, reflected binary)</h4>
+    <p>A binary numeral system where <b>two successive values differ in only one bit</b> ("single-bit change" / "unit-distance code"). Used for error reduction, analog data representation, low-power design.</p>
+    <table class="tbl">
+      <tr><th>Decimal</th><th>Binary</th><th>Gray</th></tr>
+      <tr><td>0</td><td>000</td><td>000</td></tr>
+      <tr><td>1</td><td>001</td><td>001</td></tr>
+      <tr><td>2</td><td>010</td><td>011</td></tr>
+      <tr><td>3</td><td>011</td><td>010</td></tr>
+      <tr><td>4</td><td>100</td><td>110</td></tr>
+      <tr><td>5</td><td>101</td><td>111</td></tr>
+      <tr><td>6</td><td>110</td><td>101</td></tr>
+      <tr><td>7</td><td>111</td><td>100</td></tr>
+    </table>
+    <p><b>Binary → Gray:</b> MSB stays same; each next gray bit = XOR of current and next binary bit (G₃=B₃, G₂=B₃⊕B₂, G₁=B₂⊕B₁, G₀=B₁⊕B₀).</p>
+    <p><b>Gray → Binary:</b> MSB stays same; each next binary bit = XOR of previous binary bit (already computed) and current gray bit.</p>
+
+    <h4>Alphanumeric Codes</h4>
+    <ul>
+      <li><b>ASCII</b> — American Standard Code for Information Interchange. 7-bit code → 128 characters: 94 printable + 34 non-printing (control) characters.</li>
+      <li><b>EBCDIC</b> — IBM's 8-bit code, used in mainframes.</li>
+      <li><b>Unicode</b> (UTF-8/UTF-16) — universal character set, 140,000+ characters, all languages + emoji.</li>
+    </ul>
+    <div class="note">
+      <b>ASCII property to memorize:</b><br>
+      Digits 0–9 → hex 30–39<br>
+      Uppercase A–Z → hex 41–5A<br>
+      Lowercase a–z → hex 61–7A<br>
+      📌 Upper↔lower case conversion happens by flipping <b>bit 6</b>.
+    </div>
+
+    <h4>Error-Detecting Codes — Parity Bit</h4>
+    <p>An extra bit appended to a code word so the total count of 1's is either even or odd — detects single-bit (and some multi-bit) errors.</p>
+    <ul>
+      <li><b>Even parity:</b> total number of 1's (including parity bit) is even.</li>
+      <li><b>Odd parity:</b> total number of 1's (including parity bit) is odd.</li>
+    </ul>
+  `,
+  flashcards: [
+    {q:"Formula relating bits (n) to number of elements represented (M)?", a:"n = log₂(M) — i.e., M = 2ⁿ"},
+    {q:"What is 8421 BCD?", a:"A weighted binary code where each decimal digit 0–9 is represented by its own 4-bit binary value using weights 8,4,2,1."},
+    {q:"Which BCD bit patterns are invalid?", a:"1010 through 1111 (decimal 10–15) — not used in BCD."},
+    {q:"How do you get the Excess-3 code of a decimal digit?", a:"Convert the digit to 8421 BCD, then add 3 (0011) to it."},
+    {q:"What does 'self-complementing' mean for Excess-3?", a:"The 9's complement of a digit equals the 1's complement (bit inversion) of its Excess-3 code."},
+    {q:"What is the defining property of Gray Code?", a:"Any two successive (adjacent) values differ in exactly one bit."},
+    {q:"How many characters does standard 7-bit ASCII represent?", a:"128 (94 printable + 34 non-printing/control characters)."},
+    {q:"How do you convert between ASCII upper and lower case letters?", a:"Flip bit 6 of the character's binary code."},
+    {q:"What is even parity?", a:"A parity scheme where an extra bit is added so the total number of 1's in the code word (including the parity bit) is even."},
+    {q:"Why is Gray Code useful in hardware design?", a:"Minimizes errors during signal transitions, used in error detection, analog data representation, and low-power design (since only 1 bit switches at a time)."}
+  ],
+  mcqs: [
+    {q:"What is the 8421 BCD representation of decimal 9?", opts:["1001","1000","1111","0111"], correct:0, expl:"9 = 1001 in standard 8-4-2-1 weighted BCD."},
+    {q:"Which of the following BCD codes is INVALID?", opts:["0101","1001","1011","0000"], correct:2, expl:"1011 (decimal 11) falls in the unused range 1010–1111."},
+    {q:"Excess-3 code is obtained by:", opts:["Subtracting 3 from BCD","Adding 3 to BCD","XOR with 3","Adding 3 to binary"], correct:1, expl:"Excess-3 = BCD value + 3 (0011), applied per decimal digit."},
+    {q:"In Gray code, two consecutive values differ by:", opts:["Exactly 1 bit","Exactly 2 bits","All bits","A variable number of bits"], correct:0, expl:"That's the defining single-bit-change property of Gray code."},
+    {q:"Standard ASCII is a:", opts:["8-bit code for 256 characters","7-bit code for 128 characters","4-bit BCD code","16-bit Unicode code"], correct:1, expl:"ASCII uses 7 bits, representing 128 characters total."},
+    {q:"To convert an ASCII uppercase letter to lowercase, you:", opts:["Add 32 in decimal (flip bit 6)","Subtract 1","Invert all bits","Add a parity bit"], correct:0, expl:"Flipping bit 6 is equivalent to adding/subtracting 32 in decimal — toggles case."},
+    {q:"A code word '10001001' is said to have ODD parity if:", opts:["The number of 1's is even","The number of 1's is odd","It has exactly one 1","Parity doesn't apply to this code"], correct:1, expl:"Odd parity requires the total count of 1-bits to be odd."},
+    {q:"Which decimal coding scheme is self-complementing?", opts:["8421 BCD","Excess-3","Gray Code","ASCII"], correct:1, expl:"Excess-3's 9's complement = its own 1's complement (bit inversion)."}
+  ]
+},
+
+// ============================================================
+// CHAPTER 4
+// ============================================================
+{
+  id: "ch4",
+  num: "04",
+  title: "Complements & Signed Binary Numbers",
+  sub: "1's/2's complement, subtraction by addition, signed representations",
+  time: "60 min",
+  video: {
+    title: "Neso Academy — Complements (Binary & Decimal)",
+    sub: "Search within playlist: \"Binary Subtraction (1's and 2's Complement Techniques)\"",
+    url: NESO_PLAYLIST
+  },
+  checklist: [
+    "Define (r−1)'s complement / diminished radix complement",
+    "Define r's complement / radix complement",
+    "Compute 1's complement of a binary number (flip all bits)",
+    "Compute 2's complement (1's complement + 1, or toggle bits left of first 1 from the right)",
+    "Subtract using r's complement method (with/without end carry)",
+    "Subtract using (r−1)'s complement method",
+    "Represent signed numbers: sign-magnitude, signed-1's-complement, signed-2's-complement",
+    "Add/subtract signed binary numbers in 2's complement form"
+  ],
+  content: `
+    <h4>Two Types of Complements (for any base r)</h4>
+    <table class="tbl">
+      <tr><th>Type</th><th>Formula</th><th>Binary name</th><th>Decimal name</th></tr>
+      <tr><td>Diminished radix</td><td>(rⁿ − 1) − N</td><td>1's complement</td><td>9's complement</td></tr>
+      <tr><td>Radix complement</td><td>rⁿ − N (= diminished + 1)</td><td>2's complement</td><td>10's complement</td></tr>
+    </table>
+    <div class="example">
+      <div class="ex-label">Worked Examples</div>
+      <p>9's complement of 546700 (6-digit): 999999 − 546700 = <b>453299</b></p>
+      <p>1's complement of 1011000 (7-bit): 1111111 − 1011000 = <b>0100111</b></p>
+      <p class="dim">Shortcut for diminished radix in binary: 1−0=1, 1−1=0 → i.e. just <b>flip every bit</b>.</p>
+    </div>
+
+    <h4>1's Complement — flip every bit</h4>
+    <div class="formula">(10110000)₂ → 1's complement → (01001111)₂</div>
+    <p class="dim">Property: a number + its 1's complement = all 1's (e.g. 10110000 + 01001111 = 11111111).</p>
+
+    <h4>2's Complement — two equivalent methods</h4>
+    <ol style="padding-left:20px; margin-bottom:10px;">
+      <li>Take 1's complement, then add 1.</li>
+      <li>Shortcut: copy bits right-to-left unchanged up to and including the first 1, then toggle all bits to its left.</li>
+    </ol>
+    <div class="example">
+      <div class="ex-label">Worked Example</div>
+      <p>Number: 10110000 → 1's comp: 01001111 → +1 → 2's comp: <b>01010000</b></p>
+    </div>
+
+    <h4>Subtraction Using Complements: M − N</h4>
+    <p>1. Add the r's complement of N (the subtrahend) to M.<br>
+    2. If there's an <b>end carry</b>, discard it — the result is positive.<br>
+    3. If there's <b>no end carry</b>, the result is negative; take the r's complement of the (non-carry) result and attach a minus sign.</p>
+
+    <div class="example">
+      <div class="ex-label">Worked Example 1.5 — 10's complement subtraction</div>
+      <p>72532 − 03250 → 10's complement of 03250 = 96750 → 72532 + 96750 = 1<u>69282</u> → discard end carry 1 → answer = <b>69282</b> (positive)</p>
+    </div>
+    <div class="example">
+      <div class="ex-label">Worked Example 1.6 — no end carry case</div>
+      <p>3250 − 72532 → 10's complement of 72532 = 27468 → 03250 + 27468 = 30718 → <b>no end carry</b> → answer = − (10's complement of 30718) = <b>−69282</b></p>
+    </div>
+    <div class="example">
+      <div class="ex-label">Worked Example 1.7 — binary, 2's complement</div>
+      <p>X = 1010100, Y = 1000011</p>
+      <p>(a) X−Y: 2's comp of Y = 0111101 → X + that = 1010100+0111101 = 1<u>0010001</u> → end carry present, discard → <b>0010001</b> (positive, = +17)</p>
+      <p>(b) Y−X: 2's comp of X = 0101100 → Y + that = 1000011+0101100=1101111 → <b>no end carry</b> → answer = −(2's comp of 1101111) = <b>−0010001</b></p>
+    </div>
+
+    <h4>1.6 Signed Binary Numbers</h4>
+    <p>To represent negative integers, the leftmost bit is reserved as a <b>sign bit</b>: <b>0 = positive</b>, <b>1 = negative</b>.</p>
+    <div class="example">
+      <div class="ex-label">Three representations of −9 (8-bit example)</div>
+      <p>Signed-magnitude: <code>10001001</code></p>
+      <p>Signed-1's-complement: <code>11110110</code></p>
+      <p>Signed-2's-complement: <code>11110111</code></p>
+    </div>
+    <div class="note">📌 Only the <b>magnitude</b> part is complemented in signed-1's/2's-complement, not literally "the whole number including sign" conceptually — but operationally you complement the entire bit pattern of the positive version.</div>
+
+    <h4>Signed Arithmetic (2's complement system)</h4>
+    <ul>
+      <li><b>Addition:</b> add the two numbers including sign bits directly. A carry out of the sign-bit position is simply <b>discarded</b>.</li>
+      <li><b>Subtraction:</b> (±A) − (+B) = (±A) + (−B); (±A) − (−B) = (±A) + (+B). I.e., take the 2's complement of the subtrahend (with its sign bit) and add.</li>
+    </ul>
+    <div class="example">
+      <div class="ex-label">Worked Example — Signed Subtraction</div>
+      <p>(−6) − (−13) = (11111010) − (11110011) = (11111010) + (00001101) = <b>00000111</b> = +7 ✓</p>
+    </div>
+  `,
+  flashcards: [
+    {q:"Formula for the (r−1)'s complement of N (n digits, base r)?", a:"(rⁿ − 1) − N"},
+    {q:"Formula for the r's complement of N?", a:"rⁿ − N (for N≠0), equals the (r−1)'s complement + 1"},
+    {q:"Quick shortcut to get the 1's complement of a binary number?", a:"Flip every bit (0→1, 1→0)."},
+    {q:"Two ways to compute the 2's complement of a binary number?", a:"(1) 1's complement then add 1. (2) Keep bits unchanged up to and including the first 1 (from the right), then flip all bits to the left of it."},
+    {q:"In subtraction by complements, what does an 'end carry' mean?", a:"The result is positive — discard the carry and keep the sum as the answer."},
+    {q:"In subtraction by complements, what does NO end carry mean?", a:"The result is negative — take the r's complement of the obtained sum and prefix a minus sign."},
+    {q:"What is the convention for the sign bit in signed binary numbers?", a:"0 = positive, 1 = negative; placed in the leftmost (MSB) position."},
+    {q:"Name the three signed binary representations.", a:"Signed-magnitude, signed-1's-complement, signed-2's-complement."},
+    {q:"When adding two signed 2's-complement numbers, what happens to a carry out of the sign bit?", a:"It is discarded."},
+    {q:"How do you perform (±A) − (−B) in 2's complement arithmetic?", a:"It becomes (±A) + (+B) — i.e. just add B directly."}
+  ],
+  mcqs: [
+    {q:"The 1's complement of (1011000)₂ is:", opts:["0100111","0100110","1011001","0011000"], correct:0, expl:"Flip every bit: 1011000 → 0100111."},
+    {q:"The 2's complement of (10110000)₂ is:", opts:["01001111","01010000","01001110","10110001"], correct:1, expl:"1's complement (01001111) + 1 = 01010000."},
+    {q:"In r's complement subtraction, if there is NO end carry, the result is:", opts:["Positive, take the sum as-is","Negative; take r's complement of the sum and negate","Always zero","An error condition"], correct:1, expl:"No end carry signals a negative result — complement the sum and attach a minus sign."},
+    {q:"In signed binary representation, which bit indicates the sign?", opts:["LSB (rightmost)","MSB (leftmost)","The middle bit","There is no dedicated sign bit"], correct:1, expl:"The leftmost (most significant) bit is reserved for sign: 0=positive, 1=negative."},
+    {q:"When adding two signed 2's-complement numbers, a carry out of the sign bit position is:", opts:["Added back to the LSB","Discarded","Always an overflow error","Used as the new sign bit"], correct:1, expl:"It is simply discarded in 2's complement signed addition."},
+    {q:"The 9's complement of 546700 (6 digits) is:", opts:["453299","453300","999999","546699"], correct:0, expl:"999999 − 546700 = 453299."},
+    {q:"(±A) − (+B) in 2's complement arithmetic is equivalent to:", opts:["(±A) + (+B)","(±A) + (−B)","(±A) − (−B)","Cannot be simplified"], correct:1, expl:"Subtracting a positive B is the same as adding its negative (2's complement)."}
+  ]
+},
+
+// ============================================================
+// CHAPTER 5
+// ============================================================
+{
+  id: "ch5",
+  num: "05",
+  title: "Binary Logic & Logic Gates",
+  sub: "AND / OR / NOT, NAND / NOR (universal), XOR / XNOR (exclusive), Buffer",
+  time: "55 min",
+  video: {
+    title: "Neso Academy — Logic Gates",
+    sub: "Search within playlist: \"Logic Gates (Part 1/2)\", \"Universal Logic Gates\", \"XOR and XNOR Gates\"",
+    url: NESO_PLAYLIST
+  },
+  checklist: [
+    "Define binary logic: variables with only 2 values (0/1), 3 basic ops (AND, OR, NOT)",
+    "Write truth tables for AND, OR, NOT",
+    "Write truth tables for NAND, NOR and explain why they're 'universal gates'",
+    "Write truth tables for XOR ('odd 1 selector') and XNOR ('even 1 selector')",
+    "Explain what a Buffer gate does (amplifies signal, same logic level)",
+    "Understand gate delay and timing diagrams conceptually",
+    "Map switch circuits (series=AND, parallel=OR) to logic gates"
+  ],
+  content: `
+    <h4>Binary Logic — the foundation</h4>
+    <p>Binary logic consists of binary variables (each only 0 or 1) and a set of logical operations. <b>3 basic operations: AND, OR, NOT.</b> Logic gates are electronic circuits that implement these operations on one or more input signals to produce one output signal.</p>
+    <p class="dim">Switching circuit intuition: a switch ON = logic 1, OFF = logic 0. Transistors act as switches — conducting current = ON, not conducting = OFF. <b>Series</b> switches behave like AND; <b>parallel</b> switches behave like OR.</p>
+
+    <h4>The 3 Basic Gates</h4>
+    <table class="tbl">
+      <tr><th>Gate</th><th>Behavior</th><th>Expression</th></tr>
+      <tr><td>AND</td><td>Output HIGH only if <b>all</b> inputs are HIGH</td><td>z = x·y = xy</td></tr>
+      <tr><td>OR</td><td>Output HIGH if <b>at least one</b> input is HIGH</td><td>z = x+y</td></tr>
+      <tr><td>NOT</td><td>Single input/output — inverts the signal</td><td>z = x' (or x̄)</td></tr>
+    </table>
+    <table class="tbl">
+      <tr><th>x</th><th>y</th><th>AND</th><th>OR</th></tr>
+      <tr><td>0</td><td>0</td><td>0</td><td>0</td></tr>
+      <tr><td>0</td><td>1</td><td>0</td><td>1</td></tr>
+      <tr><td>1</td><td>0</td><td>0</td><td>1</td></tr>
+      <tr><td>1</td><td>1</td><td>1</td><td>1</td></tr>
+    </table>
+
+    <h4>Universal Gates: NAND & NOR</h4>
+    <p><b>NAND</b> = complement of AND → output is LOW <i>only</i> when all inputs are HIGH (otherwise HIGH).<br>
+    <b>NOR</b> = complement of OR → output is HIGH <i>only</i> when all inputs are LOW (otherwise LOW).</p>
+    <div class="note">📌 <b>Why "universal"?</b> Any logic circuit (AND, OR, NOT, or any combination) can be built using <i>only</i> NAND gates, or <i>only</i> NOR gates. This is a near-guaranteed exam concept question.</div>
+
+    <h4>Exclusive Gates: XOR & XNOR</h4>
+    <p><b>XOR</b> ("odd 1 selector") → output is 1 when the number of 1-inputs is <b>odd</b>.<br>
+    <b>XNOR</b> ("even 1 selector") → output is 1 when the number of 1-inputs is <b>even</b> (XNOR = complement of XOR).</p>
+    <table class="tbl">
+      <tr><th>x</th><th>y</th><th>XOR (x⊕y)</th><th>XNOR</th></tr>
+      <tr><td>0</td><td>0</td><td>0</td><td>1</td></tr>
+      <tr><td>0</td><td>1</td><td>1</td><td>0</td></tr>
+      <tr><td>1</td><td>0</td><td>1</td><td>0</td></tr>
+      <tr><td>1</td><td>1</td><td>0</td><td>1</td></tr>
+    </table>
+
+    <h4>Buffer</h4>
+    <p>A gate with a single input/output that <b>amplifies a signal without changing its logic level</b> (output = input, just restores signal strength/timing).</p>
+
+    <h4>Gate Delay & Timing Diagrams</h4>
+    <p><b>Gate delay</b> = the length of time it takes for an input change to produce the corresponding output change (real gates aren't instantaneous). <b>Timing diagrams</b> visually plot how signals change value over time as they pass through gates — useful for visualizing delay and signal propagation.</p>
+  `,
+  flashcards: [
+    {q:"What are the 3 basic logical operations in binary logic?", a:"AND, OR, NOT."},
+    {q:"AND gate truth rule?", a:"Output is HIGH (1) only when ALL inputs are HIGH; otherwise LOW."},
+    {q:"OR gate truth rule?", a:"Output is HIGH if AT LEAST ONE input is HIGH; LOW only when all inputs are LOW."},
+    {q:"Why are NAND and NOR called 'universal gates'?", a:"Because any logic function (AND, OR, NOT or combinations) can be implemented using only NAND gates, or only NOR gates."},
+    {q:"NAND gate output rule?", a:"LOW only when all inputs are HIGH; otherwise HIGH (complement of AND)."},
+    {q:"NOR gate output rule?", a:"HIGH only when all inputs are LOW; otherwise LOW (complement of OR)."},
+    {q:"XOR gate is nicknamed the 'odd 1 selector' — why?", a:"Its output is 1 exactly when the number of 1-inputs is odd."},
+    {q:"XNOR gate is nicknamed the 'even 1 selector' — why?", a:"Its output is 1 exactly when the number of 1-inputs is even; it's the complement of XOR."},
+    {q:"What does a Buffer gate do?", a:"Amplifies/restores a signal without changing its logic level (output = input logically)."},
+    {q:"What is gate delay?", a:"The time it takes for a change at a gate's input to produce the corresponding change at its output."},
+    {q:"In switching circuit analogy, series switches behave like which gate? Parallel?", a:"Series → AND (all must be closed). Parallel → OR (any one closed suffices)."}
+  ],
+  mcqs: [
+    {q:"Which gate outputs HIGH only when ALL inputs are HIGH?", opts:["OR","AND","NOR","XOR"], correct:1, expl:"That's the defining behavior of an AND gate."},
+    {q:"NAND and NOR gates are called 'universal' because:", opts:["They consume no power","Any logic gate/circuit can be built using only NAND or only NOR gates","They are the fastest gates","They have no truth table"], correct:1, expl:"This universality is exactly why they're prized in IC design."},
+    {q:"XOR gate output is 1 when:", opts:["All inputs are 0","All inputs are 1","The number of 1-inputs is odd","The number of 1-inputs is even"], correct:2, expl:"XOR = odd-1 selector — outputs 1 only for an odd count of 1-inputs."},
+    {q:"XNOR is the complement of:", opts:["AND","OR","XOR","NAND"], correct:2, expl:"XNOR directly inverts XOR's output."},
+    {q:"A Buffer gate's main function is to:", opts:["Invert the input","Amplify the signal without changing logic level","Combine two inputs","Detect parity"], correct:1, expl:"A buffer restores/strengthens a signal but keeps the same logical value."},
+    {q:"Gate delay refers to:", opts:["Power consumed by a gate","Time between input change and corresponding output change","The number of inputs a gate can have","A type of logic error"], correct:1, expl:"It's the propagation delay through real (non-ideal) gates."},
+    {q:"For a 2-input NOR gate, output is HIGH only when:", opts:["Both inputs are 1","Both inputs are 0","Inputs differ","At least one input is 1"], correct:1, expl:"NOR = complement of OR, so HIGH only when both inputs are LOW (0)."}
+  ]
+},
+
+// ============================================================
+// CHAPTER 6
+// ============================================================
+{
+  id: "ch6",
+  num: "06",
+  title: "Boolean Algebra & Postulates",
+  sub: "Huntington's postulates, theorems, De Morgan's Law, duality",
+  time: "70 min",
+  video: {
+    title: "Neso Academy — Boolean Algebra",
+    sub: "Search within playlist: \"Introduction to Boolean Algebra (Part 1/2)\", \"Boolean Algebra Examples\"",
+    url: NESO_PLAYLIST
+  },
+  checklist: [
+    "Define a postulate/axiom vs a theorem",
+    "State Closure, Associative, Commutative, Distributive laws",
+    "State Identity and Inverse postulates",
+    "List Huntington's 6 postulates for Boolean algebra",
+    "Explain 3 key differences: Boolean algebra vs ordinary algebra",
+    "Memorize the full postulates/theorems table (Identity, Idempotent, Complement, Commutative, Associative, Distributive)",
+    "State De Morgan's Law (both forms) and prove with truth table",
+    "Explain the Duality Rule and apply it to an expression",
+    "Know operator precedence: Parentheses > NOT > AND > OR",
+    "Simplify Boolean expressions using algebraic manipulation (practice set)"
+  ],
+  content: `
+    <h4>What is a Postulate?</h4>
+    <p>A <b>postulate (axiom)</b> is a basic, foundational assumption accepted as true without proof — a starting point for further reasoning. A <b>theorem</b> is then derived/proven from postulates.</p>
+
+    <h4>General Algebraic Postulates (apply broadly)</h4>
+    <ol style="padding-left:20px;">
+      <li><b>Closure:</b> performing the operation on members of a set always yields a result still in that set.</li>
+      <li><b>Associative:</b> (x#y)#z = x#(y#z)</li>
+      <li><b>Commutative:</b> x#y = y#x</li>
+      <li><b>Distributive:</b> x#(y$z) = (x#y)$(x#z)</li>
+      <li><b>Identity:</b> x#e = e#x = x (e = identity element)</li>
+      <li><b>Inverse:</b> x#y = e (y is the inverse of x)</li>
+    </ol>
+
+    <h4>Huntington's Postulates (1904) — formal Boolean algebra</h4>
+    <p>Boolean algebra = a set B with two binary operators (+) and (·), satisfying:</p>
+    <ol style="padding-left:20px;">
+      <li>Closure w.r.t. + and ·</li>
+      <li>Identity element 0 for +, identity element 1 for ·</li>
+      <li>Commutative for + and for ·</li>
+      <li>Distributive: · over +, AND + over · <span class="dim">(this second one is the special part — doesn't hold in ordinary algebra!)</span></li>
+      <li>For every x ∈ B, ∃ complement x' such that x+x'=1 and x·x'=0</li>
+      <li>∃ at least two elements x,y ∈ B such that x≠y (i.e., B has ≥2 elements: {0,1})</li>
+    </ol>
+
+    <h4>Boolean Algebra vs Ordinary Algebra</h4>
+    <ul>
+      <li>Huntington's postulates don't explicitly mention <b>associative law</b>, but it still holds.</li>
+      <li><b>Distributive law of + over ·</b> [x+(y·z)=(x+y)·(x+z)] is valid <i>only</i> in Boolean algebra, not ordinary algebra.</li>
+      <li>No additive/multiplicative inverse, no division or multiplication (in the ordinary sense) in Boolean algebra.</li>
+      <li><b>Complement</b> only exists in Boolean algebra.</li>
+      <li>Boolean: x ∈ B = {0,1}. Ordinary: x ∈ ℝ.</li>
+    </ul>
+
+    <h4>📋 The Master Postulates/Theorems Table — MEMORIZE THIS</h4>
+    <table class="tbl">
+      <tr><th>Law</th><th>OR form</th><th>AND form</th></tr>
+      <tr><td>Identity</td><td>A + 0 = A</td><td>A · 1 = A</td></tr>
+      <tr><td></td><td>A + 1 = 1</td><td>A · 0 = 0</td></tr>
+      <tr><td>Idempotent</td><td>A + A = A</td><td>A · A = A</td></tr>
+      <tr><td>Complement</td><td>A + A' = 1</td><td>A · A' = 0</td></tr>
+      <tr><td>Commutative</td><td>A + B = B + A</td><td>A · B = B · A</td></tr>
+      <tr><td>Associative</td><td>A+(B+C)=(A+B)+C</td><td>A·(B·C)=(A·B)·C</td></tr>
+      <tr><td>Distributive</td><td>A+B·C=(A+B)·(A+C)</td><td>A·(B+C)=A·B+A·C</td></tr>
+      <tr><td>Double Negation</td><td colspan="2">(A')' = A</td></tr>
+      <tr><td>Absorption</td><td>A + AB = A</td><td>A·(A+B) = A</td></tr>
+      <tr><td>De Morgan's</td><td>(A+B)' = A'·B'</td><td>(A·B)' = A'+B'</td></tr>
+    </table>
+
+    <h4>De Morgan's Law (deep dive)</h4>
+    <p><b>The complement of a sum is the product of the complements:</b> (x+y)' = x'·y'</p>
+    <p><b>The complement of a product is the sum of the complements:</b> (xy)' = x'+y'</p>
+    <div class="example">
+      <div class="ex-label">Truth Table Proof of De Morgan's</div>
+      <table class="tbl">
+        <tr><th>A</th><th>B</th><th>A+B</th><th>(A+B)'</th><th>A'</th><th>B'</th><th>A'B'</th></tr>
+        <tr><td>0</td><td>0</td><td>0</td><td>1</td><td>1</td><td>1</td><td>1</td></tr>
+        <tr><td>0</td><td>1</td><td>1</td><td>0</td><td>1</td><td>0</td><td>0</td></tr>
+        <tr><td>1</td><td>0</td><td>1</td><td>0</td><td>0</td><td>1</td><td>0</td></tr>
+        <tr><td>1</td><td>1</td><td>1</td><td>0</td><td>0</td><td>0</td><td>0</td></tr>
+      </table>
+      <p>(A+B)' matches A'B' column exactly → proven.</p>
+    </div>
+
+    <h4>Duality Rule</h4>
+    <p>Every algebraic expression deducible from Boolean postulates remains valid if you <b>interchange + ↔ ·</b> and <b>interchange 0 ↔ 1</b> throughout (operators and identity elements swap).</p>
+
+    <h4>Operator Precedence</h4>
+    <div class="formula">Parentheses → NOT → AND → OR</div>
+
+    <h4>Algebraic Manipulation — Practice Set</h4>
+    <table class="tbl">
+      <tr><th>#</th><th>Expression</th><th>Simplifies to</th></tr>
+      <tr><td>1</td><td>X + XY</td><td>X (Absorption)</td></tr>
+      <tr><td>2</td><td>XY + XY'</td><td>X</td></tr>
+      <tr><td>3</td><td>X + X'Y</td><td>X + Y</td></tr>
+      <tr><td>4</td><td>X(X+Y)</td><td>X</td></tr>
+      <tr><td>5</td><td>(X+Y)(X+Y')</td><td>X</td></tr>
+      <tr><td>6</td><td>X'(X+Y)</td><td>X'Y</td></tr>
+    </table>
+    <div class="note">📌 <b>Term</b> = represented by a gate with inputs; <b>literal</b> = each variable (primed or unprimed) inside a term. "3 terms, 8 literals" type counting questions are common.</div>
+
+    <h4>Complement of a Boolean Function — 2 methods</h4>
+    <ol style="padding-left:20px;">
+      <li>Apply De Morgan's Law repeatedly.</li>
+      <li>Take the dual of the function AND complement each individual literal.</li>
+    </ol>
+  `,
+  flashcards: [
+    {q:"Difference between a postulate and a theorem?", a:"A postulate (axiom) is assumed true without proof; a theorem is derived/proven from postulates."},
+    {q:"State De Morgan's Law (both forms).", a:"(x+y)' = x'·y' (complement of a sum = product of complements). (xy)' = x'+y' (complement of a product = sum of complements)."},
+    {q:"What is the Duality Rule?", a:"Any valid Boolean expression remains valid if you swap + ↔ · and 0 ↔ 1 throughout."},
+    {q:"State the Absorption Law (both forms).", a:"A + AB = A, and A·(A+B) = A."},
+    {q:"State the Complement Law.", a:"A + A' = 1, and A·A' = 0."},
+    {q:"State the Idempotent Law.", a:"A + A = A, and A·A = A."},
+    {q:"Which distributive law is valid ONLY in Boolean algebra, not ordinary algebra?", a:"A + (B·C) = (A+B)·(A+C) — distributing OR over AND."},
+    {q:"What is Boolean algebra's operator precedence order?", a:"Parentheses, then NOT, then AND, then OR."},
+    {q:"What is a 'literal' in a Boolean term?", a:"A single variable appearing in primed or unprimed form within a term."},
+    {q:"Two methods to find the complement of a Boolean function?", a:"(1) Apply De Morgan's Law. (2) Take the dual and complement each literal."},
+    {q:"Simplify: X + XY", a:"X (by the Absorption Law)."},
+    {q:"How many elements does Huntington's postulate 6 guarantee exist in B?", a:"At least two distinct elements (giving us {0,1})."}
+  ],
+  mcqs: [
+    {q:"De Morgan's Law states that (A+B)' equals:", opts:["A'+B'","A'·B'","AB","A+B"], correct:1, expl:"The complement of a sum is the product of the complements: A'·B'."},
+    {q:"Simplify: A + AB", opts:["A","B","AB","A+B"], correct:0, expl:"Absorption Law: A + AB = A."},
+    {q:"The Complement Law states A · A' equals:", opts:["1","0","A","A'"], correct:1, expl:"A and its complement ANDed together always give 0."},
+    {q:"Which law allows swapping + with · and 0 with 1 in a valid Boolean expression?", opts:["Absorption","Idempotent","Duality","Distributive"], correct:2, expl:"The Duality Rule lets you derive a dual valid expression this way."},
+    {q:"Correct operator precedence in Boolean algebra (highest to lowest)?", opts:["OR, AND, NOT, Parentheses","Parentheses, NOT, AND, OR","NOT, OR, AND, Parentheses","AND, OR, NOT, Parentheses"], correct:1, expl:"Parentheses first, then NOT, then AND, then OR."},
+    {q:"Which distributive form is valid in Boolean algebra but NOT in ordinary algebra?", opts:["A·(B+C) = AB+AC","A+(B·C) = (A+B)·(A+C)","A+B = B+A","A·B = B·A"], correct:1, expl:"OR distributing over AND has no ordinary-algebra equivalent."},
+    {q:"How many distinct elements must exist in B per Huntington's postulates?", opts:["1","2","4","Infinite"], correct:1, expl:"At least two — giving the set {0, 1}."},
+    {q:"Simplify the expression X(X+Y):", opts:["X","Y","XY","X+Y"], correct:0, expl:"This is the AND-form absorption law: X(X+Y) = X."}
+  ]
+},
+
+// ============================================================
+// CHAPTER 7
+// ============================================================
+{
+  id: "ch7",
+  num: "07",
+  title: "Canonical & Standard Forms",
+  sub: "Minterms, Maxterms, Sum of Products (SOP), Product of Sums (POS)",
+  time: "55 min",
+  video: {
+    title: "Neso Academy — SOP & POS Forms",
+    sub: "Search within playlist: \"Sum of Products (Part 1/2) | SOP Form\", \"Product of Sums (Part 1/2) | POS Form\"",
+    url: NESO_PLAYLIST
+  },
+  checklist: [
+    "Define Minterm (ANDed/product term, all variables present) and its symbol mⱼ",
+    "Define Maxterm (ORed/sum term, all variables present) and its symbol Mⱼ",
+    "Apply the priority rules: minterm 0→complement,1→original; maxterm 1→complement,0→original",
+    "Build SOP from a truth table (sum of minterms where F=1)",
+    "Build POS from a truth table (product of maxterms where F=0)",
+    "Find the complement of a function via minterms/maxterms swap",
+    "Convert between Canonical SOP and Canonical POS forms",
+    "Distinguish Canonical Form vs Standard Form",
+    "Identify two-level implementation: SOP→AND-then-OR, POS→OR-then-AND",
+    "Convert a Non-Standard Form expression to Standard Form (distributive law)"
+  ],
+  content: `
+    <h4>Minterms — "ANDed term containing ALL variables"</h4>
+    <p>A <b>minterm</b> (Standard Product) is a product term that contains every variable of the function, each in either original or complemented form. n variables → <b>2ⁿ minterms</b> (numbered 0 to 2ⁿ−1). Symbol: <b>mⱼ</b>.</p>
+    <div class="note">📌 <b>1-priority rule:</b> in the variable combination, 0 → write the variable complemented; 1 → write it in original form.</div>
+    <table class="tbl">
+      <tr><th>x</th><th>y</th><th>z</th><th>Minterm term</th><th>Designation</th></tr>
+      <tr><td>0</td><td>0</td><td>0</td><td>x'y'z'</td><td>m₀</td></tr>
+      <tr><td>0</td><td>0</td><td>1</td><td>x'y'z</td><td>m₁</td></tr>
+      <tr><td>0</td><td>1</td><td>0</td><td>x'yz'</td><td>m₂</td></tr>
+      <tr><td>0</td><td>1</td><td>1</td><td>x'yz</td><td>m₃</td></tr>
+      <tr><td>1</td><td>0</td><td>0</td><td>xy'z'</td><td>m₄</td></tr>
+      <tr><td>1</td><td>0</td><td>1</td><td>xy'z</td><td>m₅</td></tr>
+      <tr><td>1</td><td>1</td><td>0</td><td>xyz'</td><td>m₆</td></tr>
+      <tr><td>1</td><td>1</td><td>1</td><td>xyz</td><td>m₇</td></tr>
+    </table>
+
+    <h4>Maxterms — "ORed term containing ALL variables"</h4>
+    <p>A <b>maxterm</b> (Standard Sum) is a sum term that contains every variable, each in original or complemented form. n variables → <b>2ⁿ maxterms</b>. Symbol: <b>Mⱼ</b>.</p>
+    <div class="note">📌 <b>0-priority rule (opposite of minterm!):</b> 1 → write the variable complemented; 0 → write it in original form.</div>
+    <p class="dim">Key relation: each maxterm is the complement of its corresponding minterm (same index), e.g. M₅ = (m₅)'.</p>
+
+    <h4>Building SOP / POS from a Truth Table</h4>
+    <table class="tbl">
+      <tr><th>Form</th><th>Rule</th></tr>
+      <tr><td><b>SOP</b> (Sum of Minterms)</td><td>Take every row where F = 1, write its minterm, OR them all together.</td></tr>
+      <tr><td><b>POS</b> (Product of Maxterms)</td><td>Take every row where F = 0, write its maxterm, AND them all together.</td></tr>
+    </table>
+    <div class="note">Notation: F = Σm(list of indices) for SOP, F = ΠM(list of indices) for POS.</div>
+
+    <h4>Complement of a Boolean Function (via minterms/maxterms)</h4>
+    <p>Take the minterms where F=0 and OR them (gives F'), <i>or</i> take the maxterms where F=1 and AND them. In short: <b>F's minterm-list and F's complement's minterm-list are complementary sets</b> (together cover all 2ⁿ indices).</p>
+
+    <h4>Canonical Form</h4>
+    <p>A Boolean expression is <b>canonical</b> when <i>every</i> term contains all the variables (complemented or not). Two canonical forms: <b>Sum of Minterms (SOP)</b> and <b>Product of Maxterms (POS)</b>.</p>
+    <p>If an expression isn't canonical, expand it: for any term missing a variable x, AND/OR it with (x + x') [for SOP] or (x · x') [for POS] to reintroduce the missing variable, then distribute.</p>
+
+    <h4>Standard Form vs Canonical Form</h4>
+    <table class="tbl">
+      <tr><th></th><th>Canonical</th><th>Standard</th></tr>
+      <tr><td>Variables per term</td><td>ALL variables required in every term</td><td>Any number of literals (1, 2, 3...) allowed</td></tr>
+      <tr><td>Source</td><td>Directly from truth table</td><td>Simplified/grouped version</td></tr>
+    </table>
+    <p><b>Standard SOP:</b> ANDed terms (products) finally ORed together → implemented as a layer of AND gates feeding into one OR gate ("two-level implementation").</p>
+    <p><b>Standard POS:</b> ORed terms (sums) finally ANDed together → a layer of OR gates feeding into one AND gate (also two-level).</p>
+
+    <h4>Non-Standard Form → Standard Form</h4>
+    <p>If an expression is neither pure SOP nor pure POS, apply the <b>distributive law</b> to convert it into standard form.</p>
+  `,
+  flashcards: [
+    {q:"What is a minterm?", a:"A product (ANDed) term containing all the function's variables, each in either original or complemented form."},
+    {q:"What is a maxterm?", a:"A sum (ORed) term containing all the function's variables, each in either original or complemented form."},
+    {q:"Minterm priority rule for writing variables?", a:"0 → complemented form, 1 → original form."},
+    {q:"Maxterm priority rule for writing variables?", a:"1 → complemented form, 0 → original form (opposite of minterm rule)."},
+    {q:"How many minterms exist for n variables?", a:"2ⁿ minterms (indexed 0 to 2ⁿ−1)."},
+    {q:"How do you build the SOP expression directly from a truth table?", a:"OR together the minterms of every row where the output F = 1."},
+    {q:"How do you build the POS expression directly from a truth table?", a:"AND together the maxterms of every row where the output F = 0."},
+    {q:"Relationship between a minterm and its corresponding maxterm of the same index?", a:"They are complements of each other (Mⱼ = (mⱼ)')."},
+    {q:"What makes an expression 'canonical'?", a:"Every single term in it contains all the variables of the function (complemented or not)."},
+    {q:"Difference between Canonical SOP and Standard SOP?", a:"Canonical SOP requires every term to have ALL variables (sum of minterms); Standard SOP just needs AND-terms ORed together, any number of literals per term."},
+    {q:"What's the two-level implementation structure of an SOP expression?", a:"A layer of AND gates (one per product term) feeding into a single OR gate."},
+    {q:"How do you convert a non-standard expression into standard form?", a:"Apply the distributive law to expand it into pure AND-then-OR (SOP) or OR-then-AND (POS) structure."}
+  ],
+  mcqs: [
+    {q:"A minterm for variables x, y, z where x=1, y=0, z=1 is written as:", opts:["x'yz'","xy'z","x'y'z","xyz"], correct:1, expl:"1→original, 0→complement: x=1→x, y=0→y', z=1→z → xy'z."},
+    {q:"A maxterm for x=1, y=0, z=1 is written as:", opts:["x+y'+z","x'+y+z'","x'+y+z","x+y+z"], correct:1, expl:"Maxterm rule is opposite: 1→complement, 0→original: x=1→x', y=0→y, z=1→z' → x'+y+z'."},
+    {q:"For n=4 variables, how many minterms exist?", opts:["8","16","4","32"], correct:1, expl:"2⁴ = 16 minterms."},
+    {q:"To build the SOP expression from a truth table, you:", opts:["OR the minterms where F=1","AND the maxterms where F=1","OR the minterms where F=0","AND the minterms where F=1"], correct:0, expl:"SOP = sum (OR) of minterms corresponding to F=1 rows."},
+    {q:"Maxterm M₃ and minterm m₃ (same index) are related by:", opts:["They are identical","M₃ = (m₃)'","M₃ = m₃ + 1","No relationship"], correct:1, expl:"Each maxterm is the complement of its same-indexed minterm."},
+    {q:"A Boolean expression is in 'canonical form' when:", opts:["It has the fewest literals possible","Every term contains all the function's variables","It uses only NAND gates","It has exactly 2 terms"], correct:1, expl:"Canonical form requires every single term to include all variables."},
+    {q:"Standard SOP form is implemented in hardware as:", opts:["A single NOT gate","AND gates feeding into one OR gate","OR gates feeding into one AND gate","A chain of XOR gates"], correct:1, expl:"This is the classic two-level AND-OR implementation of SOP."}
+  ]
+},
+
+// ============================================================
+// CHAPTER 8
+// ============================================================
+{
+  id: "ch8",
+  num: "08",
+  title: "Karnaugh Maps & Quine-McCluskey",
+  sub: "Visual & tabular simplification of Boolean functions",
+  time: "85 min",
+  video: {
+    title: "Neso Academy — Karnaugh Maps (K-Map)",
+    sub: "Search within playlist: \"K-Map (2-variable / 3-variable / 4-variable)\", \"Don't Care Conditions\"",
+    url: NESO_PLAYLIST
+  },
+  checklist: [
+    "Explain what a K-map is (pictorial form of a truth table)",
+    "Draw a 2-variable K-map (4 squares)",
+    "Draw a 3-variable K-map (8 squares, Gray-code ordered columns)",
+    "Draw a 4-variable K-map (16 squares, Gray-code rows AND columns)",
+    "Understand map 'wrap-around' adjacency (top-bottom, left-right edges connect)",
+    "Define Implicant, Prime Implicant, Essential Prime Implicant",
+    "Group cells in powers of 2 (1,2,4,8...) to simplify",
+    "Handle Don't Care (X) conditions correctly",
+    "List the Quine-McCluskey method steps (tabular method)",
+    "Know when to prefer Quine-McCluskey over K-maps (4-6+ variables, programmable)"
+  ],
+  content: `
+    <h4>What is a Karnaugh Map?</h4>
+    <p>A <b>K-map</b> is a visual/pictorial method to simplify Boolean expressions — essentially a rearranged truth table where each square represents one minterm, arranged so <b>adjacent squares differ by exactly one variable</b> (this is why row/column headers follow <b>Gray code</b> order, not binary order).</p>
+    <div class="note">📌 We no longer draw full truth tables for K-map problems — we go straight from minterm/maxterm list to map.</div>
+
+    <h4>2-Variable K-Map (4 squares)</h4>
+    <p>Two variables → 4 minterms (m₀–m₃). Mark a square with 1 if that minterm is present (asserts the function).</p>
+
+    <h4>3-Variable K-Map (8 squares)</h4>
+    <p>Arranged with one variable on rows, two on columns (Gray code: 00, 01, 11, 10). <b>Adjacent squares</b> (even non-touching ones at the map edges — like a "world map" wrap-around) differ by only 1 bit and can be combined.</p>
+    <div class="example">
+      <div class="ex-label">Worked Example</div>
+      <p>m₅ + m₇ = xy'z + xyz = xz(y+y') = <b>xz</b> — combining 2 adjacent minterms removes the dissimilar variable (y here).</p>
+      <p class="dim">m₀ and m₂ are also adjacent (wrap-around) even though they don't visually touch in a flat grid — think of the K-map surface as a torus.</p>
+    </div>
+
+    <h4>4-Variable K-Map (16 squares)</h4>
+    <p>4 variables → 16 minterms. Both rows AND columns are numbered in Gray code (00,01,11,10). The map's top/bottom edges and left/right edges are considered <b>adjacent</b> (connected, like a folded/wrapped surface).</p>
+    <p class="dim">Rule of adjacency: any two adjacent squares (including wrap-around) differ by exactly 1 bit/variable.</p>
+
+    <h4>Key Definitions</h4>
+    <table class="tbl">
+      <tr><th>Term</th><th>Meaning</th></tr>
+      <tr><td><b>Implicant</b></td><td>A group of adjacent squares (size 2ⁿ: 1,2,4,8...) representing true (1) minterms.</td></tr>
+      <tr><td><b>Prime Implicant</b></td><td>A product term formed by combining the <i>maximum possible</i> number of adjacent squares — can't be grown any bigger.</td></tr>
+      <tr><td><b>Essential Prime Implicant</b></td><td>A prime implicant that covers at least one minterm not covered by any other prime implicant — <i>must</i> be included in the final simplified expression.</td></tr>
+    </table>
+
+    <h4>Simplification Process</h4>
+    <ol style="padding-left:20px;">
+      <li>Plot all 1's (and X's for don't-cares) on the map.</li>
+      <li>Group adjacent 1's into the largest possible groups, sized in powers of 2.</li>
+      <li>Identify essential prime implicants first — they MUST appear in the answer.</li>
+      <li>Cover any remaining uncovered minterms with the fewest additional prime implicants.</li>
+      <li>OR all selected terms together for the final simplified SOP expression.</li>
+    </ol>
+
+    <h4>Don't Care Conditions (X)</h4>
+    <p>A <b>don't care</b> minterm is one whose output value (0 or 1) is unspecified by the problem — marked <b>X</b> in the K-map (distinct from both 0 and 1).</p>
+    <div class="note">📌 <b>Trick:</b> to simplify, you <i>must</i> include all actual 1's, but you may freely include or exclude any X depending on which choice gives the simplest (largest) grouping. Don't-cares are just a tool — once you "use" one as a 1 for a particular grouping, treat it as such only for that grouping.</div>
+
+    <h4>K-Map Solver Tools (mentioned in slides)</h4>
+    <p class="dim">The deck references online K-map solver tools (e.g. GeeksforGeeks, UMD resources) for practice/verification — useful for checking your manual work before the exam.</p>
+
+    <h4>Quine-McCluskey Method (Tabular Simplification)</h4>
+    <p>A <b>tabular</b>, algorithmic method for simplifying Boolean functions — preferred for manual simplification of <b>4–6 variables</b> and is programmable for more (ideal for computer implementation, unlike K-maps which get visually unwieldy beyond 4-5 variables).</p>
+    <div class="note">
+      <b>Quine-McCluskey Steps:</b>
+      <ol style="padding-left:20px; margin-top:6px;">
+        <li>List all minterms of the function in binary form.</li>
+        <li>Group minterms by the <b>number of 1's</b> in their binary representation.</li>
+        <li>Combine terms differing by exactly <b>one bit</b> (replace the differing bit with a dash '–').</li>
+        <li>Repeat combining until no further combinations are possible.</li>
+        <li>Identify Prime Implicants and build a <b>Prime Implicant Chart</b>.</li>
+        <li>Select <b>essential prime implicants</b> to cover all minterms → simplified function.</li>
+      </ol>
+    </div>
+  `,
+  flashcards: [
+    {q:"What is a K-map, conceptually?", a:"A pictorial/visual rearrangement of a truth table, where each square is a minterm, arranged so adjacent squares differ by exactly one variable."},
+    {q:"Why are K-map row/column headers ordered in Gray code, not binary?", a:"So that any two physically adjacent squares differ by only one bit — required for valid grouping/simplification."},
+    {q:"Define 'Prime Implicant'.", a:"A product term made by combining the maximum possible number of adjacent 1-squares — cannot be enlarged further."},
+    {q:"Define 'Essential Prime Implicant'.", a:"A prime implicant that covers at least one minterm no other prime implicant covers — must be in the final answer."},
+    {q:"What sizes can K-map groupings be?", a:"Powers of 2 only: 1, 2, 4, 8, 16... cells."},
+    {q:"What does a Don't Care (X) condition mean in a K-map?", a:"The function's output for that input combination is unspecified — you may treat it as 0 or 1, whichever simplifies the expression more."},
+    {q:"Rule for using Don't Cares when simplifying?", a:"You must cover all actual 1's, but include X's only if doing so produces a simpler/larger grouping."},
+    {q:"For how many variables is the Quine-McCluskey method best suited for manual work?", a:"4–6 variables (and it's programmable/algorithmic for more)."},
+    {q:"First step of the Quine-McCluskey method?", a:"List all minterms of the function in binary form."},
+    {q:"In Quine-McCluskey, how are minterms combined?", a:"Terms differing by exactly one bit are combined, replacing the differing bit with a dash (–)."},
+    {q:"What is the final QM step before getting the simplified function?", a:"Build a Prime Implicant Chart and select essential prime implicants to cover all minterms."},
+    {q:"What makes corner/edge squares of a K-map 'adjacent' even though they don't touch visually?", a:"The K-map wraps around (like a torus) — top-bottom and left-right edges are considered connected."}
+  ],
+  mcqs: [
+    {q:"In a K-map, row and column headers are ordered using:", opts:["Binary code","Gray code","ASCII code","Excess-3 code"], correct:1, expl:"Gray code ensures adjacent cells differ by only 1 bit, which is essential for valid groupings."},
+    {q:"A Prime Implicant is defined as:", opts:["Any group of 1's","The largest possible grouping of adjacent 1's that can't be expanded further","A group containing exactly 2 cells","A minterm with all variables complemented"], correct:1, expl:"It's the maximal valid grouping — can't grow any bigger while staying a valid power-of-2 rectangle of 1's."},
+    {q:"An Essential Prime Implicant is one that:", opts:["Covers zero minterms","Covers at least one minterm not covered by any other prime implicant","Is always the smallest group","Only applies to don't-care conditions"], correct:1, expl:"This uniqueness is why it MUST be included in the simplified expression."},
+    {q:"K-map groupings must always be sized in:", opts:["Any number","Multiples of 3","Powers of 2 (1,2,4,8...)","Prime numbers"], correct:2, expl:"Valid groupings are always 1, 2, 4, 8, 16... cells."},
+    {q:"A Don't Care condition in a K-map is marked with:", opts:["0","1","X","−"], correct:2, expl:"X distinguishes a don't-care from a defined 0 or 1."},
+    {q:"The Quine-McCluskey method is especially preferred over K-maps when:", opts:["There are only 2 variables","There are 4–6+ variables (better for programmatic/algorithmic use)","There are no don't cares","The function has only one minterm"], correct:1, expl:"K-maps become visually unmanageable beyond ~4-5 variables; QM scales and is computer-friendly."},
+    {q:"In the Quine-McCluskey method, minterms are grouped initially by:", opts:["Their decimal value","The number of 1's in their binary form","Alphabetical order","Random order"], correct:1, expl:"Grouping by number of 1's lets you efficiently find adjacent (1-bit-different) pairs to combine."},
+    {q:"When combining two terms in Quine-McCluskey that differ in one bit, that bit is replaced with:", opts:["0","1","X","A dash (–)"], correct:3, expl:"A dash indicates that variable has been eliminated from that combined term."}
+  ]
+},
+
+// ============================================================
+// CHAPTER 9
+// ============================================================
+{
+  id: "ch9",
+  num: "09",
+  title: "Combinational Logic Circuits",
+  sub: "Analysis & design procedures — from circuit to function and back",
+  time: "55 min",
+  video: {
+    title: "Neso Academy — Combinational Circuits",
+    sub: "Search within playlist: \"Combinational Circuits\", \"Code Converters\"",
+    url: NESO_PLAYLIST
+  },
+  checklist: [
+    "Distinguish Combinational Circuit vs Sequential Circuit",
+    "Describe the block diagram model (n inputs, m outputs, 2ⁿ combinations)",
+    "Follow the Analysis Procedure to derive a Boolean function from a circuit",
+    "Follow the Analysis Procedure to derive a truth table from a circuit",
+    "Follow the 4-step Design Procedure (inputs/outputs → truth table → simplify → draw circuit)",
+    "List the 5 practical design considerations (gate count, inputs/gate, propagation delay, interconnections, fan-out)",
+    "Walk through the BCD-to-Excess-3 code converter design example"
+  ],
+  content: `
+    <h4>Combinational vs Sequential Logic Circuit</h4>
+    <table class="tbl">
+      <tr><th></th><th>Combinational</th><th>Sequential</th></tr>
+      <tr><td>Output depends on</td><td>Only the <b>current</b> input combination</td><td>Current input <b>+</b> the state of memory elements</td></tr>
+      <tr><td>Memory?</td><td>No memory / feedback path</td><td>Has feedback path / memory elements</td></tr>
+    </table>
+    <div class="note">📌 A <b>feedback path</b> is a connection from a gate's output back to a previous gate's input. Its presence is what makes a circuit sequential rather than combinational.</div>
+
+    <h4>Block Diagram Model</h4>
+    <p>A combinational circuit with <b>n</b> input variables and <b>m</b> output variables has <b>2ⁿ</b> possible input combinations. For each combination, every output has exactly one defined value. The circuit can be fully specified either by a <b>truth table</b> or by a set of <b>Boolean functions</b> (one per output).</p>
+
+    <h4>Analysis Procedure: Circuit → Boolean Function</h4>
+    <ol style="padding-left:20px;">
+      <li>Confirm the circuit is combinational (no feedback/memory).</li>
+      <li>Label every gate output that's a direct function of input variables; determine its function.</li>
+      <li>Label intermediate gate outputs that depend on inputs or already-labeled gate outputs; determine those too.</li>
+      <li>Repeat step 3 until you reach the final circuit output.</li>
+      <li>Back-substitute intermediate functions to express the final output purely in terms of input variables.</li>
+    </ol>
+
+    <h4>Analysis Procedure: Circuit → Truth Table</h4>
+    <ol style="padding-left:20px;">
+      <li>Confirm combinational circuit.</li>
+      <li>Determine number of inputs n; list all 2ⁿ input combinations (0 to 2ⁿ−1 in binary).</li>
+      <li>Label and compute intermediate gate outputs as functions of inputs / previous labels.</li>
+      <li>Proceed gate-by-gate until the final output columns are filled in.</li>
+      <li>(Alternative: if you already have the derived Boolean function, just plug in each input combination directly.)</li>
+    </ol>
+
+    <h4>Design Procedure (problem statement → circuit)</h4>
+    <ol style="padding-left:20px;">
+      <li><b>Determine</b> the required number of inputs/outputs; assign symbols to each.</li>
+      <li><b>Derive the truth table</b> from the specification — 2ⁿ input rows; output values from the spec; note any don't-care conditions.</li>
+      <li><b>Obtain simplified Boolean functions</b> for each output (using K-map, Quine-McCluskey, or algebraic manipulation).</li>
+      <li><b>Draw the logic diagram</b> and verify correctness.</li>
+    </ol>
+
+    <h4>Practical Design Considerations</h4>
+    <ul>
+      <li>Minimum number of gates</li>
+      <li>Minimum number of inputs per gate</li>
+      <li>Minimum propagation time/delay through the circuit</li>
+      <li>Minimum number of interconnections</li>
+      <li>Driving capability limits of each gate (fan-out — how many gates an output can feed)</li>
+    </ul>
+    <p class="dim">No single "correct" answer exists — different applications prioritize different constraints. Most designs start from simplified standard-form (SOP/POS) and refine from there.</p>
+
+    <h4>Worked Design Example: BCD → Excess-3 Code Converter</h4>
+    <p>A practical illustration: converting digital systems often need to exchange data using different binary codes, so a <b>code converter</b> circuit is required. Here, Code A = BCD, Code B = Excess-3, for decimal digits 0–9.</p>
+    <p>Process: build a 4-input/4-output truth table (with don't-cares for unused BCD combinations 10–15) → derive K-maps for each of the 4 output bits → extract simplified SOP expressions → draw the two-level (or multi-level, if gate-sharing across outputs is exploited) logic diagram.</p>
+    <div class="note">📌 With multi-output systems like this, expressions can sometimes be manipulated algebraically to share common gates across outputs — this may require 3+ levels of gates instead of a strict two-level implementation.</div>
+  `,
+  flashcards: [
+    {q:"What distinguishes a combinational circuit from a sequential circuit?", a:"A combinational circuit's output depends only on the current inputs; a sequential circuit's output also depends on stored state/memory."},
+    {q:"What is a 'feedback path' and why does it matter?", a:"A connection from a gate's output back to a previous gate's input — its presence makes a circuit sequential, not combinational."},
+    {q:"For n inputs, how many possible input combinations does a combinational circuit have?", a:"2ⁿ combinations."},
+    {q:"What are the two equivalent ways to fully specify a combinational circuit?", a:"A truth table, or a set of Boolean functions (one per output)."},
+    {q:"First step of the Analysis Procedure (circuit → function)?", a:"Confirm the circuit is actually combinational (no feedback/memory elements)."},
+    {q:"What is the final step of deriving a Boolean function from a circuit?", a:"Back-substitute all intermediate labeled functions until the output is expressed purely in terms of the original input variables."},
+    {q:"List the 4 steps of the Design Procedure.", a:"1) Determine inputs/outputs and assign symbols. 2) Derive the truth table. 3) Obtain simplified Boolean functions. 4) Draw and verify the logic diagram."},
+    {q:"Name 3 practical constraints considered when designing combinational circuits.", a:"Any 3 of: minimum gate count, minimum inputs per gate, minimum propagation delay, minimum interconnections, gate driving/fan-out capability."},
+    {q:"What is a 'code converter' circuit?", a:"A combinational circuit that converts an input expressed in one binary code (e.g. BCD) into the equivalent output in a different binary code (e.g. Excess-3)."},
+    {q:"In the BCD→Excess-3 design example, why are there don't-cares in the truth table?", a:"BCD only uses combinations 0000–1001 (0-9); combinations 1010–1111 never occur as valid inputs, so their outputs are unspecified (don't care)."}
+  ],
+  mcqs: [
+    {q:"A combinational circuit's output depends on:", opts:["Only past outputs","Only the current input combination","Clock signal timing only","Random noise"], correct:1, expl:"That's the defining trait — no memory of past states involved."},
+    {q:"What feature, if present in a circuit, makes it sequential rather than combinational?", opts:["More than 2 inputs","A feedback path / memory element","Use of NAND gates","Having more than one output"], correct:1, expl:"Feedback paths introduce state-dependence, which defines sequential circuits."},
+    {q:"For a combinational circuit with 3 input variables, how many input combinations are possible?", opts:["3","6","8","9"], correct:2, expl:"2³ = 8 possible input combinations."},
+    {q:"The first step in analyzing a combinational circuit to find its Boolean function is to:", opts:["Build the K-map","Confirm the circuit is combinational, not sequential","Draw a timing diagram","Apply De Morgan's Law"], correct:1, expl:"You must first verify there's no feedback/memory before treating it as combinational."},
+    {q:"In the design procedure, which step comes immediately after deriving the truth table?", opts:["Draw logic diagram","Assign input/output symbols","Obtain simplified Boolean functions for each output","Test with real hardware"], correct:2, expl:"Truth table → simplified Boolean functions (via K-map/QM/algebra) → THEN draw the diagram."},
+    {q:"A BCD-to-Excess-3 converter is an example of a:", opts:["Sequential circuit","Code converter (combinational circuit)","Memory register","Universal gate"], correct:1, expl:"It's a combinational circuit that maps one code's bit pattern to another's."},
+    {q:"Why might a design need more than 2 levels of gates despite starting from standard SOP/POS form?", opts:["It's never necessary","To share common gates across multiple outputs in a multi-output system","Two-level circuits are illegal","To increase propagation delay intentionally"], correct:1, expl:"Algebraic manipulation across multiple outputs can enable gate-sharing, at the cost of more levels."}
+  ]
+},
+
+// ============================================================
+// CHAPTER 10
+// ============================================================
+{
+  id: "ch10",
+  num: "10",
+  title: "Binary Adders & Subtractors",
+  sub: "Half/Full Adder, Ripple Carry Adder, Half/Full Subtractor, combined Adder-Subtractor",
+  time: "65 min",
+  video: {
+    title: "Neso Academy — Binary Adder & Subtractor",
+    sub: "Search within playlist: \"Half Adder\", \"Full Adder\", \"Binary Adder-Subtractor\", \"4-bit Parallel Adder\"",
+    url: NESO_PLAYLIST
+  },
+  checklist: [
+    "Derive Half Adder truth table and Boolean functions (S, C)",
+    "Draw Half Adder using AND/OR/NOT gates, and the XOR-based version",
+    "Derive Full Adder truth table (3 inputs: x,y,z) and Boolean functions (S, C)",
+    "Build a Full Adder from two Half Adders + OR gate",
+    "Explain the Binary Ripple Carry Adder (chain of full adders, C0=0)",
+    "Derive Half Subtractor truth table and functions (D, B)",
+    "Derive Full Subtractor truth table and functions (D, B) — note borrow logic",
+    "Describe the 4-bit Full Adder-Subtractor circuit (XOR control + complementer)"
+  ],
+  content: `
+    <h4>Binary Adder Family</h4>
+    <div class="formula">Binary Adder = Half Adder (adds 2 bits) + Full Adder (adds 2 bits + carry-in)</div>
+
+    <h4>Half Adder</h4>
+    <p>Two input bits (<b>x, y</b> — augend & addend), two output bits: <b>S</b> (sum, LSB) and <b>C</b> (carry, MSB).</p>
+    <table class="tbl">
+      <tr><th>x</th><th>y</th><th>C</th><th>S</th></tr>
+      <tr><td>0</td><td>0</td><td>0</td><td>0</td></tr>
+      <tr><td>0</td><td>1</td><td>0</td><td>1</td></tr>
+      <tr><td>1</td><td>0</td><td>0</td><td>1</td></tr>
+      <tr><td>1</td><td>1</td><td>1</td><td>0</td></tr>
+    </table>
+    <div class="formula">S = x'y + xy' = x ⊕ y      C = xy</div>
+    <p class="dim">Two equivalent implementations: (a) 2 AND gates + 1 OR gate for S, separate AND gate for C; (b) a single XOR gate for S, AND gate for C — the elegant version.</p>
+
+    <h4>Full Adder</h4>
+    <p>Needed for n-bit addition (bit-by-bit from LSB). <b>Three inputs:</b> x, y (the bits being added) and <b>z</b> (carry from the previous lower position). <b>Two outputs:</b> S (sum) and C (carry) — needed because the sum of 3 bits ranges 0 to 3, requiring 2 output bits.</p>
+    <table class="tbl">
+      <tr><th>x</th><th>y</th><th>z</th><th>C</th><th>S</th></tr>
+      <tr><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td></tr>
+      <tr><td>0</td><td>0</td><td>1</td><td>0</td><td>1</td></tr>
+      <tr><td>0</td><td>1</td><td>0</td><td>0</td><td>1</td></tr>
+      <tr><td>0</td><td>1</td><td>1</td><td>1</td><td>0</td></tr>
+      <tr><td>1</td><td>0</td><td>0</td><td>0</td><td>1</td></tr>
+      <tr><td>1</td><td>0</td><td>1</td><td>1</td><td>0</td></tr>
+      <tr><td>1</td><td>1</td><td>0</td><td>1</td><td>0</td></tr>
+      <tr><td>1</td><td>1</td><td>1</td><td>1</td><td>1</td></tr>
+    </table>
+    <div class="formula">S = x'y'z + x'yz' + xy'z' + xyz       C = xy + xz + yz</div>
+    <p><b>Full Adder built from 2 Half Adders + 1 OR gate:</b> first HA adds x,y → partial sum & carry; second HA adds that partial sum to z → final S and second carry; OR the two carries together for final C.</p>
+
+    <h4>Binary Ripple Carry Adder</h4>
+    <p>A chain of <b>n full adders</b> (or 1 half adder + (n−1) full adders) in cascade, adding two n-bit numbers. Subscript 0 = LSB position, (n−1) = MSB position. <b>The carry-in C₀ at the LSB must be 0.</b> Each full adder's carry-out feeds the next full adder's carry-in.</p>
+    <div class="example">
+      <div class="ex-label">Worked Example</div>
+      <p>A = 1011, B = 0011 → Sum S = <b>1110</b> (using a 4-bit ripple carry adder).</p>
+    </div>
+    <div class="note">📌 <b>Why "ripple"?</b> The carry has to propagate (ripple) sequentially through each stage — the final sum isn't valid until the carry has rippled all the way through, which is the main speed limitation of this design. A naive truth-table approach for an n-bit adder would need 2^(2n) rows (e.g. 512 for n=4-bit pairs... slides cite 2⁹=512) — cascading full adders avoids this explosion.</div>
+
+    <h4>Binary Subtractor</h4>
+    <p>Subtraction of two unsigned numbers = take the complement of the subtrahend and <b>add</b> it to the minuend (1's or 2's complement) — meaning subtraction reuses full-adder hardware. If the minuend bit < subtrahend bit, a <b>borrow</b> is needed from the next higher position.</p>
+    <div class="formula">Subtractor Family = Half Subtractor (2 bits) + Full Subtractor (2 bits + borrow-in)</div>
+
+    <h4>Half Subtractor</h4>
+    <p>Inputs: minuend <b>x</b>, subtrahend <b>y</b>. Outputs: <b>D</b> (difference), <b>B</b> (borrow).</p>
+    <table class="tbl">
+      <tr><th>X</th><th>Y</th><th>D</th><th>B</th></tr>
+      <tr><td>0</td><td>0</td><td>0</td><td>0</td></tr>
+      <tr><td>0</td><td>1</td><td>1</td><td>1</td></tr>
+      <tr><td>1</td><td>0</td><td>1</td><td>0</td></tr>
+      <tr><td>1</td><td>1</td><td>0</td><td>0</td></tr>
+    </table>
+    <div class="formula">D = x ⊕ y       B = x'y</div>
+
+    <h4>Full Subtractor</h4>
+    <p>Inputs: minuend (x), subtrahend (y), previous borrow (z). Outputs: difference (D), current borrow (B).</p>
+    <div class="formula">D = 2B + x − y − z</div>
+    <p class="dim">If z = 0, this reduces to the half-subtractor case. <b>If (x &lt; y+z), then B = 1</b> (a borrow is needed).</p>
+    <p>Just like the Full Adder, the Full Subtractor's truth table and K-map are derived, then simplified to SOP expressions for D and B, and implemented with gates (or built from 2 half subtractors + OR gate, mirroring the full adder construction).</p>
+
+    <h4>4-bit Full Adder–Subtractor (combined circuit)</h4>
+    <p>A single circuit that performs <b>both</b> addition and subtraction using full adders, controlled by a mode-select line (often via <b>XOR gates</b> on the B inputs):</p>
+    <ul>
+      <li>When mode = 0 (Add): B inputs pass through unchanged (XOR with 0).</li>
+      <li>When mode = 1 (Subtract): B inputs are <b>1's complemented</b> (XOR with 1), and the mode bit is also fed in as <b>C₀ = 1</b> to complete the 2's complement subtraction (1's complement + 1 via the carry-in).</li>
+    </ul>
+    <div class="note">📌 This is the same principle as Chapter 4's "subtraction via 2's complement addition" — now realized in hardware using ripple-carry full adders + XOR gates as a controllable complementer.</div>
+  `,
+  flashcards: [
+    {q:"What are the inputs and outputs of a Half Adder?", a:"Inputs: x, y (two bits to add). Outputs: S (sum), C (carry)."},
+    {q:"Boolean functions for a Half Adder's S and C?", a:"S = x⊕y (x'y + xy'), C = xy."},
+    {q:"Why does a Full Adder need 3 inputs?", a:"It adds two significant bits (x, y) PLUS the carry (z) propagated in from the previous lower bit position."},
+    {q:"Why does a Full Adder need 2 outputs?", a:"Because the sum of 3 binary bits can range from 0 to 3, which needs 2 bits to represent (S and C)."},
+    {q:"How can a Full Adder be built from simpler blocks?", a:"Using 2 Half Adders and 1 OR gate: first HA adds x+y, second HA adds that sum to carry-in z, and the two carry outputs are ORed for the final carry."},
+    {q:"What is a Binary Ripple Carry Adder?", a:"A chain of n full adders (or 1 half adder + (n−1) full adders) cascaded so each stage's carry-out feeds the next stage's carry-in, adding two n-bit numbers."},
+    {q:"What must C₀ (carry into the LSB) be in a ripple carry adder?", a:"0."},
+    {q:"Why is it called a 'ripple' carry adder?", a:"Because the carry must propagate sequentially (ripple) through each full adder stage before the final sum is valid — this is its main speed limitation."},
+    {q:"What are the inputs/outputs of a Half Subtractor?", a:"Inputs: x (minuend), y (subtrahend). Outputs: D (difference), B (borrow)."},
+    {q:"Boolean functions for Half Subtractor D and B?", a:"D = x⊕y, B = x'y."},
+    {q:"What 3 inputs does a Full Subtractor take?", a:"Minuend (x), subtrahend (y), and the borrow from the previous (lower) position (z)."},
+    {q:"Condition under which a Full Subtractor produces a borrow B=1?", a:"When x < y + z (minuend bit is less than subtrahend plus incoming borrow)."},
+    {q:"How does a 4-bit Adder-Subtractor switch between add and subtract modes?", a:"XOR gates on the B inputs (controlled by a mode bit) optionally complement B, and that same mode bit feeds in as the initial carry C₀ — implementing 2's complement subtraction via addition hardware."}
+  ],
+  mcqs: [
+    {q:"The Boolean function for the SUM output of a Half Adder is:", opts:["S = xy","S = x+y","S = x⊕y","S = x'y'"], correct:2, expl:"S = x'y + xy' which is exactly the XOR function."},
+    {q:"The Boolean function for the CARRY output of a Half Adder is:", opts:["C = x⊕y","C = xy","C = x+y","C = x'y'"], correct:1, expl:"Carry is only generated when BOTH inputs are 1: C = xy (the AND function)."},
+    {q:"A Full Adder requires how many inputs?", opts:["1","2","3","4"], correct:2, expl:"Two bits to add (x, y) plus the carry-in from the previous stage (z) = 3 inputs."},
+    {q:"In a Binary Ripple Carry Adder, the carry-in to the very first (LSB) stage must be:", opts:["1","0","Equal to the sum","Undefined"], correct:1, expl:"C₀ = 0 is required since there's no carry coming in before the least significant bit."},
+    {q:"A Full Adder can be constructed from:", opts:["2 Half Adders and 1 AND gate","2 Half Adders and 1 OR gate","1 Half Adder and 2 OR gates","3 Half Adders only"], correct:1, expl:"Two half adders (cascaded) plus an OR gate combining the two carry outputs."},
+    {q:"In a Half Subtractor, the Borrow output B equals:", opts:["xy","x'y","xy'","x⊕y"], correct:1, expl:"B = x'y — a borrow occurs only when minuend x=0 and subtrahend y=1."},
+    {q:"In a Full Subtractor, a borrow (B=1) occurs when:", opts:["x equals y","x is greater than y+z","x is less than y+z","z is always 0"], correct:2, expl:"If the minuend bit is smaller than (subtrahend + incoming borrow), a borrow is needed."},
+    {q:"In a combined 4-bit Adder-Subtractor circuit, switching to subtract mode typically involves:", opts:["Removing all carry connections","XOR-complementing the B inputs and setting C₀=1","Disconnecting the adder entirely","Using only NOR gates"], correct:1, expl:"This implements 2's-complement-based subtraction using the same adder hardware."},
+    {q:"Why does ripple carry addition become slow for wide (e.g. 32-bit) numbers?", opts:["It uses too many NOT gates","The carry must propagate sequentially through every stage before the result is valid","It can't handle negative numbers","XOR gates are inherently slow"], correct:1, expl:"The sequential carry propagation delay scales with the number of bits — the core ripple-carry bottleneck."}
+  ]
+}
+];
+
+// ============================================================
+// TIME ESTIMATE NOTES (per-chapter times live on each chapter object's `.time` field)
+// ============================================================
+const TIME_PAGE_NOTE = "These are focused, no-distraction estimates per chapter — actually working through the checklist, flashcards, and MCQs, not just skimming. Heavier, calculation-based chapters (conversions, K-maps, adders) naturally take longer. Add buffer time for breaks — they're not included below.";
+
+// ============================================================
+// FINAL CUMULATIVE REVIEW — pulled across all chapters
+// ============================================================
+const FINAL_FLASHCARDS = [
+
+  {q:"What's the base of Hexadecimal and what digits does it use?", a:"Base 16; digits 0–9 and A–F."},
+  {q:"Steps to convert a decimal fraction to binary?", a:"Multiply by 2 repeatedly, take the integer part each time as the next bit, read top to bottom."},
+  {q:"How many bits do you group for Binary↔Octal conversion?", a:"3 bits per octal digit."},
+  {q:"How many bits do you group for Binary↔Hex conversion?", a:"4 bits per hex digit."},
+  {q:"What is Excess-3 code and how do you get it?", a:"A self-complementing code obtained by adding 3 (0011) to the 8421-BCD value of a decimal digit."},
+  {q:"Defining property of Gray code?", a:"Any two consecutive values differ in exactly one bit."},
+  {q:"What is the 2's complement shortcut method?", a:"Copy bits unchanged from the right up to and including the first 1, then flip all bits to its left."},
+  {q:"In r's complement subtraction, what does the presence of an end carry tell you?", a:"The result is positive — discard the carry, keep the remaining digits as the answer."},
+  {q:"Sign bit convention in signed binary numbers?", a:"0 = positive, 1 = negative, placed at the MSB (leftmost) position."},
+  {q:"Why are NAND/NOR gates called universal?", a:"Any logic function can be built using only NAND gates, or only NOR gates."},
+  {q:"XOR vs XNOR — which is the 'odd 1 selector' and which is 'even 1 selector'?", a:"XOR = odd 1 selector. XNOR = even 1 selector (XNOR is XOR's complement)."},
+  {q:"State De Morgan's Law in both forms.", a:"(x+y)' = x'·y' and (xy)' = x'+y'"},
+  {q:"State the Absorption Law.", a:"A + AB = A, and A(A+B) = A."},
+  {q:"What is the Duality Rule?", a:"A valid Boolean expression stays valid if you swap + with · and 0 with 1 throughout."},
+  {q:"Minterm priority rule (0 or 1 → complemented)?", a:"0 → complemented form, 1 → original form."},
+  {q:"Maxterm priority rule (0 or 1 → complemented)?", a:"1 → complemented form, 0 → original form (opposite of minterm)."},
+  {q:"How is SOP built directly from a truth table?", a:"OR together the minterms of all rows where output F = 1."},
+  {q:"How is POS built directly from a truth table?", a:"AND together the maxterms of all rows where output F = 0."},
+  {q:"Why must K-map row/column headers use Gray code order?", a:"So physically adjacent cells always differ by exactly 1 bit, enabling valid groupings."},
+  {q:"What is an Essential Prime Implicant?", a:"A prime implicant that uniquely covers at least one minterm — must appear in the final simplified expression."},
+  {q:"Steps of the Quine-McCluskey method (briefly)?", a:"List minterms in binary → group by number of 1's → combine terms differing by 1 bit → repeat → build prime implicant chart → select essential prime implicants."},
+  {q:"What distinguishes a combinational circuit from a sequential one?", a:"Combinational output depends only on current inputs; sequential also depends on stored state (has feedback/memory)."},
+  {q:"Boolean functions for a Half Adder?", a:"S = x⊕y, C = xy"},
+  {q:"Why does a Full Adder need 3 inputs and 2 outputs?", a:"3 inputs: two bits to add plus carry-in. 2 outputs: because the sum of 3 bits can range 0–3, needing 2 bits to express."},
+  {q:"What must the initial carry-in (C₀) be in a ripple carry adder?", a:"0 — there's no carry before the least significant bit."},
+  {q:"Boolean functions for a Half Subtractor?", a:"D = x⊕y, B = x'y"},
+  {q:"Condition for borrow B=1 in a Full Subtractor?", a:"When minuend x < (subtrahend y + incoming borrow z)."},
+  {q:"How does a combined Adder-Subtractor switch modes?", a:"XOR gates conditionally complement the B inputs, and the mode bit feeds in as C₀ — implementing 2's complement subtraction via addition hardware."}
+];
+
+const FINAL_MCQS = [
+  {q:"Convert (75)₁₀ to binary.", opts:["1001011","1000111","1011001","1001101"], correct:0, expl:"75 = 64+8+2+1 = 1001011₂."},
+  {q:"To group binary digits for Octal conversion, you use groups of:", opts:["2","3","4","5"], correct:1, expl:"Octal is base 8 = 2³ → group in 3s."},
+  {q:"The 1's complement of 1011000 is:", opts:["0100111","0100110","1011001","0011001"], correct:0, expl:"Flip every bit: 1011000 → 0100111."},
+  {q:"In signed binary representation, a sign bit of 1 means:", opts:["Positive number","Negative number","Zero","Overflow"], correct:1, expl:"Convention: 0=positive, 1=negative."},
+  {q:"Excess-3 code is derived by:", opts:["Adding 3 to the BCD value","Subtracting 3 from BCD","Doubling the BCD value","XOR with binary 3"], correct:0, expl:"Excess-3 = 8421 BCD + 3 (0011), applied per digit."},
+  {q:"Which gate's output is HIGH only when ALL inputs are LOW?", opts:["NAND","NOR","XOR","AND"], correct:1, expl:"NOR is the complement of OR — HIGH only when all inputs are 0."},
+  {q:"NAND and NOR gates are 'universal' because:", opts:["They use less power","Any logic function can be implemented using only one of them","They never have delay","They only work with 2 inputs"], correct:1, expl:"That universality is their defining, exam-favorite property."},
+  {q:"De Morgan's Law: (AB)' equals:", opts:["A'B'","A'+B'","AB","A+B"], correct:1, expl:"Complement of a product = sum of complements."},
+  {q:"Simplify: A + A'B", opts:["A","A+B","AB","A'B"], correct:1, expl:"A + A'B = A + B (a standard absorption-type identity)."},
+  {q:"A minterm for x=0, y=1, z=0 is written as:", opts:["xy'z","x'yz'","x'y'z","xyz'"], correct:1, expl:"0→complement, 1→original: x=0→x', y=1→y, z=0→z' → x'yz'."},
+  {q:"A maxterm for x=0, y=1, z=0 is written as:", opts:["x+y'+z","x'+y+z'","x+y+z","x'+y'+z'"], correct:0, expl:"Maxterm rule is opposite: 1→complement,0→original: x=0→x, y=1→y', z=0→z → x+y'+z."},
+  {q:"K-map cell groupings must be sized in:", opts:["Multiples of 3","Powers of 2","Prime numbers only","Any size"], correct:1, expl:"Valid groupings are always 1, 2, 4, 8... cells (powers of 2)."},
+  {q:"Quine-McCluskey method is preferred over K-maps when:", opts:["There are only 2 variables","There are 4-6+ variables, or programmatic/computer use is needed","Don't cares are absent","The function is already simplified"], correct:1, expl:"K-maps get visually unwieldy beyond ~4-5 variables; QM scales algorithmically."},
+  {q:"A combinational circuit's defining trait is:", opts:["It has memory","Output depends only on current inputs","It always has feedback","It requires a clock signal"], correct:1, expl:"No memory/feedback — purely a function of present inputs."},
+  {q:"For an n-bit combinational circuit input, the number of possible input combinations is:", opts:["n","2n","n²","2ⁿ"], correct:3, expl:"Each of n inputs can be 0 or 1 independently → 2ⁿ total combinations."},
+  {q:"Half Adder's carry output C equals:", opts:["x⊕y","xy","x+y","x'y'"], correct:1, expl:"C = xy — carry only when both inputs are 1."},
+  {q:"A Full Adder has how many inputs and outputs?", opts:["2 inputs, 1 output","3 inputs, 2 outputs","2 inputs, 2 outputs","4 inputs, 2 outputs"], correct:1, expl:"3 inputs (x,y,carry-in z); 2 outputs (sum S, carry-out C)."},
+  {q:"In a Ripple Carry Adder, what must the carry-in to the first (LSB) stage be?", opts:["1","0","Equal to the sum","Undefined, doesn't matter"], correct:1, expl:"C₀ = 0 since there's no preceding carry at the least significant bit."},
+  {q:"Half Subtractor's borrow output B equals:", opts:["xy","x'y","xy'","x⊕y"], correct:1, expl:"B = x'y — borrow only needed when minuend(0) < subtrahend(1)."},
+  {q:"What determines a borrow (B=1) in a Full Subtractor?", opts:["x equals y","x is greater than y+z","x is less than y+z","Always 0"], correct:2, expl:"A borrow is needed whenever the minuend bit is smaller than (subtrahend + incoming borrow)."},
+  {q:"ASCII is a how-many-bit code representing how many characters?", opts:["8-bit, 256 characters","7-bit, 128 characters","4-bit, 16 characters","16-bit, 65536 characters"], correct:1, expl:"Standard ASCII: 7 bits → 128 characters (94 printable + 34 control)."},
+  {q:"To convert ASCII uppercase to lowercase, you:", opts:["Flip bit 6","Flip bit 0","Add a parity bit","Invert all bits"], correct:0, expl:"Bit 6 toggling switches between upper and lower case in ASCII."},
+  {q:"Higher base number systems require ___ digits to represent the same value, but ___ symbols overall.", opts:["More; fewer","Fewer; more","Equal; equal","Fewer; fewer"], correct:1, expl:"Higher base → fewer digits per value, but more total symbols to learn/manage — the core trade-off."},
+  {q:"What is an Essential Prime Implicant required to do?", opts:["Cover zero minterms","Cover a minterm no other prime implicant covers","Always be the smallest grouping","Only apply to maxterms"], correct:1, expl:"This uniqueness is exactly why it must appear in the final simplified expression."},
+  {q:"A 4-bit combined Adder-Subtractor typically uses ___ gates to conditionally complement inputs for subtraction.", opts:["AND","OR","XOR","NAND"], correct:2, expl:"XOR gates controlled by a mode bit conditionally invert the B inputs for 2's-complement-based subtraction."}
+];
+
+
+</script>
+<script>
+// ============================================================
+// DLD Study Guide — Application Logic (multi-page version)
+// ============================================================
+
+// ---------- State ----------
+const STATE = {
+  checklist: {},   // key: "ch1:0" -> true/false
+  flashcards: {},  // key: "ch1:3" -> true (reviewed/flipped at least once)
+  mcq: {}          // key: "ch1:2" -> {answered:true, correct:true, attempts:1}
+};
+
+const STORAGE_KEY = "dld_study_progress_v2";
+
+// Persistence strategy:
+// Primary: browser localStorage — survives closing the file/tab/browser entirely,
+// since it's tied to this HTML file's origin on disk, not to any session.
+// Secondary (best-effort): window.storage, if present (e.g. when running inside
+// an environment that provides it) — kept in sync as a backup, but localStorage
+// is the source of truth so progress survives even outside such environments.
+
+function loadState() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (raw) {
+      const parsed = JSON.parse(raw);
+      Object.assign(STATE.checklist, parsed.checklist || {});
+      Object.assign(STATE.flashcards, parsed.flashcards || {});
+      Object.assign(STATE.mcq, parsed.mcq || {});
+    }
+  } catch (e) {
+    console.warn("Could not load saved progress from localStorage:", e);
+  }
+}
+
+let saveTimeout = null;
+function saveState() {
+  clearTimeout(saveTimeout);
+  saveTimeout = setTimeout(() => {
+    const payload = JSON.stringify(STATE);
+    try {
+      localStorage.setItem(STORAGE_KEY, payload);
+    } catch (e) {
+      console.warn("Could not save progress to localStorage:", e);
+    }
+    // best-effort secondary backup, if available — never required for the app to work
+    try {
+      if (window.storage && window.storage.set) {
+        window.storage.set(STORAGE_KEY, payload, false).catch(()=>{});
+      }
+    } catch (e) { /* ignore */ }
+  }, 250);
+}
+
+// ---------- Small helpers ----------
+function checkSvg() {
+  return `<svg viewBox="0 0 16 16" fill="none"><path d="M3 8.5L6.2 11.7L13 4" stroke="#04211d" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+}
+function smallCheckSvg() {
+  return `<svg viewBox="0 0 16 16" fill="none"><path d="M3 8.5L6.2 11.7L13 4" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+}
+function undoSvg() {
+  return `<svg viewBox="0 0 16 16" fill="none"><path d="M4 4L12 12M12 4L4 12" stroke="#fff" stroke-width="2.3" stroke-linecap="round"/></svg>`;
+}
+
+// ============================================================
+// PAGE MODEL
+// Each "page" is a routable unit: home, ch1..ch10, final, dashboard
+// ============================================================
+const PAGES = [];
+
+function buildPageModel() {
+  PAGES.push({ id: "home", kind: "home", navLabel: "Overview", navNum: "—" });
+  PAGES.push({ id: "time", kind: "time", navLabel: "Time Estimates", navNum: "⏱" });
+  CHAPTERS.forEach((ch, i) => {
+    PAGES.push({ id: ch.id, kind: "chapter", chapter: ch, navLabel: ch.title, navNum: ch.num });
+  });
+  PAGES.push({ id: "final", kind: "final", navLabel: "Final Cumulative Review", navNum: "FR" });
+  PAGES.push({ id: "dashboard", kind: "dashboard", navLabel: "Progress Dashboard", navNum: "∑" });
+}
+
+let currentPageIndex = 0;
+
+// ============================================================
+// RENDER: Sidebar nav
+// ============================================================
+function renderSidebarNav() {
+  const nav = document.getElementById('sidebarNav');
+  let html = '';
+  html += `<div class="sidebar-group-label">Start here</div>`;
+  html += sidebarLinkHTML(PAGES[0], 0);
+  html += sidebarLinkHTML(PAGES[1], 1);
+
+  html += `<div class="sidebar-group-label">Chapters</div>`;
+  PAGES.forEach((p, i) => {
+    if (p.kind === 'chapter') html += sidebarLinkHTML(p, i);
+  });
+
+  html += `<div class="sidebar-group-label">Wrap-up</div>`;
+  PAGES.forEach((p, i) => {
+    if (p.kind === 'final' || p.kind === 'dashboard') html += sidebarLinkHTML(p, i);
+  });
+
+  nav.innerHTML = html;
+
+  // attach click handlers
+  nav.querySelectorAll('[data-page-index]').forEach(el => {
+    el.addEventListener('click', () => {
+      goToPage(parseInt(el.getAttribute('data-page-index'), 10));
+      closeMobileSidebar();
+    });
+  });
+}
+
+function sidebarLinkHTML(page, index) {
+  const ringHTML = page.kind === 'chapter' ? `
+    <span class="sring">
+      <svg width="16" height="16" viewBox="0 0 16 16">
+        <circle class="bgr" cx="8" cy="8" r="6.5"></circle>
+        <circle class="fgr" id="snav-ring-${page.id}" cx="8" cy="8" r="6.5" stroke-dasharray="40.8" stroke-dashoffset="40.8"></circle>
+      </svg>
+    </span>
+  ` : '';
+  return `
+    <div class="sidebar-link" data-page-index="${index}" id="snav-link-${page.id}">
+      <span class="snum">${page.navNum}</span>
+      <span class="stext">${page.navLabel}</span>
+      ${ringHTML}
+    </div>
+  `;
+}
+
+// ============================================================
+// RENDER: Pages
+// ============================================================
+function renderAllPages() {
+  const root = document.getElementById('pages-root');
+  root.innerHTML = PAGES.map((p, i) => `<div class="page is-hidden" id="page-${p.id}" data-index="${i}">${renderPageContent(p)}</div>`).join('');
+}
+
+function renderPageContent(page) {
+  switch (page.kind) {
+    case 'home': return renderHomePage();
+    case 'time': return renderTimeEstimatesPage();
+    case 'chapter': return renderChapterPage(page.chapter);
+    case 'final': return renderFinalPage();
+    case 'dashboard': return renderDashboardPage();
+    default: return '';
+  }
+}
+
+function renderHomePage() {
+  const totalMins = CHAPTERS.reduce((sum, ch) => sum + parseMinutes(ch.time), 0) + 60;
+  return `
+    <div class="hero-eyebrow">CSE 4205 · Digital Logic Design</div>
+    <h1 class="hero-h1" style="font-size:clamp(30px,4.4vw,46px); font-weight:800; letter-spacing:-0.02em; line-height:1.08; color:#f3f6fa;">
+      Midterm in <span class="hl" style="color:var(--cyan);">1 day</span>.<br>Here's the whole circuit, mapped.
+    </h1>
+    <p class="hero-sub">A complete dark-mode study guide built from your slide deck — 10 chapters, every formula, truth table and worked example, with time estimates, videos, flashcards, MCQs, and a checklist that remembers what you've covered — even if you close this file and come back later.</p>
+    <div class="hero-meta">
+      <div class="meta-chip warn">⏱ Total study time: <b>≈ ${formatMinutes(totalMins)}</b></div>
+      <div class="meta-chip">📚 10 chapters</div>
+      <div class="meta-chip">🗂 80 checklist items</div>
+      <div class="meta-chip">🃏 134 flashcards</div>
+      <div class="meta-chip">❓ 99 MCQs</div>
+    </div>
+    <div class="btn-row">
+      <button class="btn primary" data-goto="time">▸ See time estimates</button>
+      <button class="btn" data-goto="${CHAPTERS[0].id}">Start at Chapter 1</button>
+    </div>
+
+    <div style="margin-top:48px;">
+      <div class="section-label">Table of contents</div>
+      <div class="section-heading">Jump to any chapter</div>
+      <div class="toc">
+        ${CHAPTERS.map(ch => `
+          <div class="toc-item" data-goto="${ch.id}">
+            <span class="tn">${ch.num}</span>
+            <span class="tt">${ch.title}</span>
+            <span class="tc">${ch.time}</span>
+          </div>
+        `).join('')}
+      </div>
+    </div>
+
+    <div style="margin-top:36px;">
+      <div class="toc">
+        <div class="toc-item" data-goto="final"><span class="tn">FR</span><span class="tt">Final Cumulative Review</span><span class="tc">60 min</span></div>
+        <div class="toc-item" data-goto="dashboard"><span class="tn">∑</span><span class="tt">Progress Dashboard</span><span class="tc">live</span></div>
+      </div>
+    </div>
+
+    <footer class="page-footer">built from your slides · DLD_Mid_all_slides.pdf · good luck — you've got this 🔧⚡</footer>
+  `;
+}
+
+function parseMinutes(timeStr) {
+  // handles formats like "35 min", "1 hr 10 min", "70 min"
+  let total = 0;
+  const hrMatch = timeStr.match(/(\d+)\s*hr/);
+  const minMatch = timeStr.match(/(\d+)\s*min/);
+  if (hrMatch) total += parseInt(hrMatch[1], 10) * 60;
+  if (minMatch) total += parseInt(minMatch[1], 10);
+  if (!hrMatch && !minMatch) {
+    const n = parseInt(timeStr, 10);
+    if (!isNaN(n)) total = n;
+  }
+  return total;
+}
+
+function formatMinutes(mins) {
+  const h = Math.floor(mins / 60);
+  const m = mins % 60;
+  if (h === 0) return `${m} min`;
+  if (m === 0) return `${h} hr`;
+  return `${h} hr ${m} min`;
+}
+
+function renderTimeEstimatesPage() {
+  const totalMins = CHAPTERS.reduce((sum, ch) => sum + parseMinutes(ch.time), 0);
+  const finalReviewMins = 60;
+  const grandTotal = totalMins + finalReviewMins;
+
+  return `
+    <div class="section-label">Plan your hours</div>
+    <div class="section-heading">How long each topic actually takes</div>
+    <p class="section-desc">${TIME_PAGE_NOTE}</p>
+
+    <div class="panel">
+      <div class="checklist-title">Per-chapter time</div>
+      <div class="sched-grid">
+        ${CHAPTERS.map(ch => `
+          <div class="sched-row" data-goto="${ch.id}" style="cursor:pointer;">
+            <div class="sched-time">${ch.num}</div>
+            <div class="sched-task"><b>${ch.title}</b><div>${ch.sub}</div></div>
+            <div class="sched-dur">⏱ ${ch.time}</div>
+          </div>
+        `).join('')}
+        <div class="sched-row" style="border-style:dashed; opacity:0.85;">
+          <div class="sched-time" style="color:var(--violet);">FR</div>
+          <div class="sched-task"><b>Final Cumulative Review</b><div>Mixed flashcards + 25-question MCQ test across everything</div></div>
+          <div class="sched-dur">⏱ ${finalReviewMins} min</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel" style="margin-top:18px; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:14px;">
+      <div>
+        <div class="checklist-title" style="margin-bottom:4px;">Total focused study time</div>
+        <div style="color:var(--text-dim); font-size:13px;">All 10 chapters + final review, back to back</div>
+      </div>
+      <div style="font-family:var(--mono); font-size:32px; font-weight:800; color:var(--cyan);">${formatMinutes(grandTotal)}</div>
+    </div>
+
+    <div class="note" style="margin-top:18px;">📌 <b>Tip:</b> add ~15–20% on top for breaks, food, and re-reading anything that doesn't click the first time. Doing the heaviest chapters (Conversions, Boolean Algebra, K-Maps) earlier in the day when you're freshest tends to pay off most.</div>
+  `;
+}
+
+function renderChapterPage(ch) {
+  return `
+    <div class="ch-page-head">
+      <div class="ch-page-eyebrow"><span class="chnum">${ch.num}</span> CHAPTER ${parseInt(ch.num,10)} OF ${CHAPTERS.length}</div>
+      <div class="ch-page-title">${ch.title}</div>
+      <div class="ch-page-sub">${ch.sub}</div>
+      <div class="ch-page-meta">
+        <div class="meta-chip warn">⏱ ${ch.time}</div>
+        <div class="meta-chip" id="chprog-chip-${ch.id}">0% complete</div>
+      </div>
+    </div>
+
+    <div>
+      <div class="checklist-title">Checklist</div>
+      <div class="checklist" id="checklist-${ch.id}">
+        ${ch.checklist.map((item, i) => `
+          <label class="check-item">
+            <input type="checkbox" data-key="${ch.id}:${i}" onchange="onCheckToggle(this)">
+            <span class="check-box">${checkSvg()}</span>
+            <span class="check-label">${item}</span>
+          </label>
+        `).join('')}
+      </div>
+    </div>
+
+    <div class="content">
+      <div class="checklist-title">Core content</div>
+      ${ch.content}
+    </div>
+
+    <div style="margin-top:28px;">
+      <div class="checklist-title">Watch</div>
+      <a class="video-block" href="${ch.video.url}" target="_blank" rel="noopener">
+        <div class="video-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></div>
+        <div class="video-text">
+          <div class="video-title">${ch.video.title}</div>
+          <div class="video-sub">${ch.video.sub}</div>
+        </div>
+        <div class="video-arrow">↗</div>
+      </a>
+    </div>
+
+    <div style="margin-top:28px;">
+      <div class="checklist-title">Flashcards — click to flip</div>
+      <div class="fc-grid" id="fc-${ch.id}">
+        ${ch.flashcards.map((fc, i) => renderFlashcard(ch.id, i, fc)).join('')}
+      </div>
+    </div>
+
+    <div style="margin-top:28px;">
+      <div class="checklist-title">Quick MCQ check</div>
+      <div class="mcq-list" id="mcq-${ch.id}">
+        ${ch.mcqs.map((m, i) => renderMcq(ch.id, i, m)).join('')}
+      </div>
+    </div>
+  `;
+}
+
+function renderFinalPage() {
+  return `
+    <div class="section-label">Last hour before the exam</div>
+    <div class="section-heading">Mixed review — judge if you're actually ready</div>
+    <p class="section-desc">Pulled from every chapter. If you're scoring well here without peeking, you're in good shape. If not, jump back to that chapter from the sidebar.</p>
+    <div class="panel">
+      <div class="checklist-title">Final flashcard sweep</div>
+      <div class="fc-grid" id="finalFcGrid">
+        ${FINAL_FLASHCARDS.map((fc, i) => renderFlashcard('final', i, fc)).join('')}
+      </div>
+    </div>
+    <div class="panel">
+      <div class="checklist-title">Final MCQ test (25 questions)</div>
+      <div id="finalMcqScore" style="font-family:var(--mono); font-size:13px; color:var(--text-dim); margin-bottom:14px;"></div>
+      <div class="mcq-list" id="finalMcqList">
+        ${FINAL_MCQS.map((m, i) => renderMcq('final', i, m)).join('')}
+      </div>
+    </div>
+  `;
+}
+
+function renderDashboardPage() {
+  return `
+    <div class="section-label">Live · auto-updates</div>
+    <div class="section-heading">Where you actually stand</div>
+    <p class="section-desc">Combines your checklist completion, flashcards flipped, and MCQs answered correctly across all 10 chapters plus the final review. Progress is saved to this browser automatically — closing the file and reopening it later keeps everything.</p>
+    <div class="dash-grid" id="dashGrid"></div>
+    <div class="panel" style="margin-top:18px;">
+      <div class="checklist-title">Per-chapter breakdown</div>
+      <div class="dash-chapter-list" id="dashChapterList"></div>
+    </div>
+    <div class="btn-row">
+      <button class="btn" id="resetBtnInline" onclick="resetProgress()">⟲ Reset all progress</button>
+    </div>
+  `;
+}
+
+function renderFlashcard(chId, i, fc) {
+  const key = `${chId}:${i}`;
+  return `
+    <div class="fc" data-key="${key}" id="fc-${key}">
+      <button type="button" class="fc-reviewed-badge" title="Click to undo — unmark this card" onclick="undoCardReview(event, '${key}')">
+        <span class="icon-check">${smallCheckSvg()}</span>
+        <span class="icon-undo">${undoSvg()}</span>
+      </button>
+      <div class="fc-inner">
+        <div class="fc-face fc-front" onclick="flipCard('${key}')">
+          <div class="fc-tag">Q${i+1}</div>
+          <div class="fc-q">${fc.q}</div>
+          <div class="fc-hint">tap to flip ⟲</div>
+        </div>
+        <div class="fc-face fc-back">
+          <div class="fc-tag">Answer</div>
+          <div class="fc-a">${fc.a}</div>
+          <div class="fc-grade-row">
+            <button class="fc-grade-btn review-again" onclick="gradeCard(event, '${key}', false)">✗ Review again</button>
+            <button class="fc-grade-btn got-it" onclick="gradeCard(event, '${key}', true)">✓ Got it</button>
+          </div>
+          <div class="fc-status-row">
+            <span class="fc-status-tag" id="fc-status-tag-${key}"></span>
+            <span class="fc-retry-link" onclick="retryCard(event, '${key}')">⟲ try again</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+function renderMcq(chId, i, m) {
+  const key = `${chId}:${i}`;
+  return `
+    <div class="mcq" data-key="${key}">
+      <div class="mcq-q"><span class="qn">Q${i+1}.</span> ${m.q} <span class="mcq-attempts" id="attempts-${key}"></span></div>
+      <div class="mcq-opts" id="opts-${key}">
+        ${m.opts.map((opt, oi) => `
+          <div class="mcq-opt" data-oi="${oi}" onclick="answerMcq(this, '${key}', ${oi}, ${m.correct})">
+            <span class="letter">${String.fromCharCode(65+oi)}</span>
+            <span>${opt}</span>
+          </div>
+        `).join('')}
+      </div>
+      <div class="mcq-expl">${m.expl}</div>
+      <div class="mcq-footer">
+        <span class="mcq-result-tag" id="result-tag-${key}"></span>
+        <button class="mcq-retry-btn" onclick="retryMcq('${key}')">⟲ Try again</button>
+      </div>
+    </div>
+  `;
+}
+
+// ============================================================
+// INTERACTIONS
+// ============================================================
+function onCheckToggle(input) {
+  const key = input.getAttribute('data-key');
+  STATE.checklist[key] = input.checked;
+  saveState();
+  updateAllProgress();
+}
+
+function flipCard(key) {
+  const el = document.getElementById(`fc-${key}`);
+  if (!el) return;
+  el.classList.toggle('flipped');
+}
+
+function gradeCard(evt, key, gotIt) {
+  evt.stopPropagation(); // don't let the card flip back when tapping a grade button
+  const el = document.getElementById(`fc-${key}`);
+  if (!el) return;
+
+  STATE.flashcards[key] = { reviewed: true, gotIt: gotIt };
+  el.classList.add('reviewed', 'graded');
+  el.classList.toggle('needs-review', !gotIt);
+
+  const tag = document.getElementById(`fc-status-tag-${key}`);
+  if (tag) {
+    tag.textContent = gotIt ? '✓ Got it' : '✗ Review again';
+    tag.className = 'fc-status-tag ' + (gotIt ? 'got-it' : 'review-again');
+  }
+
+  saveState();
+  updateAllProgress();
+}
+
+function retryCard(evt, key) {
+  evt.stopPropagation();
+  const el = document.getElementById(`fc-${key}`);
+  if (!el) return;
+  el.classList.remove('graded', 'needs-review');
+  // flip back to the question side so they can genuinely re-attempt it
+  el.classList.remove('flipped');
+  // keep STATE.flashcards[key] as-is (still counts toward "reviewed" progress);
+  // only the visual grading resets so they can re-grade after trying again
+}
+
+function undoCardReview(evt, key) {
+  evt.stopPropagation(); // don't trigger a flip when tapping the badge
+  const el = document.getElementById(`fc-${key}`);
+  if (!el) return;
+
+  // Fully clears this card's progress — for when a card got marked reviewed
+  // by mistake (e.g. accidental "Got it" tap) and you want it to count as
+  // un-reviewed again, not just re-gradable.
+  delete STATE.flashcards[key];
+  el.classList.remove('reviewed', 'graded', 'needs-review', 'flipped');
+
+  const tag = document.getElementById(`fc-status-tag-${key}`);
+  if (tag) { tag.textContent = ''; tag.className = 'fc-status-tag'; }
+
+  saveState();
+  updateAllProgress();
+}
+
+function answerMcq(optEl, key, chosenIdx, correctIdx) {
+  const mcqEl = optEl.closest('.mcq');
+  if (mcqEl.classList.contains('answered')) return; // locked until "try again"
+
+  const allOpts = mcqEl.querySelectorAll('.mcq-opt');
+  allOpts.forEach(o => o.classList.add('disabled'));
+
+  const isCorrect = chosenIdx === correctIdx;
+  if (isCorrect) {
+    optEl.classList.add('correct');
+  } else {
+    optEl.classList.add('wrong');
+    allOpts[correctIdx].classList.add('correct');
+  }
+  mcqEl.classList.add('answered');
+
+  const prev = STATE.mcq[key] || { attempts: 0, everCorrect: false };
+  const attempts = (prev.attempts || 0) + 1;
+  const everCorrect = prev.everCorrect || isCorrect;
+  STATE.mcq[key] = { answered: true, correct: isCorrect, attempts, everCorrect };
+
+  const tag = document.getElementById(`result-tag-${key}`);
+  if (tag) {
+    tag.textContent = isCorrect ? '✓ Correct' : '✗ Incorrect';
+    tag.className = 'mcq-result-tag ' + (isCorrect ? 'ok' : 'bad');
+  }
+  const attemptsLbl = document.getElementById(`attempts-${key}`);
+  if (attemptsLbl) attemptsLbl.textContent = attempts > 1 ? `attempt ${attempts}` : '';
+
+  saveState();
+  updateAllProgress();
+}
+
+function retryMcq(key) {
+  const mcqEl = document.querySelector(`.mcq[data-key="${key}"]`);
+  if (!mcqEl) return;
+  mcqEl.classList.remove('answered');
+  const opts = mcqEl.querySelectorAll('.mcq-opt');
+  opts.forEach(o => {
+    o.classList.remove('correct', 'wrong', 'disabled');
+  });
+  // keep "answered/everCorrect/attempts" history in STATE for progress purposes,
+  // but allow re-answering visually. Progress credit (mcq "answered") already counted.
+}
+
+// ============================================================
+// PROGRESS CALCULATION
+// ============================================================
+function computeChapterProgress(ch) {
+  const total = ch.checklist.length + ch.flashcards.length + ch.mcqs.length;
+  let done = 0;
+  ch.checklist.forEach((_, i) => { if (STATE.checklist[`${ch.id}:${i}`]) done++; });
+  ch.flashcards.forEach((_, i) => { if (STATE.flashcards[`${ch.id}:${i}`]) done++; });
+  ch.mcqs.forEach((_, i) => { if (STATE.mcq[`${ch.id}:${i}`] && STATE.mcq[`${ch.id}:${i}`].answered) done++; });
+  return total === 0 ? 0 : Math.round((done / total) * 100);
+}
+
+function computeOverallStats() {
+  let checklistTotal = 0, checklistDone = 0;
+  let fcTotal = 0, fcDone = 0, fcNeedsReview = 0;
+  let mcqTotal = 0, mcqAnswered = 0, mcqCorrect = 0;
+
+  function tallyFc(key) {
+    const r = STATE.flashcards[key];
+    if (!r) return;
+    fcDone++;
+    if (r !== true && r.gotIt === false) fcNeedsReview++;
+  }
+
+  CHAPTERS.forEach(ch => {
+    checklistTotal += ch.checklist.length;
+    ch.checklist.forEach((_, i) => { if (STATE.checklist[`${ch.id}:${i}`]) checklistDone++; });
+
+    fcTotal += ch.flashcards.length;
+    ch.flashcards.forEach((_, i) => tallyFc(`${ch.id}:${i}`));
+
+    mcqTotal += ch.mcqs.length;
+    ch.mcqs.forEach((_, i) => {
+      const r = STATE.mcq[`${ch.id}:${i}`];
+      if (r && r.answered) { mcqAnswered++; if (r.everCorrect) mcqCorrect++; }
+    });
+  });
+
+  fcTotal += FINAL_FLASHCARDS.length;
+  FINAL_FLASHCARDS.forEach((_, i) => tallyFc(`final:${i}`));
+
+  mcqTotal += FINAL_MCQS.length;
+  FINAL_MCQS.forEach((_, i) => {
+    const r = STATE.mcq[`final:${i}`];
+    if (r && r.answered) { mcqAnswered++; if (r.everCorrect) mcqCorrect++; }
+  });
+
+  const grandTotal = checklistTotal + fcTotal + mcqTotal;
+  const grandDone = checklistDone + fcDone + mcqAnswered;
+  const overallPct = grandTotal === 0 ? 0 : Math.round((grandDone / grandTotal) * 100);
+
+  return { checklistTotal, checklistDone, fcTotal, fcDone, fcNeedsReview, mcqTotal, mcqAnswered, mcqCorrect, overallPct };
+}
+
+function updateAllProgress() {
+  const stats = computeOverallStats();
+
+  const sidebarFill = document.getElementById('sidebarFill');
+  const sidebarPct = document.getElementById('sidebarPct');
+  if (sidebarFill) sidebarFill.style.width = stats.overallPct + '%';
+  if (sidebarPct) sidebarPct.textContent = stats.overallPct + '%';
+
+  CHAPTERS.forEach(ch => {
+    const pct = computeChapterProgress(ch);
+    const ring = document.getElementById(`snav-ring-${ch.id}`);
+    if (ring) {
+      const circumference = 40.8; // 2*pi*6.5
+      ring.style.strokeDashoffset = circumference - (pct / 100) * circumference;
+      ring.style.stroke = pct === 100 ? '#5fd97a' : pct > 0 ? '#3dd6c5' : '#222b38';
+    }
+    const chip = document.getElementById(`chprog-chip-${ch.id}`);
+    if (chip) chip.textContent = pct + '% complete';
+  });
+
+  // final mcq score
+  let finalAnswered = 0, finalCorrect = 0;
+  FINAL_MCQS.forEach((_, i) => {
+    const r = STATE.mcq[`final:${i}`];
+    if (r && r.answered) { finalAnswered++; if (r.everCorrect) finalCorrect++; }
+  });
+  const scoreEl = document.getElementById('finalMcqScore');
+  if (scoreEl) {
+    if (finalAnswered === 0) {
+      scoreEl.textContent = `0 / ${FINAL_MCQS.length} answered`;
+    } else {
+      const pct = Math.round((finalCorrect / finalAnswered) * 100);
+      scoreEl.textContent = `${finalAnswered} / ${FINAL_MCQS.length} answered · ${finalCorrect} correct (${pct}%)`;
+    }
+  }
+
+  renderDashboardCards(stats);
+  renderDashboardChapterList();
+}
+
+function renderDashboardCards(stats) {
+  const grid = document.getElementById('dashGrid');
+  if (!grid) return;
+  const mcqPct = stats.mcqAnswered === 0 ? 0 : Math.round((stats.mcqCorrect / stats.mcqAnswered) * 100);
+
+  grid.innerHTML = `
+    <div class="dash-card">
+      <div class="dlabel">Overall progress</div>
+      <div class="dval">${stats.overallPct}<span class="unit">%</span></div>
+      <div class="dash-bar-track"><div class="dash-bar-fill" style="width:${stats.overallPct}%; background:linear-gradient(90deg,#2a8f84,#3dd6c5);"></div></div>
+    </div>
+    <div class="dash-card">
+      <div class="dlabel">Checklist items reviewed</div>
+      <div class="dval">${stats.checklistDone}<span class="unit"> / ${stats.checklistTotal}</span></div>
+      <div class="dash-bar-track"><div class="dash-bar-fill" style="width:${pctOf(stats.checklistDone, stats.checklistTotal)}%; background:linear-gradient(90deg,#a87530,#ffb454);"></div></div>
+    </div>
+    <div class="dash-card">
+      <div class="dlabel">Flashcards flipped</div>
+      <div class="dval">${stats.fcDone}<span class="unit"> / ${stats.fcTotal}</span></div>
+      <div class="dash-bar-track"><div class="dash-bar-fill" style="width:${pctOf(stats.fcDone, stats.fcTotal)}%; background:linear-gradient(90deg,#5e3fa8,#a78bfa);"></div></div>
+      ${stats.fcNeedsReview > 0 ? `<div style="margin-top:9px; font-family:var(--mono); font-size:10.5px; color:var(--amber);">⚠ ${stats.fcNeedsReview} marked "review again"</div>` : ''}
+    </div>
+    <div class="dash-card">
+      <div class="dlabel">MCQ accuracy (best attempt)</div>
+      <div class="dval">${mcqPct}<span class="unit">% (${stats.mcqCorrect}/${stats.mcqAnswered})</span></div>
+      <div class="dash-bar-track"><div class="dash-bar-fill" style="width:${mcqPct}%; background:linear-gradient(90deg,#1f8f4a,#5fd97a);"></div></div>
+    </div>
+  `;
+}
+
+function renderDashboardChapterList() {
+  const list = document.getElementById('dashChapterList');
+  if (!list) return;
+  list.innerHTML = CHAPTERS.map(ch => {
+    const pct = computeChapterProgress(ch);
+    return `
+      <div class="dash-chapter-row" data-goto="${ch.id}">
+        <span class="dcr-num">${ch.num}</span>
+        <span class="dcr-title">${ch.title}</span>
+        <span class="dcr-track"><span class="dcr-fill" style="width:${pct}%;"></span></span>
+        <span class="dcr-pct">${pct}%</span>
+      </div>
+    `;
+  }).join('');
+  list.querySelectorAll('[data-goto]').forEach(el => {
+    el.addEventListener('click', () => goToPageById(el.getAttribute('data-goto')));
+  });
+}
+
+function pctOf(a, b) { return b === 0 ? 0 : Math.round((a / b) * 100); }
+
+// ============================================================
+// RESET
+// ============================================================
+function resetProgress() {
+  if (!confirm("Reset all checklist, flashcard, and MCQ progress? This can't be undone.")) return;
+  STATE.checklist = {};
+  STATE.flashcards = {};
+  STATE.mcq = {};
+  try { localStorage.removeItem(STORAGE_KEY); } catch (e) {}
+  try { if (window.storage && window.storage.delete) window.storage.delete(STORAGE_KEY, false).catch(()=>{}); } catch (e) {}
+
+  renderAllPages();
+  attachGoToHandlers();
+  hydrateAllVisuals();
+  showPage(currentPageIndex, false);
+  updateAllProgress();
+}
+
+// ============================================================
+// PAGE ROUTING
+// ============================================================
+function goToPageById(id) {
+  const idx = PAGES.findIndex(p => p.id === id);
+  if (idx >= 0) goToPage(idx);
+}
+
+function goToPage(index) {
+  if (index < 0 || index >= PAGES.length) return;
+  currentPageIndex = index;
+  showPage(index, true);
+  try { history.replaceState(null, '', '#' + PAGES[index].id); } catch (e) {}
+}
+
+function showPage(index, scrollTop) {
+  document.querySelectorAll('.page').forEach(p => p.classList.add('is-hidden'));
+  const page = PAGES[index];
+  const el = document.getElementById(`page-${page.id}`);
+  if (el) el.classList.remove('is-hidden');
+
+  // sidebar active state
+  document.querySelectorAll('.sidebar-link').forEach(l => l.classList.remove('active'));
+  const link = document.getElementById(`snav-link-${page.id}`);
+  if (link) link.classList.add('active');
+
+  updatePager(index);
+
+  if (scrollTop) {
+    const scrollContainer = document.getElementById('mainScroll');
+    if (scrollContainer) scrollContainer.scrollTop = 0;
+    window.scrollTo(0, 0);
+  }
+}
+
+function updatePager(index) {
+  const prevBtn = document.getElementById('pagerPrev');
+  const nextBtn = document.getElementById('pagerNext');
+  const prevTitle = document.getElementById('pagerPrevTitle');
+  const nextTitle = document.getElementById('pagerNextTitle');
+  const center = document.getElementById('pagerCenter');
+
+  center.textContent = `${index + 1} / ${PAGES.length}`;
+
+  if (index <= 0) {
+    prevBtn.classList.add('disabled');
+    prevTitle.textContent = '—';
+  } else {
+    prevBtn.classList.remove('disabled');
+    prevTitle.textContent = PAGES[index - 1].navLabel;
+  }
+
+  if (index >= PAGES.length - 1) {
+    nextBtn.classList.add('disabled');
+    nextTitle.textContent = '—';
+  } else {
+    nextBtn.classList.remove('disabled');
+    nextTitle.textContent = PAGES[index + 1].navLabel;
+  }
+}
+
+function attachGoToHandlers() {
+  document.querySelectorAll('[data-goto]').forEach(el => {
+    el.addEventListener('click', () => goToPageById(el.getAttribute('data-goto')));
+  });
+}
+
+// ============================================================
+// HYDRATE VISUALS FROM STATE (after render or reset)
+// ============================================================
+function hydrateAllVisuals() {
+  document.querySelectorAll('input[type=checkbox][data-key]').forEach(input => {
+    const key = input.getAttribute('data-key');
+    if (STATE.checklist[key]) input.checked = true;
+  });
+
+  document.querySelectorAll('.fc[data-key]').forEach(el => {
+    const key = el.getAttribute('data-key');
+    const r = STATE.flashcards[key];
+    if (!r) return;
+    el.classList.add('reviewed');
+    // r can be `true` (legacy, pre-grading saves) or {reviewed, gotIt} (current format)
+    if (r === true) return; // legacy: just mark reviewed, no grade to restore
+    el.classList.add('graded');
+    el.classList.toggle('needs-review', !r.gotIt);
+    const tag = document.getElementById(`fc-status-tag-${key}`);
+    if (tag) {
+      tag.textContent = r.gotIt ? '✓ Got it' : '✗ Review again';
+      tag.className = 'fc-status-tag ' + (r.gotIt ? 'got-it' : 'review-again');
+    }
+  });
+
+  function hydrateMcqList(list, prefix) {
+    list.forEach((m, i) => {
+      const key = `${prefix}:${i}`;
+      const r = STATE.mcq[key];
+      if (!r || !r.answered) return;
+      const mcqEl = document.querySelector(`.mcq[data-key="${key}"]`);
+      if (!mcqEl) return;
+      mcqEl.classList.add('answered');
+      const opts = mcqEl.querySelectorAll('.mcq-opt');
+      opts.forEach((o, oi) => {
+        o.classList.add('disabled');
+        if (oi === m.correct) o.classList.add('correct');
+        else if (oi === undefined) {}
+      });
+      // mark the user's last choice as wrong only if their last attempt was incorrect;
+      // we don't store which option index was chosen, so just show correct + a result tag
+      const tag = document.getElementById(`result-tag-${key}`);
+      if (tag) {
+        tag.textContent = r.everCorrect ? '✓ Correct' : '✗ Incorrect';
+        tag.className = 'mcq-result-tag ' + (r.everCorrect ? 'ok' : 'bad');
+      }
+      const attemptsLbl = document.getElementById(`attempts-${key}`);
+      if (attemptsLbl && r.attempts > 1) attemptsLbl.textContent = `attempt ${r.attempts}`;
+    });
+  }
+  CHAPTERS.forEach(ch => hydrateMcqList(ch.mcqs, ch.id));
+  hydrateMcqList(FINAL_MCQS, 'final');
+}
+
+// ============================================================
+// MOBILE SIDEBAR
+// ============================================================
+function openMobileSidebar() {
+  document.getElementById('sidebar').classList.add('open');
+  document.getElementById('sidebarBackdrop').classList.add('show');
+}
+function closeMobileSidebar() {
+  document.getElementById('sidebar').classList.remove('open');
+  document.getElementById('sidebarBackdrop').classList.remove('show');
+}
+
+// ============================================================
+// INIT
+// ============================================================
+function init() {
+  loadState();
+  buildPageModel();
+
+  renderSidebarNav();
+  renderAllPages();
+  attachGoToHandlers();
+  hydrateAllVisuals();
+
+  // determine starting page from hash, if present
+  let startIndex = 0;
+  const hash = window.location.hash.replace('#', '');
+  if (hash) {
+    const idx = PAGES.findIndex(p => p.id === hash);
+    if (idx >= 0) startIndex = idx;
+  }
+  currentPageIndex = startIndex;
+  showPage(startIndex, false);
+
+  updateAllProgress();
+
+  document.getElementById('resetBtn').addEventListener('click', resetProgress);
+  document.getElementById('pagerPrev').addEventListener('click', () => goToPage(currentPageIndex - 1));
+  document.getElementById('pagerNext').addEventListener('click', () => goToPage(currentPageIndex + 1));
+  document.getElementById('sidebarToggle').addEventListener('click', openMobileSidebar);
+  document.getElementById('sidebarBackdrop').addEventListener('click', closeMobileSidebar);
+
+  window.addEventListener('hashchange', () => {
+    const h = window.location.hash.replace('#', '');
+    const idx = PAGES.findIndex(p => p.id === h);
+    if (idx >= 0 && idx !== currentPageIndex) goToPage(idx);
+  });
+
+  // keyboard navigation
+  document.addEventListener('keydown', (e) => {
+    if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+    if (e.key === 'ArrowRight' && !e.metaKey && !e.ctrlKey) goToPage(currentPageIndex + 1);
+    if (e.key === 'ArrowLeft' && !e.metaKey && !e.ctrlKey) goToPage(currentPageIndex - 1);
+  });
+}
+
+document.addEventListener('DOMContentLoaded', init);
+
+</script>
+</body>
+</html>

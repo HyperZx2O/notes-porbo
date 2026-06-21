@@ -1,0 +1,1439 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+<title>Chemistry Exam Crash Course — 1 Day Plan</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0a0e14;
+  --bg-elev:#10151f;
+  --bg-card:#151c28;
+  --bg-card-2:#1a2230;
+  --border:#232e40;
+  --border-soft:#1c2536;
+  --text:#e8eef6;
+  --text-dim:#90a0b5;
+  --text-faint:#5d6c81;
+  --accent:#27d9c4;
+  --accent-dim:#1a3a38;
+  --accent-2:#ffb454;
+  --accent-2-dim:#3a2f1a;
+  --accent-3:#8b95ff;
+  --accent-3-dim:#262a4a;
+  --good:#4ade80;
+  --good-dim:#16321f;
+  --bad:#fb7185;
+  --bad-dim:#3a1820;
+  --radius:14px;
+  --radius-sm:9px;
+}
+*{box-sizing:border-box;}
+html,body{margin:0;padding:0;}
+body{
+  background:radial-gradient(ellipse 1200px 800px at 20% -10%, #0d2d2a 0%, var(--bg) 45%), var(--bg);
+  color:var(--text);
+  font-family:'Inter',system-ui,-apple-system,sans-serif;
+  line-height:1.6;
+  -webkit-font-smoothing:antialiased;
+  min-height:100vh;
+}
+h1,h2,h3,h4{font-family:'Space Grotesk',sans-serif; margin:0 0 .4em 0; letter-spacing:-0.01em;}
+p{margin:0 0 .9em 0;}
+ul,ol{margin:0 0 .9em 0; padding-left:1.3em;}
+li{margin-bottom:.4em;}
+a{color:var(--accent);}
+.mono{font-family:'JetBrains Mono',monospace;}
+
+/* ---------- layout shell ---------- */
+.shell{display:flex; min-height:100vh;}
+.sidebar{
+  width:280px; flex-shrink:0;
+  background:var(--bg-elev);
+  border-right:1px solid var(--border-soft);
+  padding:22px 16px 90px 16px;
+  position:fixed; top:0; left:0; bottom:0;
+  overflow-y:auto;
+  z-index:40;
+  transition:transform .25s ease;
+}
+.brand{padding:4px 8px 18px 8px; border-bottom:1px solid var(--border-soft); margin-bottom:14px;}
+.brand .tag{display:inline-block; font-family:'JetBrains Mono',monospace; font-size:11px; color:var(--accent); background:var(--accent-dim); padding:3px 8px; border-radius:5px; letter-spacing:.06em; margin-bottom:8px;}
+.brand h1{font-size:18px; line-height:1.25; margin:0;}
+.brand .sub{color:var(--text-dim); font-size:12.5px; margin-top:4px;}
+
+.nav-section-label{font-size:10.5px; text-transform:uppercase; letter-spacing:.09em; color:var(--text-faint); margin:18px 8px 8px 8px; font-weight:600;}
+.nav-item{
+  display:flex; align-items:center; gap:10px;
+  padding:9px 8px; border-radius:10px; cursor:pointer;
+  color:var(--text-dim); font-size:14px; font-weight:500;
+  border:1px solid transparent;
+  margin-bottom:3px;
+}
+.nav-item:hover{background:var(--bg-card); color:var(--text);}
+.nav-item.active{background:var(--bg-card-2); color:var(--text); border-color:var(--border);}
+.nav-item .elem-badge{width:30px; height:30px; font-size:11px; flex-shrink:0;}
+.nav-item .nlabel{flex:1; min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
+.nav-check{
+  width:17px; height:17px; flex-shrink:0; border-radius:5px; border:1.5px solid var(--text-faint);
+  display:flex; align-items:center; justify-content:center; cursor:pointer;
+}
+.nav-check.checked{background:var(--good); border-color:var(--good);}
+.nav-check.checked::after{content:"✓"; color:#06210f; font-size:11px; font-weight:700;}
+
+.elem-badge{
+  width:38px; height:38px; border-radius:9px; border:1.4px solid var(--accent);
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  font-family:'JetBrains Mono',monospace; background:var(--accent-dim); color:var(--accent);
+  position:relative; flex-shrink:0;
+}
+.elem-badge .num{position:absolute; top:2px; left:4px; font-size:7.5px; opacity:.75;}
+.elem-badge .code{font-size:13px; font-weight:700; line-height:1;}
+.elem-badge.c-amber{border-color:var(--accent-2); background:var(--accent-2-dim); color:var(--accent-2);}
+.elem-badge.c-violet{border-color:var(--accent-3); background:var(--accent-3-dim); color:var(--accent-3);}
+
+.sidebar-footer{position:absolute; bottom:0; left:0; right:0; padding:14px 16px; background:linear-gradient(transparent, var(--bg-elev) 30%); font-size:11.5px; color:var(--text-faint);}
+.reset-link{color:var(--text-faint); text-decoration:underline; cursor:pointer; font-size:11.5px;}
+.reset-link:hover{color:var(--bad);}
+
+.menu-toggle{
+  display:none; position:fixed; top:14px; left:14px; z-index:60;
+  width:42px; height:42px; border-radius:11px; background:var(--bg-card); border:1px solid var(--border);
+  color:var(--text); font-size:18px; align-items:center; justify-content:center; cursor:pointer;
+}
+.scrim{display:none; position:fixed; inset:0; background:rgba(0,0,0,.55); z-index:35;}
+
+.main{flex:1; margin-left:280px; padding:28px 36px 80px 36px; max-width:880px;}
+
+/* progress bar */
+.progress-wrap{
+  position:fixed; top:0; left:280px; right:0; z-index:30;
+  background:rgba(10,14,20,.88); backdrop-filter:blur(8px);
+  border-bottom:1px solid var(--border-soft);
+  padding:9px 36px; display:flex; align-items:center; gap:12px;
+  transform:translateY(-100%); transition:transform .3s ease;
+  opacity:0;
+}
+.progress-wrap.show{transform:translateY(0); opacity:1;}
+.progress-track{flex:1; height:7px; background:var(--bg-card-2); border-radius:5px; overflow:hidden;}
+.progress-fill{height:100%; width:0%; background:linear-gradient(90deg, var(--accent), var(--accent-3)); border-radius:5px; transition:width .4s ease;}
+.progress-label{font-family:'JetBrains Mono',monospace; font-size:12px; color:var(--text-dim); white-space:nowrap;}
+body.progress-active .main, body.progress-active .sidebar{padding-top:0;}
+.progress-spacer{height:0; transition:height .3s ease;}
+body.progress-active .progress-spacer{height:42px;}
+
+/* ---------- content blocks ---------- */
+.page{display:none; animation:fadeIn .25s ease;}
+.page.active{display:block;}
+@keyframes fadeIn{from{opacity:0; transform:translateY(6px);} to{opacity:1; transform:translateY(0);}}
+
+.page-head{margin-bottom:26px;}
+.crumb{font-family:'JetBrains Mono',monospace; font-size:11.5px; color:var(--accent); letter-spacing:.08em; margin-bottom:10px; display:flex; align-items:center; gap:8px;}
+.page-head h2{font-size:28px;}
+.page-head .desc{color:var(--text-dim); font-size:15px; max-width:600px;}
+.meta-row{display:flex; gap:10px; flex-wrap:wrap; margin-top:14px;}
+.meta-chip{display:flex; align-items:center; gap:6px; background:var(--bg-card); border:1px solid var(--border); padding:6px 12px; border-radius:20px; font-size:12.5px; color:var(--text-dim);}
+.meta-chip b{color:var(--text); font-weight:600;}
+
+.section{background:var(--bg-card); border:1px solid var(--border-soft); border-radius:var(--radius); padding:20px 22px; margin-bottom:16px;}
+.section h3{font-size:16px; color:var(--text); display:flex; align-items:center; gap:8px;}
+.section h3 .sicon{width:7px; height:7px; border-radius:50%; background:var(--accent); flex-shrink:0;}
+.section p, .section li{color:#cdd8e6; font-size:14.5px;}
+.section .text-dim{color:var(--text-dim);}
+
+.formula-box{
+  background:var(--bg-card-2); border:1px solid var(--border); border-left:3px solid var(--accent);
+  border-radius:9px; padding:12px 16px; margin:12px 0; font-family:'JetBrains Mono',monospace;
+  font-size:14.5px; color:var(--accent); overflow-x:auto;
+}
+.formula-box .flabel{display:block; font-family:'Inter',sans-serif; font-size:11px; color:var(--text-faint); text-transform:uppercase; letter-spacing:.06em; margin-bottom:5px;}
+.example-box{
+  background:var(--accent-2-dim); border:1px solid #4a3a1f; border-radius:9px; padding:14px 16px; margin:12px 0;
+}
+.example-box .elabel{font-size:11px; text-transform:uppercase; letter-spacing:.06em; color:var(--accent-2); font-weight:700; margin-bottom:6px; display:block;}
+.example-box p,.example-box li{color:#e8d9bc; font-size:14px;}
+.example-box .mono-line{font-family:'JetBrains Mono',monospace; font-size:13.5px; color:#ffdca0; display:block; margin:3px 0;}
+.tip-box{
+  background:var(--accent-3-dim); border:1px solid #34386b; border-radius:9px; padding:12px 16px; margin:12px 0; font-size:13.5px; color:#c7caf5;
+}
+.tip-box b{color:#fff;}
+
+.video-card{
+  display:flex; gap:12px; align-items:flex-start; background:var(--bg-card-2); border:1px solid var(--border);
+  border-radius:11px; padding:13px 14px; margin-bottom:10px; text-decoration:none; transition:border-color .15s;
+}
+.video-card:hover{border-color:var(--accent);}
+.video-card .vplay{width:38px; height:38px; border-radius:50%; background:var(--accent-dim); color:var(--accent); flex-shrink:0; display:flex; align-items:center; justify-content:center; font-size:14px;}
+.video-card .vinfo{flex:1; min-width:0;}
+.video-card .vtitle{color:var(--text); font-size:14px; font-weight:600; margin-bottom:2px;}
+.video-card .vmeta{color:var(--text-faint); font-size:12px;}
+
+/* checklist row */
+.review-row{
+  display:flex; align-items:center; gap:12px; background:var(--bg-card-2); border:1px solid var(--border);
+  border-radius:11px; padding:14px 16px; margin-top:18px; cursor:pointer;
+}
+.review-row.checked{border-color:var(--good); background:var(--good-dim);}
+.review-box{width:22px; height:22px; border-radius:6px; border:1.6px solid var(--text-faint); flex-shrink:0; display:flex; align-items:center; justify-content:center;}
+.review-row.checked .review-box{background:var(--good); border-color:var(--good);}
+.review-row.checked .review-box::after{content:"✓"; color:#06210f; font-size:14px; font-weight:700;}
+.review-row .rtext{font-size:14px; color:var(--text); font-weight:500;}
+.review-row .rsub{font-size:12.5px; color:var(--text-faint);}
+
+/* flashcards */
+.fc-wrap{margin-top:6px;}
+.fc-stage{perspective:1400px; height:200px; margin-bottom:14px;}
+.fc-card{
+  position:relative; width:100%; height:100%; cursor:pointer;
+  transform-style:preserve-3d; transition:transform .5s cubic-bezier(.4,.2,.2,1);
+}
+.fc-card.flipped{transform:rotateY(180deg);}
+.fc-face{
+  position:absolute; inset:0; backface-visibility:hidden; border-radius:13px;
+  display:flex; align-items:center; justify-content:center; text-align:center;
+  padding:24px; border:1px solid var(--border);
+}
+.fc-front{background:linear-gradient(155deg, var(--bg-card-2), var(--bg-card)); color:var(--text); font-size:16px; font-weight:600;}
+.fc-back{background:linear-gradient(155deg, var(--accent-dim), #0e211f); color:#d6fff8; transform:rotateY(180deg); font-size:14.5px; border-color:var(--accent);}
+.fc-hint{position:absolute; bottom:10px; left:0; right:0; text-align:center; font-size:10.5px; color:var(--text-faint); text-transform:uppercase; letter-spacing:.06em;}
+.fc-controls{display:flex; align-items:center; justify-content:space-between; gap:10px;}
+.fc-btn{background:var(--bg-card-2); border:1px solid var(--border); color:var(--text); padding:9px 16px; border-radius:9px; cursor:pointer; font-size:13.5px; font-weight:600; font-family:'Inter',sans-serif;}
+.fc-btn:hover{border-color:var(--accent);}
+.fc-counter{font-family:'JetBrains Mono',monospace; font-size:12.5px; color:var(--text-dim);}
+
+/* mcq */
+.mcq-item{background:var(--bg-card-2); border:1px solid var(--border); border-radius:12px; padding:16px 18px; margin-bottom:12px;}
+.mcq-q{font-size:14.5px; font-weight:600; color:var(--text); margin-bottom:12px;}
+.mcq-qnum{color:var(--accent); font-family:'JetBrains Mono',monospace; font-size:12.5px; margin-right:6px;}
+.mcq-opt{
+  display:flex; align-items:center; gap:10px; padding:10px 12px; border-radius:9px; border:1px solid var(--border);
+  margin-bottom:7px; cursor:pointer; font-size:13.8px; color:var(--text-dim); background:var(--bg-card);
+  transition:border-color .12s, background .12s;
+}
+.mcq-opt:hover{border-color:var(--accent-3);}
+.mcq-opt .optkey{width:21px; height:21px; border-radius:6px; border:1.4px solid var(--text-faint); display:flex; align-items:center; justify-content:center; font-size:10.5px; flex-shrink:0; font-family:'JetBrains Mono',monospace;}
+.mcq-opt.selected{border-color:var(--accent-3); color:var(--text);}
+.mcq-opt.correct{border-color:var(--good); background:var(--good-dim); color:#d6ffe6;}
+.mcq-opt.correct .optkey{background:var(--good); border-color:var(--good); color:#06210f;}
+.mcq-opt.incorrect{border-color:var(--bad); background:var(--bad-dim); color:#ffd9dd;}
+.mcq-opt.incorrect .optkey{background:var(--bad); border-color:var(--bad); color:#2a0a0e;}
+.mcq-opt.disabled{cursor:default;}
+.mcq-why{margin-top:8px; padding:10px 12px; background:var(--bg-elev); border-radius:8px; font-size:13px; color:var(--text-dim); display:none;}
+.mcq-why.show{display:block;}
+.mcq-foot{display:flex; align-items:center; justify-content:space-between; margin-top:9px; gap:10px;}
+.mcq-result-tag{font-size:12px; font-weight:700; padding:3px 9px; border-radius:20px; letter-spacing:.03em;}
+.mcq-result-tag.right{background:var(--good-dim); color:var(--good);}
+.mcq-result-tag.wrong{background:var(--bad-dim); color:var(--bad);}
+.mcq-retry{
+  background:none; border:1px solid var(--border); color:var(--text-dim); padding:6px 13px; border-radius:8px;
+  cursor:pointer; font-size:12px; font-weight:600; font-family:'Inter',sans-serif; display:flex; align-items:center; gap:6px;
+}
+.mcq-retry:hover{border-color:var(--accent-3); color:var(--accent-3);}
+.mcq-score-bar{
+  display:flex; align-items:center; justify-content:space-between; background:var(--bg-card-2); border:1px solid var(--border);
+  border-radius:11px; padding:13px 16px; margin-bottom:14px; position:sticky; top:0;
+}
+body.progress-active .mcq-score-bar{top:42px;}
+.mcq-score-bar .label{font-size:13px; color:var(--text-dim);}
+.mcq-score-bar .score{font-family:'JetBrains Mono',monospace; font-size:16px; font-weight:700; color:var(--accent);}
+.mcq-reset{background:none; border:1px solid var(--border); color:var(--text-dim); padding:6px 12px; border-radius:8px; cursor:pointer; font-size:12px;}
+.mcq-reset:hover{border-color:var(--bad); color:var(--bad);}
+
+/* home page */
+.hero{
+  background:linear-gradient(135deg, #0d2a27 0%, var(--bg-card) 60%); border:1px solid var(--border-soft);
+  border-radius:18px; padding:30px 28px; margin-bottom:22px; position:relative; overflow:hidden;
+}
+.hero::after{content:""; position:absolute; right:-60px; top:-60px; width:220px; height:220px; border-radius:50%; background:radial-gradient(circle, rgba(39,217,196,.18), transparent 70%);}
+.hero h2{font-size:25px; margin-bottom:8px;}
+.hero p{color:var(--text-dim); font-size:14.5px; max-width:560px; margin-bottom:0;}
+.stat-row{display:flex; gap:14px; margin-top:18px; flex-wrap:wrap;}
+.stat{background:rgba(0,0,0,.22); border:1px solid var(--border); border-radius:11px; padding:12px 16px; min-width:110px;}
+.stat .n{font-family:'JetBrains Mono',monospace; font-size:21px; font-weight:700; color:var(--accent);}
+.stat .l{font-size:11.5px; color:var(--text-faint); text-transform:uppercase; letter-spacing:.05em;}
+
+.timeline{display:flex; flex-direction:column; gap:0;}
+.tl-item{display:flex; gap:14px; padding:14px 0; border-bottom:1px solid var(--border-soft); cursor:pointer;}
+.tl-item:last-child{border-bottom:none;}
+.tl-item:hover .tl-title{color:var(--accent);}
+.tl-time{font-family:'JetBrains Mono',monospace; font-size:12px; color:var(--text-faint); width:64px; flex-shrink:0; padding-top:3px;}
+.tl-body{flex:1;}
+.tl-title{font-size:14.5px; font-weight:600; color:var(--text); margin-bottom:2px;}
+.tl-sub{font-size:12.5px; color:var(--text-faint);}
+.tl-check{margin-left:auto; align-self:center;}
+
+.topic-grid{display:grid; grid-template-columns:repeat(auto-fill, minmax(250px,1fr)); gap:12px; margin-top:8px;}
+.topic-tile{background:var(--bg-card); border:1px solid var(--border-soft); border-radius:13px; padding:16px; cursor:pointer; transition:border-color .15s, transform .15s;}
+.topic-tile:hover{border-color:var(--accent); transform:translateY(-2px);}
+.topic-tile .ttop{display:flex; align-items:center; gap:10px; margin-bottom:10px;}
+.topic-tile .ttitle{font-size:14.5px; font-weight:600; color:var(--text);}
+.topic-tile .tdesc{font-size:12.5px; color:var(--text-faint); margin-bottom:10px; min-height:32px;}
+.mini-progress{height:5px; background:var(--bg-card-2); border-radius:4px; overflow:hidden;}
+.mini-progress div{height:100%; background:var(--accent); border-radius:4px;}
+
+.divider-label{font-size:11px; text-transform:uppercase; letter-spacing:.09em; color:var(--text-faint); margin:26px 0 12px 0; display:flex; align-items:center; gap:10px;}
+.divider-label::after{content:""; flex:1; height:1px; background:var(--border-soft);}
+
+@media (max-width: 900px){
+  .sidebar{transform:translateX(-100%); width:270px;}
+  .sidebar.open{transform:translateX(0);}
+  .main{margin-left:0; padding:78px 18px 70px 18px;}
+  .menu-toggle{display:flex;}
+  .scrim.show{display:block;}
+  .progress-wrap{left:0; padding:9px 18px 9px 64px;}
+  .hero{padding:22px 18px;}
+  .fc-stage{height:230px;}
+}
+</style>
+</head>
+<body>
+
+<div class="scrim" id="scrim"></div>
+<button class="menu-toggle" id="menuToggle">☰</button>
+
+<div class="progress-wrap" id="progressWrap">
+  <span class="progress-label" id="progressLabel">0%</span>
+  <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+  <span class="progress-label" id="progressLabel2">reviewed</span>
+</div>
+<div class="progress-spacer"></div>
+
+<div class="shell">
+  <nav class="sidebar" id="sidebar">
+    <div class="brand">
+      <span class="tag">1-DAY CRASH COURSE</span>
+      <h1>Chemistry Exam Guide</h1>
+      <div class="sub">7 topics · flashcards · MCQs · timed plan</div>
+    </div>
+    <div class="nav-section-label">Overview</div>
+    <div id="navHome" class="nav-item" data-page="home">
+      <div class="elem-badge c-amber"><span class="num">00</span><span class="code">HQ</span></div>
+      <span class="nlabel">Study Plan & Checklist</span>
+    </div>
+    <div class="nav-section-label">Topics</div>
+    <div id="navTopics"></div>
+    <div class="nav-section-label">Wrap-up</div>
+    <div id="navFinal" class="nav-item" data-page="final">
+      <div class="elem-badge c-violet"><span class="num">08</span><span class="code">FR</span></div>
+      <span class="nlabel">Final Review (All Topics)</span>
+    </div>
+    <div class="sidebar-footer">
+      <span class="reset-link" id="resetBtn">Reset all progress</span>
+    </div>
+  </nav>
+
+  <main class="main" id="main"></main>
+</div>
+
+<script>
+/* ============================================================
+   STORAGE LAYER — three-tier persistence so your progress
+   survives closing the file, on both PC and mobile:
+   1) window.storage  — used when this page is viewed inside the
+      Claude.ai artifact panel; syncs to your Claude account.
+   2) localStorage     — used when this HTML file is opened
+      directly in a normal browser (downloaded, double-clicked,
+      or opened from Files on a phone). Survives closing the tab,
+      the browser, and restarting the device.
+   3) in-memory object — last-resort fallback for the rare case
+      neither of the above is available, so the page never breaks.
+   Every save writes to every tier that's available, so whichever
+   way you open the file next time, your progress is there.
+   ============================================================ */
+const memState = {};
+const LS_PREFIX = 'chemguide_';
+
+async function storeGet(key){
+  let fromWindowStorage = null, fromLocalStorage = null;
+  try{
+    if(window.storage){
+      const r = await window.storage.get(key, false);
+      if(r) fromWindowStorage = JSON.parse(r.value);
+    }
+  }catch(e){ /* key not found or storage unavailable */ }
+  try{
+    const v = localStorage.getItem(LS_PREFIX+key);
+    if(v) fromLocalStorage = JSON.parse(v);
+  }catch(e){ /* localStorage blocked (e.g. sandboxed iframe) */ }
+
+  if(fromWindowStorage !== null) return fromWindowStorage;
+  if(fromLocalStorage !== null) return fromLocalStorage;
+  return memState[key] !== undefined ? memState[key] : null;
+}
+async function storeSet(key, value){
+  memState[key] = value;
+  try{
+    if(window.storage){ await window.storage.set(key, JSON.stringify(value), false); }
+  }catch(e){ /* ignore — other tiers still saved */ }
+  try{
+    localStorage.setItem(LS_PREFIX+key, JSON.stringify(value));
+  }catch(e){ /* ignore — other tiers still saved */ }
+}
+async function storeDelete(key){
+  delete memState[key];
+  try{ if(window.storage){ await window.storage.delete(key, false); } }catch(e){}
+  try{ localStorage.removeItem(LS_PREFIX+key); }catch(e){}
+}
+
+/* ============================================================
+   STATE
+   ============================================================ */
+let STATE = {
+  checklist: {},      // topicId -> bool
+  mcq: {}              // setId -> { qIndex: selectedOptionIndex }
+};
+
+async function loadAllState(){
+  const cl = await storeGet('checklist');
+  const mc = await storeGet('mcqAnswers');
+  if(cl) STATE.checklist = cl;
+  if(mc) STATE.mcq = mc;
+}
+function saveChecklist(){ storeSet('checklist', STATE.checklist); }
+function saveMcq(){ storeSet('mcqAnswers', STATE.mcq); }
+
+/* ============================================================
+   DATA — TOPICS
+   ============================================================ */
+const TOPICS = [
+{
+  id:'t1', num:'01', code:'TD', color:'',
+  title:'Thermodynamics Basics',
+  blurb:'Systems, energy, enthalpy, state functions, and the First Law',
+  time:50,
+  videos:[
+    {title:'Understanding Enthalpy and Calorimetry', channel:'Professor Dave Explains', len:'~9 min', url:'https://www.youtube.com/watch?v=UhwHpql1zrI'}
+  ],
+  sections:[
+    {h:'Systems: Open, Closed, Isolated', body:`
+      <p>A <b>system</b> is the part of the universe you're studying. Everything else is the <b>surroundings</b>. The boundary between them decides what can cross.</p>
+      <div class="formula-box"><span class="flabel">Three types</span>
+      <b>Open</b> — matter AND energy can cross (e.g. an open pot of boiling water)<br>
+      <b>Closed</b> — only energy can cross, matter cannot (e.g. a sealed flask being heated)<br>
+      <b>Isolated</b> — neither matter nor energy can cross (e.g. an ideal thermos)</div>
+      <div class="tip-box"><b>Exam trick:</b> if the question mentions a sealed/stoppered container, it's closed (energy like heat can still pass through glass). Only a perfectly insulated container is isolated.</div>
+    `},
+    {h:'Energy, Heat & Enthalpy', body:`
+      <p><b>Energy</b> is the capacity to do work. <b>Heat (q)</b> is energy that flows due to a temperature difference between system and surroundings.</p>
+      <p><b>Enthalpy (H)</b> is the total heat content of a system at constant pressure.</p>
+      <div class="formula-box"><span class="flabel">Definition</span>H = U + PV</div>
+      <div class="formula-box"><span class="flabel">Enthalpy change of a reaction</span>ΔH = H(products) − H(reactants)</div>
+      <p>U = internal energy, P = pressure, V = volume. At constant pressure, ΔH simply equals the heat absorbed or released (q<sub>p</sub>).</p>
+    `},
+    {h:'Extensive vs Intensive Properties', body:`
+      <p><b>Extensive</b> properties depend on the <i>amount</i> of substance: mass, volume, enthalpy, entropy, Gibbs free energy. Double the water → double the volume and enthalpy.</p>
+      <p><b>Intensive</b> properties do NOT depend on amount: temperature, pressure, density, concentration. Every drop in a glass of 20 °C water is still 20 °C.</p>
+      <div class="tip-box">Quick test: if you split the system in half, does the property stay the same (intensive) or halve too (extensive)?</div>
+    `},
+    {h:'State Functions & Exo/Endothermic Processes', body:`
+      <p>A <b>state function</b> depends only on the current state (e.g. T, P), not on the path taken to get there. Enthalpy, internal energy, and entropy are state functions — heat and work are NOT (they're path functions).</p>
+      <div class="example-box"><span class="elabel">Exothermic</span>Releases heat, ΔH is negative.
+      <span class="mono-line">CH₄(g) + 2O₂(g) → CO₂(g) + 2H₂O(l)   ΔH = −890 kJ</span></div>
+      <div class="example-box"><span class="elabel">Endothermic</span>Absorbs heat, ΔH is positive.
+      <span class="mono-line">N₂(g) + 3H₂(g) → 2NH₃(g)   ΔH = +91.8 kJ</span></div>
+    `},
+    {h:'Special Processes (memorize the "0" condition)', body:`
+      <div class="formula-box"><span class="flabel">Constant-condition processes</span>
+      Isothermal (constant T) → dT = 0<br>
+      Adiabatic (no heat exchange) → dq = 0<br>
+      Isobaric (constant P) → dP = 0<br>
+      Isochoric (constant V) → dV = 0</div>
+      <p><b>Reversible process:</b> happens in infinite tiny steps; reversing it exactly retraces the path (same magnitude, opposite sign).</p>
+      <p><b>Irreversible process:</b> happens in one big step; cannot be reversed along the same path.</p>
+    `},
+    {h:'Kinetic, Potential & Internal Energy', body:`
+      <div class="formula-box"><span class="flabel">Kinetic energy</span>E<sub>k</sub> = ½mv²</div>
+      <div class="formula-box"><span class="flabel">Potential energy</span>E<sub>p</sub> = mgh</div>
+      <p><b>Internal energy (U)</b> is the total energy of a system — it bundles together kinetic, potential, vibrational, rotational, and translational energy of all the molecules.</p>
+    `},
+    {h:'First Law of Thermodynamics', body:`
+      <p>Energy can't be created or destroyed — only converted between heat and work.</p>
+      <div class="formula-box"><span class="flabel">First Law</span>ΔU = q + w  (or differential form: dU = dq + dw)</div>
+      <p>The change in internal energy of a closed system equals the heat added to it plus the work done on it.</p>
+    `}
+  ],
+  flashcards:[
+    {q:'What can cross the boundary of an OPEN system?', a:'Both matter and energy can cross the boundary.'},
+    {q:'What can cross the boundary of a CLOSED system?', a:'Only energy can cross; matter cannot.'},
+    {q:'What can cross the boundary of an ISOLATED system?', a:'Neither matter nor energy can cross.'},
+    {q:'Write the formula for enthalpy.', a:'H = U + PV, where U is internal energy, P is pressure, V is volume.'},
+    {q:'Give one example each of an extensive and an intensive property.', a:'Extensive: volume, mass, enthalpy. Intensive: temperature, pressure, density — independent of amount.'},
+    {q:'State the First Law of Thermodynamics.', a:'ΔU = q + w — the change in internal energy equals heat added plus work done on the system.'},
+    {q:'What is the condition (in terms of differentials) for an isothermal process?', a:'dT = 0 — temperature stays constant.'},
+    {q:'What is the condition for an adiabatic process?', a:'dq = 0 — no heat enters or leaves the system.'},
+    {q:'Is ΔH negative or positive for an exothermic reaction?', a:'Negative — heat is released to the surroundings.'},
+    {q:'Why is enthalpy called a state function?', a:'Because ΔH depends only on initial and final states, not on the path/method used to get there.'}
+  ],
+  mcqs:[
+    {q:'A perfectly sealed, perfectly insulated thermos flask is an example of which system?', opts:['Open system','Closed system','Isolated system','None of these'], correct:2, why:'No matter or energy can cross — that defines an isolated system.'},
+    {q:'Which formula correctly defines enthalpy?', opts:['H = U − PV','H = U + PV','H = PV − U','H = U/PV'], correct:1, why:'Enthalpy combines internal energy with the pressure–volume work term: H = U + PV.'},
+    {q:'CH₄(g) + 2O₂(g) → CO₂(g) + 2H₂O(l), ΔH = −890 kJ. This reaction is:', opts:['Endothermic','Isothermal','Exothermic','Adiabatic'], correct:2, why:'Negative ΔH means heat is released — exothermic.'},
+    {q:'Which of these is an INTENSIVE property?', opts:['Mass','Volume','Temperature','Total internal energy'], correct:2, why:'Temperature does not depend on the amount of substance present.'},
+    {q:'In an isochoric process, which quantity is held constant?', opts:['Pressure','Temperature','Heat','Volume'], correct:3, why:'"Isochoric" comes from constant volume, so dV = 0.'},
+    {q:'According to the First Law of Thermodynamics, ΔU equals:', opts:['q − w','q + w','w − q','q × w'], correct:1, why:'ΔU = q + w: internal energy change equals heat added plus work done on the system.'},
+    {q:'A reversible process is characterized by:', opts:['A single large irreversible step','Infinite, infinitesimally small steps that can be exactly retraced','Always being exothermic','Always occurring at constant volume'], correct:1, why:'Reversibility requires the system to pass through a continuous series of near-equilibrium states.'},
+    {q:'What is the kinetic energy formula for an object of mass m moving with velocity v?', opts:['mgh','½mv²','PV','mc²'], correct:1, why:'Kinetic energy = ½mv², the energy due to motion.'}
+  ]
+},
+{
+  id:'t2', num:'02', code:'TL',
+  title:'Thermochemistry Laws',
+  blurb:"Hess's Law, Kirchhoff's equation, Cp–Cv relation & reversible work",
+  time:55,
+  videos:[
+    {title:"Hess's Law and Enthalpy Change", channel:'Professor Dave Explains', len:'~6 min', url:'https://www.youtube.com/watch?v=HebEKwFJKBc'}
+  ],
+  sections:[
+    {h:"Hess's Law", body:`
+      <p>The total enthalpy change of a reaction is the same whether it happens in one step or several steps — enthalpy is a state function, so only the start and end points matter, not the route.</p>
+      <div class="formula-box"><span class="flabel">Standard enthalpy of reaction</span>ΣΔ<sub>f</sub>H°(products) − ΣΔ<sub>f</sub>H°(reactants)</div>
+      <p>This is hugely useful: some compounds (like CO or C₆H₆) can't be made directly from their elements in a clean single step, so we calculate their formation enthalpy indirectly by adding/subtracting known reaction steps.</p>
+    `},
+    {h:"Worked Example — Hess's Law", body:`
+      <div class="example-box"><span class="elabel">Problem</span>
+      Find the heat of transition from rhombic sulfur to monoclinic sulfur, given:
+      <span class="mono-line">(i)  S(rhombic) + O₂ → SO₂   ΔH = −291.4 kJ</span>
+      <span class="mono-line">(ii) S(monoclinic) + O₂ → SO₂   ΔH = −295.4 kJ</span>
+      <p style="margin-top:8px;"><b>Solution:</b> Subtract (ii) from (i):</p>
+      <span class="mono-line">S(rhombic) − S(monoclinic) → 0, ΔH = −291.4 − (−295.4) = +4.0 kJ</span>
+      <p style="margin-top:6px;">So converting rhombic → monoclinic sulfur needs <b>+4.0 kJ</b>.</p>
+      </div>
+    `},
+    {h:'Relationship Between Cp and Cv', body:`
+      <p>For one mole of an ideal gas, H = U + RT. Differentiating with respect to temperature gives a clean relationship between heat capacity at constant pressure (C<sub>p</sub>) and constant volume (C<sub>v</sub>):</p>
+      <div class="formula-box"><span class="flabel">For 1 mole of ideal gas</span>C<sub>p</sub> − C<sub>v</sub> = R</div>
+      <p>C<sub>p</sub> is always bigger than C<sub>v</sub> because at constant pressure, some of the heat added also goes into expansion work, not just raising temperature.</p>
+    `},
+    {h:"Kirchhoff's Equation", body:`
+      <p>Kirchhoff's equation tells us how the heat of reaction changes with temperature.</p>
+      <div class="formula-box"><span class="flabel">Integrated form</span>(ΔH₂ − ΔH₁) / (T₂ − T₁) = ΔC<sub>p</sub></div>
+      <p>In words: the heat of reaction at a higher temperature (T₂) minus the heat of reaction at a lower temperature (T₁), divided by the temperature difference, equals the change in heat capacity (ΔC<sub>p</sub> = ΣC<sub>p</sub>(products) − ΣC<sub>p</sub>(reactants)).</p>
+      <div class="tip-box">This is just "rate of change of ΔH with T" — same idea as a slope. If asked to find ΔH at a new temperature, rearrange: ΔH₂ = ΔH₁ + ΔC<sub>p</sub>(T₂ − T₁).</div>
+    `},
+    {h:'Reversible Isothermal Expansion Work', body:`
+      <p>When an ideal gas expands reversibly and isothermally (constant T) from volume V<sub>i</sub> to V<sub>f</sub>, the work done by the gas is:</p>
+      <div class="formula-box"><span class="flabel">Reversible isothermal work</span>w = −nRT ln(V<sub>f</sub> / V<sub>i</sub>)</div>
+      <p>This equals the area under the P–V curve along the isotherm P = nRT/V. For expansion (V<sub>f</sub> > V<sub>i</sub>), the gas does positive work on the surroundings, so w (work done ON the gas) is negative.</p>
+    `}
+  ],
+  flashcards:[
+    {q:"State Hess's Law in one sentence.", a:'The total enthalpy change of a reaction is the same regardless of the number of steps taken — it depends only on initial and final states.'},
+    {q:'Formula for standard enthalpy of reaction using Hess\'s Law?', a:'ΔH°(reaction) = ΣΔf H°(products) − ΣΔf H°(reactants)'},
+    {q:'What is the relationship between Cp and Cv for 1 mole of an ideal gas?', a:'Cp − Cv = R'},
+    {q:'Why is Cp always greater than Cv?', a:'At constant pressure, part of the absorbed heat also does expansion work, not just raising temperature, so more heat is needed per degree.'},
+    {q:"What does Kirchhoff's equation describe?", a:'How the heat of reaction (ΔH) changes with temperature: (ΔH₂ − ΔH₁)/(T₂ − T₁) = ΔCp.'},
+    {q:'Formula for reversible isothermal expansion work of an ideal gas?', a:'w = −nRT ln(Vf / Vi)'},
+    {q:'In the sulfur Hess\'s Law example, what was the heat of transition from rhombic to monoclinic sulfur?', a:'+4.0 kJ (found by subtracting the two combustion enthalpies).'},
+    {q:'Why can\'t the formation enthalpy of CO be measured directly?', a:'Because pure CO cannot be cleanly synthesized directly from carbon and oxygen without forming CO₂ too — so Hess\'s Law (indirect combination of known steps) is used instead.'}
+  ],
+  mcqs:[
+    {q:"Hess's Law works because enthalpy is a:", opts:['Path function','State function','Vector quantity','Always positive quantity'], correct:1, why:'Being a state function means ΔH depends only on start/end points, letting you add/subtract reaction steps freely.'},
+    {q:'Given Srhombic + O₂ → SO₂ (ΔH=−291.4 kJ) and Smonoclinic + O₂ → SO₂ (ΔH=−295.4 kJ), the enthalpy of rhombic → monoclinic transition is:', opts:['−4.0 kJ','+4.0 kJ','−586.8 kJ','+586.8 kJ'], correct:1, why:'Subtract the second equation from the first: −291.4 − (−295.4) = +4.0 kJ.'},
+    {q:'For 1 mole of an ideal gas, Cp − Cv equals:', opts:['0','R','2R','R/2'], correct:1, why:'This falls directly out of differentiating H = U + RT with respect to T.'},
+    {q:"Kirchhoff's equation relates the heat of reaction to changes in:", opts:['Pressure','Volume','Temperature','Concentration'], correct:2, why:"Kirchhoff's equation specifically describes how ΔH varies with temperature."},
+    {q:'At constant pressure, dH equals:', opts:['dw','dq','dU','PdV'], correct:1, why:'At constant pressure, all the heat exchanged shows up directly as the enthalpy change: dH = dq(at constant P).'},
+    {q:'The work done in a reversible isothermal expansion of an ideal gas is given by:', opts:['w = PΔV','w = −nRT ln(Vf/Vi)','w = nRTΔP','w = −nCvΔT'], correct:1, why:'This comes from integrating P = nRT/V over the volume change at constant T.'},
+    {q:"Hess's Law is especially useful for compounds whose formation enthalpy:", opts:['Is always zero','Cannot be measured directly by simple synthesis','Is only measured at absolute zero','Never changes with temperature'], correct:1, why:'Compounds like CO or C6H6 cannot be cleanly synthesized in one step, so indirect (Hess\'s Law) calculation is needed.'},
+    {q:'In the differential dPdV term during the enthalpy derivation, why is it dropped?', opts:['It is always negative','It is the product of two infinitesimally small quantities, so it\'s negligible','It cancels with dU','It equals R'], correct:1, why:'dP and dV are both infinitesimal, so their product is a second-order infinitesimal — negligible compared to first-order terms.'}
+  ]
+},
+{
+  id:'t3', num:'03', code:'EQ',
+  title:'Chemical Equilibrium',
+  blurb:"Law of Mass Action, Le Chatelier's Principle, Kc & Kp",
+  time:50,
+  videos:[
+    {title:'What is Equilibrium Condition?', channel:'Professor Dave Explains', len:'~5 min', url:'https://www.youtube.com/watch?v=blVUWOmV8Jg'},
+    {title:"What is Le Chatelier's Principle?", channel:'Professor Dave Explains', len:'~6 min', url:'https://www.youtube.com/watch?v=yvEGTfFNeVY'}
+  ],
+  sections:[
+    {h:'Reversible vs Irreversible Reactions', body:`
+      <p><b>Reversible reaction:</b> products can convert back into reactants. Shown with a double arrow ⇌.</p>
+      <div class="example-box"><span class="elabel">Example</span><span class="mono-line">2HI ⇌ H₂ + I₂</span></div>
+      <p><b>Irreversible reaction:</b> the reaction only goes one way (the reverse essentially doesn't happen). Shown with a single arrow →.</p>
+      <div class="example-box"><span class="elabel">Example</span><span class="mono-line">NaCl + AgNO₃ → NaNO₃ + AgCl↓</span></div>
+    `},
+    {h:'Chemical Equilibrium & Law of Mass Action', body:`
+      <p><b>Chemical equilibrium</b> is reached when the rate of the forward reaction equals the rate of the reverse reaction. Concentrations stop changing (but the reaction hasn't stopped — both directions are still happening, just at equal rates).</p>
+      <div class="formula-box"><span class="flabel">Law of Mass Action</span>Rate ∝ [A][B] → Rate = k[A][B]</div>
+      <p>The rate of a reaction is proportional to the product of the "active masses" (concentrations) of the reactants, each raised to its stoichiometric power. k is the rate constant.</p>
+    `},
+    {h:'Equilibrium Constant (Kc and Kp)', body:`
+      <p>For a general reaction aA + bB ⇌ cC + dD:</p>
+      <div class="formula-box"><span class="flabel">Kc (in terms of concentration)</span>Kc = [C]<sup>c</sup>[D]<sup>d</sup> / [A]<sup>a</sup>[B]<sup>b</sup></div>
+      <p>When all species are gases, you can also use partial pressures to get Kp. They're connected by:</p>
+      <div class="formula-box"><span class="flabel">Kp–Kc relationship</span>Kp = Kc(RT)<sup>Δn</sup>, where Δn = (moles of gaseous products) − (moles of gaseous reactants)</div>
+    `},
+    {h:"Worked Example — Equilibrium Constant", body:`
+      <div class="example-box"><span class="elabel">Problem</span>
+      2.40 mol of HI dissociates 22% at 450 °C: 2HI ⇌ H₂ + I₂. Find moles of H₂, I₂ at equilibrium, and Kc.
+      <p style="margin-top:8px;"><b>Solution:</b></p>
+      <span class="mono-line">HI dissociated = 22% × 2.40 = 0.528 mol</span>
+      <span class="mono-line">HI remaining = 2.40 − 0.528 = 1.872 mol</span>
+      <span class="mono-line">H₂ formed = I₂ formed = 0.528 / 2 = 0.264 mol</span>
+      <span class="mono-line">Kc = [H₂][I₂] / [HI]² = (0.264 × 0.264) / (1.872)² ≈ 0.020</span>
+      </div>
+    `},
+    {h:"Le Chatelier's Principle", body:`
+      <p>When a system at equilibrium is disturbed (by changing concentration, temperature, or pressure), the equilibrium shifts in the direction that <b>counteracts</b> the disturbance.</p>
+      <div class="formula-box"><span class="flabel">Concentration</span>↑ reactant conc. → shifts RIGHT (more product)<br>↑ product conc. → shifts LEFT (more reactant)</div>
+      <div class="formula-box"><span class="flabel">Temperature</span>Exothermic reaction: ↑T → shifts LEFT<br>Endothermic reaction: ↑T → shifts RIGHT</div>
+      <div class="formula-box"><span class="flabel">Pressure (gas reactions)</span>↑P → shifts toward the side with FEWER gas moles<br>↓P → shifts toward the side with MORE gas moles</div>
+      <div class="tip-box"><b>Catalyst:</b> speeds up both forward and reverse reactions equally — it gets you to equilibrium faster, but does NOT shift the position of equilibrium.</div>
+    `}
+  ],
+  flashcards:[
+    {q:'Define chemical equilibrium.', a:'The state where the rate of the forward reaction equals the rate of the reverse reaction, so concentrations stop changing.'},
+    {q:'State the Law of Mass Action.', a:'The rate of a reaction is proportional to the product of the active masses (concentrations) of the reactants: Rate = k[A][B].'},
+    {q:'Write the Kc expression for aA + bB ⇌ cC + dD.', a:'Kc = [C]^c[D]^d / [A]^a[B]^b'},
+    {q:'How are Kp and Kc related?', a:'Kp = Kc(RT)^Δn, where Δn = moles of gaseous products − moles of gaseous reactants.'},
+    {q:"State Le Chatelier's Principle.", a:'If a system at equilibrium is disturbed, it shifts in the direction that counteracts (opposes) the disturbance.'},
+    {q:'What happens to equilibrium position when you increase pressure, if the product side has fewer gas moles?', a:'Equilibrium shifts toward the product side (fewer moles) to reduce pressure.'},
+    {q:'Does a catalyst shift the equilibrium position?', a:'No — it speeds up both forward and reverse rates equally, only reaching equilibrium faster, without changing its position.'},
+    {q:'For an exothermic reaction, what happens when temperature is increased?', a:'Equilibrium shifts left (toward reactants) — the system "absorbs" the extra heat by favoring the endothermic reverse direction.'},
+    {q:'What symbol denotes a reversible reaction?', a:'A double arrow: ⇌'},
+    {q:'2.40 mol HI dissociates 22%. How many moles of HI dissociate?', a:'0.528 mol (22% × 2.40)'}
+  ],
+  mcqs:[
+    {q:'At chemical equilibrium:', opts:['The reaction has completely stopped','Forward and reverse rates are equal','Only the forward reaction occurs','Concentration of reactants is always zero'], correct:1, why:'Equilibrium means dynamic balance — both reactions still occur, but at equal rates.'},
+    {q:'According to the Law of Mass Action, rate is proportional to:', opts:['Volume of container','The product of reactant concentrations','Temperature only','Time elapsed'], correct:1, why:'Rate ∝ [A][B] — proportional to the active masses (concentrations) of the reactants.'},
+    {q:'For N₂(g) + 3H₂(g) ⇌ 2NH₃(g), what is Δn for the Kp–Kc relationship?', opts:['+2','−2','0','+4'], correct:1, why:'Δn = moles of gas products − reactants = 2 − (1+3) = −2.'},
+    {q:"Increasing the concentration of a reactant shifts equilibrium:", opts:['Left, toward reactants','Right, toward products','Has no effect','Stops the reaction'], correct:1, why:'The system counteracts the added reactant by converting more of it into product.'},
+    {q:'For an endothermic reaction, increasing temperature shifts equilibrium:', opts:['Left','Right','No change','Cannot be determined'], correct:1, why:'Adding heat favors the endothermic (heat-absorbing) forward direction, shifting right.'},
+    {q:'A catalyst added to a reaction at equilibrium will:', opts:['Shift equilibrium toward products','Shift equilibrium toward reactants','Not shift the position of equilibrium at all','Stop the reverse reaction'], correct:2, why:'Catalysts speed up forward and reverse rates equally — equilibrium position is unchanged.'},
+    {q:'2HI ⇌ H₂ + I₂. With 2.40 mol HI at 22% dissociation, how many moles of H₂ form?', opts:['0.528 mol','0.264 mol','1.872 mol','0.132 mol'], correct:1, why:'0.528 mol HI dissociates, producing half that in H₂ (1:1 stoichiometric ratio with I₂, 2:1 with HI): 0.528/2 = 0.264 mol.'},
+    {q:'If volume of gaseous reactants is greater than products, increasing pressure shifts equilibrium:', opts:['Toward reactants','Toward products','No shift','Reaction stops'], correct:1, why:'The system relieves the pressure increase by shifting toward the side with fewer moles — the product side.'},
+    {q:'NaCl + AgNO₃ → NaNO₃ + AgCl is best described as a(n):', opts:['Reversible reaction','Irreversible reaction','Equilibrium reaction','Endothermic equilibrium'], correct:1, why:'Single arrow, products do not convert back — this is irreversible (a precipitation reaction).'},
+    {q:'The equilibrium constant expression uses concentrations raised to powers equal to:', opts:['Their molar masses','Their stoichiometric coefficients','Always 1','Their atomic numbers'], correct:1, why:'Each concentration term is raised to the power of its coefficient in the balanced equation.'}
+  ]
+},
+{
+  id:'t4', num:'04', code:'AB',
+  title:'Acids, Bases & Buffers',
+  blurb:'Arrhenius, Brønsted-Lowry, Lewis theories, and buffer pH calculations',
+  time:75,
+  videos:[
+    {title:'What Are Brønsted-Lowry Acids and Bases?', channel:'Professor Dave Explains', len:'~5 min', url:'https://www.youtube.com/watch?v=TK-34X4RIXw'},
+    {title:'pH of Buffer Solutions: the Henderson–Hasselbalch Equation', channel:'Khan Academy / chemistry tutorial', len:'~10 min', url:'https://www.youtube.com/watch?v=AGz1RID0ZDk'}
+  ],
+  sections:[
+    {h:'Three Acid–Base Theories', body:`
+      <div class="formula-box"><span class="flabel">Arrhenius (narrowest)</span>Acid → increases [H₃O⁺] in water<br>Base → increases [OH⁻] in water</div>
+      <div class="formula-box"><span class="flabel">Brønsted-Lowry (broader)</span>Acid = proton (H⁺) donor<br>Base = proton (H⁺) acceptor</div>
+      <div class="formula-box"><span class="flabel">Lewis (broadest)</span>Acid = electron-pair acceptor<br>Base = electron-pair donor</div>
+      <p>Each theory is broader than the last. A Lewis acid doesn't even need to contain hydrogen — e.g. BF₃ is a Lewis acid because boron accepts an electron pair.</p>
+    `},
+    {h:'Conjugate Acid–Base Pairs', body:`
+      <p>In a Brønsted-Lowry reaction, an acid and base differ from their partners by exactly one proton.</p>
+      <div class="example-box"><span class="elabel">Example</span>NH₃ + H⁺ ⇌ NH₄⁺
+      <p style="margin-top:6px;">NH₄⁺ is the <b>conjugate acid</b> of NH₃ (gained a proton). NH₃ is the <b>conjugate base</b> of NH₄⁺ (would lose a proton).</p></div>
+      <p><b>Strong acid/base:</b> completely ionizes in water (e.g. HClO₄, NaOH). <b>Weak acid/base:</b> only partially ionizes — this is what buffers are built from.</p>
+    `},
+    {h:'Oxoacid Strength Trends', body:`
+      <p>For oxoacids (acidic H attached to O, which is attached to atom Y):</p>
+      <ul>
+        <li><b>More electronegative Y</b> → stronger H–O bond polarity → stronger acid. So HClO &gt; HBrO &gt; HIO (Cl is more electronegative).</li>
+        <li><b>More O atoms on Y</b> (higher oxidation state of Y) → stronger acid. So HClO &lt; HClO₂ &lt; HClO₃ &lt; HClO₄.</li>
+        <li>If oxidation numbers are equal, the <b>smaller central atom</b> gives the stronger acid: HNO₃ &gt; H₃PO₄.</li>
+      </ul>
+    `},
+    {h:'Autoionization of Water & Kw', body:`
+      <p>Water reacts with itself slightly: 2H₂O ⇌ H₃O⁺ + OH⁻</p>
+      <div class="formula-box"><span class="flabel">At 25°C</span>Kw = [H₃O⁺][OH⁻] = 1.0 × 10⁻¹⁴</div>
+      <p>This means pH + pOH = 14 at 25 °C — a relationship you'll use constantly.</p>
+    `},
+    {h:'Buffer Solutions', body:`
+      <p>A <b>buffer</b> resists changes in pH when small amounts of acid or base are added.</p>
+      <div class="formula-box"><span class="flabel">Two types of buffer</span>
+      Acid buffer: weak acid + its salt with a strong base (e.g. CH₃COOH + CH₃COONa)<br>
+      Basic buffer: weak base + its salt with a strong acid (e.g. NH₄OH + NH₄Cl)</div>
+      <p><b>How it works:</b> Add acid (H⁺) → it's "soaked up" by the conjugate base, converting it to weak acid; pH barely moves. Add base (OH⁻) → it's neutralized by the weak acid, forming water + more conjugate base; pH barely moves.</p>
+    `},
+    {h:'Henderson-Hasselbalch Equation', body:`
+      <p>This is THE formula for buffer pH calculations — know it cold.</p>
+      <div class="formula-box"><span class="flabel">Henderson-Hasselbalch</span>pH = pKa + log([A⁻] / [HA]) = pKa + log([conjugate base]/[acid])</div>
+      <p>When [A⁻] = [HA] (equal amounts), the log term is zero, so <b>pH = pKa</b> exactly — useful for picking which weak acid to use for a target pH.</p>
+    `},
+    {h:'Worked Examples — Buffer pH', body:`
+      <div class="example-box"><span class="elabel">Example 1 — Acetate buffer</span>
+      0.20 M CH₃COOH and 0.50 M CH₃COO⁻, Ka = 1.8×10⁻⁵.
+      <span class="mono-line">pH = −log(1.8×10⁻⁵) + log(0.50/0.20) = 4.74 + 0.40 = 5.1</span>
+      </div>
+      <div class="example-box"><span class="elabel">Example 2 — Ammonium buffer</span>
+      0.0350 M NH₃ and 0.0500 M NH₄⁺, Ka(NH₄⁺) = 5.6×10⁻¹⁰.
+      <span class="mono-line">pH = −log(5.6×10⁻¹⁰) + log(0.0350/0.0500) = 9.095</span>
+      </div>
+      <div class="example-box"><span class="elabel">Example 3 — Aspirin absorption (real application)</span>
+      Aspirin pKa = 3.5. In the stomach (pH 1): ratio [ionized]/[unionized] ≈ 0.003 → mostly <b>unionized</b> → easily crosses cell membranes → absorbed in the stomach. In the intestine (pH 6): ratio ≈ 316 → mostly <b>ionized</b> → poorly absorbed there.
+      </div>
+    `}
+  ],
+  flashcards:[
+    {q:'Arrhenius definition of an acid?', a:'A substance that increases the concentration of H₃O⁺ when dissolved in water.'},
+    {q:'Brønsted-Lowry definition of an acid?', a:'A proton (H⁺) donor.'},
+    {q:'Lewis definition of an acid?', a:'An electron-pair acceptor.'},
+    {q:'What is the conjugate base of NH₄⁺?', a:'NH₃ (loses one proton).'},
+    {q:'What is Kw at 25°C, and what relationship does it give?', a:'Kw = [H₃O⁺][OH⁻] = 1.0×10⁻¹⁴, giving pH + pOH = 14.'},
+    {q:'Write the Henderson-Hasselbalch equation.', a:'pH = pKa + log([A⁻]/[HA])'},
+    {q:'What two components make up an acid buffer?', a:'A weak acid plus its salt with a strong base (e.g. CH₃COOH + CH₃COONa).'},
+    {q:'When [A⁻] = [HA] in a buffer, what is pH?', a:'pH = pKa exactly, since log(1) = 0.'},
+    {q:'How does an oxoacid\'s strength change as you add more O atoms to the central atom?', a:'It increases — more O atoms pull electron density away, making the O–H bond more polar and the H easier to release.'},
+    {q:'Why is aspirin absorbed mainly in the stomach rather than the intestine?', a:'Aspirin (pKa 3.5) is mostly unionized at the stomach\'s low pH, and unionized molecules are lipophilic enough to cross cell membranes; in the intestine it\'s mostly ionized and poorly absorbed.'}
+  ],
+  mcqs:[
+    {q:'A Lewis base is defined as a species that:', opts:['Donates a proton','Accepts a proton','Donates an electron pair','Accepts an electron pair'], correct:2, why:'Lewis base = electron-pair donor (forms a covalent bond by donating electrons).'},
+    {q:'In NH₃ + H⁺ ⇌ NH₄⁺, NH₄⁺ is the:', opts:['Conjugate base of NH₃','Conjugate acid of NH₃','Lewis base','Spectator ion'], correct:1, why:'NH₄⁺ formed by NH₃ gaining a proton, making it the conjugate acid.'},
+    {q:'If [H₃O⁺] = 1×10⁻³ M, what is [OH⁻] at 25°C?', opts:['1×10⁻³ M','1×10⁻¹¹ M','1×10⁻¹⁴ M','1×10⁻⁷ M'], correct:1, why:'Kw = [H3O+][OH-] = 1e-14, so [OH-] = 1e-14 / 1e-3 = 1e-11 M.'},
+    {q:'Which acid is strongest, based on the oxidation state rule for oxoacids?', opts:['HClO','HClO₂','HClO₃','HClO₄'], correct:3, why:'More oxygen atoms on the central Cl atom = higher oxidation state = stronger acid.'},
+    {q:'A buffer made of CH₃COOH (0.20 M) and CH₃COO⁻ (0.50 M), Ka=1.8×10⁻⁵. What is the pH? (pKa ≈ 4.74)', opts:['4.34','4.74','5.1','5.5'], correct:2, why:'pH = pKa + log([A-]/[HA]) = 4.74 + log(0.50/0.20) = 4.74 + 0.40 = 5.1.'},
+    {q:'Adding HCl to an acetate buffer causes H⁺ ions to react with:', opts:['Water only','Acetate ions (CH₃COO⁻), forming more acetic acid','Sodium ions','Nothing — pH changes drastically'], correct:1, why:'The conjugate base soaks up the added acid, keeping pH nearly unchanged.'},
+    {q:'For oxoacids HClO, HBrO, HIO with the same structure, which is the strongest acid?', opts:['HClO','HBrO','HIO','All equal'], correct:0, why:'Cl is most electronegative, polarizing the O–H bond the most, making HClO strongest among this trio.'},
+    {q:'A pH = pKa condition for a buffer means:', opts:['The buffer has failed','[A⁻] = [HA]','[A⁻] = 0','The solution is pure water'], correct:1, why:'log([A-]/[HA]) = 0 only when the ratio is 1, i.e. equal concentrations.'}
+  ]
+},
+{
+  id:'t5', num:'05', code:'AS',
+  title:'Atomic Structure',
+  blurb:'Rutherford, Bohr, quantum numbers, Aufbau & Hund\'s rule',
+  time:75,
+  videos:[
+    {title:'Bohr Model of the Hydrogen Atom', channel:'Professor Dave Explains', len:'~5 min', url:'https://www.youtube.com/watch?v=au2HCVn9IJI'},
+    {title:'Quantum Numbers, Atomic Orbitals, and Electron Configurations', channel:'Professor Dave Explains', len:'~9 min', url:'https://www.youtube.com/watch?v=Aoi4j8es4gQ'}
+  ],
+  sections:[
+    {h:"Rutherford's Atomic Model", body:`
+      <p>In the gold foil experiment, most alpha particles passed straight through thin gold foil — but a tiny fraction bounced back sharply. This meant atoms are mostly empty space, with almost all the mass concentrated in a tiny, dense, positively charged <b>nucleus</b>.</p>
+      <div class="tip-box"><b>Two defects of Rutherford's model:</b> (1) An orbiting (accelerating) electron should continuously radiate energy and spiral into the nucleus — but atoms are stable. (2) Continuous energy loss should give a continuous spectrum, but atoms actually show a line spectrum.</div>
+    `},
+    {h:"Bohr's Atomic Theory", body:`
+      <p>Bohr fixed the stability problem by proposing electrons move in fixed circular orbits with quantized angular momentum — while in an orbit, they neither gain nor lose energy.</p>
+      <div class="formula-box"><span class="flabel">Quantization condition</span>mvr = nh/2π (n = 1, 2, 3, ...)</div>
+      <p>When an electron jumps between orbits, it emits or absorbs a photon equal to the energy difference: ΔE = E₂ − E₁ = hν. This explains the hydrogen line spectrum: Lyman (n₁=1), Balmer (n₁=2), Paschen (n₁=3), Brackett (n₁=4), Pfund (n₁=5) series.</p>
+    `},
+    {h:'Limitations of the Bohr Model', body:`
+      <ul>
+        <li>Conflicts with Heisenberg's Uncertainty Principle (assumes a precisely known orbit AND speed simultaneously).</li>
+        <li>Only works well for hydrogen-like (single-electron) species — fails for multi-electron atoms, even neutral helium.</li>
+        <li>Cannot explain the Zeeman effect (splitting of spectral lines in a magnetic field).</li>
+      </ul>
+    `},
+    {h:'Heisenberg Uncertainty & de Broglie', body:`
+      <div class="formula-box"><span class="flabel">Heisenberg Uncertainty Principle</span>Δx · Δp ≥ h / 4π</div>
+      <p>You cannot simultaneously know both the exact position AND momentum of a particle like an electron. This is why we talk about "orbitals" (probability regions) instead of fixed "orbits."</p>
+      <div class="formula-box"><span class="flabel">de Broglie wavelength</span>λ = h / mv</div>
+      <p>Every moving particle has an associated wavelength — matter has wave-like behavior too, not just light.</p>
+    `},
+    {h:'Particles in the Atom & Isotopes/Isobars/Isotones', body:`
+      <p><b>Proton:</b> +1 charge, mass ≈ 1u. <b>Neutron:</b> no charge, mass ≈ 1u. <b>Electron:</b> −1 charge, negligible mass (~1/1800 of a proton).</p>
+      <div class="formula-box"><span class="flabel">Definitions</span>Atomic number (Z) = number of protons<br>Mass number (A) = protons + neutrons</div>
+      <div class="formula-box"><span class="flabel">Same vs Different</span>
+      <b>Isotopes</b> — same Z, different A (e.g. ¹H, ²H, ³H)<br>
+      <b>Isobars</b> — same A, different Z<br>
+      <b>Isotones</b> — same number of neutrons, different Z and A</div>
+    `},
+    {h:'The Four Quantum Numbers', body:`
+      <div class="formula-box"><span class="flabel">n — Principal quantum number</span>1, 2, 3 ... → determines energy level (shell) and size of orbital. Smaller n = lower energy.</div>
+      <div class="formula-box"><span class="flabel">l — Azimuthal (angular momentum) quantum number</span>0 to (n−1) → determines orbital shape (subshell: s=0, p=1, d=2, f=3)</div>
+      <div class="formula-box"><span class="flabel">ml — Magnetic quantum number</span>−l to +l → determines orbital orientation in space. Number of orbitals in a subshell = 2l+1.</div>
+      <div class="formula-box"><span class="flabel">ms — Spin quantum number</span>+½ or −½ → describes electron's intrinsic spin</div>
+      <div class="example-box"><span class="elabel">Worked example — 4p orbital</span>
+      n = 4 (given). p subshell → l = 1. For l=1, ml can be −1, 0, +1 (three 4p orbitals). Each can hold 2 electrons with ms = +½ and −½. Total orbitals for n=4 (4s+4p+4d+4f) = 1+3+5+7 = 16.
+      </div>
+    `},
+    {h:"Aufbau Principle & Hund's Rule", body:`
+      <p><b>Aufbau Principle ("building-up"):</b> electrons fill orbitals starting from the lowest energy. Energy order follows the <b>(n+l) rule</b>: lower (n+l) fills first; if (n+l) is tied, the orbital with lower n fills first.</p>
+      <div class="example-box"><span class="elabel">Example</span>3d: n+l = 3+2 = 5. 4s: n+l = 4+0 = 4. Since 4 &lt; 5, <b>4s fills before 3d</b>.</div>
+      <p><b>Hund's Rule:</b> every orbital in a subshell is singly occupied (one electron each) before any orbital gets a second electron — and all the singly-occupying electrons have the same spin.</p>
+      <div class="example-box"><span class="elabel">Example — Nitrogen (Z=7)</span>1s² 2s² 2p³ → the three 2p orbitals are each singly filled (not paired) — maximizes total spin.</div>
+    `}
+  ],
+  flashcards:[
+    {q:"What did Rutherford's gold foil experiment reveal about atomic structure?", a:'Atoms are mostly empty space with nearly all mass concentrated in a tiny, dense, positively charged nucleus.'},
+    {q:"Name the two defects of Rutherford's atomic model.", a:'(1) An accelerating electron should radiate energy and spiral into the nucleus, but atoms are stable. (2) Continuous energy loss should give a continuous spectrum, but only line spectra are observed.'},
+    {q:"What is Bohr's quantization condition for angular momentum?", a:'mvr = nh/2π, where n is a positive integer.'},
+    {q:'State the Heisenberg Uncertainty Principle.', a:'You cannot simultaneously know the exact position and momentum of a particle with arbitrary precision: Δx·Δp ≥ h/4π.'},
+    {q:"Write de Broglie's equation.", a:'λ = h/mv — every moving particle has an associated wavelength.'},
+    {q:'Define isotopes, isobars, and isotones.', a:'Isotopes: same atomic number (Z), different mass number (A). Isobars: same A, different Z. Isotones: same number of neutrons, different Z and A.'},
+    {q:'What does the azimuthal quantum number (l) determine, and what is its range?', a:'It determines orbital shape (subshell); ranges from 0 to (n−1).'},
+    {q:'What are the possible values of the spin quantum number?', a:'+½ and −½.'},
+    {q:"State the Aufbau (n+l) rule.", a:'Orbitals with lower (n+l) value fill first; if (n+l) is the same, the orbital with lower n fills first.'},
+    {q:"State Hund's Rule.", a:'Every orbital in a subshell gets one electron before any orbital gets a second; all singly-occupied electrons have the same spin.'},
+    {q:'Total number of orbitals for n=4 (4s, 4p, 4d, 4f)?', a:'16 orbitals (1+3+5+7).'}
+  ],
+  mcqs:[
+    {q:"Rutherford's gold foil experiment showed that:", opts:['Atoms are uniformly dense','Most of an atom is empty space with mass concentrated in a tiny nucleus','Electrons have no charge','Protons and electrons have equal mass'], correct:1, why:'Most alpha particles passed straight through, but a few bounced back sharply off a dense, small nucleus.'},
+    {q:"A key defect of Rutherford's model is that it cannot explain why:", opts:['Atoms have mass','Electrons don\'t spiral into the nucleus and atoms are stable','Protons are positive','Atoms are neutral overall'], correct:1, why:'Classical physics says an accelerating (orbiting) charge should radiate energy and collapse — contradicting atomic stability.'},
+    {q:"Bohr's model proposes that angular momentum of an electron is:", opts:['Always zero','Quantized in integer multiples of h/2π','Continuous','Equal to Planck\'s constant'], correct:1, why:'mvr = nh/2π — only specific orbits are allowed.'},
+    {q:'Which of these is NOT a limitation of the Bohr model?', opts:['Conflicts with Heisenberg Uncertainty Principle','Fails for multi-electron atoms','Cannot explain the Zeeman effect','Cannot explain the hydrogen line spectrum'], correct:3, why:'The Bohr model actually explains the hydrogen line spectrum well — that was its main success. Its failures are with multi-electron systems, uncertainty, and magnetic field splitting.'},
+    {q:'Atoms with the same atomic number but different mass numbers are called:', opts:['Isobars','Isotones','Isotopes','Isomers'], correct:2, why:'Isotopes share protons (Z) but differ in neutrons, so A differs.'},
+    {q:'For an electron in a 4p orbital, what is the azimuthal quantum number l?', opts:['0','1','2','4'], correct:1, why:'p subshell always corresponds to l = 1.'},
+    {q:'How many orbitals exist in a d subshell (l=2)?', opts:['1','3','5','7'], correct:2, why:'Number of orbitals = 2l+1 = 2(2)+1 = 5.'},
+    {q:'Between 4s and 3d orbitals, which fills first according to the Aufbau (n+l) rule?', opts:['3d (n+l=5)','4s (n+l=4)','They fill simultaneously','Neither fills'], correct:1, why:'4s has a lower (n+l) value (4) than 3d (5), so it fills first.'}
+  ]
+},
+{
+  id:'t6', num:'06', code:'PT',
+  title:'Periodic Table & Trends',
+  blurb:'From Döbereiner to the Modern Periodic Table, plus key periodic trends',
+  time:60,
+  videos:[
+    {title:'The Periodic Table: Atomic Radius, Ionization Energy, and Electronegativity', channel:'Professor Dave Explains', len:'~9 min', url:'https://www.youtube.com/watch?v=hePb00CqvP0'}
+  ],
+  sections:[
+    {h:'History: Building Toward the Periodic Table', body:`
+      <div class="formula-box"><span class="flabel">Döbereiner's Triads (1817)</span>Groups of 3 elements where the middle element's atomic mass ≈ average of the other two. E.g. Li (6.9), Na (23), K (39): (6.9+39)/2 = 22.95 ≈ Na's mass. Limited — only a few triads existed.</div>
+      <div class="formula-box"><span class="flabel">Newlands' Law of Octaves (1865)</span>Arranged 56 known elements by increasing atomic mass — every 8th element had similar properties (like musical octaves). Broke down after calcium; noble gases weren't known yet, so there was no room for them.</div>
+      <div class="formula-box"><span class="flabel">Mendeleev's Periodic Table (1869)</span>Law: properties of elements are a periodic function of their atomic mass. Arranged elements into periods (rows, 1–7) and groups (columns, I–VIII). Left gaps for undiscovered elements and successfully predicted their properties.</div>
+    `},
+    {h:"Mendeleev's Merits and Demerits", body:`
+      <p><b>Merits:</b> successfully classified all known elements; left blanks for undiscovered elements and correctly predicted their properties; noble gases fit in later without disrupting the table.</p>
+      <p><b>Demerits:</b> hydrogen resembles both alkali metals and halogens, so it had no fixed position; isotopes of the same element have different masses but were forced into the same position; Co (58.93) had to be placed before Ni (58.71) despite higher atomic mass — an anomaly atomic-mass ordering couldn't explain.</p>
+    `},
+    {h:'Modern Periodic Table', body:`
+      <p>Henry Moseley showed that <b>atomic number</b> (not atomic mass) is the true fundamental property.</p>
+      <div class="formula-box"><span class="flabel">Modern Periodic Law</span>Properties of elements are a periodic function of their atomic number.</div>
+      <p>This instantly fixed Mendeleev's anomalies — isotopes (same Z) now correctly share one position, and Co/Ni fall in the correct order by atomic number.</p>
+      <div class="formula-box"><span class="flabel">Periods & Groups</span>
+      7 Periods (horizontal rows) = number of electron shells<br>
+      18 Groups (vertical columns) = related valence electron configuration</div>
+    `},
+    {h:'Element Categories', body:`
+      <ul>
+        <li><b>Normal/representative elements</b> (Groups 1, 2, 13–17): outer s and p sublevels are filling.</li>
+        <li><b>Transition elements</b> (Groups 3–12): outer s and nearby d sublevels are filling.</li>
+        <li><b>Inner transition elements</b> (Lanthanides & Actinides, bottom rows): outer s and nearby f sublevels are filling.</li>
+        <li><b>Noble gases</b> (Group 18): outer s and p sublevels are completely filled — very unreactive.</li>
+      </ul>
+      <div class="tip-box"><b>Quick trick:</b> find period = highest principal quantum number (n) in the configuration. Find group: if last subshell is s or p, it's a Group "A" element — count valence electrons. If it ends in d, it's Group "B" — add up the (n)s and (n−1)d electrons.</div>
+    `},
+    {h:'Periodic Trends', body:`
+      <div class="formula-box"><span class="flabel">Atomic radius</span>Decreases left → right across a period (more nuclear charge pulls electrons in)<br>Increases top → bottom down a group (new shells added)</div>
+      <div class="formula-box"><span class="flabel">Ionization energy (energy to remove an electron)</span>Increases left → right across a period<br>Decreases top → bottom down a group</div>
+      <div class="formula-box"><span class="flabel">Electronegativity (pull on bonding electrons)</span>Increases left → right across a period<br>Decreases top → bottom down a group</div>
+      <div class="formula-box"><span class="flabel">Electron affinity (energy released gaining an electron)</span>Generally increases (more negative) left → right<br>Generally decreases bottom → top down a group</div>
+      <div class="tip-box">All four trends "point toward fluorine" (top-right, excluding noble gases) — that's the easiest way to remember the direction of increase for IE, EN, and EA. Atomic radius is the one trend that points the opposite way (toward the bottom-left).</div>
+    `}
+  ],
+  flashcards:[
+    {q:"What is Döbereiner's Triad rule?", a:'In a group of 3 elements with similar properties, the atomic mass of the middle element is approximately the average of the other two.'},
+    {q:"What was the key flaw of Newlands' Octaves?", a:'The pattern only worked up to calcium; after that, every 8th element no longer matched, and there was no place for undiscovered noble gases.'},
+    {q:"State Mendeleev's Periodic Law.", a:'The physical and chemical properties of elements are a periodic function of their atomic masses.'},
+    {q:'Who showed atomic number is more fundamental than atomic mass, and what is the Modern Periodic Law?', a:'Henry Moseley; properties of elements are a periodic function of their atomic NUMBER.'},
+    {q:'How many periods and groups are in the modern periodic table?', a:'7 periods, 18 groups.'},
+    {q:'What determines the period number of an element?', a:'The number of electron shells, equal to the highest principal quantum number (n) used.'},
+    {q:'How does atomic radius change across a period (left to right)?', a:'It decreases — increasing nuclear charge pulls the same-shell electrons closer.'},
+    {q:'How does ionization energy change down a group?', a:'It decreases — outer electrons are farther from the nucleus and more shielded, so easier to remove.'},
+    {q:'Name one demerit of Mendeleev\'s table involving Co and Ni.', a:'Cobalt (higher atomic mass, 58.93) had to be placed before Nickel (58.71) to match properties — an anomaly atomic mass ordering couldn\'t explain.'},
+    {q:'What characterizes a transition element\'s electron filling?', a:'The outer s sublevel and a nearby d sublevel are filling (Group B elements).'}
+  ],
+  mcqs:[
+    {q:"In Döbereiner's triad of Li, Na, K (atomic masses 6.9, 23, 39), the mass of Na approximately equals:", opts:['The sum of Li and K masses','The average of Li and K masses','Double the mass of Li','Half the mass of K'], correct:1, why:'(6.9+39)/2 = 22.95 ≈ 23, matching sodium\'s atomic mass.'},
+    {q:"Mendeleev's Periodic Law states that properties are a periodic function of:", opts:['Atomic number','Atomic mass','Number of neutrons','Electronegativity'], correct:1, why:'Mendeleev based his table on atomic MASS — this was later corrected to atomic number by Moseley.'},
+    {q:'The Modern Periodic Law (post-Moseley) states properties are a periodic function of:', opts:['Atomic mass','Atomic number','Atomic radius','Group number'], correct:1, why:'Moseley showed atomic number (proton count) is the truly fundamental periodic property.'},
+    {q:'How many groups does the modern periodic table have?', opts:['7','8','18','32'], correct:2, why:'There are 18 vertical groups/columns in the modern long-form periodic table.'},
+    {q:'Which trend INCREASES as you move left to right across a period?', opts:['Atomic radius','Ionization energy','Metallic character','Number of shells'], correct:1, why:'Increasing nuclear charge across a period pulls electrons in tighter, raising the energy needed to remove one.'},
+    {q:'Which trend INCREASES as you move DOWN a group?', opts:['Ionization energy','Electronegativity','Atomic radius','Electron affinity'], correct:2, why:'New electron shells are added going down a group, increasing atomic size.'},
+    {q:'Transition elements are characterized by filling of which sublevels?', opts:['s and p','s and d','s and f','p and f'], correct:1, why:'Transition (Group B) elements fill the outer s sublevel along with a nearby d sublevel.'},
+    {q:'Lanthanides and Actinides are placed separately because they involve filling of the:', opts:['s sublevel','p sublevel','d sublevel','f sublevel'], correct:3, why:'Inner transition elements are defined by filling f sublevels (4f for lanthanides, 5f for actinides).'},
+    {q:'One demerit of Mendeleev\'s table was that hydrogen:', opts:['Had no atomic mass','Resembled both alkali metals and halogens, with no fixed position','Was never discovered','Did not fit anywhere near Group 1'], correct:1, why:'H shows properties similar to both Group 1 (alkali metals) and Group 17 (halogens), so it doesn\'t cleanly belong to one group.'},
+    {q:'Noble gases are characterized by:', opts:['Partially filled outer s and p sublevels','Completely filled outer s and p sublevels','Filling of d sublevels','Filling of f sublevels'], correct:1, why:'Noble gases have fully filled outer s and p sublevels, making them very stable and unreactive.'}
+  ]
+},
+{
+  id:'t7', num:'07', code:'SC',
+  title:'Solutions & Colligative Properties',
+  blurb:"Raoult's Law, boiling/freezing point shifts, osmotic pressure & Henry's Law",
+  time:70,
+  videos:[
+    {title:'The Colligative Properties (Boiling Point Elevation, Freezing Point Depression, Osmotic Pressure & Raoult\'s Law)', channel:'YouTube Chemistry Tutorial', len:'~10 min', url:'https://www.youtube.com/watch?v=wzAToPL8Src'}
+  ],
+  sections:[
+    {h:'Solutions: The Basics', body:`
+      <p>A <b>solution</b> = solute (dissolved substance) + solvent (the medium it dissolves in). Solutions are everywhere: air (O₂ in N₂), carbonated drinks, ocean water (salts in water), even your body fluids.</p>
+      <p><b>Colligative properties</b> depend ONLY on the <i>number</i> of dissolved solute particles — not on what the solute actually is.</p>
+      <p>The 4 colligative properties: vapor pressure lowering, boiling point elevation, freezing point depression, and osmotic pressure.</p>
+    `},
+    {h:"Raoult's Law & Vapor Pressure Lowering", body:`
+      <p>Adding a non-volatile solute blocks some solvent molecules from escaping the surface, lowering the vapor pressure.</p>
+      <div class="formula-box"><span class="flabel">Raoult's Law</span>P(solution) = P°(solvent) × X(solvent)</div>
+      <div class="formula-box"><span class="flabel">Relative lowering of vapor pressure</span>(P° − P) / P° = X(solute) = n(solute) / [n(solute) + n(solvent)]</div>
+      <p><b>Ideal solution:</b> obeys Raoult's law exactly (attractive forces between all molecules are uniform). <b>Real solutions</b> deviate — <i>positive deviation</i> when adhesive forces (solute–solvent) are weaker than cohesive forces (like–like), <i>negative deviation</i> when adhesive forces are stronger.</p>
+    `},
+    {h:'Boiling Point Elevation & Freezing Point Depression', body:`
+      <p>Because the solute lowers vapor pressure, the solution must be heated MORE to boil (vapor pressure must still reach atmospheric pressure) and cooled MORE to freeze.</p>
+      <div class="formula-box"><span class="flabel">Boiling point elevation</span>ΔTb = Kb × m  (m = molality of solute, Kb = molal elevation constant)</div>
+      <div class="formula-box"><span class="flabel">Freezing point depression</span>ΔTf = Kf × m  (Kf = molal depression constant)</div>
+      <p>Both Kb and Kf depend only on the solvent (e.g. for water, Kb ≈ 0.512 °C/m and Kf ≈ 1.86 °C/m) — you don't need to memorize these values, they're usually given.</p>
+    `},
+    {h:'Osmotic Pressure', body:`
+      <p><b>Osmosis</b> is solvent flow through a semipermeable membrane to equalize solute concentration on both sides. <b>Osmotic pressure (π)</b> is the external pressure needed to JUST stop osmosis.</p>
+      <div class="formula-box"><span class="flabel">Van't Hoff equation for osmotic pressure</span>π = MRT  (M = molarity, R = gas constant, T = temperature in K)</div>
+      <p>Notice the resemblance to the ideal gas law PV=nRT — π behaves exactly like a "gas pressure" of dissolved particles.</p>
+    `},
+    {h:"Henry's Law (gas solubility)", body:`
+      <div class="formula-box"><span class="flabel">Henry's Law</span>C = kH × P  (concentration of dissolved gas ∝ partial pressure above the liquid)</div>
+      <p><b>Limitations:</b> only works well for gases that (1) behave nearly ideally, (2) have low solubility, (3) don't chemically react with the solvent (e.g. NH₃ and HCl react with water, so they DON'T obey Henry's Law), and (4) don't associate/dissociate when dissolving.</p>
+    `},
+    {h:'Worked Examples — Colligative Property Calculations', body:`
+      <div class="example-box"><span class="elabel">1. Osmotic pressure</span>
+      5.0 g sucrose (C₁₂H₂₂O₁₁, M=342 g/mol) in 100 mL solution at 20°C (293 K).
+      <span class="mono-line">n = 5.0/342 = 0.0146 mol → Molarity = 0.0146/0.100 = 0.146 M</span>
+      <span class="mono-line">π = MRT = 0.146 × 0.0821 × 293 ≈ 3.51 atm</span>
+      </div>
+      <div class="example-box"><span class="elabel">2. Freezing point depression</span>
+      17.1 g sucrose (M=342) in 200 g water, Kf = 1.86 °C/m.
+      <span class="mono-line">moles = 17.1/342 = 0.05 mol; molality = 0.05/0.200 kg = 0.25 m</span>
+      <span class="mono-line">ΔTf = Kf × m = 1.86 × 0.25 = 0.465 °C → New freezing point ≈ −0.465 °C</span>
+      </div>
+      <div class="example-box"><span class="elabel">3. Boiling point elevation</span>
+      20.1 g solute (M=62 g/mol) in 400 g water, Kb = 0.512 °C/m.
+      <span class="mono-line">moles = 20.1/62 = 0.324 mol; molality = 0.324/0.400 kg = 0.81 m</span>
+      <span class="mono-line">ΔTb = Kb × m = 0.512 × 0.81 ≈ 0.415 °C</span>
+      </div>
+      <div class="example-box"><span class="elabel">4. Finding molar mass from osmotic pressure</span>
+      1 g polymer in 300 cm³ solution, π = 10⁻³ bar at 300 K. (R = 0.0831 L·bar/mol·K)
+      <span class="mono-line">M = wRT / (πV) = (1 × 0.0831 × 300) / (0.001 × 0.300) ≈ 83,100 g/mol</span>
+      </div>
+    `}
+  ],
+  flashcards:[
+    {q:"Write Raoult's Law.", a:'P(solution) = P°(solvent) × X(solvent)'},
+    {q:'Formula for relative lowering of vapor pressure?', a:'(P° − P)/P° = X(solute), the mole fraction of the non-volatile solute.'},
+    {q:'Formula for boiling point elevation?', a:'ΔTb = Kb × m, where m is the molality of the solute.'},
+    {q:'Formula for freezing point depression?', a:'ΔTf = Kf × m'},
+    {q:"Write the Van't Hoff equation for osmotic pressure.", a:'π = MRT'},
+    {q:"Write Henry's Law.", a:'C = kH × P — gas concentration in solution is proportional to its partial pressure above the liquid.'},
+    {q:'Define a colligative property.', a:'A property that depends only on the number (concentration) of solute particles, not their chemical identity.'},
+    {q:'What causes a negative deviation from Raoult\'s Law?', a:'When adhesive forces between solute and solvent are STRONGER than the cohesive forces within each pure component.'},
+    {q:'Name one example of a gas that does NOT obey Henry\'s Law, and why.', a:'NH₃ (or HCl) — because it chemically reacts with water (forms NH₄⁺ + OH⁻) instead of just dissolving.'},
+    {q:'5.0 g sucrose (M=342) in 100 mL at 293K — what is the molarity used in the osmotic pressure calc?', a:'0.146 M (n=5.0/342=0.0146 mol, divided by 0.100 L)'}
+  ],
+  mcqs:[
+    {q:"According to Raoult's Law, the vapor pressure of a solution equals:", opts:['P° of the solute only','P° of the solvent times the mole fraction of the solvent','P° of the solvent divided by moles of solute','A constant regardless of concentration'], correct:1, why:'P(solution) = P°(solvent) × X(solvent) — this is the definition of Raoult\'s Law.'},
+    {q:'Boiling point elevation is calculated using:', opts:['ΔTb = Kb/m','ΔTb = Kb × m','ΔTb = Kb + m','ΔTb = m/Kb'], correct:1, why:'ΔTb = Kb × m, directly proportional to molality.'},
+    {q:"Osmotic pressure (Van't Hoff equation) is given by:", opts:['π = MRT','π = M/RT','π = M + RT','π = RT/M'], correct:0, why:'π = MRT mirrors the ideal gas law PV=nRT.'},
+    {q:'17.1 g of sucrose (M=342 g/mol) dissolved in 200 g water. What is the molality?', opts:['0.05 m','0.25 m','0.50 m','0.171 m'], correct:1, why:'moles = 17.1/342 = 0.05 mol; molality = 0.05 mol / 0.200 kg = 0.25 m.'},
+    {q:'Using Kf = 1.86 °C/m and molality = 0.25 m, the freezing point depression ΔTf is:', opts:['0.0465 °C','0.465 °C','1.86 °C','4.65 °C'], correct:1, why:'ΔTf = Kf × m = 1.86 × 0.25 = 0.465 °C.'},
+    {q:'A solution shows positive deviation from Raoult\'s Law when:', opts:['Adhesive forces (solute–solvent) are weaker than cohesive forces (like–like)','Adhesive forces are stronger than cohesive forces','The solution is ideal','The solute is non-volatile'], correct:0, why:'Weaker adhesive forces let molecules escape more easily than expected, raising vapor pressure above the ideal prediction.'},
+    {q:"Henry's Law fails for gases that:", opts:['Are perfectly ideal','Have very low solubility','Chemically react with the solvent','Are noble gases'], correct:2, why:'If the gas reacts with the solvent (like NH₃ or HCl with water), the simple proportionality C=kH·P breaks down.'},
+    {q:'For a 1 g sample of polymer in 300 cm³ giving π=10⁻³ bar at 300K, the molar mass is closest to:', opts:['831 g/mol','8,310 g/mol','83,100 g/mol','831,000 g/mol'], correct:2, why:'M = wRT/(πV) = (1×0.0831×300)/(0.001×0.300) ≈ 83,100 g/mol — typical for a large polymer.'},
+    {q:'The four colligative properties are vapor pressure lowering, boiling point elevation, freezing point depression, and:', opts:['Density change','Osmotic pressure','Viscosity change','Color change'], correct:1, why:'These are the four classic colligative properties covered in this syllabus.'},
+    {q:'Colligative properties depend on:', opts:['The chemical identity of the solute','The color of the solute','The number of solute particles dissolved','The molecular weight of the solvent only'], correct:2, why:'By definition, colligative properties depend only on the amount (particle count) of solute, not what it actually is.'}
+  ]
+}
+];
+
+/* ============================================================
+   FINAL REVIEW DATA (cumulative, hand-picked across all topics)
+   ============================================================ */
+const FINAL_FLASHCARDS = [
+  {q:'What can cross the boundary of a closed system?', a:'Only energy — not matter.'},
+  {q:'Write the formula for enthalpy.', a:'H = U + PV'},
+  {q:'State the First Law of Thermodynamics.', a:'ΔU = q + w'},
+  {q:"State Hess's Law.", a:'Total enthalpy change of a reaction is the same regardless of the path/number of steps taken.'},
+  {q:'Cp − Cv = ? (for 1 mole ideal gas)', a:'R'},
+  {q:"What does Kirchhoff's equation describe?", a:'How the heat of reaction changes with temperature.'},
+  {q:'Define chemical equilibrium.', a:'Forward and reverse reaction rates are equal.'},
+  {q:"State Le Chatelier's Principle.", a:'A system at equilibrium shifts to counteract any disturbance applied to it.'},
+  {q:'Does a catalyst shift equilibrium position?', a:'No — it only speeds up reaching equilibrium, equally in both directions.'},
+  {q:'Kp–Kc relationship?', a:'Kp = Kc(RT)^Δn'},
+  {q:'Brønsted-Lowry acid definition?', a:'A proton (H⁺) donor.'},
+  {q:'Lewis base definition?', a:'An electron-pair donor.'},
+  {q:'Henderson-Hasselbalch equation?', a:'pH = pKa + log([A⁻]/[HA])'},
+  {q:'Kw value at 25°C?', a:'1.0 × 10⁻¹⁴'},
+  {q:'What two components make a buffer?', a:'A weak acid + its conjugate base salt, OR a weak base + its conjugate acid salt.'},
+  {q:"Bohr's quantization condition?", a:'mvr = nh/2π'},
+  {q:'State the Heisenberg Uncertainty Principle.', a:'Position and momentum of a particle cannot both be precisely known at once: Δx·Δp ≥ h/4π.'},
+  {q:'de Broglie equation?', a:'λ = h/mv'},
+  {q:'Define isotopes.', a:'Atoms with the same atomic number but different mass numbers.'},
+  {q:'Range of the azimuthal quantum number (l)?', a:'0 to (n−1)'},
+  {q:"State Hund's Rule.", a:'Every orbital in a subshell is singly filled before any is doubly filled, with parallel spins.'},
+  {q:'Modern Periodic Law (post-Moseley)?', a:'Properties of elements are a periodic function of their atomic NUMBER.'},
+  {q:'How does atomic radius change across a period?', a:'Decreases left to right (increasing nuclear pull).'},
+  {q:'How does ionization energy change down a group?', a:'Decreases (electrons farther from nucleus, more shielded).'},
+  {q:'What characterizes a transition element?', a:'Filling of outer s and a nearby d sublevel.'},
+  {q:"Raoult's Law formula?", a:'P(solution) = P°(solvent) × X(solvent)'},
+  {q:'Boiling point elevation formula?', a:'ΔTb = Kb × m'},
+  {q:"Van't Hoff osmotic pressure equation?", a:'π = MRT'},
+  {q:"What does Henry's Law state?", a:'C = kH × P — gas solubility is proportional to its partial pressure above the liquid.'},
+  {q:'Define a colligative property.', a:'A property depending only on the number of solute particles, not their identity.'}
+];
+
+const FINAL_MCQS = [
+  {q:'A reaction where matter cannot cross the boundary but energy can is called a(n):', opts:['Open system','Closed system','Isolated system','Adiabatic system'], correct:1, why:'Closed systems exchange energy but not matter with their surroundings.'},
+  {q:'CH₄ + 2O₂ → CO₂ + 2H₂O, ΔH = −890 kJ. This is:', opts:['Endothermic','Exothermic','Isothermal','Isochoric'], correct:1, why:'Negative ΔH = heat released = exothermic.'},
+  {q:'Cp − Cv equals (for 1 mole ideal gas):', opts:['0','R','2R','nRT'], correct:1, why:'This is a direct consequence of H = U + RT for one mole.'},
+  {q:"Hess's Law works because enthalpy is a:", opts:['Path function','State function','Vector','Scalar only at STP'], correct:1, why:'State functions depend only on initial/final states, letting you sum reaction steps freely.'},
+  {q:'At chemical equilibrium, the forward and reverse reaction rates are:', opts:['Both zero','Equal to each other','Forward always faster','Reverse always faster'], correct:1, why:'Equilibrium is a dynamic balance where rates are equal, not where reactions stop.'},
+  {q:'Increasing pressure on a gas equilibrium shifts it toward the side with:', opts:['More gas moles','Fewer gas moles','Equal moles always','No effect ever'], correct:1, why:'The system relieves pressure by favoring fewer total gas particles.'},
+  {q:'A catalyst affects equilibrium by:', opts:['Shifting it toward products','Shifting it toward reactants','Not shifting its position at all','Doubling Kc'], correct:2, why:'Catalysts speed up both directions equally without changing the equilibrium position.'},
+  {q:'A Brønsted-Lowry base is defined as a:', opts:['Proton donor','Proton acceptor','Electron donor only','Electron acceptor'], correct:1, why:'Brønsted-Lowry base = proton (H⁺) acceptor.'},
+  {q:'Kw = [H₃O⁺][OH⁻] equals, at 25°C:', opts:['1×10⁻⁷','1×10⁻¹⁴','1×10⁻¹','14'], correct:1, why:'Kw = 1.0×10⁻¹⁴ at 25°C, giving pH+pOH=14.'},
+  {q:'In the Henderson-Hasselbalch equation, when [A⁻] = [HA]:', opts:['pH = 0','pH = 7 always','pH = pKa','pH = 14'], correct:2, why:'log(1) = 0, so pH simply equals pKa.'},
+  {q:'A buffer resists pH change because added acid or base reacts with:', opts:['Water only','The weak acid/base pair making up the buffer','Nothing — buffers don\'t actually work','The container'], correct:1, why:'The conjugate acid-base pair absorbs added H⁺ or OH⁻, keeping pH nearly constant.'},
+  {q:'Rutherford\'s gold foil experiment showed atoms have a:', opts:['Uniform positive charge throughout','Small, dense, positively charged nucleus','No nucleus at all','Negatively charged nucleus'], correct:1, why:'The deflection pattern revealed a tiny, dense, positive nucleus.'},
+  {q:'Bohr\'s model fails to explain:', opts:['The hydrogen line spectrum','Multi-electron atom spectra','Why hydrogen is the lightest element','The existence of protons'], correct:1, why:'Bohr\'s model only works well for single-electron (hydrogen-like) systems.'},
+  {q:'Isotopes of an element have the same:', opts:['Mass number','Atomic number','Number of neutrons','Chemical symbol but different elements'], correct:1, why:'Isotopes share the same atomic number (proton count) but differ in mass number (neutron count).'},
+  {q:'The magnetic quantum number (ml) ranges from:', opts:['0 to n−1','−l to +l','1 to n','−n to +n'], correct:1, why:'ml can take any integer value from −l to +l, giving 2l+1 orbitals per subshell.'},
+  {q:"Hund's Rule states that electrons in a subshell:", opts:['Always pair up first','Singly occupy each orbital first, with parallel spin, before pairing','Have random spin orientations','Never occupy p orbitals'], correct:1, why:'Hund\'s rule minimizes electron repulsion by spreading electrons across orbitals before pairing.'},
+  {q:'The Modern Periodic Law is based on:', opts:['Atomic mass','Atomic number','Electronegativity','Ionic radius'], correct:1, why:'Moseley established atomic number as the correct periodic ordering principle.'},
+  {q:'Across a period left to right, ionization energy generally:', opts:['Decreases','Increases','Stays constant','Becomes negative'], correct:1, why:'Increasing nuclear charge across a period makes electrons harder to remove.'},
+  {q:'Down a group, atomic radius generally:', opts:['Decreases','Increases','Stays the same','Becomes zero'], correct:1, why:'Additional electron shells are added going down a group, increasing atomic size.'},
+  {q:'A colligative property depends on:', opts:['The identity of the solute','The number of solute particles','The color of the solution','The solvent\'s boiling point alone'], correct:1, why:'By definition, colligative properties depend only on solute particle concentration, not identity.'},
+  {q:"Raoult's Law relates vapor pressure of a solution to the:", opts:['Mole fraction of the solvent','Molar mass of the solute','Boiling point of the solute','Pressure of the container only'], correct:0, why:'P(solution) = P°(solvent) × X(solvent).'},
+  {q:'Freezing point depression formula:', opts:['ΔTf = Kf/m','ΔTf = Kf × m','ΔTf = Kf + m','ΔTf = m − Kf'], correct:1, why:'ΔTf is directly proportional to molality, scaled by the molal depression constant Kf.'},
+  {q:"Van't Hoff's equation for osmotic pressure (π) is analogous to which gas law equation?", opts:["Boyle's Law", 'Ideal gas law PV=nRT', "Charles's Law", "Graham's Law"], correct:1, why:'π = MRT has the same form as PV = nRT, treating dissolved particles like a gas exerting pressure.'},
+  {q:"Henry's Law does NOT apply well when the gas:", opts:['Has low solubility','Behaves ideally','Chemically reacts with the solvent','Is at moderate pressure'], correct:2, why:'Chemical reaction with the solvent (like NH₃ with water) breaks the simple proportionality of Henry\'s Law.'},
+  {q:'An oxoacid becomes stronger as the number of oxygen atoms on the central atom:', opts:['Decreases','Increases','Has no effect','Becomes exactly 2'], correct:1, why:'More O atoms increase the central atom\'s effective electronegativity, making the O–H bond more polar and acidic.'},
+  {q:'A weak acid + its salt with a strong base forms a(n):', opts:['Acid buffer','Basic buffer','Isolated system','Indicator'], correct:0, why:'This is the definition of an acid buffer (e.g. CH3COOH + CH3COONa).'},
+  {q:'The principal quantum number (n) primarily determines:', opts:['Orbital shape','Electron spin','Energy level and orbital size','Orbital orientation'], correct:2, why:'n is the main determinant of an electron\'s energy and the orbital\'s size.'},
+  {q:'In the periodic table, lanthanides and actinides are part of the:', opts:['Normal elements','Transition elements','Inner transition elements','Noble gases'], correct:2, why:'They fill f sublevels, classifying them as inner transition elements.'},
+  {q:'Electronegativity generally trends toward being highest:', opts:['Bottom-left of the periodic table','Top-right of the periodic table (excluding noble gases)','The middle of each period','Random across the table'], correct:1, why:'Electronegativity (like IE and EA) increases toward the top-right of the periodic table.'},
+  {q:'A negative deviation from Raoult\'s Law occurs when:', opts:['Adhesive forces are weaker than cohesive forces','Adhesive forces are stronger than cohesive forces','The solution is ideal','No solute is present'], correct:1, why:'Stronger adhesive (solute-solvent) forces hold molecules in solution more tightly, lowering vapor pressure below the ideal prediction.'}
+];
+
+/* ============================================================
+   RENDERING
+   ============================================================ */
+const PAGE_ORDER = ['home', ...TOPICS.map(t=>t.id), 'final'];
+
+function elemBadge(num, code, cls){
+  return '<div class="elem-badge '+(cls||'')+'"><span class="num">'+num+'</span><span class="code">'+code+'</span></div>';
+}
+
+function buildSidebar(){
+  const navTopics = document.getElementById('navTopics');
+  navTopics.innerHTML = TOPICS.map(t=>{
+    return '<div class="nav-item" data-page="'+t.id+'">'
+      + elemBadge(t.num, t.code)
+      + '<span class="nlabel">'+t.title+'</span>'
+      + '<div class="nav-check" data-checktopic="'+t.id+'"></div>'
+      + '</div>';
+  }).join('');
+
+  document.querySelectorAll('.nav-item').forEach(el=>{
+    el.addEventListener('click', (e)=>{
+      if(e.target.classList.contains('nav-check')) return;
+      navigate(el.getAttribute('data-page'));
+    });
+  });
+  document.querySelectorAll('.nav-check').forEach(el=>{
+    el.addEventListener('click', (e)=>{
+      e.stopPropagation();
+      const id = el.getAttribute('data-checktopic');
+      toggleChecklist(id);
+    });
+  });
+}
+
+function toggleChecklist(id){
+  STATE.checklist[id] = !STATE.checklist[id];
+  saveChecklist();
+  syncChecklistUI();
+  updateProgress();
+}
+
+function syncChecklistUI(){
+  document.querySelectorAll('.nav-check').forEach(el=>{
+    const id = el.getAttribute('data-checktopic');
+    el.classList.toggle('checked', !!STATE.checklist[id]);
+  });
+  document.querySelectorAll('.review-row').forEach(el=>{
+    const id = el.getAttribute('data-reviewtopic');
+    el.classList.toggle('checked', !!STATE.checklist[id]);
+  });
+  // update home page tiles + timeline
+  document.querySelectorAll('.tl-check').forEach(el=>{
+    const id = el.getAttribute('data-checktopic2');
+    el.innerHTML = STATE.checklist[id] ? '<span style="color:var(--good); font-size:18px;">&#10003;</span>' : '<span style="color:var(--text-faint); font-size:18px;">&#9711;</span>';
+  });
+  document.querySelectorAll('.topic-tile').forEach(tile=>{
+    const id = tile.getAttribute('data-topictile');
+    const bar = tile.querySelector('.mini-progress div');
+    if(bar){
+      const pct = topicCompletion(id);
+      bar.style.width = pct+'%';
+    }
+  });
+}
+
+function topicCompletion(topicId){
+  // percent based on: checklist (50%) + mcq answered (50%)
+  const t = TOPICS.find(x=>x.id===topicId);
+  let pct = 0;
+  if(STATE.checklist[topicId]) pct += 50;
+  if(t){
+    const answers = STATE.mcq[topicId] || {};
+    const answered = Object.keys(answers).length;
+    pct += 50 * Math.min(1, answered / t.mcqs.length);
+  }
+  return Math.round(pct);
+}
+
+function navigate(pageId){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  const target = document.getElementById('page-'+pageId);
+  if(target) target.classList.add('active');
+  document.querySelectorAll('.nav-item').forEach(el=>{
+    el.classList.toggle('active', el.getAttribute('data-page')===pageId);
+  });
+  document.getElementById('main').scrollTo(0,0);
+  window.scrollTo(0,0);
+  closeSidebarMobile();
+}
+
+function closeSidebarMobile(){
+  document.getElementById('sidebar').classList.remove('open');
+  document.getElementById('scrim').classList.remove('show');
+}
+
+/* ---------- HOME PAGE ---------- */
+function renderHome(){
+  const totalTime = TOPICS.reduce((s,t)=>s+t.time,0);
+  const totalFC = TOPICS.reduce((s,t)=>s+t.flashcards.length,0) + FINAL_FLASHCARDS.length;
+  const totalQ = TOPICS.reduce((s,t)=>s+t.mcqs.length,0) + FINAL_MCQS.length;
+
+  let html = '<div class="page" id="page-home">';
+  html += '<div class="hero">';
+  html += '<span class="crumb">⚗ STUDY PLAN</span>';
+  html += '<h2>One day. Seven topics. Let\'s go.</h2>';
+  html += '<p>This guide breaks your chemistry syllabus into 7 bite-sized topics, each with a clear explanation, short videos, flashcards, and an MCQ quiz. Check off topics as you finish them — your progress bar will appear up top automatically.</p>';
+  html += '<div class="stat-row">';
+  html += '<div class="stat"><div class="n">7</div><div class="l">Topics</div></div>';
+  html += '<div class="stat"><div class="n">~'+(Math.round(totalTime/60*10)/10)+'h</div><div class="l">Study time</div></div>';
+  html += '<div class="stat"><div class="n">'+totalFC+'</div><div class="l">Flashcards</div></div>';
+  html += '<div class="stat"><div class="n">'+totalQ+'</div><div class="l">MCQs</div></div>';
+  html += '</div></div>';
+
+  html += '<div class="divider-label">Suggested timed schedule</div>';
+  html += '<div class="section"><div class="timeline">';
+  TOPICS.forEach((t,i)=>{
+    html += '<div class="tl-item" data-page="'+t.id+'">'
+      + '<div class="tl-time">'+t.time+' min</div>'
+      + '<div class="tl-body"><div class="tl-title">'+(i+1)+'. '+t.title+'</div><div class="tl-sub">'+t.blurb+'</div></div>'
+      + '<div class="tl-check" data-checktopic2="'+t.id+'"></div>'
+      + '</div>';
+    if(i < TOPICS.length-1){
+      html += '<div class="tl-item" style="cursor:default;"><div class="tl-time">break</div><div class="tl-body"><div class="tl-sub">Stretch, drink water, 10–15 min</div></div></div>';
+    }
+  });
+  html += '<div class="tl-item" data-page="final"><div class="tl-time">60 min</div><div class="tl-body"><div class="tl-title">8. Final Review — full syllabus flashcards + MCQs</div><div class="tl-sub">Mix of all 7 topics, exam-day style</div></div><div class="tl-check" data-checktopic2="final"></div></div>';
+  html += '</div></div>';
+
+  html += '<div class="divider-label">Jump to a topic</div>';
+  html += '<div class="topic-grid">';
+  TOPICS.forEach(t=>{
+    html += '<div class="topic-tile" data-page="'+t.id+'" data-topictile="'+t.id+'">'
+      + '<div class="ttop">'+elemBadge(t.num,t.code)+'<span class="ttitle">'+t.title+'</span></div>'
+      + '<div class="tdesc">'+t.blurb+'</div>'
+      + '<div class="mini-progress"><div style="width:0%"></div></div>'
+      + '</div>';
+  });
+  html += '</div>';
+
+  html += '<div class="divider-label">Master checklist</div>';
+  html += '<div class="section">';
+  TOPICS.forEach(t=>{
+    html += '<div class="review-row" data-reviewtopic="'+t.id+'"><div class="review-box"></div><div><div class="rtext">'+t.title+'</div><div class="rsub">Mark reviewed once you\'ve read through it and tried the quiz</div></div></div>';
+  });
+  html += '<div class="review-row" data-reviewtopic="final"><div class="review-box"></div><div><div class="rtext">Final Review completed</div><div class="rsub">Cumulative flashcards + MCQs across the whole syllabus</div></div></div>';
+  html += '</div>';
+
+  html += '</div>';
+  document.getElementById('main').insertAdjacentHTML('beforeend', html);
+
+  // wire interactions
+  document.querySelectorAll('#page-home .tl-item[data-page], #page-home .topic-tile[data-page]').forEach(el=>{
+    el.addEventListener('click', ()=> navigate(el.getAttribute('data-page')));
+  });
+  document.querySelectorAll('#page-home .tl-check').forEach(el=>{
+    el.addEventListener('click', (e)=>{ e.stopPropagation(); toggleChecklist(el.getAttribute('data-checktopic2')); });
+  });
+  document.querySelectorAll('#page-home .review-row').forEach(el=>{
+    el.addEventListener('click', ()=> toggleChecklist(el.getAttribute('data-reviewtopic')));
+  });
+}
+
+/* ---------- TOPIC PAGE ---------- */
+function renderTopicPage(t){
+  let html = '<div class="page" id="page-'+t.id+'">';
+  html += '<div class="page-head">';
+  html += '<div class="crumb">'+elemBadge(t.num,t.code)+'<span>TOPIC '+t.num+' OF 07</span></div>';
+  html += '<h2>'+t.title+'</h2>';
+  html += '<div class="desc">'+t.blurb+'</div>';
+  html += '<div class="meta-row"><div class="meta-chip">⏱ Suggested time: <b>'+t.time+' min</b></div>'
+    + '<div class="meta-chip">🃏 <b>'+t.flashcards.length+'</b> flashcards</div>'
+    + '<div class="meta-chip">✅ <b>'+t.mcqs.length+'</b> quiz questions</div></div>';
+  html += '</div>';
+
+  // sections
+  t.sections.forEach(s=>{
+    html += '<div class="section"><h3><span class="sicon"></span>'+s.h+'</h3>'+s.body+'</div>';
+  });
+
+  // videos
+  if(t.videos && t.videos.length){
+    html += '<div class="divider-label">Watch (short & focused)</div>';
+    t.videos.forEach(v=>{
+      html += '<a class="video-card" href="'+v.url+'" target="_blank" rel="noopener">'
+        + '<div class="vplay">▶</div>'
+        + '<div class="vinfo"><div class="vtitle">'+v.title+'</div><div class="vmeta">'+v.channel+' · '+v.len+'</div></div>'
+        + '</a>';
+    });
+  }
+
+  // flashcards
+  html += '<div class="divider-label">Flashcards</div>';
+  html += '<div class="section"><div class="fc-wrap" id="fcwrap-'+t.id+'"></div></div>';
+
+  // mcq
+  html += '<div class="divider-label">Quick Quiz</div>';
+  html += '<div id="mcqwrap-'+t.id+'"></div>';
+
+  // review checkbox
+  html += '<div class="review-row" data-reviewtopic="'+t.id+'"><div class="review-box"></div><div><div class="rtext">Mark "'+t.title+'" as reviewed</div><div class="rsub">Check this once you feel confident on this topic</div></div></div>';
+
+  html += '</div>';
+  document.getElementById('main').insertAdjacentHTML('beforeend', html);
+
+  buildFlashcards('fcwrap-'+t.id, t.flashcards, t.id);
+  buildMCQs('mcqwrap-'+t.id, t.mcqs, t.id);
+
+  document.querySelector('#page-'+t.id+' .review-row').addEventListener('click', ()=> toggleChecklist(t.id));
+}
+
+/* ---------- FINAL REVIEW PAGE ---------- */
+function renderFinalPage(){
+  let html = '<div class="page" id="page-final">';
+  html += '<div class="page-head">';
+  html += '<div class="crumb">'+elemBadge('08','FR','c-violet')+'<span>FULL SYLLABUS REVIEW</span></div>';
+  html += '<h2>Final Review</h2>';
+  html += '<div class="desc">Mixed flashcards and MCQs pulled from every topic. Use this as your last pass before the exam to check what actually stuck.</div>';
+  html += '<div class="meta-row"><div class="meta-chip">⏱ Suggested time: <b>60 min</b></div>'
+    + '<div class="meta-chip">🃏 <b>'+FINAL_FLASHCARDS.length+'</b> flashcards</div>'
+    + '<div class="meta-chip">✅ <b>'+FINAL_MCQS.length+'</b> quiz questions</div></div>';
+  html += '</div>';
+
+  html += '<div class="divider-label">Flashcards — all topics mixed</div>';
+  html += '<div class="section"><div class="fc-wrap" id="fcwrap-final"></div></div>';
+
+  html += '<div class="divider-label">Full Practice Quiz</div>';
+  html += '<div id="mcqwrap-final"></div>';
+
+  html += '<div class="review-row" data-reviewtopic="final"><div class="review-box"></div><div><div class="rtext">Mark Final Review as completed</div><div class="rsub">You\'ve gone through the whole syllabus once more — nice work</div></div></div>';
+
+  html += '</div>';
+  document.getElementById('main').insertAdjacentHTML('beforeend', html);
+
+  buildFlashcards('fcwrap-final', FINAL_FLASHCARDS, 'final');
+  buildMCQs('mcqwrap-final', FINAL_MCQS, 'final');
+  document.querySelector('#page-final .review-row').addEventListener('click', ()=> toggleChecklist('final'));
+}
+
+/* ---------- FLASHCARD ENGINE ---------- */
+function buildFlashcards(containerId, cards, setId){
+  const container = document.getElementById(containerId);
+  let idx = 0;
+  let flipped = false;
+
+  container.innerHTML =
+    '<div class="fc-stage"><div class="fc-card" id="'+containerId+'-card">'
+    + '<div class="fc-face fc-front"><div></div><div class="fc-hint">Tap to flip</div></div>'
+    + '<div class="fc-face fc-back"><div></div><div class="fc-hint">Tap to flip back</div></div>'
+    + '</div></div>'
+    + '<div class="fc-controls">'
+    + '<button class="fc-btn" id="'+containerId+'-prev">&larr; Prev</button>'
+    + '<span class="fc-counter" id="'+containerId+'-counter"></span>'
+    + '<button class="fc-btn" id="'+containerId+'-next">Next &rarr;</button>'
+    + '</div>';
+
+  const cardEl = document.getElementById(containerId+'-card');
+  const frontText = container.querySelector('.fc-front > div:first-child');
+  const backText = container.querySelector('.fc-back > div:first-child');
+  const counter = document.getElementById(containerId+'-counter');
+
+  function render(){
+    frontText.textContent = cards[idx].q;
+    backText.textContent = cards[idx].a;
+    cardEl.classList.remove('flipped');
+    flipped = false;
+    counter.textContent = (idx+1)+' / '+cards.length;
+  }
+  cardEl.addEventListener('click', ()=>{
+    flipped = !flipped;
+    cardEl.classList.toggle('flipped', flipped);
+  });
+  document.getElementById(containerId+'-prev').addEventListener('click', ()=>{
+    idx = (idx-1+cards.length)%cards.length; render();
+  });
+  document.getElementById(containerId+'-next').addEventListener('click', ()=>{
+    idx = (idx+1)%cards.length; render();
+  });
+  render();
+}
+
+/* ---------- MCQ ENGINE ---------- */
+function buildMCQs(containerId, mcqs, setId){
+  const container = document.getElementById(containerId);
+  if(!STATE.mcq[setId]) STATE.mcq[setId] = {};
+
+  function scoreText(){
+    const answers = STATE.mcq[setId] || {};
+    let correctCount = 0;
+    let answeredCount = 0;
+    mcqs.forEach((m,i)=>{
+      if(answers[i] !== undefined){
+        answeredCount++;
+        if(answers[i] === m.correct) correctCount++;
+      }
+    });
+    return {correctCount, answeredCount, total:mcqs.length};
+  }
+
+  function renderScoreBar(){
+    const s = scoreText();
+    return '<div class="mcq-score-bar"><div class="label">Score: <span class="score">'+s.correctCount+' / '+s.total+'</span> &nbsp;('+s.answeredCount+' answered)</div><button class="mcq-reset" id="'+containerId+'-reset">Reset quiz</button></div>';
+  }
+
+  function renderQuestions(){
+    const answers = STATE.mcq[setId] || {};
+    return mcqs.map((m,i)=>{
+      const chosen = answers[i];
+      const answeredThis = chosen !== undefined;
+      const optsHtml = m.opts.map((o,oi)=>{
+        let cls = 'mcq-opt';
+        if(answeredThis){
+          cls += ' disabled';
+          if(oi===m.correct) cls += ' correct';
+          else if(oi===chosen) cls += ' incorrect';
+        }
+        const key = String.fromCharCode(65+oi);
+        return '<div class="'+cls+'" data-qi="'+i+'" data-oi="'+oi+'"><span class="optkey">'+key+'</span><span>'+o+'</span></div>';
+      }).join('');
+      const whyHtml = '<div class="mcq-why'+(answeredThis?' show':'')+'" id="'+containerId+'-why-'+i+'"><b>Why:</b> '+m.why+'</div>';
+      const footHtml = answeredThis
+        ? '<div class="mcq-foot"><span class="mcq-result-tag '+(chosen===m.correct?'right':'wrong')+'">'+(chosen===m.correct?'✓ Correct':'✗ Not quite')+'</span>'
+          + '<button class="mcq-retry" data-retry-qi="'+i+'">↻ Try again</button></div>'
+        : '';
+      return '<div class="mcq-item"><div class="mcq-q"><span class="mcq-qnum">Q'+(i+1)+'.</span>'+m.q+'</div>'+optsHtml+whyHtml+footHtml+'</div>';
+    }).join('');
+  }
+
+  function fullRender(){
+    container.innerHTML = renderScoreBar() + renderQuestions();
+    container.querySelectorAll('.mcq-opt').forEach(el=>{
+      el.addEventListener('click', onSelect);
+    });
+    container.querySelectorAll('.mcq-retry').forEach(el=>{
+      el.addEventListener('click', onRetryQuestion);
+    });
+    document.getElementById(containerId+'-reset').addEventListener('click', ()=>{
+      STATE.mcq[setId] = {};
+      saveMcq();
+      fullRender();
+      updateProgress();
+      syncChecklistUI();
+    });
+  }
+
+  function onRetryQuestion(e){
+    const qi = parseInt(e.currentTarget.getAttribute('data-retry-qi'));
+    delete STATE.mcq[setId][qi];
+    saveMcq();
+    fullRender();
+    updateProgress();
+    syncChecklistUI();
+  }
+
+  function onSelect(e){
+    const el = e.currentTarget;
+    if(el.classList.contains('disabled')) return;
+    const qi = parseInt(el.getAttribute('data-qi'));
+    const oi = parseInt(el.getAttribute('data-oi'));
+    STATE.mcq[setId][qi] = oi;
+    saveMcq();
+    fullRender();
+    updateProgress();
+    syncChecklistUI();
+  }
+
+  fullRender();
+}
+
+/* ---------- PROGRESS BAR ---------- */
+function updateProgress(){
+  let checklistTotal = TOPICS.length + 1; // +1 for final
+  let checklistDone = 0;
+  TOPICS.forEach(t=>{ if(STATE.checklist[t.id]) checklistDone++; });
+  if(STATE.checklist['final']) checklistDone++;
+
+  let mcqTotal = 0, mcqDone = 0;
+  TOPICS.forEach(t=>{
+    mcqTotal += t.mcqs.length;
+    const ans = STATE.mcq[t.id] || {};
+    mcqDone += Object.keys(ans).length;
+  });
+  mcqTotal += FINAL_MCQS.length;
+  const finalAns = STATE.mcq['final'] || {};
+  mcqDone += Object.keys(finalAns).length;
+
+  const totalItems = checklistTotal + mcqTotal;
+  const doneItems = checklistDone + mcqDone;
+  const pct = totalItems ? Math.round((doneItems/totalItems)*100) : 0;
+
+  const wrap = document.getElementById('progressWrap');
+  const fill = document.getElementById('progressFill');
+  const label = document.getElementById('progressLabel');
+
+  if(doneItems > 0){
+    document.body.classList.add('progress-active');
+    wrap.classList.add('show');
+  }
+  fill.style.width = pct+'%';
+  label.textContent = pct+'% reviewed';
+}
+
+/* ---------- BOOT ---------- */
+async function boot(){
+  await loadAllState();
+  buildSidebar();
+
+  renderHome();
+  TOPICS.forEach(renderTopicPage);
+  renderFinalPage();
+
+  syncChecklistUI();
+  updateProgress();
+  navigate('home');
+
+  // mobile menu
+  document.getElementById('menuToggle').addEventListener('click', ()=>{
+    document.getElementById('sidebar').classList.toggle('open');
+    document.getElementById('scrim').classList.toggle('show');
+  });
+  document.getElementById('scrim').addEventListener('click', closeSidebarMobile);
+
+  // reset all
+  document.getElementById('resetBtn').addEventListener('click', async ()=>{
+    if(!confirm('Reset all checklist progress and quiz answers? This cannot be undone.')) return;
+    STATE = {checklist:{}, mcq:{}};
+    await storeSet('checklist', {});
+    await storeSet('mcqAnswers', {});
+    document.getElementById('main').innerHTML = '';
+    renderHome();
+    TOPICS.forEach(renderTopicPage);
+    renderFinalPage();
+    syncChecklistUI();
+    updateProgress();
+    navigate('home');
+    document.body.classList.remove('progress-active');
+    document.getElementById('progressWrap').classList.remove('show');
+  });
+}
+
+boot();
+</script>
+</body>
+</html>
