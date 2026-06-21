@@ -1,0 +1,25 @@
+name: Fetch Drive files
+on:
+  schedule:
+    - cron: '0 6 * * *'
+  workflow_dispatch:
+
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Run fetch script
+        env:
+          API_KEY: ${{ secrets.DRIVE_API_KEY }}
+          FOLDER_ID: '1M_1z8t7hDfQUgv0BBw3xt6wj1j-iRT9I'
+        run: node .github/scripts/fetch-drive.js
+
+      - name: Commit updated drive-files.json
+        run: |
+          git config user.name "github-actions"
+          git config user.email "actions@github.com"
+          git add assets/data/drive-files.json
+          git diff --quiet && git diff --staged --quiet || git commit -m "chore: update drive-files.json"
+          git push

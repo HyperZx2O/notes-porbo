@@ -115,6 +115,289 @@ body.no-scroll {
   outline-offset: 2px;
 }
 
+button.drive-link {
+  border: none;
+  background: none;
+  cursor: pointer;
+  padding: 0;
+}
+
+.drive-link.connected {
+  color: var(--color-accent);
+}
+
+.drive-external {
+  font-family: var(--font-display);
+  font-size: var(--text-xs);
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: var(--color-ink);
+  border: var(--border-thick) solid var(--color-rule);
+  padding: var(--space-xs) var(--space-sm);
+  transition: color var(--dur-fast) var(--ease-out), border-color var(--dur-fast) var(--ease-out);
+  flex-shrink: 0;
+}
+
+.drive-external:hover {
+  color: var(--color-accent);
+  border-color: var(--color-accent);
+}
+
+.drive-external:focus-visible {
+  outline: var(--border-thick) solid var(--color-focus);
+  outline-offset: 2px;
+}
+
+.drive-card-btn {
+  border: none;
+  background: none;
+  cursor: pointer;
+  padding: 0;
+  display: grid;
+  place-items: center;
+  width: 1.75rem;
+  height: 1.75rem;
+  color: var(--color-muted);
+  flex-shrink: 0;
+  transition: color var(--dur-fast) var(--ease-out);
+}
+
+.drive-card-btn:hover {
+  color: var(--color-accent);
+}
+
+.drive-card-btn:focus-visible {
+  outline: 2px solid var(--color-focus);
+  outline-offset: 2px;
+}
+
+/* ─── Drive Modal ─── */
+
+.drive-modal-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.6);
+  z-index: 1000;
+  justify-content: center;
+  align-items: center;
+  padding: var(--space-md);
+}
+
+.drive-modal-overlay.open {
+  display: flex;
+}
+
+.drive-modal-panel {
+  background: var(--color-paper);
+  border: var(--border-thick) solid var(--color-rule);
+  width: 100%;
+  max-width: 640px;
+  max-height: 80vh;
+  display: flex;
+  flex-direction: column;
+  transition: max-width var(--dur-fast) var(--ease-out), max-height var(--dur-fast) var(--ease-out);
+}
+
+.drive-modal-panel.preview {
+  max-width: 90vw;
+  max-height: 90vh;
+}
+
+.drive-modal-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-md) var(--space-lg);
+  border-bottom: var(--border-thick) solid var(--color-rule);
+}
+
+.drive-modal-title {
+  font-family: var(--font-display);
+  font-size: var(--text-lg);
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: -0.01em;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.drive-modal-close {
+  font-family: var(--font-mono);
+  font-size: var(--text-xl);
+  font-weight: 700;
+  color: var(--color-rule);
+  background: none;
+  border: none;
+  cursor: pointer;
+  line-height: 1;
+  padding: var(--space-xs);
+  flex-shrink: 0;
+}
+
+.drive-modal-close:hover {
+  color: var(--color-ink);
+}
+
+.drive-modal-close:focus-visible {
+  outline: 2px solid var(--color-focus);
+  outline-offset: 2px;
+}
+
+.drive-modal-body {
+  flex: 1;
+  overflow-y: auto;
+}
+
+.drive-modal-body-preview {
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+}
+
+.drive-modal-group {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  color: var(--color-muted);
+  cursor: pointer;
+  user-select: none;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: var(--space-sm) var(--space-lg);
+  border-bottom: 1px solid var(--color-paper-2);
+  transition: color var(--dur-fast) var(--ease-out);
+}
+
+.drive-modal-group:hover {
+  color: var(--color-ink);
+}
+
+.drive-modal-group.collapsed {
+  color: var(--color-muted);
+}
+
+.drive-modal-group-content {
+  overflow: hidden;
+}
+
+.drive-modal-arrow {
+  display: inline-block;
+  width: 1em;
+}
+
+.drive-modal-file-wrap {
+  padding: var(--space-xs) var(--space-lg);
+  border-bottom: 1px solid var(--color-paper-2);
+}
+
+.drive-modal-file {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  color: var(--color-ink);
+  text-decoration: none;
+  padding: var(--space-xs) 0;
+  transition: color var(--dur-fast) var(--ease-out);
+}
+
+.drive-modal-file:hover {
+  color: var(--color-accent);
+}
+
+.drive-modal-badge {
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--color-paper);
+  background: var(--color-accent);
+  padding: 0.1em 0.4em;
+  flex-shrink: 0;
+  margin-left: auto;
+  line-height: 1.4;
+}
+
+.drive-modal-preview-actions {
+  display: flex;
+  border-bottom: 1px solid var(--color-paper-2);
+  flex-shrink: 0;
+}
+
+.drive-modal-preview-actions button,
+.drive-modal-preview-actions a {
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  color: var(--color-accent);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: var(--space-md) var(--space-lg);
+  text-align: left;
+  text-decoration: none;
+}
+
+.drive-modal-preview-actions a {
+  margin-left: auto;
+  border-left: 1px solid var(--color-paper-2);
+}
+
+.drive-modal-preview-actions button:hover,
+.drive-modal-preview-actions a:hover {
+  color: var(--color-ink);
+}
+
+.drive-modal-preview-actions button:focus-visible,
+.drive-modal-preview-actions a:focus-visible {
+  outline: 2px solid var(--color-focus);
+  outline-offset: -2px;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
+}
+
+.drive-modal-loading {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  color: var(--color-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  display: grid;
+  place-items: center;
+  flex: 1;
+  min-height: 60vh;
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+.drive-modal-fallback {
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  color: var(--color-muted);
+  display: grid;
+  place-items: center;
+  flex: 1;
+  min-height: 60vh;
+  text-align: center;
+  padding: var(--space-lg);
+}
+
+.drive-modal-fallback a {
+  color: var(--color-accent);
+}
+
+.drive-modal-iframe {
+  width: 100%;
+  flex: 1;
+  border: none;
+  min-height: 60vh;
+}
+
 /* ─── Semester tabs ─── */
 
 .semester-bar {
@@ -405,6 +688,90 @@ body.no-scroll {
   color: var(--color-muted);
 }
 
+/* ─── Loading state ─── */
+
+.loading-state {
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  color: var(--color-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  text-align: center;
+  padding: var(--space-3xl) var(--space-xl);
+  border: var(--border-thick) solid var(--color-rule);
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+.loading-state.error {
+  color: var(--color-accent);
+  animation: none;
+}
+
+.loading-state.error button {
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  background: none;
+  border: var(--border-thick) solid var(--color-rule);
+  color: var(--color-ink);
+  cursor: pointer;
+  padding: var(--space-sm) var(--space-md);
+  margin-top: var(--space-md);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  transition: color var(--dur-fast) var(--ease-out), border-color var(--dur-fast) var(--ease-out);
+}
+
+.loading-state.error button:hover {
+  color: var(--color-accent);
+  border-color: var(--color-accent);
+}
+
+/* ─── 404 ─── */
+
+.error-404 {
+  text-align: center;
+  padding: var(--space-3xl) var(--space-xl);
+  border: var(--border-thick) solid var(--color-rule);
+}
+
+.error-404-code {
+  font-family: var(--font-display);
+  font-size: 4rem;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  color: var(--color-ink);
+  line-height: 1;
+}
+
+.error-404-msg {
+  font-family: var(--font-mono);
+  font-size: var(--text-base);
+  color: var(--color-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-top: var(--space-md);
+}
+
+.error-404-link {
+  display: inline-block;
+  font-family: var(--font-display);
+  font-size: var(--text-sm);
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  text-decoration: none;
+  color: var(--color-accent);
+  border: var(--border-thick) solid var(--color-accent);
+  padding: var(--space-sm) var(--space-md);
+  margin-top: var(--space-xl);
+  transition: color var(--dur-fast) var(--ease-out), background var(--dur-fast) var(--ease-out);
+}
+
+.error-404-link:hover {
+  color: var(--color-paper);
+  background: var(--color-accent);
+}
+
 /* ─── Ft2: Inline single line footer ─── */
 
 .site-footer {
@@ -572,9 +939,13 @@ body.no-scroll {
     padding: var(--space-md) var(--space-md);
   }
 
+  .search-wrap {
+    flex-wrap: wrap;
+  }
+
   .search-wrap input {
-    min-width: 0;
-    width: 100%;
+    flex: 1;
+    min-width: 140px;
   }
 
   .semester-bar {
@@ -619,6 +990,16 @@ body.no-scroll {
 
   .course-files-inner {
     padding: var(--space-sm) var(--space-md) var(--space-md);
+  }
+
+  .drive-card-btn,
+  .file-download {
+    width: 2.75rem;
+    height: 2.75rem;
+  }
+
+  .drive-external {
+    padding: var(--space-sm) var(--space-md);
   }
 }
 

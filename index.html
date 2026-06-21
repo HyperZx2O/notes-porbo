@@ -11,14 +11,15 @@
   <header class="masthead">
     <h1 class="wordmark">Notes <em>Porbo</em></h1>
     <div class="search-wrap">
-      <input type="text" id="search-input" placeholder="Ctrl + K to search" readonly aria-label="Search courses or files">
-      <a href="https://drive.google.com/drive/u/1/folders/1M_1z8t7hDfQUgv0BBw3xt6wj1j-iRT9I" class="drive-link" target="_blank" rel="noopener" aria-label="Open Google Drive folder">
+      <a href="https://drive.google.com/drive/u/1/folders/1M_1z8t7hDfQUgv0BBw3xt6wj1j-iRT9I" class="drive-external" target="_blank" rel="noopener noreferrer">DRIVE</a>
+      <input type="text" id="search-input" placeholder="Search courses" readonly aria-label="Search courses or files">
+      <button type="button" class="drive-link" id="drive-btn" aria-label="Connect Google Drive">
         <svg width="22" height="22" viewBox="0 0 48 48" aria-hidden="true">
           <polygon points="24,4 8,30 40,30" fill="currentColor"/>
           <polygon points="8,30 16,44 32,44 24,30" fill="currentColor" opacity="0.65"/>
           <polygon points="40,30 32,44 24,30" fill="currentColor" opacity="0.35"/>
         </svg>
-      </a>
+      </button>
     </div>
   </header>
 
@@ -34,6 +35,6 @@
     <p>Notes Porbo &copy; 2026 <span class="footer-sep">/</span> <button class="changelog-btn" id="changelog-btn">Changelog</button></p>
   </footer>
 
-  <script src="assets/js/main.js?v=3"></script>
+  <script src="assets/js/main.js?v=4"></script>
 </body>
 </html>
