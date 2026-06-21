@@ -2,19 +2,22 @@
 
 Study dashboard for IUT course materials, organized by semester. Built for GitHub Pages.
 
+Courses are listed in `assets/data/courses.json`. Adding a new HTML file to a course folder and listing it in `courses.json` makes it appear on the dashboard.
+
+Drive extras are crawled daily via GitHub Actions and served as static JSON — no API key reaches the browser.
+
 ## Structure
 
 ```
-1-1/          → Semester 1-1
-  Course-X/   → Course folder
-    file.html → Study material (quiz, midterm, final, etc.)
-1-2/          → Semester 1-2
-assets/       → CSS, JS, tokens
-  css/
-  js/
+1-1/          → Semester 1-1 course HTML files
+1-2/          → Semester 1-2 course HTML files
+assets/
+  css/        → Styles
+  js/         → Dashboard logic (main.js)
+  data/       → courses.json, drive-files.json (auto-generated)
+.github/
+  workflows/  → fetch-drive.yml (daily crawl)
+  scripts/    → fetch-drive.js (server-side Drive crawler)
 index.html    → Dashboard
+404.html      → Not-found page
 ```
-
-## Updating
-
-Add or remove folders/files under any semester directory, then commit and push — GitHub Actions auto-deploys to Pages.

@@ -10,7 +10,7 @@
     { "name": "CHEM 4241 - Chemistry", "files": [] },
     { "name": "CSE 4203 - Discrete Mathematics", "files": ["midterm.html"] },
     { "name": "CSE 4205 - Digital Logic Design", "files": [] },
-    { "name": "HUM 4241 - Islamic History Science and Culture", "files": ["midterm.html"] },
+    { "name": "HUM 4241 - Islamic History Science and Culture", "files": ["midterm.html", "quiz1.html"] },
     { "name": "MATH 4241 - Integral Calculus and Differential Equations", "files": ["midterm.html"] },
     { "name": "PHY 4241 - Physics II", "files": ["midterm.html"] }
   ]
