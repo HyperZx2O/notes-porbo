@@ -45,3 +45,15 @@
   --radius-none: 0;
   --border-thick: 3px;
 }
+
+[data-theme="dark"] {
+  --color-paper: oklch(15% 0.01 70);
+  --color-paper-2: oklch(27% 0.012 70);
+  --color-rule: oklch(85% 0.01 70);
+  --color-rule-light: oklch(35% 0.01 70);
+  --color-muted: oklch(47% 0.008 70);
+  --color-ink: oklch(92% 0.008 80);
+  --color-accent: oklch(72% 0.20 45);
+  --color-accent-hover: oklch(62% 0.24 45);
+  --color-focus: oklch(65% 0.22 55);
+}

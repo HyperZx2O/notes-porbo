@@ -667,10 +667,21 @@ var DriveModal = {
       a.textContent = f.name.replace(/\.\w+$/, '').replace(/-/g, ' ');
       var badge = document.createElement('span');
       badge.className = 'drive-modal-badge';
-      badge.textContent = 'DRIVE';
+      if (f.mimeType === 'application/pdf') badge.textContent = 'PDF';
+      else if (f.mimeType.indexOf('image/') === 0) badge.textContent = 'IMG';
+      else if (f.mimeType.indexOf('video/') === 0) badge.textContent = 'VID';
+      else badge.textContent = 'FILE';
       a.appendChild(badge);
       a.addEventListener('click', function(e) { e.preventDefault(); self._preview(f); });
+      var openLink = document.createElement('a');
+      openLink.className = 'drive-modal-open';
+      openLink.href = 'https://drive.google.com/file/d/' + f.id + '/view';
+      openLink.target = '_blank';
+      openLink.rel = 'noopener noreferrer';
+      openLink.textContent = '↗';
+      openLink.setAttribute('aria-label', 'Open in Drive');
       row.appendChild(a);
+      row.appendChild(openLink);
       body.appendChild(row);
     });
 
@@ -715,10 +726,21 @@ var DriveModal = {
       a.textContent = f.name.replace(/\.\w+$/, '').replace(/-/g, ' ');
       var badge = document.createElement('span');
       badge.className = 'drive-modal-badge';
-      badge.textContent = 'DRIVE';
+      if (f.mimeType === 'application/pdf') badge.textContent = 'PDF';
+      else if (f.mimeType.indexOf('image/') === 0) badge.textContent = 'IMG';
+      else if (f.mimeType.indexOf('video/') === 0) badge.textContent = 'VID';
+      else badge.textContent = 'FILE';
       a.appendChild(badge);
       a.addEventListener('click', function(e) { e.preventDefault(); self._preview(f); });
+      var openLink = document.createElement('a');
+      openLink.className = 'drive-modal-open';
+      openLink.href = 'https://drive.google.com/file/d/' + f.id + '/view';
+      openLink.target = '_blank';
+      openLink.rel = 'noopener noreferrer';
+      openLink.textContent = '↗';
+      openLink.setAttribute('aria-label', 'Open in Drive');
       row.appendChild(a);
+      row.appendChild(openLink);
       wrap.appendChild(row);
     });
 
@@ -743,6 +765,12 @@ var DriveModal = {
     back.innerHTML = '&larr; Back';
     back.addEventListener('click', function() { self._renderList(); });
     actions.appendChild(back);
+    var openDrive = document.createElement('a');
+    openDrive.href = 'https://drive.google.com/file/d/' + file.id + '/view';
+    openDrive.target = '_blank';
+    openDrive.rel = 'noopener noreferrer';
+    openDrive.textContent = 'Open in Drive ↗';
+    actions.appendChild(openDrive);
     var dl = document.createElement('a');
     dl.href = 'https://drive.google.com/uc?export=download&id=' + file.id;
     dl.target = '_blank';
@@ -750,6 +778,15 @@ var DriveModal = {
     dl.textContent = 'Download';
     actions.appendChild(dl);
     body.appendChild(actions);
+    // ponytail: images render directly, other files use Drive iframe
+    if (file.mimeType && file.mimeType.indexOf('image/') === 0) {
+      var img = document.createElement('img');
+      img.className = 'drive-modal-img';
+      img.src = 'https://drive.google.com/uc?export=view&id=' + file.id;
+      img.alt = file.name;
+      body.appendChild(img);
+      return;
+    }
     var loading = document.createElement('div');
     loading.className = 'drive-modal-loading';
     loading.textContent = 'Loading preview…';
@@ -773,6 +810,38 @@ var DriveModal = {
     body.appendChild(iframe);
   }
 };
+
+// Theme toggle
+(function() {
+  var html = document.documentElement;
+  var btn = document.getElementById('theme-toggle');
+  var mq = window.matchMedia('(prefers-color-scheme: dark)');
+
+  function apply(forceDark) {
+    var stored = localStorage.getItem('theme');
+    var isDark = forceDark !== undefined ? forceDark
+      : stored === 'dark' ? true
+      : stored === 'light' ? false
+      : mq.matches;
+    if (isDark) html.setAttribute('data-theme', 'dark');
+    else html.removeAttribute('data-theme');
+    if (btn) btn.textContent = isDark ? 'LIGHT' : 'DARK';
+  }
+
+  // OS preference change — only when no explicit override
+  mq.addEventListener('change', function(e) {
+    if (!localStorage.getItem('theme')) apply(e.matches);
+  });
+
+  apply();
+  if (btn) {
+    btn.addEventListener('click', function() {
+      var dark = html.getAttribute('data-theme') === 'dark';
+      if (dark) { localStorage.setItem('theme', 'light'); apply(false); }
+      else { localStorage.setItem('theme', 'dark'); apply(true); }
+    });
+  }
+})();
 
 init();
 
