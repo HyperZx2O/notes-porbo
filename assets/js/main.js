@@ -867,7 +867,9 @@ function computeStatsHTML() {
     });
   }
 
-  var semRows = Object.keys(semFiles).sort().map(function(sem) {
+  var semRows = Object.keys(semFiles).sort().filter(function(sem) {
+    return /^\d-\d/.test(sem);
+  }).map(function(sem) {
     var shortSem = sem.replace(/ .*/, '');
     return '<div class="stats-row"><span>' + shortSem + '</span><span>' + semFiles[sem] + ' files</span></div>';
   }).join('');
