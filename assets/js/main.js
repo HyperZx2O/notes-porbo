@@ -298,6 +298,7 @@ function setupChangelog() {
 function init() {
   setupUI();
   setupChangelog();
+  setupStats();
   loadCourses();
 }
 
@@ -514,16 +515,20 @@ function escapeHtml(str) {
 // and writes assets/data/drive-files.json. This module just fetches that.
 
 var DriveClient = (function() {
-  var ready = false, files = null;
+  var ready = false, files = null, refreshedAt = null;
 
   return {
     isConnected: function() { return ready; },
+    getRefreshedAt: function() { return refreshedAt; },
+    getRawFiles: function() { return files; },
     init: function(cb) {
       fetch('assets/data/drive-files.json').then(function(r) {
         if (!r.ok) throw new Error('HTTP ' + r.status);
         return r.json();
       }).then(function(data) {
-        files = data;
+        // ponytail: handle both wrapped and bare array format
+        files = data.files || data;
+        refreshedAt = data._refreshedAt || null;
         ready = true;
         document.dispatchEvent(new CustomEvent('drive:change'));
         if (cb) cb();
@@ -681,6 +686,9 @@ var DriveModal = {
       openLink.rel = 'noopener noreferrer';
       openLink.innerHTML = self._openIcon;
       openLink.setAttribute('aria-label', 'Open in Drive');
+      openLink.addEventListener('click', function() {
+        if (window.goatcounter) goatcounter.count({event: true, path: '/drive/' + f.id + '/open', title: f.name});
+      });
       row.appendChild(a);
       row.appendChild(openLink);
       body.appendChild(row);
@@ -740,6 +748,9 @@ var DriveModal = {
       openLink.rel = 'noopener noreferrer';
       openLink.innerHTML = self._openIcon;
       openLink.setAttribute('aria-label', 'Open in Drive');
+      openLink.addEventListener('click', function() {
+        if (window.goatcounter) goatcounter.count({event: true, path: '/drive/' + f.id + '/open', title: f.name});
+      });
       row.appendChild(a);
       row.appendChild(openLink);
       wrap.appendChild(row);
@@ -754,6 +765,7 @@ var DriveModal = {
 
   _preview: function(file) {
     if (!this.overlay) return;
+    if (window.goatcounter) goatcounter.count({event: true, path: '/drive/' + file.id, title: file.name});
     this.overlay.querySelector('.drive-modal-panel').classList.add('preview');
     this.overlay.querySelector('.drive-modal-title').textContent = file.name;
     var body = this.overlay.querySelector('.drive-modal-body');
@@ -811,6 +823,161 @@ var DriveModal = {
     body.appendChild(iframe);
   }
 };
+
+/* ─── Stats overlay ─── */
+
+function computeStatsHTML() {
+  var files = DriveClient.getRawFiles();
+  var refreshedAt = DriveClient.getRefreshedAt();
+
+  if (!files) return '<p class="stats-loading">Drive data not loaded.</p>';
+
+  var total = files.length;
+  var pdfs = 0, notes = 0, slides = 0, docs = 0, images = 0, other = 0;
+  var semFiles = {};
+  var courseFiles = {};
+  var latestMod = null, latestModName = '';
+
+  files.forEach(function(f) {
+    if (f.mimeType === 'application/pdf') pdfs++;
+    else if (f.mimeType.indexOf('image/') === 0) images++;
+    else if (f.mimeType === 'text/plain') notes++;
+    else if (f.mimeType.indexOf('presentation') >= 0) slides++;
+    else if (f.mimeType.indexOf('document') >= 0 || f.mimeType.indexOf('spreadsheet') >= 0) docs++;
+    else other++;
+
+    if (f._path) {
+      var parts = f._path.split('/');
+      if (parts.length > 0) {
+        var sem = parts[0];
+        semFiles[sem] = (semFiles[sem] || 0) + 1;
+      }
+    }
+
+    if (f.modifiedTime && (!latestMod || f.modifiedTime > latestMod)) {
+      latestMod = f.modifiedTime;
+      latestModName = f.name.replace(/\.\w+$/, '').replace(/-/g, ' ');
+    }
+  });
+
+  var courseCount = 0;
+  if (typeof COURSES !== 'undefined' && COURSES) {
+    Object.keys(COURSES).forEach(function(sem) {
+      courseCount += (COURSES[sem] || []).length;
+    });
+  }
+
+  var semRows = Object.keys(semFiles).sort().map(function(sem) {
+    var shortSem = sem.replace(/ .*/, '');
+    return '<div class="stats-row"><span>' + shortSem + '</span><span>' + semFiles[sem] + ' files</span></div>';
+  }).join('');
+
+  var freshnessHTML = '';
+  if (refreshedAt) {
+    var d = new Date(refreshedAt);
+    freshnessHTML += '<div class="stats-row"><span>Refreshed</span><span>' + d.toLocaleDateString('en-GB', {day:'numeric',month:'short',year:'numeric'}) + ' ' + d.toLocaleTimeString('en-GB', {hour:'2-digit',minute:'2-digit'}) + '</span></div>';
+  }
+  if (latestMod) {
+    var md = new Date(latestMod);
+    var now = new Date();
+    var diffMs = now - md;
+    var diffDays = Math.floor(diffMs / 86400000);
+    var diffHours = Math.floor(diffMs / 3600000);
+    var ago = diffDays > 0 ? diffDays + ' day' + (diffDays > 1 ? 's' : '') + ' ago' : diffHours + ' hour' + (diffHours > 1 ? 's' : '') + ' ago';
+    freshnessHTML += '<div class="stats-row"><span>Latest mod</span><span>' + latestModName + '</span></div>';
+    freshnessHTML += '<div class="stats-row" style="border:none;padding-top:0"><span></span><span class="stats-meta">' + ago + '</span></div>';
+  }
+
+  var popularHTML = '<div class="stats-row"><span>Loading popular files…</span><span></span></div>';
+  fetch('https://hyperzx20.goatcounter.com/counter//hits.json?event=true')
+    .then(function(r) { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
+    .then(function(hits) {
+      var body = document.getElementById('stats-body');
+      if (!body) return;
+      var popularEl = body.querySelector('.stats-popular');
+      if (!popularEl) return;
+      if (!hits || hits.length === 0) {
+        popularEl.innerHTML = '<div class="stats-row"><span>No data yet</span><span></span></div>';
+        return;
+      }
+      var html = '';
+      var shown = 0;
+      hits.forEach(function(h) {
+        if (shown >= 5) return;
+        if (!h.title || h.count < 1) return;
+        shown++;
+        html += '<div class="stats-row"><span>' + shown + '. ' + h.title + '</span><span>' + h.count + '×</span></div>';
+      });
+      if (!html) html = '<div class="stats-row"><span>No data yet</span><span></span></div>';
+      popularEl.innerHTML = html;
+    })
+    .catch(function() {
+      var body = document.getElementById('stats-body');
+      if (!body) return;
+      var popularEl = body.querySelector('.stats-popular');
+      if (popularEl) popularEl.innerHTML = '<div class="stats-row"><span>Unavailable</span><span></span></div>';
+    });
+
+  return '<div class="stats-section">'
+    + '<div class="stats-row"><span>Courses</span><span>' + courseCount + '</span></div>'
+    + '<div class="stats-row" style="border:none"><span>Files</span><span>' + total + '</span></div>'
+    + '</div>'
+    + '<div class="stats-section">'
+    + '<h3>By type</h3>'
+    + '<div class="stats-row"><span>PDF</span><span>' + pdfs + '</span></div>'
+    + '<div class="stats-row"><span>Notes</span><span>' + notes + '</span></div>'
+    + '<div class="stats-row"><span>Slides</span><span>' + slides + '</span></div>'
+    + '<div class="stats-row"><span>Docs</span><span>' + docs + '</span></div>'
+    + '<div class="stats-row" style="border:none"><span>Images</span><span>' + images + '</span></div>'
+    + '</div>'
+    + '<div class="stats-section">'
+    + '<h3>By semester</h3>'
+    + semRows
+    + '</div>'
+    + '<div class="stats-section">'
+    + '<h3>Freshness</h3>'
+    + freshnessHTML
+    + '</div>'
+    + '<div class="stats-section">'
+    + '<h3>Popular</h3>'
+    + '<div class="stats-popular">' + popularHTML + '</div>'
+    + '</div>';
+}
+
+function setupStats() {
+  var overlay = document.createElement('div');
+  overlay.className = 'stats-overlay';
+  overlay.id = 'stats-overlay';
+  overlay.innerHTML = '<div class="stats-panel">'
+    + '<div class="stats-head">'
+    + '<h2>Stats</h2>'
+    + '<button class="stats-close" id="stats-close" aria-label="Close stats">&times;</button>'
+    + '</div>'
+    + '<div class="stats-body" id="stats-body">'
+    + '<p class="stats-loading">Loading stats&hellip;</p>'
+    + '</div>'
+    + '</div>';
+  document.body.appendChild(overlay);
+  document.getElementById('stats-btn').addEventListener('click', openStats);
+  document.getElementById('stats-close').addEventListener('click', closeStats);
+  overlay.addEventListener('click', function(e) { if (e.target === this) closeStats(); });
+}
+
+function openStats() {
+  document.body.classList.add('no-scroll');
+  var overlay = document.getElementById('stats-overlay');
+  overlay.style.display = '';
+  overlay.classList.add('open');
+  var body = document.getElementById('stats-body');
+  body.innerHTML = computeStatsHTML();
+}
+
+function closeStats() {
+  document.body.classList.remove('no-scroll');
+  var overlay = document.getElementById('stats-overlay');
+  overlay.style.display = '';
+  overlay.classList.remove('open');
+}
 
 // Theme toggle
 (function() {

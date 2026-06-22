@@ -28,7 +28,7 @@ function fetchJSON(url) {
 
 function listUrl(folderId, token) {
   var url = 'https://www.googleapis.com/drive/v3/files?q=\'' + folderId + '\'+in+parents+and+trashed=false'
-    + '&fields=files(id,name,mimeType),nextPageToken'
+    + '&fields=files(id,name,mimeType,modifiedTime),nextPageToken'
     + '&pageSize=100&orderBy=folder,name&key=' + API_KEY;
   if (token) url += '&pageToken=' + token;
   return url;
@@ -71,7 +71,8 @@ crawl(FOLDER_ID, '', 0).then(function(files) {
   var outDir = path.join(__dirname, '..', '..', 'assets', 'data');
   fs.mkdirSync(outDir, { recursive: true });
   var outFile = path.join(outDir, 'drive-files.json');
-  fs.writeFileSync(outFile, JSON.stringify(files, null, 2));
+  var output = { _refreshedAt: new Date().toISOString(), files: files };
+  fs.writeFileSync(outFile, JSON.stringify(output, null, 2));
   console.log('Written ' + files.length + ' files to ' + outFile);
 }).catch(function(err) {
   console.error('Crawl failed:', err.message);
