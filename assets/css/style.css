@@ -135,6 +135,14 @@ button.drive-link {
   to { transform: rotate(360deg); }
 }
 
+.drive-link.done svg {
+  animation: drive-flash 0.15s ease-in-out 3;
+}
+
+@keyframes drive-flash {
+  50% { opacity: 0.2; }
+}
+
 .drive-external {
   font-family: var(--font-display);
   font-size: var(--text-xs);

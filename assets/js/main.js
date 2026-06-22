@@ -593,6 +593,8 @@ function _pollForUpdate(btn, retries) {
     if (data.length !== DriveClient._filesCount()) {
       DriveClient.setFiles(data);
       btn.classList.remove('syncing');
+      btn.classList.add('done');
+      setTimeout(function() { btn.classList.remove('done'); }, 1000);
     } else {
       _recrawlTimer = setTimeout(_pollForUpdate, 15000, btn, retries - 1);
     }
