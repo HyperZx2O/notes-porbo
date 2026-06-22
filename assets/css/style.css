@@ -126,23 +126,6 @@ button.drive-link {
   color: var(--color-accent);
 }
 
-.drive-link.syncing svg {
-  animation: drive-spin 1s linear infinite;
-  color: var(--color-accent);
-}
-
-@keyframes drive-spin {
-  to { transform: rotate(360deg); }
-}
-
-.drive-link.done svg {
-  animation: drive-flash 0.15s ease-in-out 3;
-}
-
-@keyframes drive-flash {
-  50% { opacity: 0.2; }
-}
-
 .drive-external {
   font-family: var(--font-display);
   font-size: var(--text-xs);

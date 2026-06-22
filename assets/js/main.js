@@ -274,23 +274,6 @@ function setupUI() {
     var sem = localStorage.getItem('sem') || DEFAULT_SEMESTER;
     if (COURSES && COURSES[sem]) switchSemester(sem);
   });
-
-  var driveBtn = document.getElementById('drive-btn');
-  if (driveBtn) {
-    driveBtn.addEventListener('click', function() {
-      if (driveBtn.classList.contains('syncing')) return;
-      if (typeof DRIVE_CONFIG === 'undefined' || !DRIVE_CONFIG.ghToken) return;
-      driveBtn.classList.add('syncing');
-      _triggerWorkflowDispatch().then(function(r) {
-        if (!r.ok) throw new Error('HTTP ' + r.status);
-        // ponytail: 90s initial delay, then poll every 15s for up to ~12 tries
-        _recrawlTimer = setTimeout(_pollForUpdate, 90000, driveBtn, 12);
-      }).catch(function(err) {
-        console.error('Recrawl dispatch failed:', err.message);
-        driveBtn.classList.remove('syncing');
-      });
-    });
-  }
 }
 
 function setupChangelog() {
@@ -526,9 +509,9 @@ function escapeHtml(str) {
 }
 
 /* ─── DriveClient ─── */
-// ponytail: Drive API key + GitHub PAT live in drive-config.js.
-// The daily Action crawls the public Drive folder. Clicking the
-// drive button dispatches the workflow and polls for the updated JSON.
+// ponytail: API key lives in GitHub secret, not in source.
+// A daily Action (fetch-drive.yml) crawls the public Drive folder
+// and writes assets/data/drive-files.json. This module just fetches that.
 
 var DriveClient = (function() {
   var ready = false, files = null;
@@ -549,12 +532,6 @@ var DriveClient = (function() {
         if (cb) cb();
       });
     },
-    setFiles: function(data) {
-      files = data;
-      ready = true;
-      document.dispatchEvent(new CustomEvent('drive:change'));
-    },
-    _filesCount: function() { return files ? files.length : 0; },
     // ponytail: matches course folder name anywhere in the path
     // (semester folder names like '1-1 CSE\'24' don't match the '1-1' key)
     getFilesForCourse: function(semester, courseName) {
@@ -565,43 +542,6 @@ var DriveClient = (function() {
     }
   };
 })();
-
-/* ─── Live recrawl ─── */
-// ponytail: fixed 90s delay + brief polling. No workflow-status API calls.
-
-function _triggerWorkflowDispatch() {
-  return fetch('https://api.github.com/repos/HyperZx2O/notes-porbo/actions/workflows/fetch-drive.yml/dispatches', {
-    method: 'POST',
-    headers: {
-      'Authorization': 'Bearer ' + DRIVE_CONFIG.ghToken,
-      'Accept': 'application/vnd.github.v3+json',
-      'User-Agent': 'notes-porbo'
-    },
-    body: JSON.stringify({ ref: 'main' })
-  });
-}
-
-var _recrawlTimer = null;
-
-function _pollForUpdate(btn, retries) {
-  if (retries <= 0) { btn.classList.remove('syncing'); return; }
-  fetch('assets/data/drive-files.json?t=' + Date.now()).then(function(r) {
-    if (!r.ok) throw Error();
-    return r.json();
-  }).then(function(data) {
-    // ponytail: length check is good enough — files added/removed changes the count
-    if (data.length !== DriveClient._filesCount()) {
-      DriveClient.setFiles(data);
-      btn.classList.remove('syncing');
-      btn.classList.add('done');
-      setTimeout(function() { btn.classList.remove('done'); }, 1000);
-    } else {
-      _recrawlTimer = setTimeout(_pollForUpdate, 15000, btn, retries - 1);
-    }
-  }).catch(function() {
-    _recrawlTimer = setTimeout(_pollForUpdate, 15000, btn, retries - 1);
-  });
-}
 
 function addDriveButton(card, course, semester) {
   if (!DriveClient.isConnected()) return;
