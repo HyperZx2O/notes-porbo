@@ -34,6 +34,36 @@ function renderFileRow(course, file, semester) {
   dl.title = "Download";
 
   row.appendChild(a);
+
+  var star = document.createElement("button");
+  star.className = "bookmark-star";
+  var bmId = "native:" + semester + "/" + course.name + "/" + file;
+  if (BookmarkManager.isBookmarked(bmId)) { star.textContent = "\u2605"; star.classList.add("active"); }
+  else star.textContent = "\u2606";
+  star.setAttribute("aria-label", "Bookmark " + label);
+  star.addEventListener("click", function(e) {
+    e.preventDefault();
+    e.stopPropagation();
+    if (BookmarkManager.isBookmarked(bmId)) {
+      BookmarkManager.remove(bmId);
+      star.textContent = "\u2606";
+      star.classList.remove("active");
+    } else {
+      BookmarkManager.add({
+        id: bmId,
+        type: "native",
+        semester: semester,
+        courseName: course.name,
+        fileName: file,
+        label: label,
+        href: href
+      });
+      star.textContent = "\u2605";
+      star.classList.add("active");
+    }
+  });
+  row.appendChild(star);
+
   row.appendChild(dl);
   return row;
 }
@@ -257,6 +287,8 @@ function setupUI() {
     if (e.key === "Escape") {
       var so = document.getElementById("search-modal-overlay");
       if (so && so.classList.contains("open")) { SearchModal.close(); return; }
+      var bo = document.getElementById("bookmark-overlay");
+      if (bo && bo.classList.contains("open")) { closeBookmarks(); return; }
       var o = document.getElementById("changelog-overlay");
       if (o && o.classList.contains("open")) closeChangelog();
       var dm = document.querySelector(".drive-modal-overlay.open");
@@ -299,6 +331,7 @@ function init() {
   setupUI();
   setupChangelog();
   setupStats();
+  setupBookmarks();
   loadCourses();
 }
 
@@ -509,6 +542,32 @@ function escapeHtml(str) {
   return div.innerHTML;
 }
 
+/* ─── BookmarkManager ─── */
+
+var BookmarkManager = (function() {
+  var KEY = 'notesporbo:bookmarks';
+  function getAll() {
+    try { return JSON.parse(localStorage.getItem(KEY)) || []; } catch(e) { return []; }
+  }
+  function save(list) {
+    localStorage.setItem(KEY, JSON.stringify(list));
+  }
+  return {
+    getAll: getAll,
+    add: function(b) {
+      var list = getAll();
+      list.unshift(b);
+      save(list);
+    },
+    remove: function(id) {
+      save(getAll().filter(function(b) { return b.id !== id; }));
+    },
+    isBookmarked: function(id) {
+      return getAll().some(function(b) { return b.id === id; });
+    }
+  };
+})();
+
 /* ─── DriveClient ─── */
 // ponytail: API key lives in GitHub secret, not in source.
 // A daily Action (fetch-drive.yml) crawls the public Drive folder
@@ -689,8 +748,32 @@ var DriveModal = {
       openLink.addEventListener('click', function() {
         if (window.goatcounter) goatcounter.count({event: true, path: '/drive/' + f.id + '/open', title: f.name});
       });
+      var star = document.createElement('button');
+      star.className = 'bookmark-star';
+      var bmId = 'drive:' + f.id;
+      if (BookmarkManager.isBookmarked(bmId)) { star.textContent = '\u2605'; star.classList.add('active'); }
+      else star.textContent = '\u2606';
+      star.setAttribute('aria-label', 'Bookmark ' + (f.name.replace(/\.\w+$/, '').replace(/-/g, ' ')));
+      star.addEventListener('click', function(e) {
+        e.stopPropagation();
+        if (BookmarkManager.isBookmarked(bmId)) {
+          BookmarkManager.remove(bmId);
+          star.textContent = '\u2606';
+          star.classList.remove('active');
+        } else {
+          BookmarkManager.add({
+            id: bmId, type: 'drive', fileId: f.id,
+            name: f.name, mimeType: f.mimeType,
+            label: f.name.replace(/\.\w+$/, '').replace(/-/g, ' '),
+            path: f._path || ''
+          });
+          star.textContent = '\u2605';
+          star.classList.add('active');
+        }
+      });
       row.appendChild(a);
       row.appendChild(openLink);
+      row.appendChild(star);
       body.appendChild(row);
     });
 
@@ -751,8 +834,32 @@ var DriveModal = {
       openLink.addEventListener('click', function() {
         if (window.goatcounter) goatcounter.count({event: true, path: '/drive/' + f.id + '/open', title: f.name});
       });
+      var star = document.createElement('button');
+      star.className = 'bookmark-star';
+      var bmId = 'drive:' + f.id;
+      if (BookmarkManager.isBookmarked(bmId)) { star.textContent = '\u2605'; star.classList.add('active'); }
+      else star.textContent = '\u2606';
+      star.setAttribute('aria-label', 'Bookmark ' + (f.name.replace(/\.\w+$/, '').replace(/-/g, ' ')));
+      star.addEventListener('click', function(e) {
+        e.stopPropagation();
+        if (BookmarkManager.isBookmarked(bmId)) {
+          BookmarkManager.remove(bmId);
+          star.textContent = '\u2606';
+          star.classList.remove('active');
+        } else {
+          BookmarkManager.add({
+            id: bmId, type: 'drive', fileId: f.id,
+            name: f.name, mimeType: f.mimeType,
+            label: f.name.replace(/\.\w+$/, '').replace(/-/g, ' '),
+            path: f._path || ''
+          });
+          star.textContent = '\u2605';
+          star.classList.add('active');
+        }
+      });
       row.appendChild(a);
       row.appendChild(openLink);
+      row.appendChild(star);
       wrap.appendChild(row);
     });
 
@@ -791,7 +898,15 @@ var DriveModal = {
     dl.textContent = 'Download';
     actions.appendChild(dl);
     body.appendChild(actions);
-    // ponytail: images render directly, other files use Drive iframe
+    // ponytail: PDF uses native browser embed, images render directly, other files use Drive iframe
+    if (file.mimeType === 'application/pdf') {
+      var embed = document.createElement('embed');
+      embed.className = 'drive-modal-pdf';
+      embed.src = 'https://drive.google.com/uc?export=download&confirm=t&id=' + file.id;
+      embed.type = 'application/pdf';
+      body.appendChild(embed);
+      return;
+    }
     if (file.mimeType && file.mimeType.indexOf('image/') === 0) {
       var img = document.createElement('img');
       img.className = 'drive-modal-img';
@@ -821,6 +936,17 @@ var DriveModal = {
       if (iframe.style.display !== '') { iframe.onerror(); }
     }, 15000);
     body.appendChild(iframe);
+  },
+
+  previewFile: function(file) {
+    this._ensure();
+    this._name = file._path || file.name;
+    this._groups = {};
+    this._order = [];
+    this._collapsed = {};
+    this.overlay.classList.add('open');
+    document.body.classList.add('no-scroll');
+    this._preview(file);
   }
 };
 
@@ -979,6 +1105,94 @@ function closeStats() {
   var overlay = document.getElementById('stats-overlay');
   overlay.style.display = '';
   overlay.classList.remove('open');
+}
+
+/* ─── Bookmarks ─── */
+
+function getBookmarkBreadcrumb(bm) {
+  if (bm.type === 'native') {
+    return bm.semester + ' / ' + bm.courseName;
+  }
+  var parts = bm.path.split('/');
+  var sem = parts[0].replace(/ .*/, '');
+  var course = parts[1] || '';
+  var extra = parts.slice(2, -1).join(' / ');
+  return sem + ' / ' + course + (extra ? ' / ' + extra : '');
+}
+
+function openBookmarks() {
+  document.body.classList.add('no-scroll');
+  var overlay = document.getElementById('bookmark-overlay');
+  overlay.style.display = '';
+  overlay.classList.add('open');
+  var body = document.getElementById('bookmark-body');
+  var list = BookmarkManager.getAll();
+  if (!list.length) {
+    body.innerHTML = '<p class="bookmark-empty">No bookmarks yet</p>';
+    return;
+  }
+  var html = '';
+  list.forEach(function(bm) {
+    var bread = getBookmarkBreadcrumb(bm);
+    html += '<div class="bookmark-item">'
+      + '<button class="bookmark-star active" data-id="' + bm.id + '">\u2605</button>'
+      + '<div class="bookmark-item-body">'
+      + '<button class="bookmark-item-name" data-id="' + bm.id + '">' + escapeHtml(bm.label || bm.name) + '</button>'
+      + '<div class="bookmark-breadcrumb">' + escapeHtml(bread) + '</div>'
+      + '</div>'
+      + '</div>';
+  });
+  body.innerHTML = html;
+  body.querySelectorAll('.bookmark-star.active').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      var id = btn.dataset.id;
+      BookmarkManager.remove(id);
+      openBookmarks();
+    });
+  });
+  body.querySelectorAll('.bookmark-item-name').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      var id = btn.dataset.id;
+      var bm = BookmarkManager.getAll().filter(function(b) { return b.id === id; })[0];
+      if (!bm) return;
+      closeBookmarks();
+      if (bm.type === 'native') {
+        window.location.href = bm.href;
+      } else {
+        var files = DriveClient.getRawFiles();
+        if (!files) return;
+        var found = null;
+        files.forEach(function(f) { if (f.id === bm.fileId) found = f; });
+        if (found) DriveModal.previewFile(found);
+      }
+    });
+  });
+}
+
+function closeBookmarks() {
+  document.body.classList.remove('no-scroll');
+  var overlay = document.getElementById('bookmark-overlay');
+  overlay.style.display = '';
+  overlay.classList.remove('open');
+}
+
+function setupBookmarks() {
+  var overlay = document.createElement('div');
+  overlay.className = 'bookmark-overlay';
+  overlay.id = 'bookmark-overlay';
+  overlay.innerHTML = '<div class="bookmark-panel">'
+    + '<div class="bookmark-head">'
+    + '<h2>Bookmarks</h2>'
+    + '<button class="bookmark-close" id="bookmark-close" aria-label="Close bookmarks">&times;</button>'
+    + '</div>'
+    + '<div class="bookmark-body" id="bookmark-body">'
+    + '<p class="bookmark-loading">Loading bookmarks&hellip;</p>'
+    + '</div>'
+    + '</div>';
+  document.body.appendChild(overlay);
+  document.getElementById('bookmarks-btn').addEventListener('click', openBookmarks);
+  document.getElementById('bookmark-close').addEventListener('click', closeBookmarks);
+  overlay.addEventListener('click', function(e) { if (e.target === this) closeBookmarks(); });
 }
 
 // Theme toggle
