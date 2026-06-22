@@ -79,6 +79,8 @@ body.no-scroll {
   border-radius: var(--radius-none);
   background: var(--color-paper);
   color: var(--color-ink);
+  height: 2.5rem;
+  box-sizing: border-box;
   min-width: 220px;
   transition: border-color var(--dur-fast) var(--ease-out);
 }
@@ -139,7 +141,8 @@ button.drive-link {
   padding: var(--space-sm) var(--space-md);
   cursor: pointer;
   line-height: 1;
-  min-height: 44px;
+  height: 2.5rem;
+  box-sizing: border-box;
   display: grid;
   place-items: center;
   flex-shrink: 0;
