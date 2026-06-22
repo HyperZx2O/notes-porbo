@@ -583,6 +583,7 @@ var DriveModal = {
   _groups: null,
   _order: null,
   _collapsed: {},
+  _openIcon: '<svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="square" stroke-linejoin="miter" aria-hidden="true"><path d="M2 10L10 2M7 2h3v3"/></svg>',
 
   open: function(courseName, groups, order) {
     this._name = courseName;
@@ -678,7 +679,7 @@ var DriveModal = {
       openLink.href = 'https://drive.google.com/file/d/' + f.id + '/view';
       openLink.target = '_blank';
       openLink.rel = 'noopener noreferrer';
-      openLink.textContent = '↗';
+      openLink.innerHTML = self._openIcon;
       openLink.setAttribute('aria-label', 'Open in Drive');
       row.appendChild(a);
       row.appendChild(openLink);
@@ -737,7 +738,7 @@ var DriveModal = {
       openLink.href = 'https://drive.google.com/file/d/' + f.id + '/view';
       openLink.target = '_blank';
       openLink.rel = 'noopener noreferrer';
-      openLink.textContent = '↗';
+      openLink.innerHTML = self._openIcon;
       openLink.setAttribute('aria-label', 'Open in Drive');
       row.appendChild(a);
       row.appendChild(openLink);
