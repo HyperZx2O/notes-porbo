@@ -898,28 +898,7 @@ var DriveModal = {
     dl.textContent = 'Download';
     actions.appendChild(dl);
     body.appendChild(actions);
-    // ponytail: PDF fetch via CORS bypasses Google's CORP: same-site block, then blob URL
-    if (file.mimeType === 'application/pdf') {
-      var embed = document.createElement('embed');
-      embed.className = 'drive-modal-pdf';
-      embed.type = 'application/pdf';
-      embed.style.minHeight = '400px';
-      body.appendChild(embed);
-      var url = 'https://drive.google.com/uc?export=download&confirm=t&id=' + file.id;
-      fetch(url).then(function(r) {
-        if (!r.ok) throw new Error('HTTP ' + r.status);
-        return r.blob();
-      }).then(function(blob) {
-        embed.src = URL.createObjectURL(blob);
-      }).catch(function() {
-        embed.style.display = 'none';
-        var fb = document.createElement('div');
-        fb.className = 'drive-modal-fallback';
-        fb.innerHTML = 'Preview unavailable. <a href="https://drive.google.com/file/d/' + file.id + '/view" target="_blank" rel="noopener noreferrer">Open in Drive</a>.';
-        body.appendChild(fb);
-      });
-      return;
-    }
+    // ponytail: Google blocks cross-origin PDF loading (CORP: same-site) — use Drive iframe
     if (file.mimeType && file.mimeType.indexOf('image/') === 0) {
       var img = document.createElement('img');
       img.className = 'drive-modal-img';

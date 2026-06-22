@@ -1271,15 +1271,6 @@ button.drive-link {
   color: var(--color-accent);
 }
 
-/* ─── PDF embed ─── */
-
-.drive-modal-pdf {
-  width: 100%;
-  flex: 1;
-  border: none;
-  min-height: 60vh;
-}
-
 /* ─── Responsive ─── */
 
 @media (max-width: 768px) {
