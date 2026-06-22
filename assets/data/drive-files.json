@@ -606,6 +606,13 @@
   },
   {
     "mimeType": "application/pdf",
+    "id": "1GpS2H0zOppWNKBAkCdGih-9pwDJEeScK",
+    "name": "Quiz 1 (Answer).pdf",
+    "_path": "1-1 CSE'24/CSE 4107 - Structured Programming I/Quiz/Quiz 1 (Answer).pdf",
+    "_hasGroup": true
+  },
+  {
+    "mimeType": "application/pdf",
     "id": "18nbuEWvrz_e23F9HtBXvA8o4031jtfcn",
     "name": "Quiz 1.pdf",
     "_path": "1-1 CSE'24/CSE 4107 - Structured Programming I/Quiz/Quiz 1.pdf",
@@ -2125,6 +2132,13 @@
   },
   {
     "mimeType": "application/pdf",
+    "id": "1kdCOg71dBTskXhXQJVJuZ7BWZ2vIfuHL",
+    "name": "Math.referred.pdf",
+    "_path": "1-1 CSE'24/Math 4141 - Geometry & Differential Calculus/Final/Math.referred.pdf",
+    "_hasGroup": true
+  },
+  {
+    "mimeType": "application/pdf",
     "id": "1PBJxbo1FMo6RwJdfw3YsY5Lnf0ihcBa9",
     "name": "Calculus suggestions by nova_supreme.pdf",
     "_path": "1-1 CSE'24/Math 4141 - Geometry & Differential Calculus/Final/Preparation/Calculus suggestions by nova_supreme.pdf",
@@ -3601,13 +3615,6 @@
     "_hasGroup": true
   },
   {
-    "mimeType": "text/html",
-    "id": "1tZL0yUSDBuL-Kykt2LrTFKEkHPCbd7kS",
-    "name": "Islamic History Quiz Bank I.html",
-    "_path": "1-2 CSE'24/HUM 4241 - Islamic History Science and Culture/Quiz/Quiz 1/Islamic History Quiz Bank I.html",
-    "_hasGroup": true
-  },
-  {
     "mimeType": "application/pdf",
     "id": "1MKp1wNkBe5e9zRsaUXlb8eglI7PhVtGL",
     "name": "Islamic History Quiz Bank I.pdf",
@@ -3742,44 +3749,9 @@
   },
   {
     "mimeType": "application/pdf",
-    "id": "1x8U0P4sB0dU28Y4o2nGXl3cz5kNAH775",
-    "name": "(1st -3rd Slide)of Integration.pdf",
-    "_path": "1-2 CSE'24/MATH 4241 - Integral Calculus and Differential Equations/Assignment/Mid/(1st -3rd Slide)of Integration.pdf",
-    "_hasGroup": true
-  },
-  {
-    "mimeType": "application/pdf",
-    "id": "1P2RJqTIittx4QhnFmDzR-pACTEywRWTG",
-    "name": "Differential Equation (1st Slide).pdf",
-    "_path": "1-2 CSE'24/MATH 4241 - Integral Calculus and Differential Equations/Assignment/Mid/Differential Equation (1st Slide).pdf",
-    "_hasGroup": true
-  },
-  {
-    "mimeType": "application/pdf",
-    "id": "1y-h_SEhOgrV4oNf-OZOK7EU2hOYX-cfi",
-    "name": "MATHS_4241_Assignment_mid(All in one).pdf",
-    "_path": "1-2 CSE'24/MATH 4241 - Integral Calculus and Differential Equations/Assignment/Mid/MATHS_4241_Assignment_mid(All in one).pdf",
-    "_hasGroup": true
-  },
-  {
-    "mimeType": "application/pdf",
-    "id": "1e7CqKjjlh6tWpw-3vw2zc-uJVsYFYmGW",
-    "name": "Non Exact Differential Equation.pdf",
-    "_path": "1-2 CSE'24/MATH 4241 - Integral Calculus and Differential Equations/Assignment/Mid/Non Exact Differential Equation.pdf",
-    "_hasGroup": true
-  },
-  {
-    "mimeType": "application/pdf",
-    "id": "1Hpon13SgsK14QQ5PV6Q3iqMo5q5mfB3S",
-    "name": "REDUCTION+Gamma Beta Function.pdf",
-    "_path": "1-2 CSE'24/MATH 4241 - Integral Calculus and Differential Equations/Assignment/Mid/REDUCTION+Gamma Beta Function.pdf",
-    "_hasGroup": true
-  },
-  {
-    "mimeType": "application/pdf",
-    "id": "10PWBsuiBRoQZh8Qm6qdwJQXWqYH5ETLA",
-    "name": "Upto Exact Differential Equation.pdf",
-    "_path": "1-2 CSE'24/MATH 4241 - Integral Calculus and Differential Equations/Assignment/Mid/Upto Exact Differential Equation.pdf",
+    "id": "1y33cAAiL2W2MnzOVtEqYzNA0QkNuCMEQ",
+    "name": "Assignment [Midterm] [240041123].pdf",
+    "_path": "1-2 CSE'24/MATH 4241 - Integral Calculus and Differential Equations/Assignment/Assignment [Midterm] [240041123].pdf",
     "_hasGroup": true
   },
   {
@@ -3910,30 +3882,37 @@
   },
   {
     "mimeType": "application/pdf",
+    "id": "1Hgf87wI6npHmFzD8rDYSKOUI5R8ptxJo",
+    "name": "Indefinite_Integrals.pdf",
+    "_path": "1-2 CSE'24/MATH 4241 - Integral Calculus and Differential Equations/Handnotes/Indefinite_Integrals.pdf",
+    "_hasGroup": true
+  },
+  {
+    "mimeType": "application/pdf",
     "id": "17v9xvcMYJHkDPqFBDTbnkqeWGdK26Gb-",
     "name": "CSE A-B-Quiz1 - Set 1.pdf",
-    "_path": "1-2 CSE'24/MATH 4241 - Integral Calculus and Differential Equations/Quiz/CSE A-B-Quiz1 - Set 1.pdf",
+    "_path": "1-2 CSE'24/MATH 4241 - Integral Calculus and Differential Equations/Quiz/Quiz 1/CSE A-B-Quiz1 - Set 1.pdf",
     "_hasGroup": true
   },
   {
     "mimeType": "application/pdf",
     "id": "1GGL6grl9BHqaAJ-zcnHRqVnEkqgs_Z8_",
     "name": "CSE A-B-Quiz1 - Set 2.pdf",
-    "_path": "1-2 CSE'24/MATH 4241 - Integral Calculus and Differential Equations/Quiz/CSE A-B-Quiz1 - Set 2.pdf",
+    "_path": "1-2 CSE'24/MATH 4241 - Integral Calculus and Differential Equations/Quiz/Quiz 1/CSE A-B-Quiz1 - Set 2.pdf",
     "_hasGroup": true
   },
   {
     "mimeType": "application/pdf",
     "id": "1PRaOJa-gOpokrrXykKvWEQaK2JuX1WCN",
     "name": "SWE-Quiz1 - Set 1.pdf",
-    "_path": "1-2 CSE'24/MATH 4241 - Integral Calculus and Differential Equations/Quiz/SWE-Quiz1 - Set 1.pdf",
+    "_path": "1-2 CSE'24/MATH 4241 - Integral Calculus and Differential Equations/Quiz/Quiz 1/SWE-Quiz1 - Set 1.pdf",
     "_hasGroup": true
   },
   {
     "mimeType": "application/pdf",
     "id": "14rug5NBcIQBbRWB-fj_qkPfuQxiEGPuP",
     "name": "SWE-Quiz1 - Set 2.pdf",
-    "_path": "1-2 CSE'24/MATH 4241 - Integral Calculus and Differential Equations/Quiz/SWE-Quiz1 - Set 2.pdf",
+    "_path": "1-2 CSE'24/MATH 4241 - Integral Calculus and Differential Equations/Quiz/Quiz 1/SWE-Quiz1 - Set 2.pdf",
     "_hasGroup": true
   },
   {
