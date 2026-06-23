@@ -1,5 +1,5 @@
 {
-  "_refreshedAt": "2026-06-23T09:33:19.244Z",
+  "_refreshedAt": "2026-06-23T14:41:17.963Z",
   "files": [
     {
       "mimeType": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
@@ -3327,6 +3327,38 @@
     },
     {
       "mimeType": "application/pdf",
+      "id": "1afhQtD51lMwwBeg0jjkv1UF3A7LDjcQU",
+      "name": "CHEM 4241_ Mid.pdf",
+      "modifiedTime": "2026-05-10T12:38:18.000Z",
+      "_path": "1-2 CSE'24/CHEM 4241 - Chemistry/Midterm/Previous Years/CHEM 4241_ Mid.pdf",
+      "_hasGroup": true
+    },
+    {
+      "mimeType": "application/pdf",
+      "id": "1uWG64HuuLz6EFzxm3uZFxAY7feAFfmSI",
+      "name": "Chem-Mid.pdf",
+      "modifiedTime": "2026-05-10T12:26:11.000Z",
+      "_path": "1-2 CSE'24/CHEM 4241 - Chemistry/Midterm/Previous Years/Chem-Mid.pdf",
+      "_hasGroup": true
+    },
+    {
+      "mimeType": "application/pdf",
+      "id": "1h-tM-K4lETmkUz-5FLxitMUCMRrNkWr3",
+      "name": "Chemistry copy.pdf",
+      "modifiedTime": "2026-06-23T13:55:41.000Z",
+      "_path": "1-2 CSE'24/CHEM 4241 - Chemistry/Midterm/Previous Years/Chemistry copy.pdf",
+      "_hasGroup": true
+    },
+    {
+      "mimeType": "image/jpeg",
+      "id": "1xabRWfHvYYK5eAG4cSm0pjbT4QooXSNL",
+      "name": "WhatsApp Image 2026-05-13 at 20.18.05 (2).jpeg",
+      "modifiedTime": "2026-05-14T16:19:12.000Z",
+      "_path": "1-2 CSE'24/CHEM 4241 - Chemistry/Midterm/Previous Years/WhatsApp Image 2026-05-13 at 20.18.05 (2).jpeg",
+      "_hasGroup": true
+    },
+    {
+      "mimeType": "application/pdf",
       "id": "1fzp7dfnJPeW-H_f1VZG4RSXvBgI5GtaQ",
       "name": "Quiz 1.pdf",
       "modifiedTime": "2026-05-11T08:45:48.033Z",
@@ -4343,6 +4375,14 @@
     },
     {
       "mimeType": "application/pdf",
+      "id": "1SjTY9npbMGjt_QKnRBoy-4uqDiF3GZlG",
+      "name": "math4241_final_16-17_integralCalculusAndDifferentialEquation.pdf",
+      "modifiedTime": "2026-05-11T18:31:28.000Z",
+      "_path": "1-2 CSE'24/MATH 4241 - Integral Calculus and Differential Equations/Final/previous years/math4241_final_16-17_integralCalculusAndDifferentialEquation.pdf",
+      "_hasGroup": true
+    },
+    {
+      "mimeType": "application/pdf",
       "id": "1_tGgRlKYCISc2GYW5hP2DvAY5tdlqaoA",
       "name": "02.06.2026_AreaOfARegionBetweenTwoCurves_Volume_DiskMethod.pdf",
       "modifiedTime": "2026-06-13T21:38:40.606Z",
@@ -4443,6 +4483,54 @@
       "name": "Indefinite_Integrals.pdf",
       "modifiedTime": "2026-05-10T12:29:03.000Z",
       "_path": "1-2 CSE'24/MATH 4241 - Integral Calculus and Differential Equations/Handnotes/Indefinite_Integrals.pdf",
+      "_hasGroup": true
+    },
+    {
+      "mimeType": "application/pdf",
+      "id": "155lpLinzEZ__tovWZXMcQ-b8W32lO8Lw",
+      "name": "05 Math 4241 Integral Calculus and Differential Equations.pdf",
+      "modifiedTime": "2026-06-23T13:53:14.028Z",
+      "_path": "1-2 CSE'24/MATH 4241 - Integral Calculus and Differential Equations/Midterm/Previous Years/05 Math 4241 Integral Calculus and Differential Equations.pdf",
+      "_hasGroup": true
+    },
+    {
+      "mimeType": "application/pdf",
+      "id": "1iYQlKedURKWoTiWj8KyKo8mNh_BRxjGS",
+      "name": "MATH 4241_ Mid.pdf",
+      "modifiedTime": "2026-05-10T12:36:25.000Z",
+      "_path": "1-2 CSE'24/MATH 4241 - Integral Calculus and Differential Equations/Midterm/Previous Years/MATH 4241_ Mid.pdf",
+      "_hasGroup": true
+    },
+    {
+      "mimeType": "application/pdf",
+      "id": "1SOgr8Vo9s8rVhri-tIaxoiA0oDoaHcw9",
+      "name": "Math-Mid.pdf",
+      "modifiedTime": "2026-05-10T12:14:24.000Z",
+      "_path": "1-2 CSE'24/MATH 4241 - Integral Calculus and Differential Equations/Midterm/Previous Years/Math-Mid.pdf",
+      "_hasGroup": true
+    },
+    {
+      "mimeType": "application/pdf",
+      "id": "1RhlilHrwavvvutR-UMl66jhKNSlk_V5l",
+      "name": "math4241_final_16-17_integralCalculusAndDifferentialEquation.pdf",
+      "modifiedTime": "2026-05-11T18:31:28.000Z",
+      "_path": "1-2 CSE'24/MATH 4241 - Integral Calculus and Differential Equations/Midterm/Previous Years/math4241_final_16-17_integralCalculusAndDifferentialEquation.pdf",
+      "_hasGroup": true
+    },
+    {
+      "mimeType": "application/pdf",
+      "id": "13tpTGjaCYn-E2AHKrkHo1HsSrWvSrBHI",
+      "name": "math4241_mid_16-17_integralCalculusAndDifferentialEquation.pdf",
+      "modifiedTime": "2026-05-11T18:31:16.000Z",
+      "_path": "1-2 CSE'24/MATH 4241 - Integral Calculus and Differential Equations/Midterm/Previous Years/math4241_mid_16-17_integralCalculusAndDifferentialEquation.pdf",
+      "_hasGroup": true
+    },
+    {
+      "mimeType": "image/jpeg",
+      "id": "1-dSF73SpOdnLk4ETuPVeevBxIQ9K893T",
+      "name": "WhatsApp Image 2026-05-13 at 20.18.05 (1).jpeg",
+      "modifiedTime": "2026-05-14T16:19:08.000Z",
+      "_path": "1-2 CSE'24/MATH 4241 - Integral Calculus and Differential Equations/Midterm/Previous Years/WhatsApp Image 2026-05-13 at 20.18.05 (1).jpeg",
       "_hasGroup": true
     },
     {
