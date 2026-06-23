@@ -1,5 +1,5 @@
 {
-  "_refreshedAt": "2026-06-23T14:41:17.963Z",
+  "_refreshedAt": "2026-06-23T19:57:21.277Z",
   "files": [
     {
       "mimeType": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
@@ -4483,6 +4483,14 @@
       "name": "Indefinite_Integrals.pdf",
       "modifiedTime": "2026-05-10T12:29:03.000Z",
       "_path": "1-2 CSE'24/MATH 4241 - Integral Calculus and Differential Equations/Handnotes/Indefinite_Integrals.pdf",
+      "_hasGroup": true
+    },
+    {
+      "mimeType": "application/pdf",
+      "id": "18KSMTVp3NFAL5WHiob7SPJqk0jr9jZG6",
+      "name": "MATH 4241 Midterm.pdf",
+      "modifiedTime": "2026-06-23T17:14:13.711Z",
+      "_path": "1-2 CSE'24/MATH 4241 - Integral Calculus and Differential Equations/Midterm/MATH 4241 Midterm.pdf",
       "_hasGroup": true
     },
     {
