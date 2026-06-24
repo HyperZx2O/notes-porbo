@@ -103,7 +103,8 @@ a{color:var(--accent);}
   width:42px; height:42px; border-radius:11px; background:var(--bg-card); border:1px solid var(--border);
   color:var(--text); font-size:18px; align-items:center; justify-content:center; cursor:pointer;
 }
-.scrim{display:none; position:fixed; inset:0; background:rgba(0,0,0,.55); z-index:35;}
+.scrim{position:fixed; inset:0; background:rgba(0,0,0,.55); z-index:35; opacity:0; pointer-events:none; transition:opacity .25s ease;}
+.scrim.show{opacity:1; pointer-events:auto;}
 
 .main{flex:1; margin-left:280px; padding:28px 36px 80px 36px; max-width:880px;}
 
@@ -119,6 +120,8 @@ a{color:var(--accent);}
 .progress-wrap.show{transform:translateY(0); opacity:1;}
 .progress-track{flex:1; height:7px; background:var(--bg-card-2); border-radius:5px; overflow:hidden;}
 .progress-fill{height:100%; width:0%; background:linear-gradient(90deg, var(--accent), var(--accent-3)); border-radius:5px; transition:width .4s ease;}
+.progress-fill.complete{background:linear-gradient(90deg,var(--good),var(--accent-3));}
+.progress-detail{font-family:'JetBrains Mono',monospace; font-size:10px; color:var(--text-faint); white-space:nowrap;}
 .progress-label{font-family:'JetBrains Mono',monospace; font-size:12px; color:var(--text-dim); white-space:nowrap;}
 body.progress-active .main, body.progress-active .sidebar{padding-top:0;}
 .progress-spacer{height:0; transition:height .3s ease;}
@@ -128,6 +131,10 @@ body.progress-active .progress-spacer{height:42px;}
 .page{display:none; animation:fadeIn .25s ease;}
 .page.active{display:block;}
 @keyframes fadeIn{from{opacity:0; transform:translateY(6px);} to{opacity:1; transform:translateY(0);}}
+@keyframes mcqCorrect{0%{transform:scale(1)} 50%{transform:scale(1.02)} 100%{transform:scale(1)}}
+@keyframes mcqShake{0%,100%{transform:translateX(0)} 25%{transform:translateX(-4px)} 75%{transform:translateX(4px)}}
+.mcq-opt.correct{animation:mcqCorrect .35s ease;}
+.mcq-opt.incorrect{animation:mcqShake .35s ease;}
 
 .page-head{margin-bottom:26px;}
 .crumb{font-family:'JetBrains Mono',monospace; font-size:11.5px; color:var(--accent); letter-spacing:.08em; margin-bottom:10px; display:flex; align-items:center; gap:8px;}
@@ -176,6 +183,7 @@ body.progress-active .progress-spacer{height:42px;}
   border-radius:11px; padding:14px 16px; margin-top:18px; cursor:pointer;
 }
 .review-row.checked{border-color:var(--good); background:var(--good-dim);}
+.review-row:hover{border-color:var(--accent);}
 .review-box{width:22px; height:22px; border-radius:6px; border:1.6px solid var(--text-faint); flex-shrink:0; display:flex; align-items:center; justify-content:center;}
 .review-row.checked .review-box{background:var(--good); border-color:var(--good);}
 .review-row.checked .review-box::after{content:"✓"; color:#06210f; font-size:14px; font-weight:700;}
@@ -263,6 +271,8 @@ body.progress-active .mcq-score-bar{top:42px;}
 .tl-title{font-size:14.5px; font-weight:600; color:var(--text); margin-bottom:2px;}
 .tl-sub{font-size:12.5px; color:var(--text-faint);}
 .tl-check{margin-left:auto; align-self:center;}
+.tl-check.done{color:var(--good);}
+.tl-check.not-done{color:var(--text-faint);}
 
 .topic-grid{display:grid; grid-template-columns:repeat(auto-fill, minmax(250px,1fr)); gap:12px; margin-top:8px;}
 .topic-tile{background:var(--bg-card); border:1px solid var(--border-soft); border-radius:13px; padding:16px; cursor:pointer; transition:border-color .15s, transform .15s;}
@@ -271,20 +281,89 @@ body.progress-active .mcq-score-bar{top:42px;}
 .topic-tile .ttitle{font-size:14.5px; font-weight:600; color:var(--text);}
 .topic-tile .tdesc{font-size:12.5px; color:var(--text-faint); margin-bottom:10px; min-height:32px;}
 .mini-progress{height:5px; background:var(--bg-card-2); border-radius:4px; overflow:hidden;}
-.mini-progress div{height:100%; background:var(--accent); border-radius:4px;}
+.mini-progress div{height:100%; background:var(--accent); border-radius:4px; transition:width .4s ease;}
 
 .divider-label{font-size:11px; text-transform:uppercase; letter-spacing:.09em; color:var(--text-faint); margin:26px 0 12px 0; display:flex; align-items:center; gap:10px;}
 .divider-label::after{content:""; flex:1; height:1px; background:var(--border-soft);}
+
+/* ========== Q&A ========== */
+.qna-search-wrap{margin-bottom:18px; position:relative;}
+.qna-search{
+  width:100%; padding:12px 16px 12px 40px; border-radius:11px; border:1px solid var(--border);
+  background:var(--bg-card); color:var(--text); font-family:'Inter',sans-serif; font-size:14px;
+  outline:none; transition:border-color .15s;
+}
+.qna-search:focus{border-color:var(--accent);}
+.qna-search-icon{position:absolute; left:14px; top:50%; transform:translateY(-50%); color:var(--text-faint); font-size:15px; pointer-events:none;}
+.qna-tabs{display:flex; gap:8px; margin-bottom:20px; overflow-x:auto; padding-bottom:4px; -webkit-overflow-scrolling:touch;}
+.qna-tab{
+  flex-shrink:0; padding:7px 16px; border-radius:20px; border:1px solid var(--border);
+  background:var(--bg-card); color:var(--text-dim); font-size:13px; font-weight:500; cursor:pointer;
+  transition:all .15s; white-space:nowrap;
+}
+.qna-tab:hover{border-color:var(--accent); color:var(--text);}
+.qna-tab.active{background:var(--accent-dim); border-color:var(--accent); color:var(--accent);}
+
+.qna-card{background:var(--bg-card); border:1px solid var(--border-soft); border-radius:var(--radius); margin-bottom:12px; overflow:hidden;}
+.qna-card-head{
+  display:flex; align-items:flex-start; gap:12px; padding:16px 18px; cursor:pointer;
+  color:var(--text); font-size:14.5px; font-weight:600; line-height:1.4;
+  transition:background .12s; user-select:none;
+}
+.qna-card-head:hover{background:var(--bg-card-2);}
+.qna-card-head .qna-num{
+  flex-shrink:0; width:26px; height:26px; border-radius:7px; background:var(--accent-dim);
+  color:var(--accent); display:flex; align-items:center; justify-content:center;
+  font-family:'JetBrains Mono',monospace; font-size:11.5px; font-weight:700; margin-top:1px;
+}
+.qna-card-head .qna-chevron{flex-shrink:0; color:var(--text-faint); font-size:12px; transition:transform .25s ease; margin-top:5px;}
+.qna-card.open .qna-chevron{transform:rotate(90deg);}
+.qna-card-body{
+  max-height:0; overflow:hidden; transition:max-height .35s ease, opacity .25s ease; opacity:0;
+}
+.qna-card.open .qna-card-body{max-height:6000px; opacity:1;}
+.qna-card-inner{padding:4px 18px 18px 18px; border-top:1px solid var(--border-soft);}
+.qna-card-inner p{margin:0 0 .9em 0; font-size:14.2px; line-height:1.65; color:#cdd8e6;}
+.qna-card-inner p:last-child{margin-bottom:0;}
+.qna-card-inner ul,.qna-card-inner ol{margin:0 0 .8em 0; padding-left:1.4em;}
+.qna-card-inner li{margin-bottom:.35em; font-size:14.2px; color:#cdd8e6;}
+.qna-card-inner .formula-box{margin:10px 0;}
+.qna-card-inner .example-box{margin:10px 0;}
+.qna-card-inner .tip-box{margin:10px 0;}
+.qna-card-inner b{color:var(--text); font-weight:600;}
+.qna-card-inner .step-label{display:block; font-size:11px; text-transform:uppercase; letter-spacing:.05em; color:var(--text-faint); margin:14px 0 6px 0; font-weight:600;}
+.qna-card-inner .deriv-step{margin:6px 0; padding-left:18px; border-left:2px solid var(--border);}
+.qna-ascii{background:var(--bg-elev); border:1px solid var(--border); border-radius:8px; padding:14px 16px; font-family:'JetBrains Mono',monospace; font-size:12.5px; line-height:1.5; color:var(--text-dim); overflow-x:auto; margin:10px 0; white-space:pre;}
+.qna-table{width:100%; border-collapse:collapse; margin:10px 0; font-size:13.5px;}
+.qna-table th{background:var(--bg-card-2); color:var(--text); font-weight:600; text-align:left; padding:9px 12px; border:1px solid var(--border);}
+.qna-table td{padding:8px 12px; border:1px solid var(--border-soft); color:#cdd8e6;}
+.qna-table tr:nth-child(even) td{background:rgba(255,255,255,.02);}
+.qna-table tr:hover td{background:rgba(255,255,255,.04);}
+.math{font-family:'JetBrains Mono',monospace; color:var(--accent); font-size:13.8px;}
+.math-sub{font-size:11px; color:var(--accent-2);}
+.qna-meta{display:flex; align-items:center; gap:14px; flex-wrap:wrap; margin-bottom:20px; padding:14px 16px; background:var(--bg-card); border:1px solid var(--border-soft); border-radius:11px;}
+.qna-meta span{font-size:13px; color:var(--text-dim);}
+.qna-meta b{color:var(--text); font-weight:600;}
+.qna-empty{text-align:center; padding:48px 20px; color:var(--text-faint);}
+.qna-empty p{font-size:15px; margin-bottom:4px;}
+.qna-card-inner .table-wrap{overflow-x:auto;}
+
+*:focus-visible{outline:2px solid var(--accent); outline-offset:2px;}
+@media (prefers-reduced-motion: reduce){*,*::before,*::after{animation-duration:0s!important;transition-duration:0s!important;}}
 
 @media (max-width: 900px){
   .sidebar{transform:translateX(-100%); width:270px;}
   .sidebar.open{transform:translateX(0);}
   .main{margin-left:0; padding:78px 18px 70px 18px;}
   .menu-toggle{display:flex;}
-  .scrim.show{display:block;}
+  .scrim.show{opacity:1; pointer-events:auto;}
   .progress-wrap{left:0; padding:9px 18px 9px 64px;}
   .hero{padding:22px 18px;}
   .fc-stage{height:230px;}
+  .qna-tabs{gap:6px;}
+  .qna-tab{padding:6px 12px; font-size:12px;}
+  .qna-card-head{font-size:13.8px; padding:14px 14px;}
+  .qna-card-inner{padding:2px 14px 14px 14px;}
 }
 </style>
 </head>
@@ -295,7 +374,10 @@ body.progress-active .mcq-score-bar{top:42px;}
 
 <div class="progress-wrap" id="progressWrap">
   <span class="progress-label" id="progressLabel">0%</span>
-  <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+  <div style="flex:1;min-width:0">
+    <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+    <div class="progress-detail" id="progressDetail"></div>
+  </div>
   <span class="progress-label" id="progressLabel2">reviewed</span>
 </div>
 <div class="progress-spacer"></div>
@@ -314,6 +396,11 @@ body.progress-active .mcq-score-bar{top:42px;}
     </div>
     <div class="nav-section-label">Topics</div>
     <div id="navTopics"></div>
+    <div class="nav-section-label">Reference</div>
+    <div id="navQNA" class="nav-item" data-page="qna">
+      <div class="elem-badge c-violet"><span class="num">QA</span><span class="code">Q&A</span></div>
+      <span class="nlabel">Question Bank</span>
+    </div>
     <div class="nav-section-label">Wrap-up</div>
     <div id="navFinal" class="nav-item" data-page="final">
       <div class="elem-badge c-violet"><span class="num">08</span><span class="code">FR</span></div>
@@ -995,9 +1082,141 @@ const FINAL_MCQS = [
 ];
 
 /* ============================================================
-   RENDERING
+   Q&A DATA — from chem qna.md
    ============================================================ */
-const PAGE_ORDER = ['home', ...TOPICS.map(t=>t.id), 'final'];
+const QNA_CHAPTERS = [
+{
+  id:'ch1', num:'01', title:'Chapter 1: Thermodynamics',
+  questions:[
+    {q:'State the first law of thermodynamics',
+     a:'<p>The <b>First Law of Thermodynamics</b> is an extension of the law of conservation of energy applied to thermodynamic systems. It states that energy can neither be created nor destroyed, although it can be transformed from one form to another. Consequently, the total energy of an isolated system remains constant.</p><div class="step-label">Mathematical Expression</div><p>When a system undergoes a change from an initial state to a final state by absorbing an amount of heat <span class="math">q</span> and doing or experiencing work <span class="math">w</span>, its internal energy changes by an amount <span class="math">&Delta;U</span>:</p><div class="formula-box"><span class="flabel">First Law</span><span class="math">&Delta;U = q + w</span></div><div class="step-label">IUPAC Sign Convention</div><ul><li>Heat absorbed <i>by</i> the system: <span class="math">+q</span></li><li>Heat released <i>by</i> the system: <span class="math">&minus;q</span></li><li>Work done <i>on</i> the system (compression): <span class="math">+w</span></li><li>Work done <i>by</i> the system (expansion): <span class="math">&minus;w</span></li></ul>'},
+    {q:'State the second law of thermodynamics',
+     a:'<p>The <b>Second Law of Thermodynamics</b> establishes the direction, feasibility, and spontaneity of physical and chemical processes. It can be stated in several classical, equivalent ways:</p><ul><li><b>Kelvin-Planck Statement:</b> It is impossible to construct a heat engine operating in a cyclic process that absorbs heat from a single thermal reservoir and converts it completely into work without producing any other changes in the surroundings (i.e., a 100% efficient heat engine cannot exist).</li><li><b>Clausius Statement:</b> It is impossible for a self-acting machine, unaided by any external agency, to transfer heat from a cooler body to a hotter body.</li><li><b>Entropy Statement:</b> The total entropy of an isolated system always increases during any spontaneous (irreversible) process:</li></ul><div class="formula-box"><span class="flabel">Entropy change</span><span class="math">&Delta;S<sub>total</sub> = &Delta;S<sub>system</sub> + &Delta;S<sub>surroundings</sub> &gt; 0</span></div>'},
+    {q:'Derive the equation for isothermal reversible expansion of gas (7 marks)',
+     a:'<p>For an ideal gas undergoing an isothermal process, the temperature remains constant (<span class="math">dT = 0</span>). Since the internal energy of an ideal gas depends solely on temperature, the change in internal energy is zero (<span class="math">&Delta;U = 0</span>).</p><p>From the First Law of Thermodynamics:</p><div class="formula-box"><span class="flabel">First Law</span><span class="math">&Delta;U = q + w = 0 &rArr; q = &minus;w</span></div><p>Let <span class="math">n</span> moles of an ideal gas expand reversibly from an initial volume <span class="math">V<sub>1</sub></span> to a final volume <span class="math">V<sub>2</sub></span> at a constant absolute temperature <span class="math">T</span>. During an infinitesimal expansion step, the volume increases by <span class="math">dV</span> against an external pressure <span class="math">P</span>. The work done by the gas on the surroundings is:</p><div class="formula-box"><span class="flabel">Infinitesimal work</span><span class="math">dw = &minus;P dV</span></div><p>From the ideal gas equation, <span class="math">PV = nRT &rArr; P = nRT / V</span>. Substituting:</p><div class="formula-box"><span class="math">dw = &minus;(nRT / V) dV</span></div><p>Integrating from volume <span class="math">V<sub>1</sub></span> to <span class="math">V<sub>2</sub></span>:</p><div class="formula-box"><span class="flabel">Total work</span><span class="math">w = &minus;nRT &int;<sub>V<sub>1</sub></sub><sup>V<sub>2</sub></sup> (1/V) dV = &minus;nRT ln(V<sub>2</sub>/V<sub>1</sub>)</span></div><p>Converting to common logarithm:</p><div class="formula-box"><span class="math">w = &minus;2.303 nRT log<sub>10</sub>(V<sub>2</sub>/V<sub>1</sub>)</span></div><p>By Boyle\'s Law (<span class="math">P<sub>1</sub>V<sub>1</sub> = P<sub>2</sub>V<sub>2</sub></span>), this can also be written in terms of pressure:</p><div class="formula-box"><span class="math">w = &minus;2.303 nRT log<sub>10</sub>(P<sub>1</sub>/P<sub>2</sub>)</span></div>'},
+    {q:'Discuss Hess\'s law — statement, explanation, and applications',
+     a:'<div class="step-label">1. Statement</div><p><b>Hess\'s Law of Constant Heat Summation</b> states that the total enthalpy change (<span class="math">&Delta;H</span>) for a chemical reaction is the same whether the reaction occurs in a single step or through a series of intermediate steps. It depends entirely on the initial reactants and final products and is independent of the pathway taken.</p><div class="step-label">2. Explanation</div><p>Enthalpy (<span class="math">H</span>) is a thermodynamic state function. Let a reactant <span class="math">A</span> be converted directly to product <span class="math">Z</span> with an enthalpy change of <span class="math">&Delta;H</span>. Alternatively, let <span class="math">A</span> transform to <span class="math">Z</span> via intermediate steps:</p><div class="formula-box"><span class="math">A &xrarr;<sup>&Delta;H<sub>1</sub></sup> B &xrarr;<sup>&Delta;H<sub>2</sub></sup> C &xrarr;<sup>&Delta;H<sub>3</sub></sup> Z</span></div><p>According to Hess\'s law:</p><div class="formula-box"><span class="math">&Delta;H = &Delta;H<sub>1</sub> + &Delta;H<sub>2</sub> + &Delta;H<sub>3</sub></span></div><p>If this were not true, a cyclic process could be engineered to continuously create or destroy energy, violating the First Law.</p><div class="step-label">3. Applications</div><ul><li><b>Calculation of Enthalpies of Formation:</b> Used to determine standard enthalpies of formation (<span class="math">&Delta;H<sub>f</sub>&deg;</span>) for compounds that cannot be synthesized directly.</li><li><b>Enthalpy of Allotropic Transitions:</b> Permits calculation of the heat involved when one allotrope converts into another (e.g., C<sub>graphite</sub> &rarr; C<sub>diamond</sub>).</li><li><b>Lattice Energy (Born-Haber Cycle):</b> Forms the foundational framework for calculating the lattice energy of ionic solids using experimentally accessible values.</li></ul>'},
+    {q:'Prove that at constant pressure, energy change is equal to heat transfer',
+     a:'<p>From the First Law of Thermodynamics, an infinitesimal change in internal energy is given by <span class="math">dU = dq + dw</span>. Substituting mechanical expansion work <span class="math">dw = &minus;P dV</span>:</p><div class="formula-box"><span class="math">dU = dq &minus; P dV</span></div><p>At constant external pressure, the heat transferred is designated as <span class="math">dq<sub>p</sub></span>:</p><div class="formula-box"><span class="math">dq<sub>p</sub> = dU + P dV &mdash; (1)</span></div><p>Enthalpy (<span class="math">H</span>) is defined by:</p><div class="formula-box"><span class="math">H = U + PV</span></div><p>Taking the complete differential:</p><div class="formula-box"><span class="math">dH = dU + P dV + V dP</span></div><p>Under constant pressure (<span class="math">dP = 0</span>):</p><div class="formula-box"><span class="math">dH = dU + P dV &mdash; (2)</span></div><p>Equating (1) and (2):</p><div class="formula-box"><span class="flabel">Result</span><span class="math">dq<sub>p</sub> = dH &nbsp;&rArr;&nbsp; q<sub>p</sub> = &Delta;H</span></div><p>This proves that the heat transferred at constant pressure equals the change in enthalpy of the system.</p>'},
+    {q:'Show the relationship between C<sub>p</sub> and C<sub>v</sub>',
+     a:'<p><span class="math">C<sub>p</sub></span> is the heat capacity at constant pressure, and <span class="math">C<sub>v</sub></span> is the heat capacity at constant volume. By definition:</p><div class="formula-box"><span class="math">C<sub>p</sub> = (&part;H / &part;T)<sub>p</sub> &nbsp;&nbsp; C<sub>v</sub> = (&part;U / &part;T)<sub>v</sub></span></div><p>The relationship between Enthalpy and Internal Energy is:</p><div class="formula-box"><span class="math">H = U + PV</span></div><p>For exactly 1 mole of an ideal gas, <span class="math">PV = RT</span>. Substituting:</p><div class="formula-box"><span class="math">H = U + RT</span></div><p>Differentiating with respect to temperature:</p><div class="formula-box"><span class="math">dH/dT = dU/dT + R</span></div><div class="formula-box"><span class="flabel">Result (for 1 mole ideal gas)</span><span class="math">C<sub>p</sub> &minus; C<sub>v</sub> = R</span></div>'},
+    {q:'Determination of transition enthalpy',
+     a:'<div class="step-label">1. Definitions</div><p><b>Enthalpy of Transition (<span class="math">&Delta;H<sub>trans</sub></span>):</b> The enthalpy change that accompanies the transition of exactly one mole of a substance from one physical phase or allotropic form to another at a specific temperature and pressure.</p><p><b>Transition Temperature:</b> The temperature at which two distinct phases or allotropic modifications of a substance can coexist in equilibrium at a given pressure.</p><div class="step-label">2. Derivation via Hess\'s Law Indirect Route</div><p>Direct calorimetric measurement can be experimentally difficult. For example, to find the transition enthalpy of graphite to diamond:</p><div class="formula-box"><span class="flabel">Target</span><span class="math">C(graphite) &rarr; C(diamond) &nbsp;&nbsp; &Delta;H<sub>trans</sub> = ?</span></div><p>We measure the standard enthalpies of combustion of both forms:</p><ol><li><span class="math">C(graphite) + O<sub>2</sub>(g) &rarr; CO<sub>2</sub>(g) &nbsp;&nbsp; &Delta;H<sub>1</sub></span></li><li><span class="math">C(diamond) + O<sub>2</sub>(g) &rarr; CO<sub>2</sub>(g) &nbsp;&nbsp; &Delta;H<sub>2</sub></span></li></ol><p>Subtracting equation 2 from equation 1 yields the target:</p><div class="formula-box"><span class="flabel">Transition enthalpy</span><span class="math">&Delta;H<sub>trans</sub> = &Delta;H<sub>1</sub> &minus; &Delta;H<sub>2</sub></span></div>'},
+    {q:'Derive Kirchhoff\'s equation (7 marks)',
+     a:'<p>Kirchhoff\'s equation describes the variation of the enthalpy change of a chemical reaction with temperature.</p><div class="step-label">A. Differential Form</div><p>The enthalpy change of a generic reaction is <span class="math">&Delta;H = H<sub>products</sub> &minus; H<sub>reactants</sub></span>. Differentiating with respect to <span class="math">T</span> at constant <span class="math">P</span>:</p><div class="formula-box"><span class="math">(&part;(&Delta;H) / &part;T)<sub>p</sub> = C<sub>p(products)</sub> &minus; C<sub>p(reactants)</sub> = &Delta;C<sub>p</sub></span></div><p>This is the differential form:</p><div class="formula-box"><span class="flabel">Differential Kirchhoff</span><span class="math">d(&Delta;H) / dT = &Delta;C<sub>p</sub></span></div><p>Similarly, at constant volume:</p><div class="formula-box"><span class="math">d(&Delta;U) / dT = &Delta;C<sub>v</sub></span></div><div class="step-label">B. Integral Form</div><p>Integrating between temperature limits <span class="math">T<sub>1</sub></span> and <span class="math">T<sub>2</sub></span>:</p><div class="formula-box"><span class="flabel">Integrated Kirchhoff</span><span class="math">&Delta;H<sub>2</sub> &minus; &Delta;H<sub>1</sub> = &Delta;C<sub>p</sub> (T<sub>2</sub> &minus; T<sub>1</sub>)</span></div><div class="formula-box"><span class="math">&Delta;H<sub>2</sub> = &Delta;H<sub>1</sub> + &Delta;C<sub>p</sub> (T<sub>2</sub> &minus; T<sub>1</sub>)</span></div><p>Similarly for internal energy:</p><div class="formula-box"><span class="math">&Delta;U<sub>2</sub> = &Delta;U<sub>1</sub> + &Delta;C<sub>v</sub> (T<sub>2</sub> &minus; T<sub>1</sub>)</span></div>'},
+    {q:'Derive Kirchhoff\'s equation relating the dependence of enthalpy with temperature',
+     a:'<p>From the differential form:</p><div class="formula-box"><span class="math">d(&Delta;H) / dT = &Delta;C<sub>p</sub> &nbsp;&rArr;&nbsp; d(&Delta;H) = &Delta;C<sub>p</sub> dT</span></div><p>Integrating between <span class="math">T<sub>1</sub></span> and <span class="math">T<sub>2</sub></span>:</p><div class="formula-box"><span class="math">&Delta;H<sub>2</sub> &minus; &Delta;H<sub>1</sub> = &int;<sub>T<sub>1</sub></sub><sup>T<sub>2</sub></sup> &Delta;C<sub>p</sub> dT</span></div><p>For constant <span class="math">&Delta;C<sub>p</sub></span>:</p><div class="formula-box"><span class="flabel">Integrated form</span><span class="math">&Delta;H<sub>2</sub> = &Delta;H<sub>1</sub> + &Delta;C<sub>p</sub> (T<sub>2</sub> &minus; T<sub>1</sub>)</span></div>'}
+  ]
+},
+{
+  id:'ch2', num:'02', title:'Chapter 2: Chemical Equilibrium',
+  questions:[
+    {q:'State, explain, and discuss the factors that affect the equilibrium of a reaction',
+     a:'<p>A dynamic chemical equilibrium is established when the rates of the forward and reverse reactions become equal. While the equilibrium constant <span class="math">K</span> is constant at a given temperature, the position of the equilibrium can be shifted by external factors, as governed by <b>Le Chatelier\'s Principle</b>.</p><div class="step-label">Key Factors</div><ul><li><b>Concentration:</b> Increasing the concentration of reactants shifts equilibrium in the <b>forward direction</b> to consume them. Increasing product concentrations shifts it <b>backward</b>.</li><li><b>Temperature:</b> An increase in temperature favors the <b>endothermic</b> pathway (absorbs heat). A decrease favors the <b>exothermic</b> pathway (releases heat).</li><li><b>Pressure/Volume:</b> Changes in pressure only affect gaseous systems where there is a change in the total number of gaseous moles (<span class="math">&Delta;n &ne; 0</span>). Increasing pressure shifts equilibrium toward the side with <b>fewer moles of gas</b>.</li><li><b>Catalysts:</b> A catalyst accelerates both forward and reverse reactions equally, lowering the activation energy barrier. It <b>does not alter the position of equilibrium</b>, but allows the system to reach it faster.</li></ul>'},
+    {q:'Le Chatelier\'s principle (8 marks)',
+     a:'<div class="step-label">1. Statement</div><p>If a system at dynamic equilibrium is subjected to a change in concentration, temperature, or pressure, the equilibrium will shift in a direction that tends to counteract or minimize the effect of the applied stress.</p><div class="step-label">2. Comprehensive Parameter Reference Table</div><div class="table-wrap"><table class="qna-table"><thead><tr><th>Applied Stress / Alteration</th><th>Direction of Equilibrium Shift</th></tr></thead><tbody><tr><td><b>Increase Reactant Concentration</b></td><td>Shifts <b>Forward</b> (to consume reactants)</td></tr><tr><td><b>Increase Product Concentration</b></td><td>Shifts <b>Backward</b> (to consume products)</td></tr><tr><td><b>Increase Temperature (Endothermic, <span class="math">&Delta;H &gt; 0</span>)</b></td><td>Shifts <b>Forward</b> (to absorb added heat)</td></tr><tr><td><b>Increase Temperature (Exothermic, <span class="math">&Delta;H &lt; 0</span>)</b></td><td>Shifts <b>Backward</b> (to oppose heat release)</td></tr><tr><td><b>Increase Total Pressure (Decrease Volume)</b></td><td>Shifts to the side with <b>fewer moles of gas</b></td></tr><tr><td><b>Decrease Total Pressure (Increase Volume)</b></td><td>Shifts to the side with <b>more moles of gas</b></td></tr><tr><td><b>Addition of Inert Gas at Constant Volume</b></td><td><b>No Shift</b> (partial pressures remain unchanged)</td></tr><tr><td><b>Addition of Inert Gas at Constant Pressure</b></td><td>Shifts to side with <b>more moles of gas</b> (volume expands)</td></tr></tbody></table></div>'},
+    {q:'Relationship between K<sub>p</sub> and K<sub>c</sub> (5 marks)',
+     a:'<p>Consider a generalized reversible gaseous reaction:</p><div class="formula-box"><span class="math">aA(g) + bB(g) &rArr; cC(g) + dD(g)</span></div><p>The equilibrium constants in terms of partial pressures and molar concentrations are:</p><div class="formula-box"><span class="flabel">K<sub>p</sub></span><span class="math">K<sub>p</sub> = (P<sub>C</sub>)<sup>c</sup>(P<sub>D</sub>)<sup>d</sup> / (P<sub>A</sub>)<sup>a</sup>(P<sub>B</sub>)<sup>b</sup></span></div><div class="formula-box"><span class="flabel">K<sub>c</sub></span><span class="math">K<sub>c</sub> = [C]<sup>c</sup>[D]<sup>d</sup> / [A]<sup>a</sup>[B]<sup>b</sup></span></div><p>From the Ideal Gas Equation, <span class="math">PV = nRT &rArr; P = (n/V)RT = CRT</span>. So:</p><div class="formula-box"><span class="math">P<sub>A</sub> = [A]RT, &nbsp; P<sub>B</sub> = [B]RT, &nbsp; P<sub>C</sub> = [C]RT, &nbsp; P<sub>D</sub> = [D]RT</span></div><p>Substituting into the <span class="math">K<sub>p</sub></span> expression:</p><div class="formula-box"><span class="math">K<sub>p</sub> = {[C]<sup>c</sup>[D]<sup>d</sup> / [A]<sup>a</sup>[B]<sup>b</sup>} &times; (RT)<sup>(c+d)&minus;(a+b)</sup></span></div><div class="formula-box"><span class="flabel">K<sub>p</sub> &ndash; K<sub>c</sub> Relationship</span><span class="math">K<sub>p</sub> = K<sub>c</sub> (RT)<sup>&Delta;n</sup></span></div><p>Where <span class="math">&Delta;n = (c+d) &minus; (a+b)</span> = moles of gaseous products minus moles of gaseous reactants.</p>'},
+    {q:'Show K<sub>p</sub> = K<sub>c</sub> for a given reaction',
+     a:'<p>Using the relationship <span class="math">K<sub>p</sub> = K<sub>c</sub> (RT)<sup>&Delta;n</sup></span>, for <span class="math">K<sub>p</sub> = K<sub>c</sub></span> we need <span class="math">(RT)<sup>&Delta;n</sup> = 1</span>, which occurs when <span class="math">&Delta;n = 0</span>.</p><div class="step-label">Example Reaction</div><div class="formula-box"><span class="math">H<sub>2</sub>(g) + I<sub>2</sub>(g) &rArr; 2HI(g)</span></div><p>Calculating <span class="math">&Delta;n</span>:</p><ul><li>Gaseous product moles = 2</li><li>Gaseous reactant moles = 1 + 1 = 2</li></ul><div class="formula-box"><span class="math">&Delta;n = 2 &minus; 2 = 0 &nbsp;&rArr;&nbsp; K<sub>p</sub> = K<sub>c</sub> (RT)<sup>0</sup> = K<sub>c</sub></span></div>'},
+    {q:'Derive the van\'t Hoff equation (5 marks)',
+     a:'<div class="step-label">1. Derivation</div><p>The standard Gibbs free energy change is related to the equilibrium constant by:<br><span class="math">&Delta;G&deg; = &minus;RT ln K<sub>p</sub></span></p><p>From the fundamental definition of Gibbs free energy:<br><span class="math">&Delta;G&deg; = &Delta;H&deg; &minus; T&Delta;S&deg;</span></p><p>Equating the two expressions:</p><div class="formula-box"><span class="math">&minus;RT ln K<sub>p</sub> = &Delta;H&deg; &minus; T&Delta;S&deg;</span></div><div class="formula-box"><span class="math">ln K<sub>p</sub> = &minus;(&Delta;H&deg;/RT) + (&Delta;S&deg;/R)</span></div><p>Differentiating with respect to temperature:</p><div class="formula-box"><span class="flabel">Differential van\'t Hoff</span><span class="math">d(ln K<sub>p</sub>) / dT = &Delta;H&deg; / RT<sup>2</sup></span></div><p>Integrating from <span class="math">T<sub>1</sub></span> (constant <span class="math">K<sub>1</sub></span>) to <span class="math">T<sub>2</sub></span> (constant <span class="math">K<sub>2</sub></span>):</p><div class="formula-box"><span class="flabel">Integrated form</span><span class="math">log<sub>10</sub>(K<sub>2</sub>/K<sub>1</sub>) = (&Delta;H&deg; / 2.303R) &middot; [(T<sub>2</sub> &minus; T<sub>1</sub>) / (T<sub>1</sub>T<sub>2</sub>)]</span></div><div class="step-label">2. Graphical Representation</div><p>Rearranging into linear form (<span class="math">y = mx + c</span>):</p><div class="formula-box"><span class="math">ln K<sub>p</sub> = (&minus;&Delta;H&deg;/R) &middot; (1/T) + (&Delta;S&deg;/R)</span></div><p>Plotting <span class="math">ln K<sub>p</sub></span> against <span class="math">1/T</span> gives a straight line with slope <span class="math">= &minus;&Delta;H&deg;/R</span>.</p><ul><li><b>Endothermic (<span class="math">&Delta;H&deg; &gt; 0</span>):</b> slope is negative. As T increases, <span class="math">ln K<sub>p</sub></span> increases.</li><li><b>Exothermic (<span class="math">&Delta;H&deg; &lt; 0</span>):</b> slope is positive. As T increases, <span class="math">ln K<sub>p</sub></span> decreases.</li></ul>'},
+    {q:'Order is an experimentally determined quantity',
+     a:'<p>The <b>order of a reaction</b> is the sum of the concentration exponents in the experimentally determined kinetic rate law. It cannot be reliably deduced from the stoichiometric coefficients of a balanced chemical equation.</p><div class="step-label">Explanation</div><ul><li>Many chemical reactions are complex reactions consisting of multiple elementary steps.</li><li>The overall reaction rate is controlled entirely by the slowest step in the mechanism, known as the <b>rate-determining step</b>.</li><li>For example, the decomposition of dinitrogen pentoxide (<span class="math">2N<sub>2</sub>O<sub>5</sub> &rarr; 4NO<sub>2</sub> + O<sub>2</sub></span>) has a stoichiometric coefficient of 2, but experimental kinetic measurements show it is a <b>first-order</b> reaction: <span class="math">Rate = k[N<sub>2</sub>O<sub>5</sub>]<sup>1</sup></span>. Thus, reaction order can only be determined through empirical experimentation.</li></ul>'},
+    {q:'Discuss different concepts of acid and base with examples (7&ndash;8 marks)',
+     a:'<div class="step-label">1. Arrhenius Concept</div><ul><li><b>Acid:</b> A substance that dissociates in water to produce hydrogen ions (<span class="math">H<sup>+</sup></span> / hydronium ions <span class="math">H<sub>3</sub>O<sup>+</sup></span>).<br><span class="math">HCl(aq) &rarr; H<sup>+</sup>(aq) + Cl<sup>&minus;</sup>(aq)</span></li><li><b>Base:</b> A substance that dissociates in water to produce hydroxide ions (<span class="math">OH<sup>&minus;</sup></span>).<br><span class="math">NaOH(aq) &rarr; Na<sup>+</sup>(aq) + OH<sup>&minus;</sup>(aq)</span></li></ul><div class="step-label">2. Br&oslash;nsted-Lowry Concept</div><ul><li><b>Acid:</b> A substance that acts as a proton (<span class="math">H<sup>+</sup></span>) donor.</li><li><b>Base:</b> A substance that acts as a proton (<span class="math">H<sup>+</sup></span>) acceptor.</li></ul><div class="formula-box"><span class="flabel">Example</span><span class="math">NH<sub>3</sub>(aq) + H<sub>2</sub>O(l) &rArr; NH<sub>4</sub><sup>+</sup>(aq) + OH<sup>&minus;</sup>(aq)</span></div><div class="step-label">3. Lewis Concept</div><ul><li><b>Acid:</b> A substance capable of accepting an electron pair to form a coordinate covalent bond.</li><li><b>Base:</b> A substance capable of donating an electron pair to form a coordinate covalent bond.</li></ul><div class="formula-box"><span class="flabel">Example</span><span class="math">BF<sub>3</sub> (Lewis Acid) + :NH<sub>3</sub> (Lewis Base) &rarr; F<sub>3</sub>B&larr;NH<sub>3</sub></span></div>'},
+    {q:'Discuss the strength of different acids (5&ndash;7 marks)',
+     a:'<p>Acid strength refers to a molecule\'s relative ability to donate a proton to a base. It is quantified by the acid dissociation constant <span class="math">K<sub>a</sub></span> or its logarithmic value <span class="math">pK<sub>a</sub> = &minus;log<sub>10</sub>K<sub>a</sub></span>, where higher <span class="math">K<sub>a</sub></span> corresponds to stronger acids.</p><div class="step-label">Key Periodic and Structural Trends</div><ol><li><b>Binary Hydrides (Down a Group):</b> Acid strength increases down a vertical group. As atomic size increases, the bond dissociation energy decreases:<br><span class="math">HF &lt; HCl &lt; HBr &lt; HI</span></li><li><b>Oxyacids with the Same Central Atom:</b> Acid strength increases as the oxidation state of the central atom increases:<br><span class="math">HClO &lt; HClO<sub>2</sub> &lt; HClO<sub>3</sub> &lt; HClO<sub>4</sub></span></li><li><b>Oxyacids with Different Central Atoms (Same Oxidation State):</b> Acid strength increases with the electronegativity of the central atom:<br><span class="math">HIO<sub>4</sub> &lt; HBrO<sub>4</sub> &lt; HClO<sub>4</sub></span></li></ol>'},
+    {q:'Explain buffer solution',
+     a:'<p>A <b>buffer solution</b> is an aqueous solution that resists significant changes in pH when small quantities of an acid (<span class="math">H<sup>+</sup></span>) or a base (<span class="math">OH<sup>&minus;</sup></span>) are added to it.</p><div class="step-label">Classifications</div><ol><li><b>Acidic Buffer:</b> A mixture of a weak chemical acid and its conjugate base salt.<br><i>Example:</i> Acetic acid and sodium acetate (<span class="math">CH<sub>3</sub>COOH + CH<sub>3</sub>COONa</span>).</li><li><b>Basic Buffer:</b> A mixture of a weak chemical base and its conjugate acid salt.<br><i>Example:</i> Ammonium hydroxide and ammonium chloride (<span class="math">NH<sub>4</sub>OH + NH<sub>4</sub>Cl</span>).</li></ol><p>The pH of an acidic buffer is calculated using the <b>Henderson-Hasselbalch Equation</b>:</p><div class="formula-box"><span class="flabel">Henderson-Hasselbalch</span><span class="math">pH = pK<sub>a</sub> + log<sub>10</sub>([Salt] / [Acid])</span></div>'}
+  ]
+},
+{
+  id:'ch3', num:'03', title:'Chapter 3: Atomic Structure',
+  questions:[
+    {q:'Discuss Rutherford\'s experiment, postulates, and limitations (7 marks)',
+     a:'<div class="step-label">1. Alpha-Particle Scattering Experiment</div><p>Rutherford bombarded a thin gold foil with a stream of high-energy alpha (<span class="math">&alpha;</span>) particles. He observed that:</p><ul><li>The vast majority of <span class="math">&alpha;</span>-particles passed straight through the foil undeflected.</li><li>A small fraction were deflected through small angles.</li><li>A very tiny fraction (about 1 in 20,000) were deflected backward by angles close to 180&deg;.</li></ul><div class="step-label">2. Postulates</div><ul><li><b>The Nucleus:</b> An atom contains a tiny, dense, positively charged central core called the nucleus, containing nearly all the atom\'s mass.</li><li><b>Extranuclear Space:</b> The bulk of the atom\'s volume consists of empty space through which electrons are distributed.</li><li><b>Planetary Electrons:</b> Electrons revolve around the positive nucleus at high speeds in fixed circular pathways, analogous to planets orbiting the sun.</li></ul><div class="step-label">3. Limitations</div><ul><li><b>Atomic Instability:</b> According to classical electromagnetic theory, an accelerating charged particle must continuously radiate energy, causing the electron to spiral into the nucleus. This contradicts atomic stability.</li><li><b>Continuous vs. Line Spectra:</b> Could not explain why excited atoms produce sharp, discrete line emission spectra rather than a continuous spectrum.</li></ul>'},
+    {q:'Discuss Bohr\'s postulates and limitations (7 marks)',
+     a:'<div class="step-label">1. Postulates</div><ul><li><b>Stationary States:</b> Electrons revolve around the nucleus only in certain permitted non-radiating circular pathways called stationary orbits. While in these orbits, the electron does not lose or radiate energy.</li><li><b>Quantization of Angular Momentum:</b> An electron can only occupy orbits where its orbital angular momentum (<span class="math">mvr</span>) is an integral multiple of <span class="math">h/2&pi;</span>:<br><span class="math">mvr = nh/2&pi; &nbsp; (n = 1, 2, 3, ...)</span></li><li><b>Energy Transitions:</b> Energy is absorbed or emitted only when an electron transitions from one stationary orbit to another. The frequency of the photon is given by:<br><span class="math">&Delta;E = E<sub>2</sub> &minus; E<sub>1</sub> = h&nu;</span></li></ul><div class="step-label">2. Limitations</div><ul><li><b>Multi-Electron Atoms:</b> While accurate for single-electron species (H, He<sup>+</sup>, Li<sup>2+</sup>), Bohr\'s model fails to predict spectral lines of multi-electron atoms.</li><li><b>Fine Structure:</b> High-resolution spectroscopes reveal individual spectral lines are actually clusters of closely spaced lines, which the model cannot explain.</li><li><b>Zeeman and Stark Effects:</b> Fails to explain the splitting of spectral lines under external magnetic or electric fields.</li><li><b>Heisenberg Uncertainty Principle:</b> Treats the electron as a localized particle in a defined orbit, violating wave-particle duality and the uncertainty principle.</li></ul>'},
+    {q:'Derive the equation for the wavelength of an electron undergoing transition from one orbit to another (9 marks)',
+     a:'<p>According to Bohr\'s derivation, the total electronic energy (<span class="math">E<sub>n</sub></span>) of an electron in the <span class="math">n</span>-th orbit is:</p><div class="formula-box"><span class="flabel">Bohr energy</span><span class="math">E<sub>n</sub> = &minus;2&pi;<sup>2</sup>mZ<sup>2</sup>e<sup>4</sup> / n<sup>2</sup>h<sup>2</sup></span></div><p>When an electron drops from outer level <span class="math">n<sub>2</sub></span> to inner level <span class="math">n<sub>1</sub></span>, the energy difference is emitted as a photon:</p><div class="formula-box"><span class="math">&Delta;E = E<sub>n<sub>2</sub></sub> &minus; E<sub>n<sub>1</sub></sub> = (2&pi;<sup>2</sup>mZ<sup>2</sup>e<sup>4</sup>/h<sup>2</sup>) &middot; (1/n<sub>1</sub><sup>2</sup> &minus; 1/n<sub>2</sub><sup>2</sup>)</span></div><p>Since photon energy is <span class="math">&Delta;E = hc/&lambda;</span>:</p><div class="formula-box"><span class="flabel">Wavenumber</span><span class="math">1/&lambda; = (2&pi;<sup>2</sup>mZ<sup>2</sup>e<sup>4</sup> / ch<sup>3</sup>) &middot; (1/n<sub>1</sub><sup>2</sup> &minus; 1/n<sub>2</sub><sup>2</sup>)</span></div><p>For hydrogen (<span class="math">Z = 1</span>), <span class="math">R<sub>H</sub> = 2&pi;<sup>2</sup>me<sup>4</sup> / ch<sup>3</sup></span> is <b>Rydberg\'s Constant</b>:</p><div class="formula-box"><span class="flabel">Rydberg formula</span><span class="math">1/&lambda; = R<sub>H</sub> (1/n<sub>1</sub><sup>2</sup> &minus; 1/n<sub>2</sub><sup>2</sup>)</span></div>'},
+    {q:'Show that r<sub>n</sub> &Proportional; n<sup>2</sup> for electrons',
+     a:'<p>For an electron revolving in a stable circular orbit, the electrostatic force provides the centripetal force:</p><div class="formula-box"><span class="math">mv<sup>2</sup> / r = Ze<sup>2</sup> / r<sup>2</sup> &nbsp;&rArr;&nbsp; v<sup>2</sup> = Ze<sup>2</sup> / mr &mdash; (1)</span></div><p>From Bohr\'s quantization postulate (<span class="math">mvr = nh/2&pi;</span>), isolate <span class="math">v</span>:</p><div class="formula-box"><span class="math">v = nh / 2&pi;mr &nbsp;&rArr;&nbsp; v<sup>2</sup> = n<sup>2</sup>h<sup>2</sup> / 4&pi;<sup>2</sup>m<sup>2</sup>r<sup>2</sup> &mdash; (2)</span></div><p>Equating (1) and (2):</p><div class="formula-box"><span class="math">Ze<sup>2</sup> / mr = n<sup>2</sup>h<sup>2</sup> / 4&pi;<sup>2</sup>m<sup>2</sup>r<sup>2</sup></span></div><p>Solving for <span class="math">r</span>:</p><div class="formula-box"><span class="flabel">Bohr radius</span><span class="math">r<sub>n</sub> = (h<sup>2</sup> / 4&pi;<sup>2</sup>mZe<sup>2</sup>) &middot; n<sup>2</sup></span></div><div class="formula-box"><span class="flabel">Result</span><span class="math">r<sub>n</sub> &Proportional; n<sup>2</sup></span></div><p>This proves that the radius of a Bohr orbit expands proportionally with the square of the principal quantum number.</p>'},
+    {q:'Determine the shortest wavelength for a given series',
+     a:'<p>The shortest wavelength (<span class="math">&lambda;<sub>min</sub></span>), or series limit, in any hydrogen spectral series corresponds to the transition with the highest energy change. This occurs when the electron falls from an infinite distance (<span class="math">n<sub>2</sub> = &infin;</span>) to the baseline level <span class="math">n<sub>1</sub></span>.</p><p>Using Rydberg\'s equation:</p><div class="formula-box"><span class="math">1/&lambda;<sub>min</sub> = R<sub>H</sub>Z<sup>2</sup> (1/n<sub>1</sub><sup>2</sup> &minus; 1/&infin;<sup>2</sup>) = R<sub>H</sub>Z<sup>2</sup> / n<sub>1</sub><sup>2</sup></span></div><div class="formula-box"><span class="flabel">Shortest wavelength</span><span class="math">&lambda;<sub>min</sub> = n<sub>1</sub><sup>2</sup> / R<sub>H</sub>Z<sup>2</sup></span></div>'},
+    {q:'Explain the Heisenberg uncertainty principle and show it is only applicable for microscopic particles (7 marks)',
+     a:'<div class="step-label">1. Explanation</div><p>The <b>Heisenberg Uncertainty Principle</b> states that it is fundamentally impossible to simultaneously measure both the exact position (<span class="math">&Delta;x</span>) and the exact linear momentum (<span class="math">&Delta;p</span>) of a subatomic particle with absolute precision.</p><div class="formula-box"><span class="math">&Delta;x &middot; &Delta;p &ge; h / 4&pi; &nbsp;&rArr;&nbsp; &Delta;x &middot; (m&Delta;v) &ge; h / 4&pi;</span></div><div class="step-label">2. Scale Comparison Analysis</div><p>The physical significance depends directly on the mass of the moving object:</p><div class="formula-box"><span class="flabel">Macroscopic object (m = 10<sup>&minus;3</sup> kg)</span><span class="math">&Delta;x &middot; &Delta;v &ge; 6.626&times;10<sup>&minus;34</sup> / (4&pi; &times; 10<sup>&minus;3</sup>) &asymp; 5.27&times;10<sup>&minus;32</sup> m<sup>2</sup>/s</span></div><p>The uncertainty is &asymp;10<sup>&minus;32</sup> &mdash; completely undetectable. Classical mechanics holds for everyday objects.</p><div class="formula-box"><span class="flabel">Microscopic particle (electron, m &asymp; 9.11&times;10<sup>&minus;31</sup> kg)</span><span class="math">&Delta;x &middot; &Delta;v &ge; 6.626&times;10<sup>&minus;34</sup> / (4&pi; &times; 9.11&times;10<sup>&minus;31</sup>) &asymp; 5.79&times;10<sup>&minus;4</sup> m<sup>2</sup>/s</span></div><p>An uncertainty of &asymp;10<sup>&minus;4</sup> is highly significant at the atomic scale. If the position is resolved within atomic size (<span class="math">&Delta;x &asymp; 10<sup>&minus;10</sup> m</span>), the velocity uncertainty becomes <span class="math">&Delta;v &asymp; 5.79 &times; 10<sup>6</sup> m/s</span>, which is extremely large. This proves the principle is only relevant for microscopic particles.</p>'},
+    {q:'Explain the de Broglie equation and write down its applications (7 marks)',
+     a:'<div class="step-label">1. Explanation</div><p>Louis de Broglie proposed that moving matter exhibits wave-particle duality. A moving material particle of mass <span class="math">m</span> traveling at velocity <span class="math">v</span> has an associated matter wave whose wavelength is inversely proportional to its linear momentum:</p><div class="formula-box"><span class="flabel">de Broglie wavelength</span><span class="math">&lambda; = h / p = h / mv</span></div><div class="step-label">2. Key Applications</div><ul><li><b>Electron Microscopy:</b> Accelerated electrons possess much shorter wavelengths than visible light photons, achieving resolution powers orders of magnitude higher than optical microscopes.</li><li><b>Theoretical Validation of Bohr\'s Quantization:</b> For an electron orbit to be stable, it must form a circular standing wave. The circumference must equal an integral number of wavelengths:<br><span class="math">2&pi;r = n&lambda;</span><br>Substituting de Broglie\'s relation (<span class="math">&lambda; = h/mv</span>):<br><span class="math">2&pi;r = n(h/mv) &nbsp;&rArr;&nbsp; mvr = nh/2&pi;</span><br>This derives Bohr\'s quantization postulate from wave mechanics.</li></ul>'},
+    {q:'Define and describe the four quantum numbers and their importance (7&ndash;8 marks)',
+     a:'<p>Quantum numbers act as coordinate configurations that describe the energy states, orbital shapes, orientations, and spins of electrons within an atom.</p><ol><li><b>Principal Quantum Number (<span class="math">n</span>):</b><br>Specifies the main electron shell. Takes positive integer values: <span class="math">n = 1, 2, 3, ...</span><br><i>Importance:</i> Determines the overall effective size of the electron orbital and its baseline energy level.</li><li><b>Azimuthal (Angular Momentum) Quantum Number (<span class="math">l</span>):</b><br>Defines the geometric shape of the subshell. Allowed values: <span class="math">0</span> to <span class="math">(n&minus;1)</span>. (<span class="math">l=0 &rarr; s</span>, <span class="math">l=1 &rarr; p</span>, <span class="math">l=2 &rarr; d</span>, <span class="math">l=3 &rarr; f</span>)<br><i>Importance:</i> Dictates the angular symmetry and number of angular nodes.</li><li><b>Magnetic Quantum Number (<span class="math">m<sub>l</sub></span>):</b><br>Identifies spatial orientation of the orbital. Integer values from <span class="math">&minus;l</span> to <span class="math">+l</span> (total of <span class="math">2l+1</span> values).<br><i>Importance:</i> Accounts for the splitting of degenerate orbitals in a magnetic field (Zeeman Effect).</li><li><b>Spin Quantum Number (<span class="math">m<sub>s</sub></span>):</b><br>Describes the intrinsic spin direction of the electron. Two permitted orientations: <span class="math">+1/2</span> (spin up) and <span class="math">&minus;1/2</span> (spin down).<br><i>Importance:</i> Explains atomic magnetism and satisfies the Pauli exclusion principle.</li></ol>'},
+    {q:'What is the difference between an orbit and an orbital &mdash; draw diagrams',
+           a:`<div class="table-wrap"><table class="qna-table"><thead><tr><th>Structural Feature</th><th>Orbit</th><th>Orbital</th></tr></thead><tbody><tr><td><b>Basic Definition</b></td><td>A well-defined, flat, two-dimensional circular path around the nucleus where electrons revolve.</td><td>A three-dimensional region of space where the probability of finding an electron is highest (&ge; 90%).</td></tr><tr><td><b>Model Origin</b></td><td>Derived from the classical planetary model by Niels Bohr.</td><td>Derived from quantum wave mechanics and wave equations.</td></tr><tr><td><b>Uncertainty Principle</b></td><td>Violates the limits set by the Heisenberg Uncertainty Principle.</td><td>Fully complies with the limits of the Heisenberg Uncertainty Principle.</td></tr><tr><td><b>Geometric Shape</b></td><td>Strictly circular and planar.</td><td>Various 3D shapes (spherical, dumbbell, cloverleaf).</td></tr><tr><td><b>Electron Capacity</b></td><td>Can accommodate up to a maximum of <span class="math">2n<sup>2</sup></span> electrons.</td><td>Restricted to holding a maximum of 2 electrons with opposite spins.</td></tr></tbody></table></div><pre class="qna-ascii">    Orbit (Classical Model)                  Orbital (Quantum Cloud)
+          _______                                     . . : : . .
+       . \'       \' .                               : : . . . . : :
+     /     ( + )     \\                            : . .  ( + )  . :
+     \\    Nucleus    /                             : : . . . . : :
+       . _ _ _ _ _ .                                  . . : : . .
+       [Defined Path]                             [Probability Cloud]</pre>`},
+    {q:'Derive the Schr&ouml;dinger equation and write down its significance',
+     a:'<div class="step-label">1. Derivation</div><p>Consider a steady standing wave propagating along a string. Its classical differential wave equation is:</p><div class="formula-box"><span class="math">&part;<sup>2</sup>&psi; / &part;x<sup>2</sup> + (4&pi;<sup>2</sup> / &lambda;<sup>2</sup>) &psi; = 0</span></div><p>According to de Broglie, <span class="math">&lambda; = h/mv &rArr; &lambda;<sup>2</sup> = h<sup>2</sup>/m<sup>2</sup>v<sup>2</sup></span>. Substituting:</p><div class="formula-box"><span class="math">&part;<sup>2</sup>&psi; / &part;x<sup>2</sup> + (4&pi;<sup>2</sup>m<sup>2</sup>v<sup>2</sup> / h<sup>2</sup>) &psi; = 0 &mdash; (1)</span></div><p>The total energy of an electron is <span class="math">E = KE + V = &frac12;mv<sup>2</sup> + V &nbsp;&rArr;&nbsp; mv<sup>2</sup> = 2(E &minus; V)</span>.</p><p>Multiplying by <span class="math">m</span>: <span class="math">m<sup>2</sup>v<sup>2</sup> = 2m(E &minus; V)</span>. Substituting into (1):</p><div class="formula-box"><span class="flabel">One-dimensional Schr&ouml;dinger</span><span class="math">&part;<sup>2</sup>&psi; / &part;x<sup>2</sup> + (8&pi;<sup>2</sup>m / h<sup>2</sup>)(E &minus; V)&psi; = 0</span></div><p>Extending to three dimensions (using the Laplacian operator <span class="math">&nabla;<sup>2</sup></span>):</p><div class="formula-box"><span class="flabel">Time-independent Schr&ouml;dinger</span><span class="math">&nabla;<sup>2</sup>&psi; + (8&pi;<sup>2</sup>m / h<sup>2</sup>)(E &minus; V)&psi; = 0</span></div><div class="step-label">2. Physical Significance</div><ul><li><b>The Wave Function (<span class="math">&psi;</span>):</b> Represents the mathematical amplitude of the electron matter wave. Contains all accessible physical information about the system.</li><li><b>Probability Density (<span class="math">|&psi;|<sup>2</sup>):</b> According to Max Born\'s statistical interpretation, <span class="math">|&psi;|<sup>2</sup></span> at any point represents the probability density of finding the electron at that coordinate.</li><li><b>Energy Quantization:</b> Solving the equation yields physically acceptable solutions (eigenfunctions) and permitted energy states (eigenvalues), explaining electronic configurations.</li></ul>'}
+  ]
+},
+{
+  id:'ch4', num:'04', title:'Chapter 4: Periodic Properties',
+  questions:[
+    {q:'Describe the rules for distributing electrons among orbitals &mdash; Pauli exclusion principle, Aufbau principle, Hund\'s rule (12 marks)',
+     a:'<div class="step-label">1. Aufbau Principle</div><ul><li><b>Core Rule:</b> Electrons fill atomic orbitals in order of increasing energy; lower-energy orbitals are completely filled before higher-energy states.</li><li><b>The <span class="math">(n+l)</span> Energy Rule:</b> Orbitals with a lower sum of principal (<span class="math">n</span>) and azimuthal (<span class="math">l</span>) quantum numbers fill first. If two orbitals share the same <span class="math">(n+l)</span>, the one with lower <span class="math">n</span> takes priority.</li><li>Filling Order: <span class="math">1s &lt; 2s &lt; 2p &lt; 3s &lt; 3p &lt; 4s &lt; 3d &lt; 4p ...</span></li></ul><div class="step-label">2. Pauli Exclusion Principle</div><ul><li><b>Core Rule:</b> No two electrons in the same atom can share the exact same set of four quantum numbers (<span class="math">n, l, m<sub>l</sub>, m<sub>s</sub></span>).</li><li><b>Physical Consequence:</b> An individual orbital can hold a maximum of two electrons, and they must have opposite, antiparallel spins (<span class="math">+1/2</span> and <span class="math">&minus;1/2</span>).</li></ul><div class="step-label">3. Hund\'s Rule of Maximum Multiplicity</div><ul><li><b>Core Rule:</b> When filling degenerate orbitals, electrons occupy empty subshells singly with parallel spins before pairing begins.</li><li><b>Physical Justification:</b> Keeping electrons separate minimizes inter-electronic electrostatic repulsion, resulting in a more stable, lower-energy state.</li></ul>'},
+    {q:'Write down the electronic configuration of given elements (show box diagram)',
+     a:'<p>Electronic configurations are written by applying distribution rules while accounting for the extra stability of half-filled and fully-filled subshells.</p><div class="step-label">Key Examples</div><p><b>Nitrogen (Z=7):</b> <span class="math">1s<sup>2</sup> 2s<sup>2</sup> 2p<sub>x</sub><sup>1</sup> 2p<sub>y</sub><sup>1</sup> 2p<sub>z</sub><sup>1</sup></span></p><pre class="qna-ascii">Box Diagram: [&uarr;&darr;]_{1s}  [&uarr;&darr;]_{2s}  [&uarr; | &uarr; | &uarr;]_{2p}</pre><p><b>Chromium (Z=24 &mdash; Exception):</b> Expected <span class="math">[Ar] 4s<sup>2</sup> 3d<sup>4</sup></span>, actual <span class="math">[Ar] 4s<sup>1</sup> 3d<sup>5</sup></span>. Half-filled <span class="math">3d<sup>5</sup></span> maximizes exchange energy.</p><pre class="qna-ascii">Box: [Ar]  [&uarr;]_{4s}  [&uarr; | &uarr; | &uarr; | &uarr; | &uarr;]_{3d}</pre><p><b>Copper (Z=29 &mdash; Exception):</b> Actual <span class="math">[Ar] 4s<sup>1</sup> 3d<sup>10</sup></span> instead of <span class="math">[Ar] 4s<sup>2</sup> 3d<sup>9</sup></span>. Fully-filled <span class="math">3d<sup>10</sup></span> offers high structural symmetry.</p><pre class="qna-ascii">Box: [Ar]  [&uarr;]_{4s}  [&uarr;&darr; | &uarr;&darr; | &uarr;&darr; | &uarr;&darr; | &uarr;&darr;]_{3d}</pre>'},
+    {q:'Discuss the periodic law according to Mendeleev &mdash; features, limitations, and successes',
+     a:'<div class="step-label">1. Mendeleev\'s Periodic Law</div><p>The physical and chemical properties of chemical elements are periodic functions of their <b>atomic masses</b>.</p><div class="step-label">2. Historic Successes</div><ul><li><b>Systematic Organization:</b> Classified the 63 known elements into an intuitive table based on repeating chemical properties and valency.</li><li><b>Prediction of Undiscovered Elements:</b> Left empty spaces for yet-undiscovered elements, accurately predicting the atomic masses and chemical traits of elements like <i>Eka-Aluminum</i> (Gallium) and <i>Eka-Silicon</i> (Germanium).</li></ul><div class="step-label">3. Key Limitations</div><ul><li><b>Anomalous Pairs:</b> Had to place heavier elements before lighter ones (e.g., Tellurium, mass 127.6, before Iodine, mass 126.9).</li><li><b>Placement of Isotopes:</b> Isotopes possess different atomic masses but identical chemical properties, difficult to separate in a mass-based framework.</li><li><b>Position of Hydrogen:</b> No fixed position could be assigned, as hydrogen shows similarities to both alkali metals and halogens.</li></ul>'},
+    {q:'Discuss the modern periodic table &mdash; limitations and successes',
+     a:'<div class="step-label">1. The Modern Periodic Law</div><p>Henry Moseley demonstrated that properties of elements are periodic functions of their <b>atomic numbers</b> (total nuclear charge) rather than atomic masses.</p><div class="step-label">2. Successes</div><ul><li><b>Elimination of Mass Anomalies:</b> Ordering by atomic number resolves Mendeleev\'s conflicts (e.g., Argon (Z=18) correctly precedes Potassium (Z=19)).</li><li><b>Isotope Alignment:</b> Isotopes share the same atomic number, mapping to the same position.</li><li><b>Electronic Configuration Link:</b> Reflects the filling sequence of subshells, directly linking an element\'s position to its valence chemistry.</li></ul><div class="step-label">3. Limitations</div><ul><li><b>Placement of Hydrogen:</b> Shares properties with both Group 1 (forming H<sup>+</sup>) and Group 17 (forming H<sup>&minus;</sup> hydride ions).</li><li><b>Lanthanide and Actinide Segregation:</b> Separated into isolated rows at the bottom to maintain a practical layout.</li></ul>'},
+    {q:'Find the position of a given element in the periodic table',
+     a:'<p>The position of any element can be determined from the ground-state electronic configuration:</p><ul><li><b>Period Number:</b> Equal to the highest principal quantum number (<span class="math">n</span>) present.</li><li><b>Block Assignment:</b> Determined by the specific subshell type (<span class="math">s, p, d, f</span>) of the final valence electron.</li><li><b>Group Determination:</b><ul><li><b>s-block:</b> Group = electrons in <span class="math">ns</span> subshell.</li><li><b>p-block:</b> Group = <span class="math">10 + (ns e<sup>&minus;</sup>) + (np e<sup>&minus;</sup>)</span>.</li><li><b>d-block:</b> Group = <span class="math">((n&minus;1)d e<sup>&minus;</sup>) + (ns e<sup>&minus;</sup>)</span>.</li></ul></li></ul><div class="step-label">Application Example: Iron (Fe, Z=26)</div><p>Configuration: <span class="math">1s<sup>2</sup> 2s<sup>2</sup> 2p<sup>6</sup> 3s<sup>2</sup> 3p<sup>6</sup> 4s<sup>2</sup> 3d<sup>6</sup></span></p><ul><li><b>Period:</b> 4 (highest shell is <span class="math">n=4</span>)</li><li><b>Block:</b> d-block (final electron enters a <span class="math">d</span> subshell)</li><li><b>Group:</b> Electrons in <span class="math">(3d + 4s) = 6 + 2 = 8</span></li></ul>'},
+    {q:'Classify elements based on electronic configuration (7 marks)',
+     a:'<ul><li><b>s-Block Elements:</b> Groups 1 and 2. General valence: <span class="math">ns<sup>1&ndash;2</sup></span>. Highly reactive, soft, electropositive metals.</li><li><b>p-Block Elements:</b> Groups 13 through 18. General valence: <span class="math">ns<sup>2</sup> np<sup>1&ndash;6</sup></span>. Diverse mix of metals, metalloids, and non-metals, ending with noble gases.</li><li><b>d-Block (Transition) Elements:</b> Groups 3 through 12. Valence: <span class="math">(n&minus;1)d<sup>1&ndash;10</sup> ns<sup>0&ndash;2</sup></span>. Hard, dense metals with variable oxidation states and colored complexes.</li><li><b>f-Block (Inner Transition) Elements:</b> Lanthanides and Actinides. General: <span class="math">(n&minus;2)f<sup>1&ndash;14</sup> (n&minus;1)d<sup>0&ndash;1</sup> ns<sup>2</sup></span>. Heavy, electropositive metals; many actinides are radioactive.</li></ul>'},
+    {q:'Describe atomic radius and its variation across the periodic table (5 marks)',
+     a:'<p><b>Atomic Radius</b> is defined as half the distance between the nuclei of two identical chemically bonded atoms.</p><div class="step-label">Periodic Variation Trends</div><ul><li><b>Across a Period (Left to Right):</b> Atomic radius <b>decreases</b>. As atomic number increases, protons are added to the nucleus, increasing the effective nuclear charge (<span class="math">Z<sub>eff</sub></span>). This pulls the electron cloud closer, shrinking the atom.</li><li><b>Down a Group (Top to Bottom):</b> Atomic radius <b>increases</b>. A new principal electron shell (<span class="math">n</span>) is added with each period, increasing the distance between valence electrons and the nucleus.</li></ul>'},
+    {q:'Discuss ionization energy as a periodic function (7&ndash;8 marks)',
+     a:'<p><b>Ionization Energy (IE)</b> is the minimum energy required to remove the most loosely bound electron from an isolated, neutral gaseous atom in its ground state:</p><div class="formula-box"><span class="math">A(g) + IE &rarr; A<sup>+</sup>(g) + e<sup>&minus;</sup></span></div><div class="step-label">Global Periodic Variations</div><ul><li><b>Across a Period:</b> Ionization energy generally <b>increases</b> left to right. Higher effective nuclear charge holds outer electrons more tightly.</li><li><b>Down a Group:</b> Ionization energy <b>decreases</b> top to bottom. Larger atomic size and greater inner electron shielding make valence electrons easier to remove.</li></ul><div class="step-label">Structural Anomalies</div><ul><li><b>Be &gt; B:</b> Beryllium (<span class="math">1s<sup>2</sup> 2s<sup>2</sup></span>) has higher IE than Boron (<span class="math">1s<sup>2</sup> 2s<sup>2</sup> 2p<sup>1</sup></span>) because removing an electron requires breaking a stable, fully-filled <span class="math">2s</span> subshell.</li><li><b>N &gt; O:</b> Nitrogen (<span class="math">1s<sup>2</sup> 2s<sup>2</sup> 2p<sup>3</sup></span>) has a stable, half-filled <span class="math">2p</span> subshell, making it harder to ionize than Oxygen.</li></ul>'},
+    {q:'Discuss the factors affecting ionization energy (7 marks)',
+     a:'<ul><li><b>Atomic Size:</b> In larger atoms, valence electrons are farther from the nucleus, reducing electrostatic attraction and lowering IE.</li><li><b>Effective Nuclear Charge (<span class="math">Z<sub>eff</sub></span>):</b> A higher <span class="math">Z<sub>eff</sub></span> exerts a stronger pull on valence electrons, increasing IE.</li><li><b>Shielding (Screening) Effect:</b> Inner-shell electrons repel outer valence electrons, shielding them from the nuclear charge. More shielding lowers IE.</li><li><b>Penetration Effect:</b> Electrons in orbitals that penetrate closer to the nucleus are more tightly held. Stability order: <span class="math">s &gt; p &gt; d &gt; f</span>.</li><li><b>Subshell Stability:</b> Completely filled (<span class="math">ns<sup>2</sup>, np<sup>6</sup>, nd<sup>10</sup></span>) or half-filled (<span class="math">np<sup>3</sup>, nd<sup>5</sup></span>) subshells have enhanced stability, resulting in higher IE.</li></ul>'},
+    {q:'What is electron affinity and discuss its periodic variation (6&ndash;7 marks)',
+     a:'<p><b>Electron Affinity (EA)</b> is the energy change (typically released) when an electron is added to a neutral, isolated gaseous atom to form a negative anion:</p><div class="formula-box"><span class="math">X(g) + e<sup>&minus;</sup> &rarr; X<sup>&minus;</sup>(g) + EA</span></div><div class="step-label">Periodic Variation Trends</div><ul><li><b>Across a Period:</b> Electron affinity becomes <b>more negative / increases</b> left to right. Decreasing atomic radius and increasing <span class="math">Z<sub>eff</sub></span> allow stronger attraction for the incoming electron.</li><li><b>Down a Group:</b> Electron affinity becomes <b>less negative / decreases</b> moving down. Increasing atomic size weakens the attractive force.</li></ul><div class="step-label">The Anomalous Halogen Group Exception</div><p><b>Cl &gt; F:</b> Fluorine has a smaller atomic radius than Chlorine. Because fluorine\'s <span class="math">2p</span> subshell is so crowded, adding an electron generates significant electron-electron repulsion, diminishing the net energy released. Chlorine\'s larger <span class="math">3p</span> subshell accommodates the extra electron more easily, giving it a higher electron affinity.</p>'},
+    {q:'What are the factors that affect electron affinity',
+     a:'<ul><li><b>Atomic Size:</b> In smaller atoms, the incoming electron can get closer to the nucleus, experiencing a stronger attractive force, resulting in higher EA.</li><li><b>Nuclear Charge:</b> A higher nuclear charge exerts a stronger pull on the incoming electron, increasing EA.</li><li><b>Electronic Configuration:</b> Atoms with stable, half-filled or fully-filled subshells resist accepting an extra electron. Consequently, noble gases and alkaline earth metals have EAs near zero or even endothermic.</li></ul>'}
+  ]
+},
+{
+  id:'ch5', num:'05', title:'Chapter 5: Solutions',
+  questions:[
+    {q:'Classify solutions based on attractive force',
+     a:'<p>Liquid solutions are classified into two categories based on the relative strength of intermolecular attractive forces between the components (solute A and solvent B):</p><ul><li><b>Ideal Solutions:</b> Intermolecular forces between solute and solvent (<span class="math">A&minus;B</span>) are identical in strength to those within pure components (<span class="math">A&minus;A</span> and <span class="math">B&minus;B</span>). They mix with no change in enthalpy (<span class="math">&Delta;H<sub>mix</sub> = 0</span>) or volume (<span class="math">&Delta;V<sub>mix</sub> = 0</span>) and follow Raoult\'s Law at all concentrations.</li><li><b>Non-Ideal Solutions:</b> Attractive forces between solute and solvent differ from those within the pure components. This leads to deviations from Raoult\'s Law, accompanied by changes in volume and heat during mixing (<span class="math">&Delta;H<sub>mix</sub> &ne; 0</span>, <span class="math">&Delta;V<sub>mix</sub> &ne; 0</span>).</li></ul>'},
+    {q:'Categorize non-ideal solutions based on Raoult\'s law (7 marks)',
+     a:'<div class="step-label">1. Positive Deviation</div><ul><li><b>Condition:</b> Solute-solvent interactions (<span class="math">A&minus;B</span>) are <b>weaker</b> than interactions in pure components (<span class="math">A&minus;A</span> and <span class="math">B&minus;B</span>).</li><li><b>Impact:</b> Molecules escape into vapor more easily, making total vapor pressure <b>higher</b> than predicted by Raoult\'s Law.</li><li><b>Thermodynamic Signs:</b> <span class="math">&Delta;H<sub>mix</sub> &gt; 0</span> (endothermic) and <span class="math">&Delta;V<sub>mix</sub> &gt; 0</span> (expansion).</li><li><i>Example:</i> Ethanol and Acetone mixture.</li></ul><div class="step-label">2. Negative Deviation</div><ul><li><b>Condition:</b> Solute-solvent interactions (<span class="math">A&minus;B</span>) are <b>stronger</b> than interactions in pure components.</li><li><b>Impact:</b> Components hold onto each other more tightly, reducing evaporation and making vapor pressure <b>lower</b> than the Raoult\'s Law prediction.</li><li><b>Thermodynamic Signs:</b> <span class="math">&Delta;H<sub>mix</sub> &lt; 0</span> (exothermic) and <span class="math">&Delta;V<sub>mix</sub> &lt; 0</span> (contraction).</li><li><i>Example:</i> Chloroform and Acetone mixture.</li></ul>'},
+    {q:'Define vapor pressure',
+     a:'<p><b>Vapor Pressure</b> is the pressure exerted by a vapor that is in dynamic thermodynamic equilibrium with its liquid (or solid) phase in a closed system at a specific temperature. At this point, the rate of evaporation of the liquid equals the rate of condensation of the vapor.</p>'},
+    {q:'From Raoult\'s law, derive the expression for lowering of vapor pressure (5 marks) and show it is a colligative property (2 marks)',
+     a:'<div class="step-label">1. Derivation</div><p>According to Raoult\'s Law, the partial vapor pressure of a volatile solvent (<span class="math">P<sub>1</sub></span>) over a solution is directly proportional to its mole fraction (<span class="math">X<sub>1</sub></span>):</p><div class="formula-box"><span class="flabel">Raoult\'s Law</span><span class="math">P<sub>1</sub> = X<sub>1</sub> &middot; P<sub>1</sub>&deg;</span></div><p>For a binary solution with non-volatile solute, <span class="math">X<sub>1</sub> + X<sub>2</sub> = 1 &rArr; X<sub>1</sub> = 1 &minus; X<sub>2</sub></span>. Substituting:</p><div class="formula-box"><span class="math">P<sub>1</sub> = (1 &minus; X<sub>2</sub>) P<sub>1</sub>&deg; = P<sub>1</sub>&deg; &minus; X<sub>2</sub>P<sub>1</sub>&deg;</span></div><div class="formula-box"><span class="flabel">Lowering of vapor pressure</span><span class="math">P<sub>1</sub>&deg; &minus; P<sub>1</sub> = X<sub>2</sub>P<sub>1</sub>&deg;</span></div><div class="formula-box"><span class="flabel">Relative lowering</span><span class="math">(P<sub>1</sub>&deg; &minus; P<sub>1</sub>) / P<sub>1</sub>&deg; = X<sub>2</sub></span></div><div class="step-label">2. Proof as a Colligative Property</div><p>A colligative property depends solely on the number of solute particles, not their chemical identity. Because the relative lowering of vapor pressure equals the mole fraction of the solute (<span class="math">X<sub>2</sub></span>), it depends entirely on the ratio of solute particles to total particles. This proves it is a colligative property.</p>'},
+    {q:'Determine the molar mass of a solute using Raoult\'s law for lowering of vapor pressure (7 marks)',
+     a:'<p>From the relative lowering of vapor pressure equation:</p><div class="formula-box"><span class="math">(P<sub>1</sub>&deg; &minus; P<sub>1</sub>) / P<sub>1</sub>&deg; = X<sub>2</sub></span></div><p>The mole fraction of solute is <span class="math">X<sub>2</sub> = n<sub>2</sub> / (n<sub>1</sub> + n<sub>2</sub>)</span>. Let <span class="math">w<sub>2</sub>, M<sub>2</sub></span> be mass and molar mass of solute, and <span class="math">w<sub>1</sub>, M<sub>1</sub></span> for solvent.</p><div class="formula-box"><span class="math">X<sub>2</sub> = (w<sub>2</sub>/M<sub>2</sub>) / (w<sub>1</sub>/M<sub>1</sub> + w<sub>2</sub>/M<sub>2</sub>)</span></div><p>For dilute solutions, <span class="math">n<sub>2</sub> &laquo; n<sub>1</sub></span>, so <span class="math">n<sub>1</sub> + n<sub>2</sub> &asymp; n<sub>1</sub></span>:</p><div class="formula-box"><span class="math">X<sub>2</sub> &asymp; n<sub>2</sub>/n<sub>1</sub> = (w<sub>2</sub> &middot; M<sub>1</sub>) / (w<sub>1</sub> &middot; M<sub>2</sub>)</span></div><p>Substituting back:</p><div class="formula-box"><span class="flabel">Molar mass formula</span><span class="math">M<sub>2</sub> = w<sub>2</sub> &middot; M<sub>1</sub> &middot; P<sub>1</sub>&deg; / (w<sub>1</sub> &middot; (P<sub>1</sub>&deg; &minus; P<sub>1</sub>))</span></div>'},
+    {q:'Show that elevation of boiling point is proportional to molality (9 marks)',
+     a:'<p>The boiling point of a liquid is the temperature at which its vapor pressure equals the external atmospheric pressure. Adding a non-volatile solute lowers the vapor pressure, meaning it must be heated to a higher temperature to boil, resulting in boiling point elevation (<span class="math">&Delta;T<sub>b</sub></span>).</p><p>For dilute solutions, <span class="math">&Delta;T<sub>b</sub> &Proportional; &Delta;P</span>. From Raoult\'s Law, <span class="math">&Delta;P &Proportional; X<sub>2</sub></span>:</p><div class="formula-box"><span class="math">&Delta;T<sub>b</sub> &Proportional; X<sub>2</sub></span></div><p>Expressing mole fraction in terms of moles:</p><div class="formula-box"><span class="math">X<sub>2</sub> &asymp; n<sub>2</sub>/n<sub>1</sub> = n<sub>2</sub> &middot; M<sub>1</sub> / w<sub>1</sub></span></div><p>Substituting:</p><div class="formula-box"><span class="math">&Delta;T<sub>b</sub> &Proportional; n<sub>2</sub> &middot; M<sub>1</sub> / w<sub>1</sub> &nbsp;&rArr;&nbsp; &Delta;T<sub>b</sub> &Proportional; n<sub>2</sub> / w<sub>1</sub></span></div><p>Since <span class="math">M<sub>1</sub></span> is constant, converting to standard molality (<span class="math">m</span> = moles per 1000 g solvent):</p><div class="formula-box"><span class="flabel">Boiling point elevation</span><span class="math">&Delta;T<sub>b</sub> = K<sub>b</sub> &middot; m</span></div><p>This demonstrates that the boiling point elevation is directly proportional to the molality of the solution.</p>'},
+    {q:'Show that depression of freezing point is proportional to molality (9 marks)',
+     a:'<p>The freezing point of a solution is the temperature at which the vapor pressure of the liquid solvent matches that of its pure solid phase. Adding a non-volatile solute lowers the vapor pressure, causing equilibrium at a lower temperature &mdash; freezing point depression (<span class="math">&Delta;T<sub>f</sub></span>).</p><p>For dilute solutions, <span class="math">&Delta;T<sub>f</sub> &Proportional; &Delta;P &Proportional; X<sub>2</sub></span>:</p><div class="formula-box"><span class="math">&Delta;T<sub>f</sub> &Proportional; X<sub>2</sub> &asymp; n<sub>2</sub>/n<sub>1</sub> = n<sub>2</sub> &middot; M<sub>1</sub> / w<sub>1</sub></span></div><p>Replacing with molality <span class="math">m = (n<sub>2</sub> &times; 1000) / w<sub>1</sub></span>:</p><div class="formula-box"><span class="flabel">Freezing point depression</span><span class="math">&Delta;T<sub>f</sub> = K<sub>f</sub> &middot; m</span></div><p>This establishes that the freezing point depression is directly proportional to the molality of the solution.</p>'},
+    {q:'Determination of molar mass of solute using depression of freezing point (10 marks)',
+     a:'<div class="step-label">1. Mathematical Derivation of Molar Mass (5 marks)</div><p>The relationship between freezing point depression and molality is:</p><div class="formula-box"><span class="math">&Delta;T<sub>f</sub> = K<sub>f</sub> &middot; m</span></div><p>Molality can be calculated from component masses:</p><div class="formula-box"><span class="math">m = (w<sub>2</sub> / M<sub>2</sub>) &times; (1000 / w<sub>1</sub>)</span></div><p>where <span class="math">w<sub>2</sub></span> = solute mass, <span class="math">M<sub>2</sub></span> = solute molar mass, <span class="math">w<sub>1</sub></span> = solvent mass in grams.</p><p>Substituting and rearranging:</p><div class="formula-box"><span class="flabel">Molar mass formula</span><span class="math">M<sub>2</sub> = 1000 &middot; K<sub>f</sub> &middot; w<sub>2</sub> / (&Delta;T<sub>f</sub> &middot; w<sub>1</sub>)</span></div><div class="step-label">2. Proof as a Colligative Property (5 marks)</div><p>A property is colligative if its value depends only on the total concentration of solute particles, not their chemical identity. The equation <span class="math">&Delta;T<sub>f</sub> = K<sub>f</sub> &middot; m</span> shows that for a given solvent (<span class="math">K<sub>f</sub></span> constant), the freezing point depression scales linearly with molality. Because molality is a direct measure of solute particle count, <span class="math">&Delta;T<sub>f</sub></span> is determined solely by particle concentration, proving it is a colligative property.</p>'},
+    {q:'Discuss osmosis and derive the van\'t Hoff equation for osmotic pressure (3 marks)',
+     a:'<div class="step-label">1. Osmosis</div><p><b>Osmosis</b> is the spontaneous net movement of solvent molecules through a semi-permeable membrane from a region of lower solute concentration into a region of higher solute concentration. <b>Osmotic Pressure (<span class="math">&pi;</span>)</b> is the minimum external pressure that must be applied to the solution side to halt this inward flow of solvent.</p><div class="step-label">2. Derivation of the van\'t Hoff Equation</div><p>Van\'t Hoff noted that in dilute solutions, the solute behaves similarly to an ideal gas:</p><ol><li><b>Boyle-van\'t Hoff Law:</b> At constant T, osmotic pressure &Proportional; molar concentration (<span class="math">C</span>): <span class="math">&pi; &Proportional; C</span></li><li><b>Charles-van\'t Hoff Law:</b> At constant C, osmotic pressure &Proportional; absolute temperature (<span class="math">T</span>): <span class="math">&pi; &Proportional; T</span></li></ol><p>Combining:</p><div class="formula-box"><span class="flabel">van\'t Hoff equation</span><span class="math">&pi; = CRT = (n/V)RT &nbsp;&rArr;&nbsp; &pi;V = nRT</span></div><p>Notice the resemblance to the ideal gas law PV = nRT.</p>'},
+    {q:'Describe Henry\'s law with limitations',
+     a:'<div class="step-label">1. Description</div><p><b>Henry\'s Law</b> states that at a constant temperature, the solubility (<span class="math">S</span>) of a gas dissolved in a given volume of liquid is directly proportional to the partial pressure (<span class="math">P</span>) of that gas in equilibrium with the liquid:</p><div class="formula-box"><span class="flabel">Henry\'s Law</span><span class="math">S = K<sub>H</sub> &middot; P</span></div><p>where <span class="math">K<sub>H</sub></span> is the Henry\'s Law constant, which depends on the specific gas, solvent, and temperature.</p><div class="step-label">2. Limitations</div><p>Henry\'s Law is an idealized relationship and only holds under specific conditions:</p><ul><li><b>Moderate Pressure and Temperature:</b> The law breaks down at extremely high pressures or low temperatures, where real gases deviate significantly from ideal behavior.</li><li><b>No Chemical Reaction:</b> The gas must not react chemically with the solvent. For example, Ammonia (<span class="math">NH<sub>3</sub></span>) or Hydrogen Chloride (<span class="math">HCl</span>) do not follow Henry\'s Law in water because they react to form ions.</li><li><b>No Dissociation or Association:</b> Gas molecules must not dissociate into ions or associate into larger complexes within the liquid phase.</li></ul>'}
+  ]
+}
+];
+
+const PAGE_ORDER = ['home', ...TOPICS.map(t=>t.id), 'qna', 'final'];
 
 function elemBadge(num, code, cls){
   return '<div class="elem-badge '+(cls||'')+'"><span class="num">'+num+'</span><span class="code">'+code+'</span></div>';
@@ -1047,7 +1266,9 @@ function syncChecklistUI(){
   // update home page tiles + timeline
   document.querySelectorAll('.tl-check').forEach(el=>{
     const id = el.getAttribute('data-checktopic2');
-    el.innerHTML = STATE.checklist[id] ? '<span style="color:var(--good); font-size:18px;">&#10003;</span>' : '<span style="color:var(--text-faint); font-size:18px;">&#9711;</span>';
+    const done = !!STATE.checklist[id];
+    el.innerHTML = done ? '&#10003;' : '&#9711;';
+    el.className = 'tl-check '+(done?'done':'not-done');
   });
   document.querySelectorAll('.topic-tile').forEach(tile=>{
     const id = tile.getAttribute('data-topictile');
@@ -1079,8 +1300,7 @@ function navigate(pageId){
   document.querySelectorAll('.nav-item').forEach(el=>{
     el.classList.toggle('active', el.getAttribute('data-page')===pageId);
   });
-  document.getElementById('main').scrollTo(0,0);
-  window.scrollTo(0,0);
+  window.scrollTo({top:0, behavior:'smooth'});
   closeSidebarMobile();
 }
 
@@ -1092,6 +1312,7 @@ function closeSidebarMobile(){
 /* ---------- HOME PAGE ---------- */
 function renderHome(){
   const totalTime = TOPICS.reduce((s,t)=>s+t.time,0);
+  const finalTime = FINAL_FLASHCARDS.length + FINAL_MCQS.length;
   const totalFC = TOPICS.reduce((s,t)=>s+t.flashcards.length,0) + FINAL_FLASHCARDS.length;
   const totalQ = TOPICS.reduce((s,t)=>s+t.mcqs.length,0) + FINAL_MCQS.length;
 
@@ -1101,7 +1322,7 @@ function renderHome(){
   html += '<h2>One day. Seven topics. Let\'s go.</h2>';
   html += '<p>This guide breaks your chemistry syllabus into 7 bite-sized topics, each with a clear explanation, short videos, flashcards, and an MCQ quiz. Check off topics as you finish them — your progress bar will appear up top automatically.</p>';
   html += '<div class="stat-row">';
-  html += '<div class="stat"><div class="n">7</div><div class="l">Topics</div></div>';
+  html += '<div class="stat"><div class="n">'+TOPICS.length+'</div><div class="l">Topics</div></div>';
   html += '<div class="stat"><div class="n">~'+(Math.round(totalTime/60*10)/10)+'h</div><div class="l">Study time</div></div>';
   html += '<div class="stat"><div class="n">'+totalFC+'</div><div class="l">Flashcards</div></div>';
   html += '<div class="stat"><div class="n">'+totalQ+'</div><div class="l">MCQs</div></div>';
@@ -1119,7 +1340,7 @@ function renderHome(){
       html += '<div class="tl-item" style="cursor:default;"><div class="tl-time">break</div><div class="tl-body"><div class="tl-sub">Stretch, drink water, 10–15 min</div></div></div>';
     }
   });
-  html += '<div class="tl-item" data-page="final"><div class="tl-time">60 min</div><div class="tl-body"><div class="tl-title">8. Final Review — full syllabus flashcards + MCQs</div><div class="tl-sub">Mix of all 7 topics, exam-day style</div></div><div class="tl-check" data-checktopic2="final"></div></div>';
+  html += '<div class="tl-item" data-page="final"><div class="tl-time">'+finalTime+' min</div><div class="tl-body"><div class="tl-title">'+(TOPICS.length+1)+'. Final Review — full syllabus flashcards + MCQs</div><div class="tl-sub">Mix of all '+TOPICS.length+' topics, exam-day style</div></div><div class="tl-check" data-checktopic2="final"></div></div>';
   html += '</div></div>';
 
   html += '<div class="divider-label">Jump to a topic</div>';
@@ -1160,7 +1381,7 @@ function renderHome(){
 function renderTopicPage(t){
   let html = '<div class="page" id="page-'+t.id+'">';
   html += '<div class="page-head">';
-  html += '<div class="crumb">'+elemBadge(t.num,t.code)+'<span>TOPIC '+t.num+' OF 07</span></div>';
+  html += '<div class="crumb">'+elemBadge(t.num,t.code)+'<span>TOPIC '+t.num+' OF '+String(TOPICS.length).padStart(2,'0')+'</span></div>';
   html += '<h2>'+t.title+'</h2>';
   html += '<div class="desc">'+t.blurb+'</div>';
   html += '<div class="meta-row"><div class="meta-chip">⏱ Suggested time: <b>'+t.time+' min</b></div>'
@@ -1195,6 +1416,13 @@ function renderTopicPage(t){
   // review checkbox
   html += '<div class="review-row" data-reviewtopic="'+t.id+'"><div class="review-box"></div><div><div class="rtext">Mark "'+t.title+'" as reviewed</div><div class="rsub">Check this once you feel confident on this topic</div></div></div>';
 
+  // next topic button
+  const ti = TOPICS.findIndex(x=>x.id===t.id);
+  if(ti < TOPICS.length-1){
+    const next = TOPICS[ti+1];
+    html += '<div class="review-row" data-page="'+next.id+'" style="border-color:var(--accent-dim);margin-top:8px;"><div style="color:var(--accent);font-size:18px;">→</div><div><div class="rtext">Next: '+next.title+'</div><div class="rsub">'+next.blurb+' — '+next.time+' min</div></div></div>';
+  }
+
   html += '</div>';
   document.getElementById('main').insertAdjacentHTML('beforeend', html);
 
@@ -1202,16 +1430,20 @@ function renderTopicPage(t){
   buildMCQs('mcqwrap-'+t.id, t.mcqs, t.id);
 
   document.querySelector('#page-'+t.id+' .review-row').addEventListener('click', ()=> toggleChecklist(t.id));
+  document.querySelectorAll('#page-'+t.id+' .review-row[data-page]').forEach(el=>{
+    el.addEventListener('click', ()=> navigate(el.getAttribute('data-page')));
+  });
 }
 
 /* ---------- FINAL REVIEW PAGE ---------- */
 function renderFinalPage(){
+  const finalTime = FINAL_FLASHCARDS.length + FINAL_MCQS.length;
   let html = '<div class="page" id="page-final">';
   html += '<div class="page-head">';
   html += '<div class="crumb">'+elemBadge('08','FR','c-violet')+'<span>FULL SYLLABUS REVIEW</span></div>';
   html += '<h2>Final Review</h2>';
   html += '<div class="desc">Mixed flashcards and MCQs pulled from every topic. Use this as your last pass before the exam to check what actually stuck.</div>';
-  html += '<div class="meta-row"><div class="meta-chip">⏱ Suggested time: <b>60 min</b></div>'
+  html += '<div class="meta-row"><div class="meta-chip">⏱ Suggested time: <b>'+finalTime+' min</b></div>'
     + '<div class="meta-chip">🃏 <b>'+FINAL_FLASHCARDS.length+'</b> flashcards</div>'
     + '<div class="meta-chip">✅ <b>'+FINAL_MCQS.length+'</b> quiz questions</div></div>';
   html += '</div>';
@@ -1247,6 +1479,7 @@ function buildFlashcards(containerId, cards, setId){
     + '<button class="fc-btn" id="'+containerId+'-prev">&larr; Prev</button>'
     + '<span class="fc-counter" id="'+containerId+'-counter"></span>'
     + '<button class="fc-btn" id="'+containerId+'-next">Next &rarr;</button>'
+    + '<button class="fc-btn" id="'+containerId+'-shuffle" title="Shuffle cards">&#128256;</button>'
     + '</div>';
 
   const cardEl = document.getElementById(containerId+'-card');
@@ -1254,9 +1487,15 @@ function buildFlashcards(containerId, cards, setId){
   const backText = container.querySelector('.fc-back > div:first-child');
   const counter = document.getElementById(containerId+'-counter');
 
+  // ponytail: O(n) Fisher-Yates shuffle, order array preserves original data
+  let order = cards.map((_,i)=>i);
+  if(setId === 'final') shuffleArray(order); // auto-shuffle final review
+
+  function shuffleArray(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}}
+
   function render(){
-    frontText.textContent = cards[idx].q;
-    backText.textContent = cards[idx].a;
+    frontText.textContent = cards[order[idx]].q;
+    backText.textContent = cards[order[idx]].a;
     cardEl.classList.remove('flipped');
     flipped = false;
     counter.textContent = (idx+1)+' / '+cards.length;
@@ -1271,6 +1510,18 @@ function buildFlashcards(containerId, cards, setId){
   document.getElementById(containerId+'-next').addEventListener('click', ()=>{
     idx = (idx+1)%cards.length; render();
   });
+  document.getElementById(containerId+'-shuffle').addEventListener('click', ()=>{
+    shuffleArray(order); idx=0; render();
+  });
+  // ponytail: keyboard nav via container, only when this flashcard set is on the active page
+  container.addEventListener('keydown', function handler(e){
+    if(!document.getElementById('page-'+setId)?.classList.contains('active') && setId !== 'final' && setId !== 'home') return;
+    if(!document.getElementById(containerId+'-card')){container.removeEventListener('keydown',handler);return;}
+    if(e.key==='ArrowLeft'){idx=(idx-1+cards.length)%cards.length;render();e.preventDefault();}
+    if(e.key==='ArrowRight'){idx=(idx+1)%cards.length;render();e.preventDefault();}
+    if(e.key===' '){flipped=!flipped;cardEl.classList.toggle('flipped',flipped);e.preventDefault();}
+  });
+  container.setAttribute('tabindex','0');
   render();
 }
 
@@ -1322,6 +1573,7 @@ function buildMCQs(containerId, mcqs, setId){
   }
 
   function fullRender(){
+    const sy = window.scrollY; // ponytail: preserve scroll pos across full re-render
     container.innerHTML = renderScoreBar() + renderQuestions();
     container.querySelectorAll('.mcq-opt').forEach(el=>{
       el.addEventListener('click', onSelect);
@@ -1336,6 +1588,7 @@ function buildMCQs(containerId, mcqs, setId){
       updateProgress();
       syncChecklistUI();
     });
+    window.scrollTo({top:sy, behavior:'auto'}); // restore scroll
   }
 
   function onRetryQuestion(e){
@@ -1364,7 +1617,7 @@ function buildMCQs(containerId, mcqs, setId){
 
 /* ---------- PROGRESS BAR ---------- */
 function updateProgress(){
-  let checklistTotal = TOPICS.length + 1; // +1 for final
+  let checklistTotal = TOPICS.length + 1;
   let checklistDone = 0;
   TOPICS.forEach(t=>{ if(STATE.checklist[t.id]) checklistDone++; });
   if(STATE.checklist['final']) checklistDone++;
@@ -1386,13 +1639,133 @@ function updateProgress(){
   const wrap = document.getElementById('progressWrap');
   const fill = document.getElementById('progressFill');
   const label = document.getElementById('progressLabel');
+  const detail = document.getElementById('progressDetail');
 
   if(doneItems > 0){
     document.body.classList.add('progress-active');
     wrap.classList.add('show');
   }
   fill.style.width = pct+'%';
+  fill.classList.toggle('complete', pct===100);
   label.textContent = pct+'% reviewed';
+  detail.textContent = 'checklist '+checklistDone+'/'+checklistTotal+' · mcq '+mcqDone+'/'+mcqTotal;
+  if(pct===100 && !document.getElementById('doneMsg')){
+    const msg = document.createElement('div');
+    msg.id='doneMsg';
+    msg.style.cssText='position:fixed;bottom:20px;right:20px;background:var(--good-dim);border:1px solid var(--good);border-radius:12px;padding:16px 20px;z-index:50;font-size:14px;color:var(--good);max-width:320px;animation:fadeIn .5s ease;box-shadow:0 4px 20px rgba(0,0,0,.4);';
+    msg.innerHTML='&#10003; Everything completed! You\'re ready for the exam.';
+    document.body.appendChild(msg);
+    setTimeout(()=>{msg.style.transition='opacity .5s';msg.style.opacity='0';setTimeout(()=>msg.remove(),500);},8000);
+  }
+}
+
+/* ============================================================
+   Q&A PAGE RENDERING
+   ============================================================ */
+function renderQNA(){
+  let html = '<div class="page" id="page-qna">';
+
+  // page head
+  html += '<div class="page-head">';
+  html += '<div class="crumb">'+elemBadge('QA','Q&A','c-violet')+'<span>QUESTION BANK</span></div>';
+  html += '<h2>Comprehensive Q&A</h2>';
+  html += '<div class="desc">Fully solved questions from all 5 chapters &mdash; search, filter by chapter, or expand each question to see the full answer.</div>';
+  html += '</div>';
+
+  // search bar
+  html += '<div class="qna-search-wrap">';
+  html += '<span class="qna-search-icon">&#128269;</span>';
+  html += '<input class="qna-search" id="qnaSearch" type="text" placeholder="Search questions..." autocomplete="off">';
+  html += '</div>';
+
+  // chapter tabs
+  html += '<div class="qna-tabs" id="qnaTabs">';
+  html += '<div class="qna-tab active" data-chapter="all">All Chapters</div>';
+  QNA_CHAPTERS.forEach(ch=>{
+    html += '<div class="qna-tab" data-chapter="'+ch.id+'">Ch. '+ch.num+' &middot; '+ch.title.replace('Chapter '+ch.num+': ','')+'</div>';
+  });
+  html += '</div>';
+
+  // meta bar
+  const totalQ = QNA_CHAPTERS.reduce((s,ch)=>s+ch.questions.length,0);
+  html += '<div class="qna-meta">';
+  html += '<span><b>'+totalQ+'</b> questions across <b>'+QNA_CHAPTERS.length+'</b> chapters</span>';
+  html += '<span id="qnaVisibleCount"></span>';
+  html += '</div>';
+
+  // accordion container
+  html += '<div id="qnaAccordion"></div>';
+
+  html += '</div>';
+  document.getElementById('main').insertAdjacentHTML('beforeend', html);
+
+  function renderQuestions(filterChapter, filterText){
+    const container = document.getElementById('qnaAccordion');
+    let visibleCount = 0;
+    let cards = '';
+    QNA_CHAPTERS.forEach(ch=>{
+      if(filterChapter && filterChapter !== 'all' && filterChapter !== ch.id) return;
+
+      ch.questions.forEach((qa, qi)=>{
+        const searchTarget = (qa.q + ' ' + qa.a).toLowerCase();
+        if(filterText && !searchTarget.includes(filterText.toLowerCase())) return;
+        visibleCount++;
+
+        const cid = 'qna-' + ch.id + '-' + qi;
+        cards += '<div class="qna-card" id="'+cid+'">'
+          + '<div class="qna-card-head" onclick="toggleQNA(\''+cid+'\')">'
+          + '<span class="qna-num">' + ch.num + '.' + (qi+1) + '</span>'
+          + '<span style="flex:1">' + qa.q + '</span>'
+          + '<span class="qna-chevron">&#9654;</span>'
+          + '</div>'
+          + '<div class="qna-card-body"><div class="qna-card-inner">'
+          + qa.a
+          + '</div></div>'
+          + '</div>';
+      });
+    });
+    container.innerHTML = cards || '<div class="qna-empty"><p>No questions match your search.</p><p style="font-size:13px;">Try a different keyword or browse all chapters.</p></div>';
+    document.getElementById('qnaVisibleCount').textContent = visibleCount + ' shown';
+  }
+
+  // initial render
+  renderQuestions('all', '');
+
+  // search
+  let searchTimer;
+  document.getElementById('qnaSearch').addEventListener('input', function(){
+    clearTimeout(searchTimer);
+    searchTimer = setTimeout(()=>{
+      const activeTab = document.querySelector('.qna-tab.active');
+      const ch = activeTab ? activeTab.getAttribute('data-chapter') : 'all';
+      renderQuestions(ch, this.value);
+    }, 200);
+  });
+
+  // tab switching
+  document.querySelectorAll('#qnaTabs .qna-tab').forEach(tab=>{
+    tab.addEventListener('click', function(){
+      document.querySelectorAll('#qnaTabs .qna-tab').forEach(t=>t.classList.remove('active'));
+      this.classList.add('active');
+      const ch = this.getAttribute('data-chapter');
+      const searchVal = document.getElementById('qnaSearch').value;
+      renderQuestions(ch, searchVal);
+    });
+  });
+}
+
+/* ---------- Q&A accordion toggle ---------- */
+function toggleQNA(cardId){
+  const card = document.getElementById(cardId);
+  if(!card) return;
+  const isOpen = card.classList.contains('open');
+  card.classList.toggle('open');
+  // close others if opening
+  if(!isOpen){
+    document.querySelectorAll('.qna-card.open').forEach(other=>{
+      if(other.id !== cardId) other.classList.remove('open');
+    });
+  }
 }
 
 /* ---------- BOOT ---------- */
@@ -1402,6 +1775,7 @@ async function boot(){
 
   renderHome();
   TOPICS.forEach(renderTopicPage);
+  renderQNA();
   renderFinalPage();
 
   syncChecklistUI();
@@ -1424,6 +1798,7 @@ async function boot(){
     document.getElementById('main').innerHTML = '';
     renderHome();
     TOPICS.forEach(renderTopicPage);
+    renderQNA();
     renderFinalPage();
     syncChecklistUI();
     updateProgress();
