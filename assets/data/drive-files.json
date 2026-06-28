@@ -1,5 +1,5 @@
 {
-  "_refreshedAt": "2026-06-24T09:22:13.771Z",
+  "_refreshedAt": "2026-06-28T12:46:09.306Z",
   "files": [
     {
       "mimeType": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
@@ -3439,18 +3439,18 @@
     },
     {
       "mimeType": "application/pdf",
-      "id": "1PbVco0hWY467HMrSHSeQw0yV_hFXreR0",
-      "name": "Section 1.pdf",
-      "modifiedTime": "2026-05-01T13:12:43.000Z",
-      "_path": "1-2 CSE'24/Class Routine/Section 1.pdf",
+      "id": "1oQWnHZ4H-9fPag2y4U0zbuRQl7caymXZ",
+      "name": "Section-1.pdf",
+      "modifiedTime": "2026-06-26T23:23:35.058Z",
+      "_path": "1-2 CSE'24/Class Routine/Section-1.pdf",
       "_hasGroup": true
     },
     {
       "mimeType": "application/pdf",
-      "id": "14gVSetsXLcmFImtHdoHV0xvFCI6ZhjWC",
-      "name": "Section 2.pdf",
-      "modifiedTime": "2026-05-01T13:12:46.000Z",
-      "_path": "1-2 CSE'24/Class Routine/Section 2.pdf",
+      "id": "1UObNB78IGYEptI201fQFak-7rFq-1LU-",
+      "name": "Section-2.pdf",
+      "modifiedTime": "2026-06-26T23:24:31.496Z",
+      "_path": "1-2 CSE'24/Class Routine/Section-2.pdf",
       "_hasGroup": true
     },
     {
@@ -3787,6 +3787,14 @@
       "name": "A03 - Asymptotics + Recurrences.pdf",
       "modifiedTime": "2026-06-09T17:49:31.000Z",
       "_path": "1-2 CSE'24/CSE 4203 - Discrete Mathematics/Assignment/Assignment 3/A03 - Asymptotics + Recurrences.pdf",
+      "_hasGroup": true
+    },
+    {
+      "mimeType": "application/pdf",
+      "id": "16r-MhBV3Kp_HabVsBYZdyYu5tL_ZHDi3",
+      "name": "Discrete Mathematics and Its Applications, Eighth Edition SOLUTIONS.pdf",
+      "modifiedTime": "2026-06-26T20:18:33.384Z",
+      "_path": "1-2 CSE'24/CSE 4203 - Discrete Mathematics/Books/Discrete Mathematics and Its Applications, Eighth Edition SOLUTIONS.pdf",
       "_hasGroup": true
     },
     {
@@ -4151,10 +4159,18 @@
     },
     {
       "mimeType": "application/pdf",
+      "id": "1kT7SrPz4qibnSzb0XzsETHRWnqr8dMTu",
+      "name": "ISLAMIC Suggestion MID(with Answers).pdf",
+      "modifiedTime": "2026-06-25T13:26:45.059Z",
+      "_path": "1-2 CSE'24/HUM 4241 - Islamic History Science and Culture/Midterm/ISLAMIC Suggestion MID(with Answers).pdf",
+      "_hasGroup": true
+    },
+    {
+      "mimeType": "application/pdf",
       "id": "1M3e-XpvF_SIgCBmpnMJsBZr37IOg7i3Y",
-      "name": "Islamic_Midterm_Exam_Answers_Revised_Cited.pdf",
-      "modifiedTime": "2026-06-18T17:22:59.993Z",
-      "_path": "1-2 CSE'24/HUM 4241 - Islamic History Science and Culture/Midterm/Islamic_Midterm_Exam_Answers_Revised_Cited.pdf",
+      "name": "Islamic_Midterm_Slide(05-10).pdf",
+      "modifiedTime": "2026-06-25T13:28:16.664Z",
+      "_path": "1-2 CSE'24/HUM 4241 - Islamic History Science and Culture/Midterm/Islamic_Midterm_Slide(05-10).pdf",
       "_hasGroup": true
     },
     {
@@ -4163,6 +4179,14 @@
       "name": "Midterm Suggestion ",
       "modifiedTime": "2026-06-21T07:34:31.875Z",
       "_path": "1-2 CSE'24/HUM 4241 - Islamic History Science and Culture/Midterm/Midterm Suggestion ",
+      "_hasGroup": true
+    },
+    {
+      "mimeType": "application/pdf",
+      "id": "1K9jMc06TMOg6g9YMsC3KNB_Mlc2JzfN6",
+      "name": "CSE-Suggestion copy.pdf",
+      "modifiedTime": "2026-06-19T18:38:26.000Z",
+      "_path": "1-2 CSE'24/HUM 4241 - Islamic History Science and Culture/Midterm/EXTRA/CSE-Suggestion copy.pdf",
       "_hasGroup": true
     },
     {
@@ -4192,9 +4216,9 @@
     {
       "mimeType": "application/pdf",
       "id": "1orHudQt5TuRIf-8aD-b13kP2mgaXZCK8",
-      "name": "Lesson_5 to 10 .pdf",
-      "modifiedTime": "2026-06-18T13:45:34.288Z",
-      "_path": "1-2 CSE'24/HUM 4241 - Islamic History Science and Culture/Slides/Lesson_5 to 10 .pdf",
+      "name": "Lecture 05-10.pdf",
+      "modifiedTime": "2026-06-25T17:23:09.328Z",
+      "_path": "1-2 CSE'24/HUM 4241 - Islamic History Science and Culture/Slides/Lecture 05-10.pdf",
       "_hasGroup": true
     },
     {
