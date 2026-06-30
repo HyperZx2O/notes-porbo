@@ -1,5 +1,9 @@
 # Notes Porbo
 
+<p align="center">
+  <img src="banner.png" alt="Notes Porbo Banner" width="100%" style="max-width: 960px;" />
+</p>
+
 Study dashboard for IUT course materials, organized by semester. Built for GitHub Pages.
 
 Courses are listed in `assets/data/courses.json`. Adding a new HTML file to a course folder and listing it in `courses.json` makes it appear on the dashboard.
