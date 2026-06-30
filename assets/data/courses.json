@@ -1,17 +1,75 @@
 {
   "1-1": [
-    { "name": "CSE 4105 - Computing For Engineers", "files": ["final.html", "notes1.html", "notes2.html"] },
-    { "name": "CSE 4107 - Structured Programming I", "files": ["final.html"] },
-    { "name": "HUM 4147 - Technology, Environment & Society", "files": ["final.html"] },
-    { "name": "Math 4141 - Geometry & Differential Calculus", "files": ["geometry.html"] },
-    { "name": "PHY 4141 - Physics I", "files": ["final.html"] }
+    {
+      "name": "CSE 4105 - Computing For Engineers",
+      "files": [
+        "final.html",
+        "notes1.html",
+        "notes2.html"
+      ]
+    },
+    {
+      "name": "CSE 4107 - Structured Programming I",
+      "files": [
+        "final.html"
+      ]
+    },
+    {
+      "name": "HUM 4147 - Technology, Environment & Society",
+      "files": [
+        "final.html"
+      ]
+    },
+    {
+      "name": "Math 4141 - Geometry & Differential Calculus",
+      "files": [
+        "geometry.html"
+      ]
+    },
+    {
+      "name": "PHY 4141 - Physics I",
+      "files": [
+        "final.html"
+      ]
+    }
   ],
   "1-2": [
-    { "name": "CHEM 4241 - Chemistry", "files": ["midterm.html"] },
-    { "name": "CSE 4203 - Discrete Mathematics", "files": ["midterm.html"] },
-    { "name": "CSE 4205 - Digital Logic Design", "files": ["midterm.html"] },
-    { "name": "HUM 4241 - Islamic History Science and Culture", "files": ["midterm.html", "quiz1.html"] },
-    { "name": "MATH 4241 - Integral Calculus and Differential Equations", "files": ["midterm.html"] },
-    { "name": "PHY 4241 - Physics II", "files": ["midterm.html"] }
+    {
+      "name": "CHEM 4241 - Chemistry",
+      "files": [
+        "midterm.html"
+      ]
+    },
+    {
+      "name": "CSE 4203 - Discrete Mathematics",
+      "files": [
+        "midterm.html"
+      ]
+    },
+    {
+      "name": "CSE 4205 - Digital Logic Design",
+      "files": [
+        "midterm.html"
+      ]
+    },
+    {
+      "name": "HUM 4241 - Islamic History Science and Culture",
+      "files": [
+        "midterm.html",
+        "quiz1.html"
+      ]
+    },
+    {
+      "name": "MATH 4241 - Integral Calculus and Differential Equations",
+      "files": [
+        "midterm.html"
+      ]
+    },
+    {
+      "name": "PHY 4241 - Physics II",
+      "files": [
+        "midterm.html"
+      ]
+    }
   ]
 }

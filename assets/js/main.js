@@ -5,8 +5,7 @@
 
 let COURSES = null;
 
-const DEFAULT_SEMESTER = "1-1";
-let currentSemester = DEFAULT_SEMESTER;
+let currentSemester = null;
 let activeCardIndex = -1;
 
 function getCourseDir(semester, courseName) {
@@ -238,8 +237,9 @@ function loadCourses() {
     return r.json();
   }).then(function(data) {
     COURSES = data;
+    setupSemesterTabs();
     var saved = localStorage.getItem('sem');
-    var semester = saved && COURSES[saved] ? saved : DEFAULT_SEMESTER;
+    var semester = saved && COURSES[saved] ? saved : Object.keys(COURSES)[0];
     switchSemester(semester);
     DriveClient.init();
   }).catch(function(err) {
@@ -248,12 +248,22 @@ function loadCourses() {
   });
 }
 
-function setupUI() {
-  var tabs = document.querySelectorAll(".semester-tab");
-  tabs.forEach(function (tab) {
-    tab.addEventListener("click", function () { switchSemester(tab.dataset.semester); });
+function setupSemesterTabs() {
+  var bar = document.getElementById("semester-bar");
+  if (!bar || !COURSES) return;
+  bar.innerHTML = "";
+  var keys = Object.keys(COURSES);
+  keys.forEach(function (sem, i) {
+    var btn = document.createElement("button");
+    btn.className = "semester-tab" + (i === 0 ? " active" : "");
+    btn.dataset.semester = sem;
+    btn.textContent = sem;
+    btn.addEventListener("click", function () { switchSemester(sem); });
+    bar.appendChild(btn);
   });
+}
 
+function setupUI() {
   var searchInput = document.getElementById("search-input");
   if (searchInput) {
     searchInput.addEventListener("click", function () { SearchModal.open(); });
@@ -303,7 +313,7 @@ function setupUI() {
   document.addEventListener('drive:change', function() {
     var btn = document.getElementById('drive-btn');
     if (btn) btn.classList.toggle('connected', DriveClient.isConnected());
-    var sem = localStorage.getItem('sem') || DEFAULT_SEMESTER;
+    var sem = localStorage.getItem('sem') || Object.keys(COURSES)[0];
     if (COURSES && COURSES[sem]) switchSemester(sem);
   });
 }

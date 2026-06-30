@@ -1,4 +1,4 @@
-name: Fetch Drive files
+name: Sync courses & Drive
 on:
   workflow_dispatch:
 
@@ -6,23 +6,26 @@ permissions:
   contents: write
 
 jobs:
-  fetch:
+  sync:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
 
-      - name: Run fetch script
+      - name: Generate courses.json from semesters/
+        run: node .github/scripts/generate-courses.js
+
+      - name: Fetch Drive files
         env:
           API_KEY: ${{ secrets.DRIVE_API_KEY }}
           FOLDER_ID: '1M_1z8t7hDfQUgv0BBw3xt6wj1j-iRT9I'
         run: node .github/scripts/fetch-drive.js
 
-      - name: Commit updated drive-files.json
+      - name: Commit updates
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           git config user.name "github-actions"
           git config user.email "actions@github.com"
-          git add assets/data/drive-files.json
-          git diff --quiet && git diff --staged --quiet || git commit -m "chore: update drive-files.json"
+          git add assets/data/courses.json assets/data/drive-files.json
+          git diff --quiet && git diff --staged --quiet || git commit -m "chore: sync courses & drive files"
           git push https://x-access-token:${GITHUB_TOKEN}@github.com/${{ github.repository }}.git
