@@ -1,5 +1,5 @@
 {
-  "_refreshedAt": "2026-06-28T12:46:09.306Z",
+  "_refreshedAt": "2026-07-01T05:49:04.429Z",
   "files": [
     {
       "mimeType": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
@@ -3327,26 +3327,34 @@
     },
     {
       "mimeType": "application/pdf",
-      "id": "1afhQtD51lMwwBeg0jjkv1UF3A7LDjcQU",
-      "name": "CHEM 4241_ Mid.pdf",
-      "modifiedTime": "2026-05-10T12:38:18.000Z",
-      "_path": "1-2 CSE'24/CHEM 4241 - Chemistry/Midterm/Previous Years/CHEM 4241_ Mid.pdf",
+      "id": "1avRmWJrp9l5SzWBmnHYwYFC6JY86dJiq",
+      "name": "CHEM 4241 Midterm.pdf",
+      "modifiedTime": "2026-06-30T17:04:22.301Z",
+      "_path": "1-2 CSE'24/CHEM 4241 - Chemistry/Midterm/CHEM 4241 Midterm.pdf",
       "_hasGroup": true
     },
     {
       "mimeType": "application/pdf",
       "id": "1uWG64HuuLz6EFzxm3uZFxAY7feAFfmSI",
-      "name": "Chem-Mid.pdf",
-      "modifiedTime": "2026-05-10T12:26:11.000Z",
-      "_path": "1-2 CSE'24/CHEM 4241 - Chemistry/Midterm/Previous Years/Chem-Mid.pdf",
+      "name": "Batch '17-'18",
+      "modifiedTime": "2026-06-30T17:02:19.099Z",
+      "_path": "1-2 CSE'24/CHEM 4241 - Chemistry/Midterm/Previous Years/Batch '17-'18",
+      "_hasGroup": true
+    },
+    {
+      "mimeType": "application/pdf",
+      "id": "1afhQtD51lMwwBeg0jjkv1UF3A7LDjcQU",
+      "name": "Batch '21-'22",
+      "modifiedTime": "2026-06-30T17:02:09.143Z",
+      "_path": "1-2 CSE'24/CHEM 4241 - Chemistry/Midterm/Previous Years/Batch '21-'22",
       "_hasGroup": true
     },
     {
       "mimeType": "application/pdf",
       "id": "1h-tM-K4lETmkUz-5FLxitMUCMRrNkWr3",
-      "name": "Chemistry copy.pdf",
-      "modifiedTime": "2026-06-23T13:55:41.000Z",
-      "_path": "1-2 CSE'24/CHEM 4241 - Chemistry/Midterm/Previous Years/Chemistry copy.pdf",
+      "name": "Batch '22-'23",
+      "modifiedTime": "2026-06-30T17:02:28.062Z",
+      "_path": "1-2 CSE'24/CHEM 4241 - Chemistry/Midterm/Previous Years/Batch '22-'23",
       "_hasGroup": true
     },
     {
@@ -4159,18 +4167,10 @@
     },
     {
       "mimeType": "application/pdf",
-      "id": "1kT7SrPz4qibnSzb0XzsETHRWnqr8dMTu",
-      "name": "ISLAMIC Suggestion MID(with Answers).pdf",
-      "modifiedTime": "2026-06-25T13:26:45.059Z",
-      "_path": "1-2 CSE'24/HUM 4241 - Islamic History Science and Culture/Midterm/ISLAMIC Suggestion MID(with Answers).pdf",
-      "_hasGroup": true
-    },
-    {
-      "mimeType": "application/pdf",
-      "id": "1M3e-XpvF_SIgCBmpnMJsBZr37IOg7i3Y",
-      "name": "Islamic_Midterm_Slide(05-10).pdf",
-      "modifiedTime": "2026-06-25T13:28:16.664Z",
-      "_path": "1-2 CSE'24/HUM 4241 - Islamic History Science and Culture/Midterm/Islamic_Midterm_Slide(05-10).pdf",
+      "id": "1tYvGOC6pHTvKb-79eUWW_7FQErygamjT",
+      "name": "HUM 4241 Midterm.pdf",
+      "modifiedTime": "2026-06-30T17:03:33.170Z",
+      "_path": "1-2 CSE'24/HUM 4241 - Islamic History Science and Culture/Midterm/HUM 4241 Midterm.pdf",
       "_hasGroup": true
     },
     {
@@ -4183,10 +4183,10 @@
     },
     {
       "mimeType": "application/pdf",
-      "id": "1K9jMc06TMOg6g9YMsC3KNB_Mlc2JzfN6",
-      "name": "CSE-Suggestion copy.pdf",
-      "modifiedTime": "2026-06-19T18:38:26.000Z",
-      "_path": "1-2 CSE'24/HUM 4241 - Islamic History Science and Culture/Midterm/EXTRA/CSE-Suggestion copy.pdf",
+      "id": "1kT7SrPz4qibnSzb0XzsETHRWnqr8dMTu",
+      "name": "Midterm Suggestion Solution ",
+      "modifiedTime": "2026-06-30T17:00:01.607Z",
+      "_path": "1-2 CSE'24/HUM 4241 - Islamic History Science and Culture/Midterm/Midterm Suggestion Solution ",
       "_hasGroup": true
     },
     {
@@ -4519,42 +4519,34 @@
     },
     {
       "mimeType": "application/pdf",
-      "id": "155lpLinzEZ__tovWZXMcQ-b8W32lO8Lw",
-      "name": "05 Math 4241 Integral Calculus and Differential Equations.pdf",
-      "modifiedTime": "2026-06-23T13:53:14.028Z",
-      "_path": "1-2 CSE'24/MATH 4241 - Integral Calculus and Differential Equations/Midterm/Previous Years/05 Math 4241 Integral Calculus and Differential Equations.pdf",
-      "_hasGroup": true
-    },
-    {
-      "mimeType": "application/pdf",
-      "id": "1iYQlKedURKWoTiWj8KyKo8mNh_BRxjGS",
-      "name": "MATH 4241_ Mid.pdf",
-      "modifiedTime": "2026-05-10T12:36:25.000Z",
-      "_path": "1-2 CSE'24/MATH 4241 - Integral Calculus and Differential Equations/Midterm/Previous Years/MATH 4241_ Mid.pdf",
+      "id": "1RhlilHrwavvvutR-UMl66jhKNSlk_V5l",
+      "name": "Batch '16-'17",
+      "modifiedTime": "2026-06-30T17:05:23.537Z",
+      "_path": "1-2 CSE'24/MATH 4241 - Integral Calculus and Differential Equations/Midterm/Previous Years/Batch '16-'17",
       "_hasGroup": true
     },
     {
       "mimeType": "application/pdf",
       "id": "1SOgr8Vo9s8rVhri-tIaxoiA0oDoaHcw9",
-      "name": "Math-Mid.pdf",
-      "modifiedTime": "2026-05-10T12:14:24.000Z",
-      "_path": "1-2 CSE'24/MATH 4241 - Integral Calculus and Differential Equations/Midterm/Previous Years/Math-Mid.pdf",
+      "name": "Batch '17-'18",
+      "modifiedTime": "2026-06-30T17:05:13.085Z",
+      "_path": "1-2 CSE'24/MATH 4241 - Integral Calculus and Differential Equations/Midterm/Previous Years/Batch '17-'18",
       "_hasGroup": true
     },
     {
       "mimeType": "application/pdf",
-      "id": "1RhlilHrwavvvutR-UMl66jhKNSlk_V5l",
-      "name": "math4241_final_16-17_integralCalculusAndDifferentialEquation.pdf",
-      "modifiedTime": "2026-05-11T18:31:28.000Z",
-      "_path": "1-2 CSE'24/MATH 4241 - Integral Calculus and Differential Equations/Midterm/Previous Years/math4241_final_16-17_integralCalculusAndDifferentialEquation.pdf",
+      "id": "1iYQlKedURKWoTiWj8KyKo8mNh_BRxjGS",
+      "name": "Batch '21-'22",
+      "modifiedTime": "2026-06-30T17:05:02.836Z",
+      "_path": "1-2 CSE'24/MATH 4241 - Integral Calculus and Differential Equations/Midterm/Previous Years/Batch '21-'22",
       "_hasGroup": true
     },
     {
       "mimeType": "application/pdf",
-      "id": "13tpTGjaCYn-E2AHKrkHo1HsSrWvSrBHI",
-      "name": "math4241_mid_16-17_integralCalculusAndDifferentialEquation.pdf",
-      "modifiedTime": "2026-05-11T18:31:16.000Z",
-      "_path": "1-2 CSE'24/MATH 4241 - Integral Calculus and Differential Equations/Midterm/Previous Years/math4241_mid_16-17_integralCalculusAndDifferentialEquation.pdf",
+      "id": "155lpLinzEZ__tovWZXMcQ-b8W32lO8Lw",
+      "name": "Batch '23-'24",
+      "modifiedTime": "2026-06-30T17:04:50.122Z",
+      "_path": "1-2 CSE'24/MATH 4241 - Integral Calculus and Differential Equations/Midterm/Previous Years/Batch '23-'24",
       "_hasGroup": true
     },
     {
