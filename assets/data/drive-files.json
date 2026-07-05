@@ -1,5 +1,5 @@
 {
-  "_refreshedAt": "2026-07-01T05:49:04.429Z",
+  "_refreshedAt": "2026-07-05T13:26:00.749Z",
   "files": [
     {
       "mimeType": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
@@ -3855,6 +3855,14 @@
     },
     {
       "mimeType": "application/pdf",
+      "id": "121Qoeogty3quu3ZL_xVIp4zo2bqWgN6h",
+      "name": " Discrete Mathematics (23-24).pdf",
+      "modifiedTime": "2026-07-03T15:11:42.646Z",
+      "_path": "1-2 CSE'24/CSE 4203 - Discrete Mathematics/Midterm/ Discrete Mathematics (23-24).pdf",
+      "_hasGroup": true
+    },
+    {
+      "mimeType": "application/pdf",
       "id": "1fulC_5p13WEBJR4EjQkvMnnrX4PG_1nN",
       "name": "LS01 - Logic, Proofs, and Sets.pdf",
       "modifiedTime": "2026-04-26T03:36:43.000Z",
@@ -3939,6 +3947,62 @@
       "name": "26.05.05_Logic_Gates.pdf",
       "modifiedTime": "2026-05-07T07:11:59.849Z",
       "_path": "1-2 CSE'24/CSE 4205 - Digital Logic Design/Handnotes/26.05.05_Logic_Gates.pdf",
+      "_hasGroup": true
+    },
+    {
+      "mimeType": "application/pdf",
+      "id": "1upvKzeKE55L3bnt4CF5zC9L3uzrDQP2L",
+      "name": "Slide 01.pdf",
+      "modifiedTime": "2026-07-01T18:51:37.609Z",
+      "_path": "1-2 CSE'24/CSE 4205 - Digital Logic Design/Handnotes/Slide 01.pdf",
+      "_hasGroup": true
+    },
+    {
+      "mimeType": "application/pdf",
+      "id": "1Kk25hEoolY4_mDDFkfPGWALvHwPYYDDc",
+      "name": "Slide 02.pdf",
+      "modifiedTime": "2026-07-01T18:51:38.028Z",
+      "_path": "1-2 CSE'24/CSE 4205 - Digital Logic Design/Handnotes/Slide 02.pdf",
+      "_hasGroup": true
+    },
+    {
+      "mimeType": "application/pdf",
+      "id": "1aPU3oCdsneQ82od3XJODd3fiHXvWabpP",
+      "name": "Slide 03.pdf",
+      "modifiedTime": "2026-07-01T18:51:38.723Z",
+      "_path": "1-2 CSE'24/CSE 4205 - Digital Logic Design/Handnotes/Slide 03.pdf",
+      "_hasGroup": true
+    },
+    {
+      "mimeType": "application/pdf",
+      "id": "1BZ31A9g3nFQXNxgflWA9Hrp-cXvVT2B5",
+      "name": "Slide 04.pdf",
+      "modifiedTime": "2026-07-01T18:51:39.172Z",
+      "_path": "1-2 CSE'24/CSE 4205 - Digital Logic Design/Handnotes/Slide 04.pdf",
+      "_hasGroup": true
+    },
+    {
+      "mimeType": "application/pdf",
+      "id": "1dav25A3thSwEycp0liTUdf2vySQLQ8Zx",
+      "name": "Slide 06.pdf",
+      "modifiedTime": "2026-07-01T18:51:39.422Z",
+      "_path": "1-2 CSE'24/CSE 4205 - Digital Logic Design/Handnotes/Slide 06.pdf",
+      "_hasGroup": true
+    },
+    {
+      "mimeType": "application/pdf",
+      "id": "1p4wIOAMhOLzKbL-jI2pga-dvqARZ9Nmm",
+      "name": "CSE 4205 Midterm.pdf",
+      "modifiedTime": "2026-07-05T13:16:59.622Z",
+      "_path": "1-2 CSE'24/CSE 4205 - Digital Logic Design/Midterm/CSE 4205 Midterm.pdf",
+      "_hasGroup": true
+    },
+    {
+      "mimeType": "application/pdf",
+      "id": "1EZwlOP28uY1-jXIv0Mb_YlzBWVd8iHbl",
+      "name": "Digital Logic Design(23-24).pdf",
+      "modifiedTime": "2026-07-03T15:12:59.545Z",
+      "_path": "1-2 CSE'24/CSE 4205 - Digital Logic Design/Midterm/Digital Logic Design(23-24).pdf",
       "_hasGroup": true
     },
     {
@@ -4731,6 +4795,22 @@
       "name": "Physics Notes 2.pdf",
       "modifiedTime": "2026-06-17T12:26:46.938Z",
       "_path": "1-2 CSE'24/PHY 4241 - Physics II/Handnotes/Physics Notes 2.pdf",
+      "_hasGroup": true
+    },
+    {
+      "mimeType": "application/pdf",
+      "id": "1UGXyN_YC9ezwJb1luE51aIr5i_mhikb9",
+      "name": "Physics 4241 Midterm.pdf",
+      "modifiedTime": "2026-07-05T13:19:18.546Z",
+      "_path": "1-2 CSE'24/PHY 4241 - Physics II/Midterm/Physics 4241 Midterm.pdf",
+      "_hasGroup": true
+    },
+    {
+      "mimeType": "application/pdf",
+      "id": "1UsQSGFO0IZ2R8OHAKYLbPKcA-zftdzu2",
+      "name": "Physics(23-24).pdf",
+      "modifiedTime": "2026-07-03T15:10:46.244Z",
+      "_path": "1-2 CSE'24/PHY 4241 - Physics II/Midterm/Physics(23-24).pdf",
       "_hasGroup": true
     },
     {
