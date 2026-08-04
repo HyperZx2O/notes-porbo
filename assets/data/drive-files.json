@@ -1,5 +1,5 @@
 {
-  "_refreshedAt": "2026-07-20T14:09:13.962Z",
+  "_refreshedAt": "2026-08-04T17:20:31.432Z",
   "files": [
     {
       "mimeType": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
@@ -3390,14 +3390,6 @@
       "_hasGroup": true
     },
     {
-      "mimeType": "application/vnd.ms-powerpoint",
-      "id": "14ukvnBiiynPpLN-4vbdE4GDoQnXul8R1",
-      "name": "2022-10-07 Chemical Kinetics.ppt",
-      "modifiedTime": "2025-02-17T19:13:00.000Z",
-      "_path": "1-2 CSE'24/CHEM 4241 - Chemistry/Slides/2022-10-07 Chemical Kinetics.ppt",
-      "_hasGroup": true
-    },
-    {
       "mimeType": "application/pdf",
       "id": "1_eJwj0IPI80YbXTmVBAn8EAv6kb6wYjB",
       "name": "Course Outcome.pdf",
@@ -3407,10 +3399,26 @@
     },
     {
       "mimeType": "application/pdf",
+      "id": "1QiByt4wPst8Y_FSW_DJkUFXJASFOkVgp",
+      "name": "6. Chemical Kinetics.pdf",
+      "modifiedTime": "2026-08-04T17:10:57.000Z",
+      "_path": "1-2 CSE'24/CHEM 4241 - Chemistry/Slides/Final Term/6. Chemical Kinetics.pdf",
+      "_hasGroup": true
+    },
+    {
+      "mimeType": "application/pdf",
+      "id": "17DlyEJpCMkar_4ptNN0elJJllrw91pw-",
+      "name": "7. Electrochemistry.pdf",
+      "modifiedTime": "2026-08-04T17:11:22.000Z",
+      "_path": "1-2 CSE'24/CHEM 4241 - Chemistry/Slides/Final Term/7. Electrochemistry.pdf",
+      "_hasGroup": true
+    },
+    {
+      "mimeType": "application/pdf",
       "id": "1_Sk_xEJp4o0ccg4-Yl8xdb5EzSk0MydY",
       "name": "Phase Rule and Phase Diagram.pdf",
       "modifiedTime": "2026-07-09T04:36:20.383Z",
-      "_path": "1-2 CSE'24/CHEM 4241 - Chemistry/Slides/Phase Rule and Phase Diagram.pdf",
+      "_path": "1-2 CSE'24/CHEM 4241 - Chemistry/Slides/Final Term/Phase Rule and Phase Diagram.pdf",
       "_hasGroup": true
     },
     {
@@ -3455,26 +3463,26 @@
     },
     {
       "mimeType": "application/pdf",
-      "id": "1D8Wzhtfs7TVfVbIfJF9hv7o9UYR48Wvd",
-      "name": "Chem Lab Notes.pdf",
-      "modifiedTime": "2026-07-12T11:07:03.988Z",
-      "_path": "1-2 CSE'24/CHEM 4242 - Chemistry Lab/Chem Lab Notes.pdf",
-      "_hasGroup": true
-    },
-    {
-      "mimeType": "application/pdf",
-      "id": "13A7mKwnsqeGIfOKk7AtW6flZ9rEZxZ7v",
-      "name": "CHEM_4242_Lab_Question_Bank_100_QA.pdf",
-      "modifiedTime": "2026-07-17T11:23:28.920Z",
-      "_path": "1-2 CSE'24/CHEM 4242 - Chemistry Lab/CHEM_4242_Lab_Question_Bank_100_QA.pdf",
-      "_hasGroup": true
-    },
-    {
-      "mimeType": "application/pdf",
       "id": "1ICjKQW7wDai-dauzT8gkEWREn-uoqCQg",
-      "name": "CHEM_4242_Lab_Quiz_Compact_Note.pdf",
-      "modifiedTime": "2026-07-17T11:23:19.308Z",
-      "_path": "1-2 CSE'24/CHEM 4242 - Chemistry Lab/CHEM_4242_Lab_Quiz_Compact_Note.pdf",
+      "name": "Lab Notes",
+      "modifiedTime": "2026-08-04T17:13:08.299Z",
+      "_path": "1-2 CSE'24/CHEM 4242 - Chemistry Lab/Lab Notes",
+      "_hasGroup": true
+    },
+    {
+      "mimeType": "application/pdf",
+      "id": "1D8Wzhtfs7TVfVbIfJF9hv7o9UYR48Wvd",
+      "name": "Lab Notes [Handwritten].pdf",
+      "modifiedTime": "2026-08-04T17:13:38.670Z",
+      "_path": "1-2 CSE'24/CHEM 4242 - Chemistry Lab/Lab Notes [Handwritten].pdf",
+      "_hasGroup": true
+    },
+    {
+      "mimeType": "image/jpeg",
+      "id": "1QZMNRlIrFUKcKNpeLlZ_4itX7X-ezSPv",
+      "name": "Lab Report Format.jpeg",
+      "modifiedTime": "2026-08-01T10:50:37.354Z",
+      "_path": "1-2 CSE'24/CHEM 4242 - Chemistry Lab/Lab Report Format.jpeg",
       "_hasGroup": true
     },
     {
@@ -3483,6 +3491,22 @@
       "name": "Lab-Manual.pdf",
       "modifiedTime": "2026-04-24T18:23:29.000Z",
       "_path": "1-2 CSE'24/CHEM 4242 - Chemistry Lab/Lab-Manual.pdf",
+      "_hasGroup": true
+    },
+    {
+      "mimeType": "application/pdf",
+      "id": "13A7mKwnsqeGIfOKk7AtW6flZ9rEZxZ7v",
+      "name": "Question Bank'",
+      "modifiedTime": "2026-08-04T17:13:19.786Z",
+      "_path": "1-2 CSE'24/CHEM 4242 - Chemistry Lab/Question Bank'",
+      "_hasGroup": true
+    },
+    {
+      "mimeType": "image/jpeg",
+      "id": "1RApS8QeEil-uR9dmY2Qd0WVLf9_Vdduy",
+      "name": "Experiment 02.jpeg",
+      "modifiedTime": "2026-08-01T10:52:24.790Z",
+      "_path": "1-2 CSE'24/CHEM 4242 - Chemistry Lab/Midterm/Experiment 02.jpeg",
       "_hasGroup": true
     },
     {
@@ -3499,6 +3523,22 @@
       "name": "Section-2.pdf",
       "modifiedTime": "2026-06-26T23:24:31.496Z",
       "_path": "1-2 CSE'24/Class Routine/Section-2.pdf",
+      "_hasGroup": true
+    },
+    {
+      "mimeType": "application/pdf",
+      "id": "1QSL0VyDSRZlYyUYVNMKh76uYAMTpTEcu",
+      "name": "Demo-Project.pdf",
+      "modifiedTime": "2026-06-18T13:28:49.000Z",
+      "_path": "1-2 CSE'24/CSE 4202 - Structured Programming II Lab/Lab Materials/Demo Github Project/Demo-Project.pdf",
+      "_hasGroup": true
+    },
+    {
+      "mimeType": "application/pdf",
+      "id": "1LLHlRncJAS06arvJ4YCPHyMnZac3S3mm",
+      "name": "Google Drive Folder.pdf",
+      "modifiedTime": "2026-06-18T13:32:35.000Z",
+      "_path": "1-2 CSE'24/CSE 4202 - Structured Programming II Lab/Lab Materials/Demo Github Project/Google Drive Folder.pdf",
       "_hasGroup": true
     },
     {
@@ -3774,8 +3814,64 @@
       "_hasGroup": true
     },
     {
+      "mimeType": "text/plain",
+      "id": "1bAoruGVrhMyxOORKg_5prfcheJwB567L",
+      "name": "Assignment05_TaskA.c",
+      "modifiedTime": "2026-06-09T18:32:19.000Z",
+      "_path": "1-2 CSE'24/CSE 4202 - Structured Programming II Lab/Lab Materials/Lab 05/Assignment05_TaskA.c",
+      "_hasGroup": true
+    },
+    {
+      "mimeType": "text/plain",
+      "id": "1ib9m3RN6AdSftNi5R6AXEXZLIsmG0W2s",
+      "name": "Assignment05_TaskB.c",
+      "modifiedTime": "2026-06-13T13:00:13.000Z",
+      "_path": "1-2 CSE'24/CSE 4202 - Structured Programming II Lab/Lab Materials/Lab 05/Assignment05_TaskB.c",
+      "_hasGroup": true
+    },
+    {
+      "mimeType": "text/plain",
+      "id": "1vsaOMw8CWLeTqp1Zcwy7OCJ8t2H_dKR-",
+      "name": "Assignment05_TaskC.c",
+      "modifiedTime": "2026-06-13T13:09:32.000Z",
+      "_path": "1-2 CSE'24/CSE 4202 - Structured Programming II Lab/Lab Materials/Lab 05/Assignment05_TaskC.c",
+      "_hasGroup": true
+    },
+    {
+      "mimeType": "text/plain",
+      "id": "187KNrAwv5UA9kBVXeRjoW_0PJvfKpqnf",
+      "name": "Assignment05_TaskD.c",
+      "modifiedTime": "2026-06-13T13:09:15.000Z",
+      "_path": "1-2 CSE'24/CSE 4202 - Structured Programming II Lab/Lab Materials/Lab 05/Assignment05_TaskD.c",
+      "_hasGroup": true
+    },
+    {
+      "mimeType": "text/plain",
+      "id": "1Na8PoO1GIrdcRx75majh8UxO6g5S3iqi",
+      "name": "Assignment05_TaskE.c",
+      "modifiedTime": "2026-06-16T14:09:06.000Z",
+      "_path": "1-2 CSE'24/CSE 4202 - Structured Programming II Lab/Lab Materials/Lab 05/Assignment05_TaskE.c",
+      "_hasGroup": true
+    },
+    {
+      "mimeType": "text/plain",
+      "id": "1ABKI1Dsd-glH83Qv6XRA0pOxWly2zMCe",
+      "name": "Assignment05_TaskF.c",
+      "modifiedTime": "2026-06-13T13:10:23.000Z",
+      "_path": "1-2 CSE'24/CSE 4202 - Structured Programming II Lab/Lab Materials/Lab 05/Assignment05_TaskF.c",
+      "_hasGroup": true
+    },
+    {
+      "mimeType": "text/plain",
+      "id": "1tDJtqjUTgPXEmAyUyB9lcGYU4UMeLTmF",
+      "name": "Assignment05_TaskG.c",
+      "modifiedTime": "2026-06-16T14:11:50.000Z",
+      "_path": "1-2 CSE'24/CSE 4202 - Structured Programming II Lab/Lab Materials/Lab 05/Assignment05_TaskG.c",
+      "_hasGroup": true
+    },
+    {
       "mimeType": "application/pdf",
-      "id": "1lToB4VkHzAXje7YKcnOIjvTG-EMDPhe1",
+      "id": "1YNC2hqE_09K9OCzP16VxO58FHsArjOgQ",
       "name": "Assignment_5.pdf",
       "modifiedTime": "2026-06-03T17:41:53.000Z",
       "_path": "1-2 CSE'24/CSE 4202 - Structured Programming II Lab/Lab Materials/Lab 05/Assignment_5.pdf",
@@ -3783,18 +3879,34 @@
     },
     {
       "mimeType": "application/pdf",
-      "id": "1QSL0VyDSRZlYyUYVNMKh76uYAMTpTEcu",
-      "name": "Demo-Project.pdf",
-      "modifiedTime": "2026-06-18T13:28:49.000Z",
-      "_path": "1-2 CSE'24/CSE 4202 - Structured Programming II Lab/Lab Materials/Lab 06/Demo-Project.pdf",
+      "id": "1F-u26T7YxH5yDL7_aPrYX209YvpjShJT",
+      "name": "lab05.pdf",
+      "modifiedTime": "2026-07-06T22:56:56.000Z",
+      "_path": "1-2 CSE'24/CSE 4202 - Structured Programming II Lab/Lab Materials/Lab 05/lab05.pdf",
+      "_hasGroup": true
+    },
+    {
+      "mimeType": "text/plain",
+      "id": "1vwO_zvl-R6E9RdMUcu7xOQHEkq3ePURl",
+      "name": "mergeSort.c",
+      "modifiedTime": "2026-06-03T16:40:00.000Z",
+      "_path": "1-2 CSE'24/CSE 4202 - Structured Programming II Lab/Lab Materials/Lab 05/mergeSort.c",
       "_hasGroup": true
     },
     {
       "mimeType": "application/pdf",
-      "id": "1LLHlRncJAS06arvJ4YCPHyMnZac3S3mm",
-      "name": "Google Drive Folder.pdf",
-      "modifiedTime": "2026-06-18T13:32:35.000Z",
-      "_path": "1-2 CSE'24/CSE 4202 - Structured Programming II Lab/Lab Materials/Lab 06/Google Drive Folder.pdf",
+      "id": "1YMeOdJHbZud3z_y9N5ZMNo2tVsMHoXBL",
+      "name": "Assignment_6.pdf",
+      "modifiedTime": "2026-07-29T00:01:13.000Z",
+      "_path": "1-2 CSE'24/CSE 4202 - Structured Programming II Lab/Lab Materials/Lab 06/Assignment_6.pdf",
+      "_hasGroup": true
+    },
+    {
+      "mimeType": "application/pdf",
+      "id": "1T7C-2VqCvgRAUSzVcTL0y1YornHVhdZ7",
+      "name": "lab06.pdf",
+      "modifiedTime": "2026-08-04T17:06:51.000Z",
+      "_path": "1-2 CSE'24/CSE 4202 - Structured Programming II Lab/Lab Materials/Lab 06/lab06.pdf",
       "_hasGroup": true
     },
     {
@@ -3835,6 +3947,54 @@
       "name": "A03 - Asymptotics + Recurrences.pdf",
       "modifiedTime": "2026-06-09T17:49:31.000Z",
       "_path": "1-2 CSE'24/CSE 4203 - Discrete Mathematics/Assignment/Assignment 3/A03 - Asymptotics + Recurrences.pdf",
+      "_hasGroup": true
+    },
+    {
+      "mimeType": "application/pdf",
+      "id": "1wEDFoP6BewPOA3Guq-B9o2D_ZYW36xVt",
+      "name": "A03 Solution.pdf",
+      "modifiedTime": "2026-07-25T06:17:23.017Z",
+      "_path": "1-2 CSE'24/CSE 4203 - Discrete Mathematics/Assignment/Assignment 3/A03 Solution.pdf",
+      "_hasGroup": true
+    },
+    {
+      "mimeType": "application/pdf",
+      "id": "1VJ500dFx_hXvLprBCSsgNKXU4cp5Ymbc",
+      "name": "A04 - Divisibility - Modular Arithmetic.pdf",
+      "modifiedTime": "2026-07-25T06:17:37.040Z",
+      "_path": "1-2 CSE'24/CSE 4203 - Discrete Mathematics/Assignment/Assignment 4/A04 - Divisibility - Modular Arithmetic.pdf",
+      "_hasGroup": true
+    },
+    {
+      "mimeType": "application/pdf",
+      "id": "1FCpydgjpzZfT9N_Smj2pXB2Edi-lw0nn",
+      "name": "A04 Solution.pdf",
+      "modifiedTime": "2026-07-25T06:17:37.669Z",
+      "_path": "1-2 CSE'24/CSE 4203 - Discrete Mathematics/Assignment/Assignment 4/A04 Solution.pdf",
+      "_hasGroup": true
+    },
+    {
+      "mimeType": "application/pdf",
+      "id": "11prDvQ1je70wP0rTZeIc4qLS2aPt68DA",
+      "name": "A05 - Cryptography.pdf",
+      "modifiedTime": "2026-07-25T06:18:10.939Z",
+      "_path": "1-2 CSE'24/CSE 4203 - Discrete Mathematics/Assignment/Assignment 5/A05 - Cryptography.pdf",
+      "_hasGroup": true
+    },
+    {
+      "mimeType": "application/pdf",
+      "id": "1xAb-D7foedMLxPYEE9nHOCJDfJACZuem",
+      "name": "A05 Solution.pdf",
+      "modifiedTime": "2026-08-04T17:14:18.000Z",
+      "_path": "1-2 CSE'24/CSE 4203 - Discrete Mathematics/Assignment/Assignment 5/A05 Solution.pdf",
+      "_hasGroup": true
+    },
+    {
+      "mimeType": "application/pdf",
+      "id": "1Sgxb5r-1jfhWHfJSoCLEcW1LDNuMIAsA",
+      "name": "A06 - Graph Coloring + Matching.pdf",
+      "modifiedTime": "2026-08-04T17:14:31.000Z",
+      "_path": "1-2 CSE'24/CSE 4203 - Discrete Mathematics/Assignment/Assignment 6/A06 - Graph Coloring + Matching.pdf",
       "_hasGroup": true
     },
     {
@@ -3910,6 +4070,14 @@
       "_hasGroup": true
     },
     {
+      "mimeType": "text/plain",
+      "id": "1nFIqIsmSwYmVLLalGJbC3lYAODdIR_HS",
+      "name": "@echo off.txt",
+      "modifiedTime": "2026-08-04T05:15:47.342Z",
+      "_path": "1-2 CSE'24/CSE 4203 - Discrete Mathematics/Slides/@echo off.txt",
+      "_hasGroup": true
+    },
+    {
       "mimeType": "application/pdf",
       "id": "1Ad-bZpBZxAg0AjLxZ9fhvcq--wfaC3y1",
       "name": "LS07 - Divisibility.pdf",
@@ -3939,6 +4107,30 @@
       "name": "LS10 - Graphs and Coloring.pdf",
       "modifiedTime": "2026-07-16T15:31:00.000Z",
       "_path": "1-2 CSE'24/CSE 4203 - Discrete Mathematics/Slides/LS10 - Graphs and Coloring.pdf",
+      "_hasGroup": true
+    },
+    {
+      "mimeType": "application/pdf",
+      "id": "1Zz5LsrheMCKGseFeKpCPJZKOLBVPzEQM",
+      "name": "LS11 - Matching.pdf",
+      "modifiedTime": "2026-08-04T05:02:20.527Z",
+      "_path": "1-2 CSE'24/CSE 4203 - Discrete Mathematics/Slides/LS11 - Matching.pdf",
+      "_hasGroup": true
+    },
+    {
+      "mimeType": "application/pdf",
+      "id": "1mYDJVlUagwOPne6XzikDi627siqgjXIh",
+      "name": "LS12 - Connectivity and Trees.pdf",
+      "modifiedTime": "2026-08-04T05:02:13.503Z",
+      "_path": "1-2 CSE'24/CSE 4203 - Discrete Mathematics/Slides/LS12 - Connectivity and Trees.pdf",
+      "_hasGroup": true
+    },
+    {
+      "mimeType": "application/pdf",
+      "id": "1Ciy4KavB3bLuxG6L3T00ifqUz-XsS2qh",
+      "name": "ls13 - DD.pdf",
+      "modifiedTime": "2026-03-03T16:16:00.000Z",
+      "_path": "1-2 CSE'24/CSE 4203 - Discrete Mathematics/Slides/ls13 - DD.pdf",
       "_hasGroup": true
     },
     {
@@ -4095,10 +4287,34 @@
     },
     {
       "mimeType": "application/pdf",
+      "id": "18Kf9kfBGqawubcY4lYsQDXToUUh_Hl2j",
+      "name": "Chapter 5.pdf",
+      "modifiedTime": "2026-08-04T17:17:39.855Z",
+      "_path": "1-2 CSE'24/CSE 4205 - Digital Logic Design/Slides/Chapter 5.pdf",
+      "_hasGroup": true
+    },
+    {
+      "mimeType": "application/pdf",
       "id": "1RHJYO0cu_yFTi1m5NSinvcUt5qtP-I_r",
       "name": "S10 - Combinational Logic III.pdf",
       "modifiedTime": "2026-07-19T05:46:42.000Z",
       "_path": "1-2 CSE'24/CSE 4205 - Digital Logic Design/Slides/S10 - Combinational Logic III.pdf",
+      "_hasGroup": true
+    },
+    {
+      "mimeType": "application/pdf",
+      "id": "1h11djzDdkKeKurA0DEN-dSD1tWQaTB-c",
+      "name": "S11 - Combinational Logic III.pdf",
+      "modifiedTime": "2026-08-04T17:16:19.000Z",
+      "_path": "1-2 CSE'24/CSE 4205 - Digital Logic Design/Slides/S11 - Combinational Logic III.pdf",
+      "_hasGroup": true
+    },
+    {
+      "mimeType": "application/pdf",
+      "id": "1bl6D7pJ01VZ7Odcuqw1N7gjkFKH2_8mB",
+      "name": "S12 - Programmable Logic Devices.pdf",
+      "modifiedTime": "2026-08-04T17:16:32.000Z",
+      "_path": "1-2 CSE'24/CSE 4205 - Digital Logic Design/Slides/S12 - Programmable Logic Devices.pdf",
       "_hasGroup": true
     },
     {
@@ -4336,9 +4552,57 @@
     {
       "mimeType": "application/pdf",
       "id": "1IkbkKTF4ZPzXcGKcO92WNV6qGpX-jUE_",
-      "name": "Quiz_02_Suggestions_L25_to_L31.pdf",
-      "modifiedTime": "2026-06-17T12:01:19.026Z",
-      "_path": "1-2 CSE'24/HUM 4242 - Arabic II/Quiz/Quiz 2/Quiz_02_Suggestions_L25_to_L31.pdf",
+      "name": "Arabic Quiz Bank II.pdf",
+      "modifiedTime": "2026-08-04T17:03:08.959Z",
+      "_path": "1-2 CSE'24/HUM 4242 - Arabic II/Quiz/Quiz 2/Arabic Quiz Bank II.pdf",
+      "_hasGroup": true
+    },
+    {
+      "mimeType": "application/pdf",
+      "id": "1KHZRIsHq9eQ3Ge1DhB9KAGDc53YGCeJh",
+      "name": "Arabic Quiz Bank III.pdf",
+      "modifiedTime": "2026-08-04T17:03:20.100Z",
+      "_path": "1-2 CSE'24/HUM 4242 - Arabic II/Quiz/Quiz 3/Arabic Quiz Bank III.pdf",
+      "_hasGroup": true
+    },
+    {
+      "mimeType": "application/pdf",
+      "id": "1ntO7nUFg-HjfJ2_b1B-m-xDH-oPWooO_",
+      "name": "Lesson-40_Fatiha.pdf",
+      "modifiedTime": "2026-07-27T13:39:22.216Z",
+      "_path": "1-2 CSE'24/HUM 4242 - Arabic II/Slides/Final Term/Lesson-40_Fatiha.pdf",
+      "_hasGroup": true
+    },
+    {
+      "mimeType": "application/pdf",
+      "id": "1KVt1alJpt3Kqpsq5sY2B2NGYNWlwe3iP",
+      "name": "Surah_Al_Fatihah_Class_03_English.pdf",
+      "modifiedTime": "2026-08-01T09:51:58.684Z",
+      "_path": "1-2 CSE'24/HUM 4242 - Arabic II/Slides/Final Term/Surah_Al_Fatihah_Class_03_English.pdf",
+      "_hasGroup": true
+    },
+    {
+      "mimeType": "application/pdf",
+      "id": "11JEdEaniyneiD1reDOmjw1PiXcrI5kbq",
+      "name": "Surah_Al_Fatihah_Class_04_English.pdf",
+      "modifiedTime": "2026-08-01T09:51:58.983Z",
+      "_path": "1-2 CSE'24/HUM 4242 - Arabic II/Slides/Final Term/Surah_Al_Fatihah_Class_04_English.pdf",
+      "_hasGroup": true
+    },
+    {
+      "mimeType": "application/pdf",
+      "id": "1Mr7gCC88_k4YSEz_6sbu8vEFgSrJx39Q",
+      "name": "সূরা_ফাতিহা_ক্লাস_০৩_.pdf",
+      "modifiedTime": "2026-07-27T13:39:21.965Z",
+      "_path": "1-2 CSE'24/HUM 4242 - Arabic II/Slides/Final Term/সূরা_ফাতিহা_ক্লাস_০৩_.pdf",
+      "_hasGroup": true
+    },
+    {
+      "mimeType": "application/pdf",
+      "id": "1vj4Y5Jt7ZUURwKWhFM_uDFDJt8PPTwl4",
+      "name": "সূরা_ফাতিহা_ক্লাস_০৪.pdf",
+      "modifiedTime": "2026-07-27T13:39:22.131Z",
+      "_path": "1-2 CSE'24/HUM 4242 - Arabic II/Slides/Final Term/সূরা_ফাতিহা_ক্লাস_০৪.pdf",
       "_hasGroup": true
     },
     {
@@ -4346,7 +4610,7 @@
       "id": "1fi2YSlnVDkWn0oKXbk1k99ZLKai98yiI",
       "name": "Lesson-19.pdf",
       "modifiedTime": "2026-05-22T17:32:46.000Z",
-      "_path": "1-2 CSE'24/HUM 4242 - Arabic II/Slides/Lesson-19.pdf",
+      "_path": "1-2 CSE'24/HUM 4242 - Arabic II/Slides/Mid Term/Lesson-19.pdf",
       "_hasGroup": true
     },
     {
@@ -4354,7 +4618,7 @@
       "id": "1ysq3H6lXXjryFBNFv8ZHwaS1Sq0dMgE7",
       "name": "Lesson-20.pdf",
       "modifiedTime": "2026-05-22T17:32:50.000Z",
-      "_path": "1-2 CSE'24/HUM 4242 - Arabic II/Slides/Lesson-20.pdf",
+      "_path": "1-2 CSE'24/HUM 4242 - Arabic II/Slides/Mid Term/Lesson-20.pdf",
       "_hasGroup": true
     },
     {
@@ -4362,7 +4626,7 @@
       "id": "1Yp-tQIUIn2k5frCoaO95hCA-ztcfVJyP",
       "name": "Lesson-21.pdf",
       "modifiedTime": "2026-05-22T17:32:56.000Z",
-      "_path": "1-2 CSE'24/HUM 4242 - Arabic II/Slides/Lesson-21.pdf",
+      "_path": "1-2 CSE'24/HUM 4242 - Arabic II/Slides/Mid Term/Lesson-21.pdf",
       "_hasGroup": true
     },
     {
@@ -4370,7 +4634,7 @@
       "id": "1zzxL61gx4e4NPkVowMGmRAu2gAA0i81G",
       "name": "Lesson-22.pdf",
       "modifiedTime": "2026-05-22T17:33:03.000Z",
-      "_path": "1-2 CSE'24/HUM 4242 - Arabic II/Slides/Lesson-22.pdf",
+      "_path": "1-2 CSE'24/HUM 4242 - Arabic II/Slides/Mid Term/Lesson-22.pdf",
       "_hasGroup": true
     },
     {
@@ -4378,7 +4642,7 @@
       "id": "1INEfa_-GYaRu0Nt5i-wEG3umVjrZhcfJ",
       "name": "Lesson-23.pdf",
       "modifiedTime": "2026-05-22T17:33:08.000Z",
-      "_path": "1-2 CSE'24/HUM 4242 - Arabic II/Slides/Lesson-23.pdf",
+      "_path": "1-2 CSE'24/HUM 4242 - Arabic II/Slides/Mid Term/Lesson-23.pdf",
       "_hasGroup": true
     },
     {
@@ -4386,7 +4650,7 @@
       "id": "1kUOz-VeBosr5FgeD-t4EhyZR1agp82tP",
       "name": "Lesson-24.pdf",
       "modifiedTime": "2026-05-22T17:33:13.000Z",
-      "_path": "1-2 CSE'24/HUM 4242 - Arabic II/Slides/Lesson-24.pdf",
+      "_path": "1-2 CSE'24/HUM 4242 - Arabic II/Slides/Mid Term/Lesson-24.pdf",
       "_hasGroup": true
     },
     {
@@ -4394,7 +4658,7 @@
       "id": "1DB7rO_izvrao0E1lpR3sMAje3Rh2HtpD",
       "name": "Lesson-25.pdf",
       "modifiedTime": "2026-05-22T17:33:19.000Z",
-      "_path": "1-2 CSE'24/HUM 4242 - Arabic II/Slides/Lesson-25.pdf",
+      "_path": "1-2 CSE'24/HUM 4242 - Arabic II/Slides/Mid Term/Lesson-25.pdf",
       "_hasGroup": true
     },
     {
@@ -4402,7 +4666,7 @@
       "id": "13PQU-zJ0waF0Vh5VbEgkpE4qIMi49HXg",
       "name": "Lesson-26.pdf",
       "modifiedTime": "2026-05-22T17:33:23.000Z",
-      "_path": "1-2 CSE'24/HUM 4242 - Arabic II/Slides/Lesson-26.pdf",
+      "_path": "1-2 CSE'24/HUM 4242 - Arabic II/Slides/Mid Term/Lesson-26.pdf",
       "_hasGroup": true
     },
     {
@@ -4410,7 +4674,7 @@
       "id": "1ayRWpxz3e86naIuO7WQ90ELiOLIT31ys",
       "name": "Lesson-27.pdf",
       "modifiedTime": "2026-05-22T17:33:27.000Z",
-      "_path": "1-2 CSE'24/HUM 4242 - Arabic II/Slides/Lesson-27.pdf",
+      "_path": "1-2 CSE'24/HUM 4242 - Arabic II/Slides/Mid Term/Lesson-27.pdf",
       "_hasGroup": true
     },
     {
@@ -4418,7 +4682,7 @@
       "id": "1XhfEsSH_mumDP52fGgHoRbgSe4NvLM27",
       "name": "Lesson-28.pdf",
       "modifiedTime": "2026-05-22T17:33:35.000Z",
-      "_path": "1-2 CSE'24/HUM 4242 - Arabic II/Slides/Lesson-28.pdf",
+      "_path": "1-2 CSE'24/HUM 4242 - Arabic II/Slides/Mid Term/Lesson-28.pdf",
       "_hasGroup": true
     },
     {
@@ -4426,7 +4690,7 @@
       "id": "1b9cR_HDrKwWJJfH7geL684Mx2_L5Uh3H",
       "name": "Lesson-29.pdf",
       "modifiedTime": "2026-05-22T17:33:42.000Z",
-      "_path": "1-2 CSE'24/HUM 4242 - Arabic II/Slides/Lesson-29.pdf",
+      "_path": "1-2 CSE'24/HUM 4242 - Arabic II/Slides/Mid Term/Lesson-29.pdf",
       "_hasGroup": true
     },
     {
@@ -4434,7 +4698,7 @@
       "id": "1ZihKCfIjzcCMS326UoBcVW_KG8up_Ag5",
       "name": "Lesson-31.pdf",
       "modifiedTime": "2026-05-22T17:33:56.000Z",
-      "_path": "1-2 CSE'24/HUM 4242 - Arabic II/Slides/Lesson-31.pdf",
+      "_path": "1-2 CSE'24/HUM 4242 - Arabic II/Slides/Mid Term/Lesson-31.pdf",
       "_hasGroup": true
     },
     {
@@ -4442,7 +4706,7 @@
       "id": "1rPbyAyvTkZuaImokt1aNKGBucjqxx_gq",
       "name": "Lesson-32.pdf",
       "modifiedTime": "2026-05-22T17:34:03.000Z",
-      "_path": "1-2 CSE'24/HUM 4242 - Arabic II/Slides/Lesson-32.pdf",
+      "_path": "1-2 CSE'24/HUM 4242 - Arabic II/Slides/Mid Term/Lesson-32.pdf",
       "_hasGroup": true
     },
     {
@@ -4451,6 +4715,14 @@
       "name": "Assignment [Midterm] [240041123].pdf",
       "modifiedTime": "2026-06-21T20:13:51.000Z",
       "_path": "1-2 CSE'24/MATH 4241 - Integral Calculus and Differential Equations/Assignment/Assignment [Midterm] [240041123].pdf",
+      "_hasGroup": true
+    },
+    {
+      "mimeType": "application/pdf",
+      "id": "1IY1_fcFXaqby0h349AI748BLdikSv5G9",
+      "name": "Math_Assignment_1st_Part.pdf",
+      "modifiedTime": "2026-07-25T06:09:21.461Z",
+      "_path": "1-2 CSE'24/MATH 4241 - Integral Calculus and Differential Equations/Assignment/Math_Assignment_1st_Part.pdf",
       "_hasGroup": true
     },
     {
@@ -4519,18 +4791,66 @@
     },
     {
       "mimeType": "application/pdf",
+      "id": "1Mjl5T4f6FYc5pMMtxYHCqiiD8A_SIDLY",
+      "name": "04.08.2026_SeriesSolution.pdf",
+      "modifiedTime": "2026-08-04T06:33:26.931Z",
+      "_path": "1-2 CSE'24/MATH 4241 - Integral Calculus and Differential Equations/Handnotes/04.08.2026_SeriesSolution.pdf",
+      "_hasGroup": true
+    },
+    {
+      "mimeType": "application/pdf",
       "id": "1dCmvZZ5mf3G2mHU8Spjoee4IPtiJvgGY",
-      "name": "26.07.09_PartialDifferentialEquation.pdf",
-      "modifiedTime": "2026-07-13T08:34:16.670Z",
-      "_path": "1-2 CSE'24/MATH 4241 - Integral Calculus and Differential Equations/Handnotes/26.07.09_PartialDifferentialEquation.pdf",
+      "name": "09.07.2026_PartialDifferentialEquation.pdf",
+      "modifiedTime": "2026-07-29T10:44:47.067Z",
+      "_path": "1-2 CSE'24/MATH 4241 - Integral Calculus and Differential Equations/Handnotes/09.07.2026_PartialDifferentialEquation.pdf",
       "_hasGroup": true
     },
     {
       "mimeType": "application/pdf",
       "id": "16IRsqUrJzV4K2WCXXf3C5WKPofTtoG2b",
-      "name": "26.07.09_PDE_Math.pdf",
-      "modifiedTime": "2026-07-13T08:33:56.245Z",
-      "_path": "1-2 CSE'24/MATH 4241 - Integral Calculus and Differential Equations/Handnotes/26.07.09_PDE_Math.pdf",
+      "name": "09.07.2026_PDE_Math.pdf",
+      "modifiedTime": "2026-07-29T10:49:58.176Z",
+      "_path": "1-2 CSE'24/MATH 4241 - Integral Calculus and Differential Equations/Handnotes/09.07.2026_PDE_Math.pdf",
+      "_hasGroup": true
+    },
+    {
+      "mimeType": "application/pdf",
+      "id": "13EnSkTznAXH7m7vuZrA4D7qNJBVFLVE8",
+      "name": "14.07.2026_LagrangesLinearPDEof1stOrder",
+      "modifiedTime": "2026-07-29T10:54:17.308Z",
+      "_path": "1-2 CSE'24/MATH 4241 - Integral Calculus and Differential Equations/Handnotes/14.07.2026_LagrangesLinearPDEof1stOrder",
+      "_hasGroup": true
+    },
+    {
+      "mimeType": "application/pdf",
+      "id": "1cV0svVX4sL4MBkscX_I5-Y9T4jfQggZJ",
+      "name": "21.07.2026_PDE_NonLinear_in_PandQ.pdf",
+      "modifiedTime": "2026-07-21T06:54:44.422Z",
+      "_path": "1-2 CSE'24/MATH 4241 - Integral Calculus and Differential Equations/Handnotes/21.07.2026_PDE_NonLinear_in_PandQ.pdf",
+      "_hasGroup": true
+    },
+    {
+      "mimeType": "application/pdf",
+      "id": "1VTWc02EL8VPBimXm41EZDYa41zFGFpET",
+      "name": "23.07.2026_LinearHigherOrderPDEwithConstantCoeff.pdf",
+      "modifiedTime": "2026-07-29T10:48:59.190Z",
+      "_path": "1-2 CSE'24/MATH 4241 - Integral Calculus and Differential Equations/Handnotes/23.07.2026_LinearHigherOrderPDEwithConstantCoeff.pdf",
+      "_hasGroup": true
+    },
+    {
+      "mimeType": "application/pdf",
+      "id": "1sS0C-xFheHESX3Gk4VcIcfR-HpSkgbUq",
+      "name": "26.08.04_Ordinary_&_Singular_Points_(Math).pdf",
+      "modifiedTime": "2026-08-04T07:45:04.127Z",
+      "_path": "1-2 CSE'24/MATH 4241 - Integral Calculus and Differential Equations/Handnotes/26.08.04_Ordinary_&_Singular_Points_(Math).pdf",
+      "_hasGroup": true
+    },
+    {
+      "mimeType": "application/pdf",
+      "id": "14nF4D28czIgPkqUn83MA-Z-k5rswKqf0",
+      "name": "28.07.2026_NonLinearHomogPDEofHigherOrder.pdf",
+      "modifiedTime": "2026-07-29T10:49:22.214Z",
+      "_path": "1-2 CSE'24/MATH 4241 - Integral Calculus and Differential Equations/Handnotes/28.07.2026_NonLinearHomogPDEofHigherOrder.pdf",
       "_hasGroup": true
     },
     {
@@ -4935,6 +5255,14 @@
     },
     {
       "mimeType": "application/pdf",
+      "id": "1nrNivWf8bF1BvlUFCCKcrOLq6k-h_EhK",
+      "name": "Thevenin.pdf",
+      "modifiedTime": "2026-08-04T04:54:00.000Z",
+      "_path": "1-2 CSE'24/PHY 4241 - Physics II/Slides/Thevenin.pdf",
+      "_hasGroup": true
+    },
+    {
+      "mimeType": "application/pdf",
       "id": "1-BDncwAxWAK1GmEoR0Tnzd6KlGyec8-M",
       "name": "Course Outline (Course Plan) Yesitwasthisjagged.pdf",
       "modifiedTime": "2026-04-20T05:26:19.642Z",
@@ -4943,10 +5271,34 @@
     },
     {
       "mimeType": "application/pdf",
+      "id": "1gQvRnswzM5e0Znk0bMGv0aX6zQs3oQf3",
+      "name": "Experiment 01.pdf",
+      "modifiedTime": "2026-07-27T08:22:09.253Z",
+      "_path": "1-2 CSE'24/PHY 4242 - Physics II Lab/Lab Reports/Experiment 01.pdf",
+      "_hasGroup": true
+    },
+    {
+      "mimeType": "application/pdf",
+      "id": "1LXSzeNnQgAXVCYXBZQcJGMCcg1bOlvMt",
+      "name": "Experiment 02.pdf",
+      "modifiedTime": "2026-07-27T08:22:09.714Z",
+      "_path": "1-2 CSE'24/PHY 4242 - Physics II Lab/Lab Reports/Experiment 02.pdf",
+      "_hasGroup": true
+    },
+    {
+      "mimeType": "application/pdf",
+      "id": "19QoN64i4EkZQbUAngJ6QOZB6hnhkS49x",
+      "name": "Experiment 03.pdf",
+      "modifiedTime": "2026-07-27T08:22:09.964Z",
+      "_path": "1-2 CSE'24/PHY 4242 - Physics II Lab/Lab Reports/Experiment 03.pdf",
+      "_hasGroup": true
+    },
+    {
+      "mimeType": "application/pdf",
       "id": "1yKvXfE2vKxz1fwNlWzvdP6Y2vMQbiG7p",
       "name": "Experiment 01 (B22,B23).pdf",
       "modifiedTime": "2026-04-30T18:17:37.994Z",
-      "_path": "1-2 CSE'24/PHY 4242 - Physics II Lab/Lab Reports/Experiment 01 (B22,B23).pdf",
+      "_path": "1-2 CSE'24/PHY 4242 - Physics II Lab/Lab Reports/Batch 23/Experiment 01 (B22,B23).pdf",
       "_hasGroup": true
     },
     {
@@ -4954,7 +5306,7 @@
       "id": "1vMhsMVFbdMEBIyBszAS_V8S9lBCwq0Q2",
       "name": "Experiment 02 (B22,B23).pdf",
       "modifiedTime": "2026-04-30T18:17:53.464Z",
-      "_path": "1-2 CSE'24/PHY 4242 - Physics II Lab/Lab Reports/Experiment 02 (B22,B23).pdf",
+      "_path": "1-2 CSE'24/PHY 4242 - Physics II Lab/Lab Reports/Batch 23/Experiment 02 (B22,B23).pdf",
       "_hasGroup": true
     },
     {
@@ -4962,7 +5314,7 @@
       "id": "1w95_1b5PFvV8oylWE7s2zQly2-lPEKh2",
       "name": "Experiment 03(B22,B23).pdf",
       "modifiedTime": "2026-04-30T18:18:00.938Z",
-      "_path": "1-2 CSE'24/PHY 4242 - Physics II Lab/Lab Reports/Experiment 03(B22,B23).pdf",
+      "_path": "1-2 CSE'24/PHY 4242 - Physics II Lab/Lab Reports/Batch 23/Experiment 03(B22,B23).pdf",
       "_hasGroup": true
     },
     {
@@ -4970,7 +5322,7 @@
       "id": "1FcrKZrTM4UB5FSR-dQOBj92eaDly4asG",
       "name": "Experiment 04 (B22,B23).pdf",
       "modifiedTime": "2026-04-30T18:17:20.941Z",
-      "_path": "1-2 CSE'24/PHY 4242 - Physics II Lab/Lab Reports/Experiment 04 (B22,B23).pdf",
+      "_path": "1-2 CSE'24/PHY 4242 - Physics II Lab/Lab Reports/Batch 23/Experiment 04 (B22,B23).pdf",
       "_hasGroup": true
     },
     {
@@ -4978,7 +5330,7 @@
       "id": "1t3-znRybnY2kFOitYDWBDBjTmn9R7QOI",
       "name": "Experiment 05 (B22,B23).pdf",
       "modifiedTime": "2026-04-30T18:17:29.104Z",
-      "_path": "1-2 CSE'24/PHY 4242 - Physics II Lab/Lab Reports/Experiment 05 (B22,B23).pdf",
+      "_path": "1-2 CSE'24/PHY 4242 - Physics II Lab/Lab Reports/Batch 23/Experiment 05 (B22,B23).pdf",
       "_hasGroup": true
     },
     {
@@ -4986,7 +5338,7 @@
       "id": "16378MPGLA8x-1At6E_ZfSoTk6_g_7mKz",
       "name": "Experiment 06 (B22).pdf",
       "modifiedTime": "2026-04-30T18:17:46.462Z",
-      "_path": "1-2 CSE'24/PHY 4242 - Physics II Lab/Lab Reports/Experiment 06 (B22).pdf",
+      "_path": "1-2 CSE'24/PHY 4242 - Physics II Lab/Lab Reports/Batch 23/Experiment 06 (B22).pdf",
       "_hasGroup": true
     },
     {
@@ -4994,7 +5346,7 @@
       "id": "1H0aq5kvnXhV3J942-hp9H-F90OmXgqbn",
       "name": "Tasks(Exp 01)(Phy 4242)(B18).pdf",
       "modifiedTime": "2026-04-20T06:00:53.885Z",
-      "_path": "1-2 CSE'24/PHY 4242 - Physics II Lab/Lab Reports/Tasks(Exp 01)(Phy 4242)(B18).pdf",
+      "_path": "1-2 CSE'24/PHY 4242 - Physics II Lab/Lab Reports/Task Manual (Old)/Tasks(Exp 01)(Phy 4242)(B18).pdf",
       "_hasGroup": true
     },
     {
@@ -5002,7 +5354,7 @@
       "id": "1WI0pzm85JKbn_oEAlju79tiJaf21hJpA",
       "name": "Tasks(Exp 02)(Phy 4242)(B18).pdf",
       "modifiedTime": "2026-04-20T06:00:54.019Z",
-      "_path": "1-2 CSE'24/PHY 4242 - Physics II Lab/Lab Reports/Tasks(Exp 02)(Phy 4242)(B18).pdf",
+      "_path": "1-2 CSE'24/PHY 4242 - Physics II Lab/Lab Reports/Task Manual (Old)/Tasks(Exp 02)(Phy 4242)(B18).pdf",
       "_hasGroup": true
     },
     {
@@ -5010,7 +5362,7 @@
       "id": "1Zti-gSP4R3QMdWpfInIvAvRtaXLFWE-r",
       "name": "Tasks(Exp 03)(Phy 4242)(B18).pdf",
       "modifiedTime": "2026-04-20T06:00:54.382Z",
-      "_path": "1-2 CSE'24/PHY 4242 - Physics II Lab/Lab Reports/Tasks(Exp 03)(Phy 4242)(B18).pdf",
+      "_path": "1-2 CSE'24/PHY 4242 - Physics II Lab/Lab Reports/Task Manual (Old)/Tasks(Exp 03)(Phy 4242)(B18).pdf",
       "_hasGroup": true
     },
     {
@@ -5018,7 +5370,7 @@
       "id": "1cgCXgr6llrE971uwjs9Ua2dY3t-YgvsC",
       "name": "Tasks(Exp 04)(Phy 4242)(B18).pdf",
       "modifiedTime": "2026-04-20T06:00:54.636Z",
-      "_path": "1-2 CSE'24/PHY 4242 - Physics II Lab/Lab Reports/Tasks(Exp 04)(Phy 4242)(B18).pdf",
+      "_path": "1-2 CSE'24/PHY 4242 - Physics II Lab/Lab Reports/Task Manual (Old)/Tasks(Exp 04)(Phy 4242)(B18).pdf",
       "_hasGroup": true
     },
     {
@@ -5026,7 +5378,7 @@
       "id": "1bMK5W9-FMUyPwdOI95pUPwO3z95DhmdD",
       "name": "Tasks(Exp 05)(Phy 4242)(B18).pdf",
       "modifiedTime": "2026-04-20T06:00:54.871Z",
-      "_path": "1-2 CSE'24/PHY 4242 - Physics II Lab/Lab Reports/Tasks(Exp 05)(Phy 4242)(B18).pdf",
+      "_path": "1-2 CSE'24/PHY 4242 - Physics II Lab/Lab Reports/Task Manual (Old)/Tasks(Exp 05)(Phy 4242)(B18).pdf",
       "_hasGroup": true
     }
   ]
