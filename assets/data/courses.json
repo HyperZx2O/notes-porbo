@@ -37,24 +37,28 @@
     {
       "name": "CHEM 4241 - Chemistry",
       "files": [
+        "final.html",
         "midterm.html"
       ]
     },
     {
       "name": "CSE 4203 - Discrete Mathematics",
       "files": [
+        "final.html",
         "midterm.html"
       ]
     },
     {
       "name": "CSE 4205 - Digital Logic Design",
       "files": [
+        "final.html",
         "midterm.html"
       ]
     },
     {
       "name": "HUM 4241 - Islamic History Science and Culture",
       "files": [
+        "final.html",
         "midterm.html",
         "quiz1.html"
       ]
@@ -68,6 +72,7 @@
     {
       "name": "PHY 4241 - Physics II",
       "files": [
+        "final.html",
         "midterm.html"
       ]
     }
