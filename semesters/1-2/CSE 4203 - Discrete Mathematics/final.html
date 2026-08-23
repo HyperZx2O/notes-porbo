@@ -1,0 +1,3858 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CSE 4203 — Discrete Mathematics Study Guide</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=IBM+Plex+Serif:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+<style>
+
+/* ═══════════════════════════════════════════════
+   DESIGN TOKENS — Dark Academic Chemistry Theme
+   Palette: Deep navy + amber gold accent
+   Signature: Glowing formula blocks + periodic-
+   table-grid section indicators
+═══════════════════════════════════════════════ */
+:root {
+  --bg-0:       #0d0f14;
+  --bg-1:       #141720;
+  --bg-2:       #1a1e2e;
+  --bg-3:       #222840;
+  --bg-4:       #2c3355;
+  --border:     #2e3454;
+  --border-hi:  #3d4870;
+
+  --text-0:     #e8eaf2;
+  --text-1:     #b8bdd4;
+  --text-2:     #7c85ab;
+  --text-3:     #4e5678;
+
+  --gold:       #c9a227;
+  --gold-dim:   #7a610f;
+  --gold-glow:  rgba(201,162,39,0.10);
+
+  --teal:       #2cbfbf;
+  --teal-dim:   rgba(44,191,191,0.12);
+
+  --red:        #e05c5c;
+  --red-dim:    rgba(224,92,92,0.12);
+
+  --green:      #4dbb7a;
+  --green-dim:  rgba(77,187,122,0.12);
+
+  --purple:     #9b7fd4;
+  --purple-dim: rgba(155,127,212,0.12);
+
+  --font-sans:  'IBM Plex Sans', system-ui, sans-serif;
+  --font-serif: 'IBM Plex Serif', Georgia, serif;
+  --font-mono:  'IBM Plex Mono', 'Courier New', monospace;
+
+  --radius-sm:  4px;
+  --radius:     8px;
+  --radius-lg:  12px;
+
+  --sidebar-w:  260px;
+  --header-h:   56px;
+
+  --transition: 180ms ease;
+}
+
+[data-theme="light"] {
+  --bg-0:      #f4f5f9;
+  --bg-1:      #ffffff;
+  --bg-2:      #eef0f8;
+  --bg-3:      #e2e5f2;
+  --bg-4:      #ccd0e8;
+  --border:    #d0d4e8;
+  --border-hi: #b8bedc;
+  --text-0:    #111828;
+  --text-1:    #2c3654;
+  --text-2:    #5a6289;
+  --text-3:    #6b7394;
+  --gold:      #996d00;
+  --gold-dim:  #e8d49a;
+  --gold-glow: rgba(153,109,0,0.08);
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; font-size: 16px; overflow-x: clip; transition: background-color 0.3s ease, color 0.3s ease; }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+  }
+}
+
+body {
+  font-family: var(--font-sans);
+  background: var(--bg-0);
+  color: var(--text-0);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+.theme-transitioning,
+.theme-transitioning *,
+.theme-transitioning *::before,
+.theme-transitioning *::after {
+  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease !important;
+}
+
+/* ── SCROLLBAR ── */
+::selection { background: var(--gold-dim); color: var(--text-0); }
+
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--bg-0); }
+::-webkit-scrollbar-thumb { background: var(--border-hi); border-radius: 3px; }
+
+/* ── FOCUS INDICATORS ── */
+*:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 2px;
+}
+#search-input:focus-visible { outline-offset: -1px; }
+
+/* KaTeX error fallback */
+.katex-error {
+  color: var(--red);
+  border: 1px dashed var(--red);
+  border-radius: var(--radius-sm);
+  padding: 2px 6px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  background: var(--red-dim);
+}
+.icon { display: inline-block; width: 1em; height: 1em; vertical-align: -0.125em; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.icon-sm { width: 0.875em; height: 0.875em; }
+
+/* ══════════════════════════════════════
+   LAYOUT
+══════════════════════════════════════ */
+#app { display: flex; flex-direction: column; min-height: 100vh; }
+
+/* ── HEADER ── */
+#header {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  height: var(--header-h);
+  background: var(--bg-1);
+  border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; gap: 12px;
+  padding: 0 16px;
+}
+#header-logo {
+  display: flex; align-items: baseline; gap: 8px; text-decoration: none;
+  color: var(--text-0);
+}
+#header-logo .course-code {
+  font-family: var(--font-mono); font-size: 12px;
+  color: var(--gold); letter-spacing: .06em;
+}
+#header-logo .course-name {
+  font-family: var(--font-sans); font-weight: 600; font-size: 14px;
+}
+#header-spacer { flex: 1; }
+
+/* Search */
+#search-wrap {
+  position: relative; width: 280px;
+}
+#search-input {
+  width: 100%;
+  background: var(--bg-2); border: 1px solid var(--border);
+  color: var(--text-0); font-family: var(--font-sans); font-size: 13px;
+  padding: 7px 32px 7px 12px; border-radius: var(--radius);
+  outline: none; transition: border-color var(--transition);
+}
+#search-input:focus { border-color: var(--gold); }
+#search-input::placeholder { color: var(--text-3); }
+#search-clear {
+  position: absolute; right: 8px; top: 50%; transform: translateY(-50%);
+  background: none; border: none; color: var(--text-3); cursor: pointer;
+  font-size: 16px; padding: 2px; display: none; line-height: 1;
+}
+#search-results {
+  position: absolute; top: calc(100% + 4px); left: 0; right: 0;
+  background: var(--bg-1); border: 1px solid var(--border);
+  border-radius: var(--radius); max-height: 340px; overflow-y: auto;
+  z-index: 200; display: none;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+}
+.search-result-item {
+  padding: 10px 14px; cursor: pointer; border-bottom: 1px solid var(--border);
+  transition: background var(--transition);
+}
+.search-result-item:last-child { border-bottom: none; }
+.search-result-item:hover { background: var(--bg-2); }
+.search-result-subject {
+  font-size: 10px; font-family: var(--font-mono); color: var(--gold);
+  text-transform: uppercase; letter-spacing: .08em; margin-bottom: 2px;
+}
+.search-result-title { font-size: 13px; color: var(--text-0); font-weight: 500; }
+.search-result-snippet { font-size: 12px; color: var(--text-2); margin-top: 2px; }
+#search-empty { padding: 16px; text-align: center; color: var(--text-2); font-size: 13px; display: none; }
+
+/* Header buttons */
+.hdr-btn {
+  background: var(--bg-2); border: 1px solid var(--border);
+  color: var(--text-1); border-radius: var(--radius-sm);
+  padding: 6px 10px; font-size: 12px; cursor: pointer;
+  transition: all var(--transition); font-family: var(--font-sans);
+  white-space: nowrap;
+}
+.hdr-btn:hover { border-color: var(--gold); color: var(--gold); }
+
+#sidebar-toggle { display: block; min-width: 44px; min-height: 44px; }
+.hdr-btn-search { display: none; }
+
+/* ── BODY WRAP ── */
+#body-wrap {
+  display: flex;
+  margin-top: var(--header-h);
+  min-height: calc(100vh - var(--header-h));
+}
+
+/* ── SIDEBAR ── */
+#sidebar {
+  position: fixed; left: 0;
+  top: var(--header-h);
+  width: var(--sidebar-w);
+  height: calc(100vh - var(--header-h));
+  overflow-y: auto; overflow-x: hidden;
+  background: var(--bg-1);
+  border-right: 1px solid var(--border);
+  padding: 16px 0 32px;
+  transition: transform var(--transition);
+  z-index: 90;
+}
+#sidebar::-webkit-scrollbar { width: 4px; }
+
+.sidebar-section { margin-bottom: 4px; }
+.sidebar-subject {
+  display: flex; align-items: center; gap: 8px;
+  padding: 8px 16px; cursor: pointer;
+  font-size: 12px; font-weight: 600;
+  text-transform: uppercase; letter-spacing: .08em;
+  color: var(--text-2);
+  border-left: 2px solid transparent;
+  transition: all var(--transition);
+  user-select: none;
+}
+.sidebar-subject:hover { color: var(--text-0); border-left-color: var(--border-hi); }
+.sidebar-subject.active { color: var(--gold); border-left-color: var(--gold); background: var(--gold-glow); }
+.sidebar-subject .subj-num {
+  font-family: var(--font-mono); font-size: 10px;
+  background: var(--bg-3); border-radius: 3px;
+  padding: 1px 5px; min-width: 20px; text-align: center;
+}
+.sidebar-subject.active .subj-num { background: var(--gold-dim); color: var(--bg-0); }
+.sidebar-chevron { margin-left: auto; font-size: 10px; transition: transform var(--transition); }
+.sidebar-subject.open .sidebar-chevron { transform: rotate(90deg); }
+
+.sidebar-toc { display: none; }
+.sidebar-toc.open { display: block; }
+.sidebar-toc a {
+  display: block; padding: 5px 16px 5px 28px;
+  font-size: 12px; color: var(--text-2); text-decoration: none;
+  border-left: 2px solid transparent;
+  transition: color 0.2s ease, border-left-color 0.2s ease, background 0.2s ease;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.sidebar-toc a:hover { color: var(--text-0); border-left-color: var(--border-hi); background: var(--bg-2); }
+.sidebar-toc a.active { color: var(--gold); border-left-color: var(--gold); background: var(--gold-glow); }
+.sidebar-toc a { transition: color 0.3s ease, border-left-color 0.3s ease, background 0.3s ease; }
+
+.sidebar-home {
+  display: flex; align-items: center; gap: 8px;
+  padding: 8px 16px 16px; cursor: pointer;
+  font-size: 13px; font-weight: 500; color: var(--text-1);
+  border-bottom: 1px solid var(--border); margin-bottom: 8px;
+  text-decoration: none;
+}
+.sidebar-home:hover { color: var(--gold); }
+
+/* ── MAIN CONTENT ── */
+#main {
+  margin-left: var(--sidebar-w);
+  flex: 1;
+  max-width: 100%;
+  transition: margin-left 0.25s ease;
+}
+
+/* ══════════════════════════════════════
+   PAGES
+══════════════════════════════════════ */
+.page { display: none; min-height: calc(100vh - var(--header-h)); }
+.page.active { display: block; }
+
+/* ── DASHBOARD ── */
+#page-home { padding: 0; }
+
+.dashboard-hero {
+  padding: 64px 48px 48px;
+  border-bottom: 1px solid var(--border);
+  background: var(--bg-1);
+  animation: heroFadeIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+@keyframes heroFadeIn {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.dashboard-hero h1 {
+  font-family: var(--font-serif); font-size: clamp(30px, 5vw, 48px);
+  font-weight: 600; color: var(--text-0); line-height: 1.15; margin-bottom: 12px;
+  overflow-wrap: anywhere; min-width: 0;
+}
+.dashboard-hero .subtitle {
+  font-size: 15px; color: var(--text-2); max-width: 560px; line-height: 1.6;
+}
+.dashboard-meta {
+  display: flex; gap: 24px; margin-top: 24px; flex-wrap: wrap;
+}
+.dashboard-meta-item {
+  display: flex; flex-direction: column;
+}
+.dashboard-meta-item .meta-val {
+  font-size: 22px; font-weight: 600; color: var(--gold); font-family: var(--font-mono);
+}
+.dashboard-meta-item .meta-label {
+  font-size: 11px; color: var(--text-3); text-transform: uppercase; letter-spacing: .08em;
+}
+
+.subjects-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1px;
+  background: var(--border);
+  border-top: 1px solid var(--border);
+}
+.subject-card {
+  background: var(--bg-1); padding: 28px 32px;
+  cursor: pointer; transition: background 0.2s ease, transform 0.2s ease;
+  display: flex; flex-direction: column; gap: 10px;
+  opacity: 0; transform: translateY(12px);
+  animation: cardReveal 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+.subject-card:nth-child(1) { animation-delay: 0ms; }
+.subject-card:nth-child(2) { animation-delay: 60ms; }
+.subject-card:nth-child(3) { animation-delay: 120ms; }
+.subject-card:nth-child(4) { animation-delay: 180ms; }
+.subject-card:nth-child(5) { animation-delay: 240ms; }
+.subject-card:nth-child(6) { animation-delay: 300ms; }
+@keyframes cardReveal {
+  to { opacity: 1; transform: translateY(0); }
+}
+.subject-card:hover { background: var(--bg-2); transform: translateY(-2px); }
+.subject-card-header { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; }
+.subject-card-num {
+  font-family: var(--font-mono); font-size: 11px; color: var(--gold);
+  background: var(--gold-glow); border: 1px solid var(--gold-dim);
+  padding: 3px 8px; border-radius: var(--radius-sm); white-space: nowrap;
+  flex-shrink: 0;
+}
+.subject-card-arrow { color: var(--text-3); font-size: 18px; transition: transform var(--transition), color var(--transition); }
+.subject-card:hover .subject-card-arrow { transform: translateX(4px); color: var(--gold); }
+.subject-card h3 {
+  font-family: var(--font-serif); font-size: 18px; font-weight: 600;
+  color: var(--text-0); line-height: 1.3;
+  overflow-wrap: anywhere; min-width: 0;
+}
+.subject-card p { font-size: 13px; color: var(--text-2); line-height: 1.5; }
+.subject-card-tags { display: flex; flex-wrap: wrap; gap: 6px; }
+.tag {
+  font-size: 10px; font-family: var(--font-mono);
+  padding: 2px 7px; border-radius: var(--radius-sm);
+  border: 1px solid var(--border); color: var(--text-3);
+  letter-spacing: .04em;
+}
+
+/* ── STUDY PAGE ── */
+.study-page { padding: 0 0 80px; }
+
+.study-header {
+  padding: 40px 48px 32px;
+  border-bottom: 1px solid var(--border);
+  background: var(--bg-1);
+  position: sticky; top: var(--header-h); z-index: 50;
+}
+.study-header h2 {
+  font-family: var(--font-serif); font-size: clamp(22px, 3.5vw, 32px);
+  font-weight: 600; color: var(--text-0); line-height: 1.2;
+  overflow-wrap: anywhere; min-width: 0;
+}
+.study-header .src-note {
+  font-size: 11px; color: var(--text-3); margin-top: 6px; font-family: var(--font-mono);
+  letter-spacing: .04em;
+}
+
+.study-content { padding: 0 48px; }
+
+/* ── SECTION GROUPS ── */
+.section-group {
+  margin-top: 48px;
+  padding-bottom: 32px;
+  border-bottom: 1px solid var(--border);
+}
+.section-group:last-of-type { border-bottom: none; }
+
+.section-heading {
+  display: flex; align-items: center; gap: 12px;
+  margin-bottom: 20px; cursor: pointer;
+  user-select: none;
+}
+.section-num {
+  font-family: var(--font-mono); font-size: 11px; color: var(--gold);
+  background: var(--gold-glow); border: 1px solid var(--gold-dim);
+  padding: 3px 8px; border-radius: var(--radius-sm); flex-shrink: 0;
+}
+.section-heading h3 {
+  font-family: var(--font-serif); font-size: 20px; font-weight: 600;
+  color: var(--text-0); flex: 1;
+  overflow-wrap: anywhere; min-width: 0;
+}
+.section-toggle {
+  color: var(--text-3); font-size: 14px; transition: transform var(--transition);
+  flex-shrink: 0;
+}
+.section-heading.collapsed .section-toggle { transform: rotate(-90deg); }
+.section-body { }
+.section-body.hidden {
+  opacity: 0; max-height: 0; overflow: hidden;
+  transition: opacity 0.2s ease, max-height 0.25s ease;
+  margin-top: 0; padding-top: 0;
+}
+.section-body:not(.hidden) {
+  opacity: 1; max-height: 50000px;
+  transition: opacity 0.2s ease 0.05s, max-height 0.3s ease;
+}
+
+/* subsection */
+.subsection { margin-top: 32px; }
+h4.subsection-heading {
+  font-family: var(--font-sans); font-size: 13px; font-weight: 600;
+  color: var(--gold); text-transform: uppercase; letter-spacing: .08em;
+  margin-bottom: 12px; padding-bottom: 6px;
+  border-bottom: 1px solid var(--gold-dim);
+}
+
+/* ── TYPOGRAPHY WITHIN CONTENT ── */
+.content-body p { margin-bottom: 16px; color: var(--text-1); font-size: 15px; max-width: 70ch; }
+.content-body ul, .content-body ol { margin: 0 0 14px 20px; max-width: 70ch; }
+.content-body li { color: var(--text-1); font-size: 15px; margin-bottom: 5px; }
+.content-body strong { color: var(--text-0); font-weight: 600; }
+
+/* ── CALLOUT BLOCKS ── */
+.callout {
+  border-left: 3px solid; border-radius: 0 var(--radius) var(--radius) 0;
+  padding: 14px 18px; margin: 16px 0; font-size: 14px;
+}
+.callout-def {
+  border-color: var(--teal);
+  background: var(--teal-dim);
+}
+.callout-def .callout-label { color: var(--teal); font-size: 10px; font-family: var(--font-mono); text-transform: uppercase; letter-spacing: .1em; margin-bottom: 10px; }
+
+.callout-important {
+  border-color: var(--gold);
+  background: var(--gold-glow);
+}
+.callout-important .callout-label { color: var(--gold); font-size: 10px; font-family: var(--font-mono); text-transform: uppercase; letter-spacing: .1em; margin-bottom: 10px; }
+
+.callout-warn {
+  border-color: var(--red);
+  background: var(--red-dim);
+}
+.callout-warn .callout-label { color: var(--red); font-size: 10px; font-family: var(--font-mono); text-transform: uppercase; letter-spacing: .1em; margin-bottom: 10px; }
+
+.callout-note {
+  border-color: var(--purple);
+  background: var(--purple-dim);
+}
+.callout-note .callout-label { color: var(--purple); font-size: 10px; font-family: var(--font-mono); text-transform: uppercase; letter-spacing: .1em; margin-bottom: 10px; }
+
+.callout p, .callout ul, .callout li { color: var(--text-1); margin-bottom: 6px; }
+.callout p:last-child, .callout li:last-child { margin-bottom: 0; }
+
+/* ── FORMULA BLOCKS — signature element ── */
+.formula-block {
+  background: var(--bg-2);
+  border: 1px solid var(--gold-dim);
+  border-radius: var(--radius);
+  padding: 16px 20px;
+  margin: 16px 0;
+  position: relative;
+  overflow-x: auto;
+  max-width: 70ch;
+}
+.formula-block::before {
+  content: '';
+  position: absolute; left: 0; top: 0; bottom: 0; width: 3px;
+  background: var(--gold);
+  border-radius: var(--radius-sm) 0 0 var(--radius-sm);
+}
+.formula-label {
+  font-family: var(--font-mono); font-size: 10px; color: var(--gold);
+  text-transform: uppercase; letter-spacing: .1em; margin-bottom: 8px;
+}
+.formula-body {
+  font-family: var(--font-mono); font-size: 15px; color: var(--text-0);
+  white-space: pre-wrap; word-break: break-word;
+  font-variant-numeric: tabular-nums;
+}
+
+/* inline code */
+code {
+  font-family: var(--font-mono); font-size: 13px;
+  background: var(--bg-3); color: var(--text-0);
+  padding: 1px 5px; border-radius: var(--radius-sm);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ── TABLES ── */
+.table-wrap { overflow-x: auto; margin: 16px 0; max-width: 70ch; }
+table {
+  width: 100%; border-collapse: collapse;
+  font-size: 14px;
+  font-variant-numeric: tabular-nums;
+}
+th {
+  background: var(--bg-3); color: var(--gold);
+  font-family: var(--font-mono); font-size: 11px;
+  text-transform: uppercase; letter-spacing: .07em;
+  padding: 10px 14px; text-align: left;
+  border-bottom: 2px solid var(--gold-dim);
+}
+td {
+  padding: 9px 14px; border-bottom: 1px solid var(--border);
+  color: var(--text-1); vertical-align: top;
+}
+tr:last-child td { border-bottom: none; }
+tr:hover td { background: var(--bg-3); }
+
+/* comparison table */
+.compare-table th:first-child { border-right: 1px solid var(--border); }
+.compare-table td:first-child { border-right: 1px solid var(--border); color: var(--text-0); font-weight: 500; }
+
+/* ── PROBLEM/SOLUTION BLOCKS ── */
+.problem-block {
+  background: var(--bg-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  margin: 20px 0;
+}
+.problem-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 12px 18px;
+  background: var(--bg-3);
+  border-bottom: 1px solid var(--border);
+  cursor: pointer;
+}
+.problem-label { font-family: var(--font-mono); font-size: 11px; color: var(--purple); text-transform: uppercase; letter-spacing: .1em; }
+.problem-title { font-size: 14px; color: var(--text-0); font-weight: 500; }
+.problem-toggle { color: var(--text-3); font-size: 14px; transition: transform var(--transition); }
+.problem-header.open .problem-toggle { transform: rotate(180deg); }
+.problem-body { padding: 18px; }
+.problem-body.hidden {
+  opacity: 0; max-height: 0; overflow: hidden;
+  transition: opacity 0.2s ease, max-height 0.25s ease;
+  padding-top: 0; padding-bottom: 0;
+}
+.problem-body:not(.hidden) {
+  opacity: 1; max-height: 50000px;
+  transition: opacity 0.2s ease 0.05s, max-height 0.3s ease;
+}
+.problem-step { margin-bottom: 14px; }
+.problem-step-label { font-size: 11px; font-family: var(--font-mono); color: var(--gold); letter-spacing: .1em; text-transform: uppercase; margin-bottom: 6px; }
+.problem-answer {
+  background: var(--bg-3); border: 1px solid var(--green);
+  border-radius: var(--radius); padding: 12px 16px;
+  margin-top: 12px;
+}
+.problem-answer .answer-label { font-size: 10px; font-family: var(--font-mono); color: var(--green); text-transform: uppercase; letter-spacing: .1em; margin-bottom: 6px; }
+
+/* ── FORMULA QUICK-REFERENCE PANEL ── */
+#ref-panel {
+  position: fixed; right: -340px; top: var(--header-h);
+  width: 320px; height: calc(100vh - var(--header-h));
+  background: var(--bg-1); border-left: 1px solid var(--border);
+  overflow-y: auto; padding: 20px; z-index: 80;
+  transition: right 0.25s ease;
+}
+#ref-panel::after {
+  content: '';
+  position: sticky; bottom: 0; left: 0; right: 0;
+  display: block; height: 40px;
+  background: linear-gradient(transparent, var(--bg-1));
+  pointer-events: none;
+  margin: -40px 0 0;
+}
+#ref-panel.open { right: 0; }
+.ref-panel-header {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1px solid var(--border);
+}
+.ref-panel-header h4 { font-family: var(--font-serif); font-size: 15px; color: var(--text-0); }
+#ref-panel-close {
+  background: none; border: 1px solid var(--border);
+  color: var(--text-2); cursor: pointer; font-size: 18px;
+  width: 32px; height: 32px; border-radius: var(--radius-sm);
+  display: flex; align-items: center; justify-content: center;
+  transition: all var(--transition);
+}
+#ref-panel-close:hover { border-color: var(--gold); color: var(--gold); background: var(--gold-glow); }
+#ref-panel-content { animation: fadeSlideIn 0.3s ease both; }
+@keyframes fadeSlideIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.ref-subject { margin-bottom: 24px; }
+.ref-subject-title {
+  font-size: 12px; font-family: var(--font-mono); color: var(--gold);
+  text-transform: uppercase; letter-spacing: .1em; margin-bottom: 12px;
+  padding-bottom: 8px; border-bottom: 2px solid var(--gold-dim);
+  position: sticky; top: 0; background: var(--bg-1); z-index: 1;
+}
+.ref-empty { text-align: center; padding: 40px 16px; color: var(--text-3); font-size: 13px; line-height: 1.6; }
+.ref-empty .ref-empty-icon { font-size: 28px; margin-bottom: 12px; opacity: 0.4; }
+.ref-formula { background: var(--bg-2); border-radius: var(--radius-sm); padding: 8px 10px; margin-bottom: 6px; font-size: 14px; color: var(--text-0); overflow-x: auto; }
+
+/* ── BACK TO TOP ── */
+#back-top {
+  position: fixed; bottom: 24px; right: 24px; z-index: 99;
+  width: 40px; height: 40px; border-radius: 50%;
+  background: var(--bg-3); border: 1px solid var(--border-hi);
+  color: var(--text-1); font-size: 18px; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  opacity: 0; transform: translateY(8px);
+  transition: opacity 0.3s ease, transform 0.3s ease, background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+  pointer-events: none;
+}
+#back-top.visible { opacity: 1; transform: translateY(0); pointer-events: auto; }
+
+/* ── BREADCRUMB ── */
+.breadcrumb {
+  padding: 10px 48px;
+  font-size: 12px; color: var(--text-3);
+  border-bottom: 1px solid var(--border);
+  background: var(--bg-0);
+  position: sticky; top: calc(var(--header-h) + 89px); z-index: 40;
+}
+.breadcrumb a { color: var(--text-3); text-decoration: none; }
+.breadcrumb a:hover { color: var(--gold); }
+.breadcrumb span { margin: 0 6px; }
+
+/* ══════════════════════════════════════
+   RESPONSIVE
+══════════════════════════════════════ */
+@media (max-width: 900px) {
+  :root { --sidebar-w: 0px; }
+  #sidebar { transform: translateX(-260px); width: 260px; --sidebar-w: 260px; }
+  #sidebar.open { transform: translateX(0); }
+  #main { margin-left: 0; }
+  .dashboard-hero { padding: 32px 24px 24px; }
+  .subjects-grid { grid-template-columns: 1fr; }
+  .study-header { padding: 24px 24px 20px; position: static; }
+  .breadcrumb { padding: 8px 24px; position: static; }
+  .study-content { padding: 0 20px; }
+  #search-wrap { width: 180px; }
+  #ref-panel { width: 280px; right: -280px; }
+  .section-heading { min-height: 44px; }
+  .problem-header { min-height: 44px; }
+}
+
+@media (max-width: 600px) {
+  #search-wrap {
+    position: static; width: auto;
+  }
+  #search-input {
+    position: fixed; top: var(--header-h); left: 0; right: 0;
+    width: 100%; border-radius: 0; border-left: none; border-right: none;
+    padding: 10px 40px 10px 12px; font-size: 14px;
+    z-index: 150; display: none;
+  }
+  #search-input.mobile-open { display: block; }
+  #search-clear { right: 12px; z-index: 151; }
+  #search-results { position: fixed; top: calc(var(--header-h) + 42px); left: 0; right: 0; border-radius: 0; z-index: 150; }
+  .hdr-btn-search { display: flex; min-width: 44px; min-height: 44px; }
+  .dashboard-hero h1 { font-size: 22px; }
+  .study-content { padding: 0 16px; }
+  .dashboard-hero { padding: 24px 16px; }
+  .breadcrumb { padding: 8px 16px; }
+  .study-header { padding: 20px 16px; }
+  #ref-panel { width: 100%; right: -100%; }
+}
+
+/* ── OVERLAY ── */
+#overlay {
+  display: none; position: fixed; inset: 0; z-index: 80;
+  background: rgba(0,0,0,0);
+  transition: background 0.25s ease;
+}
+#overlay.visible { display: block; background: rgba(0,0,0,0.5); }
+
+/* ── SIDEBAR COLLAPSED (desktop) ── */
+.sidebar-collapsed #sidebar { transform: translateX(-260px); }
+.sidebar-collapsed #main { margin-left: 0; }
+
+</style>
+</head>
+<body>
+<div id="app">
+
+<!-- HEADER -->
+<header id="header">
+  <button class="hdr-btn" id="sidebar-toggle" aria-label="Toggle sidebar"><svg class="icon" viewBox="0 0 24 24"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg></button>
+  <a id="header-logo" href="#" onclick="showPage('home'); return false;">
+    <span class="course-code">CSE 4203</span>
+    <span class="course-name">Discrete Mathematics</span>
+  </a>
+  <div id="header-spacer"></div>
+  <div id="search-wrap">
+    <input type="search" id="search-input" placeholder="Search formulas, topics…" autocomplete="off">
+    <button id="search-clear" aria-label="Clear search"><svg class="icon icon-sm" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+    <div id="search-results" aria-label="Search results" aria-live="polite">
+      <div id="search-empty">No results found</div>
+    </div>
+  </div>
+  <button class="hdr-btn" onclick="toggleRefPanel()"><svg class="icon icon-sm" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg> Formulas</button>
+  <button class="hdr-btn hdr-btn-search" id="mobile-search-toggle" aria-label="Search"><svg class="icon icon-sm" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></button>
+  <button class="hdr-btn" id="theme-toggle"><svg class="icon icon-sm" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg> Light</button>
+</header>
+
+<!-- SIDEBAR -->
+<div id="sidebar">
+  <a class="sidebar-home" href="#" onclick="showPage('home'); closeSidebar(); return false;">
+    <svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M3 12l9-9 9 9"/><path d="M5 10v10h14V10"/></svg>
+    Dashboard
+  </a>
+  <div id="sidebar-nav"></div>
+</div>
+<div id="overlay" onclick="closeSidebar()"></div>
+
+<!-- MAIN -->
+<div id="body-wrap">
+<main id="main">
+
+<!-- DASHBOARD -->
+<div id="page-home" class="page active">
+  <div class="dashboard-hero">
+    <h1>Discrete Mathematics</h1>
+    <p class="subtitle">Comprehensive finals study guide covering divisibility, modular arithmetic, cryptography, graphs and coloring, matching, connectivity and trees, digraphs and DAGs, relations and counting, and counting techniques.</p>
+    <p class="src-note" style="margin-top:16px">9 lectures · 100+ topics · KaTeX math rendering</p>
+  </div>
+  <div class="subjects-grid" id="subjects-grid"></div>
+</div>
+
+<!-- STUDY PAGES (generated by JS) -->
+<div id="page-1" class="page study-page"></div>
+<div id="page-2" class="page study-page"></div>
+<div id="page-3" class="page study-page"></div>
+<div id="page-4" class="page study-page"></div>
+<div id="page-5" class="page study-page"></div>
+<div id="page-6" class="page study-page"></div>
+<div id="page-7" class="page study-page"></div>
+<div id="page-8" class="page study-page"></div>
+<div id="page-9" class="page study-page"></div>
+
+</main>
+</div>
+
+</div>
+
+<!-- Reference Panel -->
+<div id="ref-panel">
+  <div class="ref-panel-header">
+    <h4>Formula Quick Reference</h4>
+    <button id="ref-panel-close" onclick="toggleRefPanel()" aria-label="Close reference panel"><svg class="icon" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+  </div>
+  <div id="ref-panel-content"></div>
+</div>
+
+<button id="back-top" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="Back to top" aria-label="Back to top"><svg class="icon" viewBox="0 0 24 24"><polyline points="18 15 12 9 6 15"/></svg></button>
+
+<script>
+
+// ══════════════════════════════════════════════════════
+//  STUDY GUIDE DATA
+// ══════════════════════════════════════════════════════
+const SUBJECTS = [
+{
+  id: 1,
+  code: 'LS07',
+  title: 'Divisibility',
+  source: 'LS07 — Divisibility (June 12, 2026).',
+  desc: 'Comprehensive study guide for Divisibility. Source: LS07 — Divisibility (June 12, 2026).',
+  tags: ['GCD', 'Euclid', 'Bezout'],
+  formulas: ["a\\mid b\\iff \\exists k\\in\\mathbb Z\\text{ such that }ak=b", "d\\mid(a+b)", "d\\mid(sa+tb)", "\\gcd(a,b)\\mid g", "0\\le g\\le\\max(a,b)", "\\gcd(0,0)=0", "\\gcd(0,b)=|b|", "\\gcd(a,b)=\\gcd(a-b,b)"],
+  sections: [
+{ num: '1', title: 'Number Theory', content: `
+<div class="callout callout-def"><div class="callout-label">What is Number Theory?</div>
+<p>Number theory is the study of the integers</p>
+<div class="formula-block"><div class="formula-body">\\mathbb Z=\\{\\ldots,-2,-1,0,1,2,\\ldots\\}.</div></div>
+<p>The lecture presents number theory as one of the oldest branches of mathematics and highlights applications in:</p>
+<ul><li>cryptography and secure communications,</li>
+<li>e-commerce and digital transactions,</li>
+<li>algorithms and computational complexity.</li></ul>
+<p>The later lectures on modular arithmetic and cryptography build directly on the divisibility, GCD, and Bézout ideas introduced here.</p>
+</div>
+` },
+{ num: '2', title: 'Divisibility', content: `
+<div class="callout callout-def"><div class="callout-label">Definition</div>
+<p>For integers $a,b$,</p>
+<div class="formula-block"><div class="formula-body">a\\mid b</div></div>
+<p>(read “$a$ divides $b$”) <strong>iff</strong> there exists an integer $k$ such that</p>
+<div class="formula-block"><div class="formula-body">ak=b.</div></div>
+<p>Equivalent descriptions:</p>
+<ul><li>$b$ is a multiple of $a$;</li>
+<li>$b$ is divisible by $a$;</li>
+<li>$a$ is a divisor of $b$.</li></ul>
+<p>The definition uses an integer $k$, so $k$ is allowed to be negative or zero.</p>
+</div>
+<div class="callout callout-def"><div class="callout-label">Important examples</div>
+<ul><li>$2\\mid n$ means that $n$ is even.</li>
+<li>For every $n\\in\\mathbb N$, $-n\\mid n$, because $n=(-1)(-n)$.</li>
+<li>For every $n\\in\\mathbb N$, $n\\mid0$, because $0=n\\cdot0$. Thus, under this definition, $0$ is even.</li></ul>
+</div>
+<div class="callout callout-warn"><div class="callout-label">Common confusion</div>
+<p>Do <strong>not</strong> treat divisibility as ordinary division. Writing</p>
+<div class="formula-block"><div class="formula-body">\\frac ba=k</div></div>
+<p>is not a safe definition because it does not naturally handle $a=0$. The source explicitly warns against this formulation.</p>
+</div>
+<div class="callout callout-important"><div class="callout-label">Must Memorize</div>
+<div class="formula-block"><div class="formula-body">\\boxed{a\\mid b\\iff \\exists k\\in\\mathbb Z\\text{ such that }ak=b}</div></div>
+</div>
+` },
+{ num: '3', title: 'Common Divisors and Addition', content: `
+<p>Suppose</p>
+<p>$$ d\\mid a\\quad\\text{and}\\quad d\\mid b. $$</p>
+<p>Then $d$ is a common divisor of $a$ and $b$, and</p>
+<p>$$ \\boxed{d\\mid(a+b)}. $$</p>
+<div class="callout callout-note"><div class="callout-label">Proof</div>
+<p>Since $d\\mid a$, write</p>
+<div class="formula-block"><div class="formula-body">a=xd</div></div>
+<p>for some $x\\in\\mathbb Z$. Since $d\\mid b$, write</p>
+<div class="formula-block"><div class="formula-body">b=yd</div></div>
+<p>for some $y\\in\\mathbb Z$. Then</p>
+<div class="formula-block"><div class="formula-body">a+b=xd+yd=(x+y)d.</div></div>
+<p>Because $x+y\\in\\mathbb Z$,</p>
+<div class="formula-block"><div class="formula-body">d\\mid(a+b).</div></div>
+</div>
+<div class="callout callout-def"><div class="callout-label">Why this matters</div>
+<p>This is the basic algebraic property behind integer linear combinations and later proofs about the GCD.</p>
+</div>
+` },
+{ num: '4', title: 'Integer Linear Combinations', content: `
+<p>If</p>
+<p>$$ d\\mid a\\quad\\text{and}\\quad d\\mid b, $$</p>
+<p>then for <strong>all</strong> integers $s,t$,</p>
+<p>$$ \\boxed{d\\mid(sa+tb)}. $$</p>
+<p>The expression</p>
+<p>$$ sa+tb $$</p>
+<p>is called an <strong>Integer Linear Combination (ILC)</strong> of $a$ and $b$.</p>
+<div class="callout callout-note"><div class="callout-label">Proof</div>
+<p>Write</p>
+<div class="formula-block"><div class="formula-body">a=xd,\\qquad b=yd.</div></div>
+<p>Then</p>
+<div class="formula-block"><div class="formula-body">sa+tb=s(xd)+t(yd)
+=(sx+ty)d.</div></div>
+<p>Hence</p>
+<div class="formula-block"><div class="formula-body">d\\mid(sa+tb).</div></div>
+</div>
+<div class="callout callout-important"><div class="callout-label">Must Understand</div>
+<p>Once a number divides both $a$ and $b$, it automatically divides <strong>every</strong> integer linear combination of $a$ and $b$. This fact becomes central in:</p>
+<ul><li>the water-jug puzzle,</li>
+<li>the Euclidean algorithm,</li>
+<li>Bézout's identity,</li>
+<li>modular inverses.</li></ul>
+</div>
+` },
+{ num: '5', title: 'Water-Jug / Fountain Puzzle', content: `
+<p>The lecture uses the <em>Die Hard with a Vengeance</em> fountain puzzle as a state-machine application.</p>
+<div class="callout callout-def"><div class="callout-label">Problem</div>
+<p>With a 3-gallon jug and a 5-gallon jug, obtain exactly 4 gallons. Represent a state as</p>
+<div class="formula-block"><div class="formula-body">(x,y)</div></div>
+<p>where $x$ is the amount in the first jug and $y$ is the amount in the second. Start:</p>
+<div class="formula-block"><div class="formula-body">(0,0)</div></div>
+<p>Goal:</p>
+<div class="formula-block"><div class="formula-body">(x,g).</div></div>
+</div>
+<div class="callout callout-def"><div class="callout-label">Allowed transitions</div>
+<h4 class="subsection-heading">Fill</h4>
+<div class="formula-block"><div class="formula-body">(x,y)\\to(a,y)</div></div>
+<p>or</p>
+<div class="formula-block"><div class="formula-body">(x,y)\\to(x,b).</div></div>
+<h4 class="subsection-heading">Empty</h4>
+<div class="formula-block"><div class="formula-body">(x,y)\\to(0,y)</div></div>
+<p>or</p>
+<div class="formula-block"><div class="formula-body">(x,y)\\to(x,0).</div></div>
+<h4 class="subsection-heading">Pour from the first jug into the second</h4>
+<div class="formula-block"><div class="formula-body">(x,y)\\to
+\\begin{cases}
+(0,x+y), & x+y\\le b,\\\\
+(x+y-b,b), & \\text{otherwise}.
+\\end{cases}</div></div>
+<h4 class="subsection-heading">Pour from the second jug into the first</h4>
+<div class="formula-block"><div class="formula-body">(x,y)\\to
+\\begin{cases}
+(x+y,0), & x+y\\le a,\\\\
+(a,x+y-a), & \\text{otherwise}.
+\\end{cases}</div></div>
+</div>
+<div class="callout callout-def"><div class="callout-label">The PDF's 3-gallon / 5-gallon solution</div>
+<p>Starting at $(0,0)$:</p>
+<ol><li>Fill the 5-gallon jug: $(0,5)$</li>
+<li>Pour into the 3-gallon jug: $(3,2)$</li>
+<li>Empty the 3-gallon jug: $(0,2)$</li>
+<li>Pour the 2 gallons into the 3-gallon jug: $(2,0)$</li>
+<li>Fill the 5-gallon jug: $(2,5)$</li>
+<li>Pour from the 5-gallon jug into the 3-gallon jug: $(3,4)$</li></ol>
+<p>So the 5-gallon jug contains exactly 4 gallons.</p>
+</div>
+<div class="callout callout-def"><div class="callout-label">General possibility condition</div>
+<p>For jug capacities $a,b$, a target $g$ is obtainable exactly when</p>
+<div class="formula-block"><div class="formula-body">\\boxed{\\gcd(a,b)\\mid g}</div></div>
+<p>and</p>
+<div class="formula-block"><div class="formula-body">\\boxed{0\\le g\\le\\max(a,b)}.</div></div>
+<p>Equivalently, $g$ must be an integer linear combination of $a$ and $b$, subject to the achievable-volume range. The lecture's counterexample is</p>
+<div class="formula-block"><div class="formula-body">a=9,\\quad b=6,\\quad g=5.</div></div>
+<p>Since</p>
+<div class="formula-block"><div class="formula-body">\\gcd(9,6)=3</div></div>
+<p>and $3\\nmid5$, 5 gallons cannot be obtained.</p>
+</div>
+` },
+{ num: '6', title: 'Inductive Invariant for the Water-Jug Problem', content: `
+<p>The lecture proves that every reachable amount remains an integer linear combination of $a$ and $b$.</p>
+<p>Define $P(x,y)$ by saying:</p>
+<p>$$ x=pa+qb $$</p>
+<p>and</p>
+<p>$$ y=ra+sb $$</p>
+<p>for some integers $p,q,r,s$.</p>
+<p>Then prove by induction on the number of legal moves.</p>
+<div class="callout callout-def"><div class="callout-label">Base case</div>
+<p>At $(0,0)$,</p>
+<div class="formula-block"><div class="formula-body">0=0a+0b.</div></div>
+<p>So the property holds initially.</p>
+</div>
+<div class="callout callout-def"><div class="callout-label">Inductive step</div>
+<p>Assume the current state has the property.</p>
+<ul><li><strong>Empty:</strong> replacing a value by 0 preserves the property.</li>
+<li><strong>Fill:</strong> replacing a value by $a$ or $b$ preserves the property.</li>
+<li><strong>Pour left:</strong> the new nonzero amount is either $x+y$ or $x+y-b$, both of which remain ILCs.</li>
+<li><strong>Pour right:</strong> similarly, the new amount is either $x+y$ or $x+y-a$.</li></ul>
+<p>Thus every move preserves the invariant.</p>
+</div>
+<div class="callout callout-def"><div class="callout-label">Exam insight</div>
+<p>This proof is not just about one jug sequence. It establishes an <strong>invariant</strong>: legal transitions can never leave the set of integer linear combinations of $a$ and $b$.</p>
+</div>
+` },
+{ num: '7', title: 'Greatest Common Divisor', content: `
+<div class="callout callout-def"><div class="callout-label">Definition</div>
+<div class="formula-block"><div class="formula-body">\\gcd(a,b)</div></div>
+<p>is the largest integer $d$ such that</p>
+<div class="formula-block"><div class="formula-body">d\\mid a\\quad\\text{and}\\quad d\\mid b,</div></div>
+<p>except that</p>
+<div class="formula-block"><div class="formula-body">\\boxed{\\gcd(0,0)=0}.</div></div>
+<p>The lecture also gives the characterization that the GCD is the unique non-negative common divisor divisible by every common divisor.</p>
+</div>
+<div class="callout callout-def"><div class="callout-label">Example</div>
+<div class="formula-block"><div class="formula-body">\\gcd(6,4)=2.</div></div>
+<p>The common divisors are</p>
+<div class="formula-block"><div class="formula-body">2,-2,1,-1,</div></div>
+<p>and all of $-2,1,-1$ divide $2$.</p>
+</div>
+<div class="callout callout-def"><div class="callout-label">Properties</div>
+<div class="formula-block"><div class="formula-body">\\gcd(a,b)=\\gcd(b,a)</div></div>
+<p>and</p>
+<div class="formula-block"><div class="formula-body">\\boxed{\\gcd(0,b)=|b|}.</div></div>
+</div>
+` },
+{ num: '8', title: 'GCD by Subtraction', content: `
+<p>The source establishes</p>
+<p>$$ \\boxed{\\gcd(a,b)=\\gcd(a-b,b)} $$</p>
+<p>for integers $a,b$.</p>
+<div class="callout callout-def"><div class="callout-label">Why it works</div>
+<p>If $d\\mid a$ and $d\\mid b$, then</p>
+<div class="formula-block"><div class="formula-body">d\\mid(a-b)</div></div>
+<p>because $a-b$ is an integer linear combination:</p>
+<div class="formula-block"><div class="formula-body">a-b=1a+(-1)b.</div></div>
+<p>Conversely, if</p>
+<div class="formula-block"><div class="formula-body">d\\mid(a-b)\\quad\\text{and}\\quad d\\mid b,</div></div>
+<p>then</p>
+<div class="formula-block"><div class="formula-body">a=(a-b)+b,</div></div>
+<p>so $d\\mid a$. Thus the two pairs have exactly the same common divisors, so they have the same GCD.</p>
+</div>
+<div class="callout callout-def"><div class="callout-label">Examples from the lecture</div>
+<div class="formula-block"><div class="formula-body">\\gcd(9,6)
+=\\gcd(3,6)
+=\\gcd(3,3)
+=\\gcd(3,0)
+=3.</div></div>
+<div class="formula-block"><div class="formula-body">\\gcd(3,5)
+=\\gcd(3,2)
+=\\gcd(1,2)
+=\\gcd(1,1)
+=\\gcd(1,0)
+=1.</div></div>
+<p>For $\\gcd(1000002,1)$, repeated subtraction is extremely slow. The lecture notes the subtraction algorithm has complexity</p>
+<div class="formula-block"><div class="formula-body">O(a+b).</div></div>
+</div>
+` },
+{ num: '9', title: 'Division Theorem', content: `
+<p>For every integer $n$ and every positive integer $d$, there exists a <strong>unique</strong> pair of integers $q,r$ such that</p>
+<p>$$ \\boxed{n=qd+r} $$</p>
+<p>with</p>
+<p>$$ \\boxed{0\\le r<d}. $$</p>
+<p>This is the <strong>Division Theorem</strong>.</p>
+<div class="callout callout-def"><div class="callout-label">Terminology</div>
+<ul><li>$q=n\\operatorname{div}d$: quotient</li>
+<li>$r=n\\operatorname{rem}d$: remainder</li></ul>
+<p>Equivalent remainder notations in the lecture include:</p>
+<div class="formula-block"><div class="formula-body">r=n\\operatorname{rem}d,\\quad
+r=\\operatorname{rem}(n,d),\\quad
+r=n\\%d,\\quad
+r=n\\mod d</div></div>
+<p>with the source noting a slight language-specific distinction for “mod”.</p>
+</div>
+` },
+{ num: '10', title: 'Faster GCD: Euclidean Algorithm', content: `
+<p>The key lemma is:</p>
+<p>$$ \\boxed{\\gcd(a,b)=\\gcd(a\\operatorname{rem}b,b)} $$</p>
+<p>for</p>
+<p>$$ a\\ge b\\ge1. $$</p>
+<p>This replaces many subtraction steps with one division/remainder operation.</p>
+<div class="callout callout-note"><div class="callout-label">Proof idea</div>
+<p>Repeated subtraction gives</p>
+<div class="formula-block"><div class="formula-body">\\gcd(a,b)
+=\\gcd(a-b,b)
+=\\gcd(a-2b,b)
+=\\cdots</div></div>
+<p>until exactly</p>
+<div class="formula-block"><div class="formula-body">a-(a\\operatorname{div}b)b
+=a\\operatorname{rem}b.</div></div>
+<p>Therefore</p>
+<div class="formula-block"><div class="formula-body">\\gcd(a,b)=\\gcd(a\\operatorname{rem}b,b).</div></div>
+</div>
+<div class="callout callout-def"><div class="callout-label">Example</div>
+<div class="formula-block"><div class="formula-body">\\gcd(1000002,1)
+=
+\\gcd(0,1)
+=
+1.</div></div>
+</div>
+<div class="callout callout-def"><div class="callout-label">Euclidean Algorithm as a state machine</div>
+<ul><li>Current state: $\\gcd(x,y)$</li>
+<li>Start: $\\gcd(a,b)$</li>
+<li>Goal: $\\gcd(x,0)$, returning $x$</li>
+<li>Transition:</li></ul>
+<div class="formula-block"><div class="formula-body">\\gcd(x,y)\\to\\gcd(x\\operatorname{rem}y,y)</div></div>
+<p>plus swapping when needed. The lecture's invariant is that the GCD remains unchanged throughout the transitions.</p>
+</div>
+<div class="callout callout-def"><div class="callout-label">Complexity</div>
+<p>The worst case occurs when quotients are 1, producing a Fibonacci-like sequence. <strong>Lamé's Theorem:</strong> the number of Euclidean-algorithm steps is at most</p>
+<div class="formula-block"><div class="formula-body">\\boxed{5k}</div></div>
+<p>where $k$ is the number of digits in $\\min(a,b)$.</p>
+</div>
+` },
+{ num: '11', title: 'Bézout\'s Identity', content: `
+<div class="callout callout-important"><div class="callout-label">Theorem</div>
+<p>For integers $a,b$,</p>
+<div class="formula-block"><div class="formula-body">\\boxed{\\gcd(a,b)=sa+tb}</div></div>
+<p>for some integers $s,t$. Thus the GCD itself is an integer linear combination of the two inputs.</p>
+</div>
+<div class="callout callout-def"><div class="callout-label">Corollary</div>
+<p>A number can be written as an ILC of $a$ and $b$ <strong>iff</strong> it is a multiple of</p>
+<div class="formula-block"><div class="formula-body">\\gcd(a,b).</div></div>
+</div>
+<div class="callout callout-def"><div class="callout-label">Why the corollary is true</div>
+<p>Let</p>
+<div class="formula-block"><div class="formula-body">g=\\gcd(a,b).</div></div>
+<p>Since $g\\mid a$ and $g\\mid b$, it divides every integer linear combination $sa+tb$. Hence every ILC is a multiple of $g$. Conversely, Bézout gives</p>
+<div class="formula-block"><div class="formula-body">g=sa+tb.</div></div>
+<p>Multiplying by any integer $k$,</p>
+<div class="formula-block"><div class="formula-body">kg=(ks)a+(kt)b,</div></div>
+<p>so every multiple of $g$ is also an ILC.</p>
+</div>
+` },
+{ num: '12', title: 'Extended Euclidean Algorithm (Kuṭṭaka)', content: `
+<p>The lecture identifies the <strong>Kuṭṭaka</strong>, associated with Āryabhaṭa and described by Bhāskara I, as the Extended Euclidean Algorithm.</p>
+<div class="callout callout-def"><div class="callout-label">Purpose</div>
+<p>Use the ordinary Euclidean algorithm while retaining the remainder equations, then substitute backward to obtain $s,t$ satisfying</p>
+<div class="formula-block"><div class="formula-body">\\gcd(a,b)=sa+tb.</div></div>
+</div>
+<div class="callout callout-def"><div class="callout-label">Full example from the PDF: $\\gcd(56,15)$</div>
+<p>Euclidean steps:</p>
+<div class="formula-block"><div class="formula-body">56=15(3)+11</div></div>
+<div class="formula-block"><div class="formula-body">15=11(1)+4</div></div>
+<div class="formula-block"><div class="formula-body">11=4(2)+3</div></div>
+<div class="formula-block"><div class="formula-body">4=3(1)+1</div></div>
+<div class="formula-block"><div class="formula-body">3=1(3)+0.</div></div>
+<p>Therefore,</p>
+<div class="formula-block"><div class="formula-body">\\gcd(56,15)=1.</div></div>
+<p>Back-substitution: From Step 4:</p>
+<div class="formula-block"><div class="formula-body">1=4-3.</div></div>
+<p>From Step 3:</p>
+<div class="formula-block"><div class="formula-body">3=11-2(4).</div></div>
+<p>Substitute:</p>
+<div class="formula-block"><div class="formula-body">1=4-(11-2(4))
+=3(4)-11.</div></div>
+<p>From Step 2:</p>
+<div class="formula-block"><div class="formula-body">4=15-11.</div></div>
+<p>So</p>
+<div class="formula-block"><div class="formula-body">1=3(15-11)-11
+=3(15)-4(11).</div></div>
+<p>From Step 1:</p>
+<div class="formula-block"><div class="formula-body">11=56-3(15).</div></div>
+<p>Therefore</p>
+<div class="formula-block"><div class="formula-body">1=3(15)-4(56-3(15))</div></div>
+<div class="formula-block"><div class="formula-body">=3(15)-4(56)+12(15)</div></div>
+<div class="formula-block"><div class="formula-body">=(-4)(56)+15(15).</div></div>
+<p>Thus</p>
+<div class="formula-block"><div class="formula-body">\\boxed{\\gcd(56,15)=(-4)(56)+15(15)}</div></div>
+<p>so</p>
+<div class="formula-block"><div class="formula-body">\\boxed{s=-4,\\qquad t=15}.</div></div>
+</div>
+<div class="callout callout-important"><div class="callout-label">Must Memorize</div>
+<div class="formula-block"><div class="formula-body">\\boxed{\\gcd(a,b)=sa+tb}</div></div>
+<p>and know how to obtain $s,t$ by back-substitution.</p>
+</div>
+` },
+{ num: '14', title: 'Source Crosswalk', content: `
+<p><details><summary style="cursor:pointer;color:var(--text-2);font-size:13px;margin:16px 0">Source Structure Crosswalk</summary> <p>The following headings appear in the source PDF. Each is represented in the guide above, either directly or by a clearly corresponding explanation.</p> <li>[x] You were Wrong about Cryptography</li> <li>[x] Please Do Not Divide By Zero</li> <li>[x] Common Divisors Love Teamwork</li> <li>[x] Scaling Up the Divisibility Party</li> <li>[x] Defusing Bombs With Discrete Math</li> <li>[x] Pour, Empty, Repeat: Bomb Defused</li> <li>[x] Can’t Pour This</li> <li>[x] Overthinking Water Pouring via Induction</li> <li>[x] The Absolute Greatest Common Ground</li> <li>[x] Slow Subtraction Makes Bad Algorithms</li> <li>[x] Leftovers Are Officially Unique Now</li> <li>[x] Remainds Me a Faster Algorithm</li> <li>[x] Euclid’s Kryptonite</li> <li>[x] Every GCD Deserves a Combination</li> <li>[x] Meet The Ancient Number Crusher</li> <li>[x] Tracking Remainders the Hard Way</li> <li>[x] Substituting Backward Until It Works</li> <li>[x] Suggested Readings</li></p>
+` }
+]
+},
+{
+  id: 2,
+  code: 'LS08',
+  title: 'Modular Arithmetic',
+  source: 'LS08 — Modular Arithmetic (June 18, 2026).',
+  desc: 'Comprehensive study guide for Modular Arithmetic. Source: LS08 — Modular Arithmetic (June 18, 2026).',
+  tags: ['Modular', 'Congruence', 'FLT'],
+  formulas: ["\\gcd(a,b)=sa+tb", "\\text{ILCs of }a,b\\text{ are exactly the multiples of }\\gcd(a,b)", "a\\equiv b\\pmod n", "n\\mid(a-b)", "n\\equiv r\\pmod d", "a\\equiv b\\pmod n\\iff \\operatorname{rem}(a,n)=\\operatorname{rem}(b,n)", "a^k\\equiv b^k\\pmod n", "x\\equiv25\\pmod{100}"],
+  sections: [
+{ num: '1', title: 'Connection to Bézout', content: `
+<p>The lecture begins by recalling:</p>
+<p>$$ \\boxed{\\gcd(a,b)=sa+tb} $$</p>
+<p>for some $s,t\\in\\mathbb Z$.</p>
+<p>It also recalls the key characterization:</p>
+<p>$$ \\boxed{\\text{ILCs of }a,b\\text{ are exactly the multiples of }\\gcd(a,b)}. $$</p>
+<p>These facts are later used to explain why modular inverses exist.</p>
+` },
+{ num: '2', title: 'Modular Arithmetic as Clock Arithmetic', content: `
+<p>The main idea is to ignore complete multiples of $n$ and focus on the remainder.</p>
+<p>Examples in the source:</p>
+<ul><li>even + odd = odd;</li>
+<li>the last digit of $4203\\times4711$ depends only on $3\\times1$;</li>
+<li>$50$ hours is $2$ hours beyond two full days;</li>
+<li>$100$ days after Tuesday is Thursday because</li></ul>
+<p>$$ 100\\operatorname{rem}7=2. $$</p>
+<p>Thus modular arithmetic behaves like clock arithmetic.</p>
+` },
+{ num: '3', title: 'Congruence', content: `
+<div class="callout callout-def"><div class="callout-label">Definition</div>
+<div class="formula-block"><div class="formula-body">\\boxed{a\\equiv b\\pmod n}</div></div>
+<p>iff</p>
+<div class="formula-block"><div class="formula-body">\\boxed{n\\mid(a-b)}.</div></div>
+<p>In the lecture's words, $a$ and $b$ are the “same” modulo $n$ when their difference is a multiple of $n$.</p>
+</div>
+<div class="callout callout-def"><div class="callout-label">Residue classes modulo 5</div>
+<p>There are five classes:</p>
+<div class="formula-block"><div class="formula-body">[0]=\\{\\ldots,-10,-5,0,5,10,\\ldots\\}</div></div>
+<div class="formula-block"><div class="formula-body">[1]=\\{\\ldots,-9,-4,1,6,11,\\ldots\\}</div></div>
+<div class="formula-block"><div class="formula-body">[2]=\\{\\ldots,-8,-3,2,7,12,\\ldots\\}</div></div>
+<div class="formula-block"><div class="formula-body">[3]=\\{\\ldots,-7,-2,3,8,13,\\ldots\\}</div></div>
+<div class="formula-block"><div class="formula-body">[4]=\\{\\ldots,-6,-1,4,9,14,\\ldots\\}.</div></div>
+<p>Generally,</p>
+<div class="formula-block"><div class="formula-body">k\\in[\\operatorname{rem}(k,5)].</div></div>
+<p>If</p>
+<div class="formula-block"><div class="formula-body">k=5q+r,</div></div>
+<p>then</p>
+<div class="formula-block"><div class="formula-body">k\\in[r].</div></div>
+</div>
+` },
+{ num: '4', title: 'Division Theorem and Residue Classes', content: `
+<p>For integers $n$ and positive $d$, there exists a unique pair $q,r$ such that</p>
+<p>$$ n=qd+r $$</p>
+<p>with</p>
+<p>$$ 0\\le r<d. $$</p>
+<p>Because</p>
+<p>$$ n-r=qd, $$</p>
+<p>we have</p>
+<p>$$ d\\mid(n-r) $$</p>
+<p>and therefore</p>
+<p>$$ \\boxed{n\\equiv r\\pmod d}. $$</p>
+<p>Every allowed remainder represents one residue/equivalence class.</p>
+` },
+{ num: '5', title: 'Same Remainder Characterization', content: `
+<div class="callout callout-important"><div class="callout-label">Theorem</div>
+<div class="formula-block"><div class="formula-body">\\boxed{a\\equiv b\\pmod n\\iff
+\\operatorname{rem}(a,n)=\\operatorname{rem}(b,n)}.</div></div>
+</div>
+<div class="callout callout-def"><div class="callout-label">Forward direction</div>
+<p>Assume</p>
+<div class="formula-block"><div class="formula-body">a\\equiv b\\pmod n.</div></div>
+<p>Then</p>
+<div class="formula-block"><div class="formula-body">n\\mid(a-b),</div></div>
+<p>so for some integer $q$,</p>
+<div class="formula-block"><div class="formula-body">a-b=qn.</div></div>
+<p>Write</p>
+<div class="formula-block"><div class="formula-body">b=q'n+r</div></div>
+<p>with $0\\le r<n$. Then</p>
+<div class="formula-block"><div class="formula-body">a=qn+b
+=(q+q')n+r.</div></div>
+<p>Hence the remainder of $a$ modulo $n$ is also $r$.</p>
+</div>
+<div class="callout callout-def"><div class="callout-label">Reverse direction</div>
+<p>If</p>
+<div class="formula-block"><div class="formula-body">\\operatorname{rem}(a,n)=\\operatorname{rem}(b,n)=r,</div></div>
+<p>then</p>
+<div class="formula-block"><div class="formula-body">a=nq+r,\\qquad b=nq'+r.</div></div>
+<p>Subtract:</p>
+<div class="formula-block"><div class="formula-body">a-b=n(q-q').</div></div>
+<p>Thus</p>
+<div class="formula-block"><div class="formula-body">n\\mid(a-b),</div></div>
+<p>so</p>
+<div class="formula-block"><div class="formula-body">a\\equiv b\\pmod n.</div></div>
+</div>
+` },
+{ num: '6', title: 'Remainder Notation and Programming-Language Nuance', content: `
+<p>The lecture lists:</p>
+<ul><li>$a\\operatorname{rem}n$</li>
+<li>$\\operatorname{rem}(a,n)$</li>
+<li>$a\\bmod n$</li></ul>
+<p>as remainder-style notations.</p>
+<p>The source also warns that programming languages differ for negative operands. Example:</p>
+<p>$$ -43\\%10=7 $$</p>
+<p>in Python, while C/C++/JavaScript give</p>
+<p>$$ -43\\%10=-3. $$</p>
+<div class="callout callout-def"><div class="callout-label">Exam-safe distinction</div>
+<p>The lecture recommends writing congruence explicitly as</p>
+<div class="formula-block"><div class="formula-body">a\\equiv b\\pmod n</div></div>
+<p>and writing a remainder as</p>
+<div class="formula-block"><div class="formula-body">a=\\operatorname{rem}(b,n)</div></div>
+<p>when the meaning needs to be unambiguous.</p>
+</div>
+` },
+{ num: '7', title: 'Replacing Numbers by Congruent Numbers', content: `
+<p>If</p>
+<p>$$ a\\equiv b\\pmod n, $$</p>
+<p>then for any $c$,</p>
+<p>$$ a+c\\equiv b+c\\pmod n, $$</p>
+<p>$$ ac\\equiv bc\\pmod n, $$</p>
+<p>$$ a-c\\equiv b-c\\pmod n, $$</p>
+<p>and</p>
+<p>$$ c-a\\equiv c-b\\pmod n. $$</p>
+<div class="callout callout-def"><div class="callout-label">Practical meaning</div>
+<p>When adding, subtracting, or multiplying modulo $n$, you may replace a number by any congruent representative. This is the main computational shortcut of modular arithmetic.</p>
+</div>
+` },
+{ num: '8', title: 'Powers Preserve Congruence', content: `
+<div class="callout callout-important"><div class="callout-label">Theorem</div>
+<p>If</p>
+<div class="formula-block"><div class="formula-body">a\\equiv b\\pmod n,</div></div>
+<p>then for every integer $k\\ge1$,</p>
+<div class="formula-block"><div class="formula-body">\\boxed{a^k\\equiv b^k\\pmod n}.</div></div>
+</div>
+<div class="callout callout-note"><div class="callout-label">Proof by induction</div>
+<p>Base case:</p>
+<div class="formula-block"><div class="formula-body">a^1\\equiv b^1\\pmod n</div></div>
+<p>is exactly the assumption. Inductive step: Assume</p>
+<div class="formula-block"><div class="formula-body">a^{k-1}\\equiv b^{k-1}\\pmod n.</div></div>
+<p>Then</p>
+<div class="formula-block"><div class="formula-body">a^k=a^{k-1}a
+\\equiv b^{k-1}a
+\\equiv b^{k-1}b
+=b^k
+\\pmod n.</div></div>
+<p>Hence the statement holds for every $k\\ge1$.</p>
+</div>
+` },
+{ num: '9', title: 'Important Warning: Exponent Rules Can Be Misapplied', content: `
+<p>The lecture explicitly warns that one cannot blindly turn an arbitrary congruence into a new exponent-base relation.</p>
+<p>Example:</p>
+<p>$$ 1\\equiv6\\pmod5. $$</p>
+<p>But it is not valid to conclude that</p>
+<p>$$ 2^1\\equiv2^6\\pmod5 $$</p>
+<p>from the congruence $1\\equiv6\\pmod5$.</p>
+<p>The safe theorem is:</p>
+<div class="callout callout-note"><div class="callout-label">Source Note</div>If the <strong>bases</strong> are congruent, then equal positive powers of those bases are congruent.</div>
+` },
+{ num: '10', title: 'Simplifying Huge Powers', content: `
+<p>The source demonstrates the method on</p>
+<p>$$ x=11335^{11111}(6+7799^{5000})\\pmod{100}. $$</p>
+<p>First reduce the bases:</p>
+<p>$$ 11335\\equiv35\\pmod{100} $$</p>
+<p>and</p>
+<p>$$ 7799\\equiv99\\equiv-1\\pmod{100}. $$</p>
+<p>Therefore</p>
+<p>$$ x\\equiv35^{11111}(6-1^{5000})\\pmod{100} $$</p>
+<p>and, following the source's reduction,</p>
+<p>$$ x\\equiv35^{11111}\\cdot7\\pmod{100}. $$</p>
+<p>Now detect the power pattern:</p>
+<p>$$ 35^1\\equiv35\\pmod{100}, $$</p>
+<p>$$ 35^2\\equiv25\\pmod{100}, $$</p>
+<p>$$ 35^3\\equiv75\\pmod{100}, $$</p>
+<p>$$ 35^4\\equiv25\\pmod{100}. $$</p>
+<p>Thus:</p>
+<ul><li>odd powers of 35 give 75;</li>
+<li>even powers give 25.</li></ul>
+<p>Since $11111$ is odd,</p>
+<p>$$ 35^{11111}\\equiv75\\pmod{100}. $$</p>
+<p>Hence</p>
+<p>$$ x\\equiv75\\cdot7=525\\equiv25\\pmod{100}. $$</p>
+<div class="callout callout-def"><div class="callout-label">Final answer</div>
+<div class="formula-block"><div class="formula-body">\\boxed{x\\equiv25\\pmod{100}}.</div></div>
+</div>
+` },
+{ num: '11', title: 'Why Modular Division Is Different', content: `
+<p>Ordinary arithmetic allows cancellation:</p>
+<p>$$ 3x=3\\Rightarrow x=1. $$</p>
+<p>But in modular arithmetic,</p>
+<p>$$ 3x\\equiv3\\pmod6 $$</p>
+<p>does <strong>not</strong> force $x\\equiv1\\pmod6$.</p>
+<p>The source gives multiple solutions:</p>
+<p>$$ x=1,\\;3,\\;5. $$</p>
+<p>Indeed:</p>
+<p>$$ 3(1)=3\\equiv3\\pmod6, $$</p>
+<p>$$ 3(3)=9\\equiv3\\pmod6, $$</p>
+<p>$$ 3(5)=15\\equiv3\\pmod6. $$</p>
+<p>So naive cancellation fails.</p>
+` },
+{ num: '12', title: 'Multiplicative Inverse', content: `
+<div class="callout callout-def"><div class="callout-label">Definition</div>
+<p>A multiplicative inverse of $x$ modulo $n$, written $x^{-1}$, is a number $b$ such that</p>
+<div class="formula-block"><div class="formula-body">\\boxed{xb\\equiv1\\pmod n}.</div></div>
+</div>
+<div class="callout callout-def"><div class="callout-label">Example 1: 3 modulo 6</div>
+<p>No inverse exists, because no multiple of 3 is congruent to 1 modulo 6.</p>
+</div>
+<div class="callout callout-def"><div class="callout-label">Example 2: 3 modulo 5</div>
+<p>An inverse exists because</p>
+<div class="formula-block"><div class="formula-body">3\\cdot2=6\\equiv1\\pmod5.</div></div>
+<p>Thus</p>
+<div class="formula-block"><div class="formula-body">\\boxed{3^{-1}\\equiv2\\pmod5}.</div></div>
+</div>
+` },
+{ num: '13', title: 'When Does an Inverse Exist?', content: `
+<div class="callout callout-important"><div class="callout-label">Theorem</div>
+<div class="formula-block"><div class="formula-body">\\boxed{a\\text{ has an inverse mod }n
+\\iff\\gcd(a,n)=1}.</div></div>
+</div>
+<div class="callout callout-def"><div class="callout-label">Why</div>
+<p>We want $b$ such that</p>
+<div class="formula-block"><div class="formula-body">ab\\equiv1\\pmod n.</div></div>
+<p>This means</p>
+<div class="formula-block"><div class="formula-body">n\\mid(ab-1),</div></div>
+<p>so</p>
+<div class="formula-block"><div class="formula-body">ab-nq=1</div></div>
+<p>for some integer $q$. Thus 1 must be an integer linear combination of $a$ and $n$. By Bézout, that is possible exactly when</p>
+<div class="formula-block"><div class="formula-body">\\gcd(a,n)=1.</div></div>
+</div>
+<div class="callout callout-def"><div class="callout-label">Corollary</div>
+<p>If $p$ is prime and</p>
+<div class="formula-block"><div class="formula-body">a\\not\\equiv0\\pmod p,</div></div>
+<p>then $a$ has an inverse modulo $p$.</p>
+</div>
+` },
+{ num: '14', title: 'Division by Multiplying the Inverse', content: `
+<p>If $a^{-1}$ exists modulo $n$, multiplying by $a^{-1}$ is the correct way to cancel $a$.</p>
+<div class="callout callout-def"><div class="callout-label">Example 1</div>
+<p>7 and 13 are inverses modulo 30 because</p>
+<div class="formula-block"><div class="formula-body">7\\cdot13=91\\equiv1\\pmod{30}.</div></div>
+<p>Solve:</p>
+<div class="formula-block"><div class="formula-body">7x\\equiv14\\pmod{30}.</div></div>
+<p>Multiply both sides by 13:</p>
+<div class="formula-block"><div class="formula-body">13(7x)\\equiv13(14)\\pmod{30}.</div></div>
+<div class="formula-block"><div class="formula-body">91x\\equiv182\\pmod{30}.</div></div>
+<p>Thus</p>
+<div class="formula-block"><div class="formula-body">\\boxed{x\\equiv2\\pmod{30}}.</div></div>
+</div>
+<div class="callout callout-def"><div class="callout-label">Example 2</div>
+<div class="formula-block"><div class="formula-body">7x\\equiv12\\pmod{30}.</div></div>
+<p>Multiply by 13:</p>
+<div class="formula-block"><div class="formula-body">91x\\equiv156\\pmod{30}.</div></div>
+<p>Hence</p>
+<div class="formula-block"><div class="formula-body">\\boxed{x\\equiv6\\pmod{30}}.</div></div>
+</div>
+` },
+{ num: '15', title: 'Fermat\'s Little Theorem', content: `
+<div class="callout callout-important"><div class="callout-label">Theorem</div>
+<p>If $p$ is prime and</p>
+<div class="formula-block"><div class="formula-body">a\\not\\equiv0\\pmod p,</div></div>
+<p>then</p>
+<div class="formula-block"><div class="formula-body">\\boxed{a^{p-1}\\equiv1\\pmod p}.</div></div>
+<p>Equivalent condition:</p>
+<div class="formula-block"><div class="formula-body">p\\nmid a.</div></div>
+</div>
+<div class="callout callout-def"><div class="callout-label">Applications listed in the lecture</div>
+<ul><li>simplifying large exponents modulo a prime;</li>
+<li>computing modular inverses;</li>
+<li>solving congruences;</li>
+<li>cryptography, especially RSA.</li></ul>
+</div>
+` },
+{ num: '16', title: 'Multiplication by a Nonzero Number Permutes the Nonzero Residues', content: `
+<p>For prime $p$, take</p>
+<p>$$ S=\\{1,2,\\ldots,p-1\\}. $$</p>
+<p>For $p=7$ and $a=3$:</p>
+<p>$$ 3S=\\{3,6,9,12,15,18\\}. $$</p>
+<p>Reducing modulo 7:</p>
+<p>$$ \\{3,6,2,5,1,4\\}, $$</p>
+<p>which is exactly the same set as $S$, just reordered.</p>
+<p>In general, for prime $p$,</p>
+<p>$$ \\boxed{\\{a,2a,\\ldots,(p-1)a\\}\\pmod p} $$</p>
+<p>is a permutation of</p>
+<p>$$ \\{1,2,\\ldots,p-1\\} $$</p>
+<p>whenever $p\\nmid a$.</p>
+<div class="callout callout-def"><div class="callout-label">Why cancellation works here</div>
+<p>Suppose</p>
+<div class="formula-block"><div class="formula-body">ai\\equiv aj\\pmod p.</div></div>
+<p>Since $a$ has an inverse mod $p$, multiply both sides by $a^{-1}$:</p>
+<div class="formula-block"><div class="formula-body">i\\equiv j\\pmod p.</div></div>
+<p>Thus different nonzero residues cannot collapse to the same residue after multiplying by $a$.</p>
+</div>
+` },
+{ num: '17', title: 'Another Proof of Fermat\'s Little Theorem', content: `
+<p>Since the two sets</p>
+<p>$$ \\{a,2a,\\ldots,(p-1)a\\} $$</p>
+<p>and</p>
+<p>$$ \\{1,2,\\ldots,p-1\\} $$</p>
+<p>are permutations modulo $p$, their products are congruent:</p>
+<p>$$ a\\cdot2a\\cdots(p-1)a \\equiv 1\\cdot2\\cdots(p-1) \\pmod p. $$</p>
+<p>Therefore,</p>
+<p>$$ a^{p-1}(p-1)! \\equiv (p-1)! \\pmod p. $$</p>
+<p>Because $p$ is prime, $p\\nmid(p-1)!$, so $(p-1)!$ has an inverse modulo $p$. Cancel it to obtain</p>
+<p>$$ a^{p-1}\\equiv1\\pmod p. $$</p>
+` },
+{ num: '18', title: 'Large Powers Using FLT', content: `
+<div class="callout callout-def"><div class="callout-label">Example</div>
+<p>Calculate</p>
+<div class="formula-block"><div class="formula-body">x\\equiv3^{100}\\pmod7.</div></div>
+<p>Since $7$ is prime,</p>
+<div class="formula-block"><div class="formula-body">3^6\\equiv1\\pmod7.</div></div>
+<p>Also,</p>
+<div class="formula-block"><div class="formula-body">100=6(16)+4.</div></div>
+<p>So</p>
+<div class="formula-block"><div class="formula-body">3^{100}
+=(3^6)^{16}3^4
+\\equiv
+1^{16}\\cdot3^4
+\\pmod7.</div></div>
+<p>Because</p>
+<div class="formula-block"><div class="formula-body">3^4=81\\equiv4\\pmod7,</div></div>
+<p>we get</p>
+<div class="formula-block"><div class="formula-body">\\boxed{x\\equiv4\\pmod7}.</div></div>
+</div>
+` },
+{ num: '19', title: 'Inverse from Fermat\'s Little Theorem', content: `
+<p>From</p>
+<p>$$ a^{p-1}\\equiv1\\pmod p, $$</p>
+<p>multiply by $a^{-1}$:</p>
+<p>$$ \\boxed{a^{p-2}\\equiv a^{-1}\\pmod p}. $$</p>
+<div class="callout callout-def"><div class="callout-label">Example</div>
+<p>Find</p>
+<div class="formula-block"><div class="formula-body">2^{-1}\\pmod{13}.</div></div>
+<p>Since</p>
+<div class="formula-block"><div class="formula-body">2^{-1}\\equiv2^{13-2}=2^{11}\\pmod{13}.</div></div>
+<p>Compute:</p>
+<div class="formula-block"><div class="formula-body">2^{11}=2048\\equiv7\\pmod{13}.</div></div>
+<p>Therefore</p>
+<div class="formula-block"><div class="formula-body">\\boxed{2^{-1}\\equiv7\\pmod{13}}.</div></div>
+<p>For a non-prime modulus, the lecture points back to the Extended Euclidean Algorithm for finding the inverse.</p>
+</div>
+` },
+{ num: '20', title: 'Finals Checklist', content: `
+<ul><li>[x] Bézout recap</li>
+<li>[x] Clock arithmetic motivation</li>
+<li>[x] Definition of congruence</li>
+<li>[x] Residue classes modulo 5</li>
+<li>[x] Division Theorem connection</li>
+<li>[x] Same-remainder theorem</li>
+<li>[x] Remainder notation and language nuance</li>
+<li>[x] Addition/subtraction/multiplication properties</li>
+<li>[x] Powers preserving congruence</li>
+<li>[x] Warning about improper exponent manipulation</li>
+<li>[x] Large-exponent reduction example</li>
+<li>[x] Failure of naive modular cancellation</li>
+<li>[x] Multiplicative inverse definition</li>
+<li>[x] Existence criterion via GCD</li>
+<li>[x] Modular division examples</li>
+<li>[x] Fermat's Little Theorem</li>
+<li>[x] Permutation/rearrangement argument</li>
+<li>[x] Cancellation using modular inverses</li>
+<li>[x] Factorial proof of FLT</li>
+<li>[x] Large-power FLT example</li>
+<li>[x] Inverse via FLT</li>
+<li>[x] Suggested readings from the PDF</li></ul>
+` },
+{ num: '21', title: 'Source Crosswalk', content: `
+<p><details><summary style="cursor:pointer;color:var(--text-2);font-size:13px;margin:16px 0">Source Structure Crosswalk</summary> <p>The following headings appear in the source PDF. Each is represented in the guide above, either directly or by a clearly corresponding explanation.</p> <li>[x] On the Last Episode of Number Theory</li> <li>[x] Clocks Prove Math Can Be Useful</li> <li>[x] Flavors of the Number Universe</li> <li>[x] The Division Theorem Strikes Back</li> <li>[x] Different Numbers, Same Remainder Soulmates</li> <li>[x] Languages Disagreeing on Leftovers</li> <li>[x] Swap Any Number With Its Remainder</li> <li>[x] Induction Works on Modular Bases</li> <li>[x] Exponents Break the Invariant Rules</li> <li>[x] Shrinking Massive Exponents Instantly</li> <li>[x] Pattern Hunting Saves Your Sanity</li> <li>[x] Where Modulo Division Goes Horribly Wrong</li> <li>[x] Inverses Exist, Except When They Don’t</li> <li>[x] Bézout Solves the Existential Crisis</li> <li>[x] Dividing by Multiplying the Inverse</li> <li>[x] Fermat’s Shortcut to Modular Power</li> <li>[x] ShufÒing Elements Modulo a Prime</li> <li>[x] Canceling Elements with Modular Inverses</li> <li>[x] Factorials Safely Disappear via Inverses</li> <li>[x] Slicing Large Exponents with FLT</li> <li>[x] Fermat’s Trick for Instant Division</li> <li>[x] Suggested Readings</li></p>
+` }
+]
+},
+{
+  id: 3,
+  code: 'LS09',
+  title: 'Cryptography',
+  source: 'LS09 — Cryptography (July 8, 2026).',
+  desc: 'Comprehensive study guide for Cryptography. Source: LS09 — Cryptography (July 8, 2026).',
+  tags: ['Crypto', 'RSA', 'Ciphers'],
+  formulas: ["c\\equiv p+k\\pmod{26}", "p\\equiv c-k\\pmod{26}", "26!", "26!\\approx4.03\\times10^{26}", "c_i\\equiv p_i+k_i\\pmod{26}", "A\\equiv g^a\\pmod p", "B\\equiv g^b\\pmod p", "K_{\\text{Alice}}\\equiv B^a\\pmod p"],
+  sections: [
+{ num: '1', title: 'Shift Cipher', content: `
+<p>A shift cipher maps English letters to elements of</p>
+<p>$$ \\mathbb Z_{26}. $$</p>
+<p>A key integer $k$ shifts each plaintext letter.</p>
+<div class="callout callout-def"><div class="callout-label">Encryption</div>
+<div class="formula-block"><div class="formula-body">\\boxed{c\\equiv p+k\\pmod{26}}</div></div>
+</div>
+<div class="callout callout-def"><div class="callout-label">Decryption</div>
+<div class="formula-block"><div class="formula-body">\\boxed{p\\equiv c-k\\pmod{26}}</div></div>
+</div>
+<div class="callout callout-def"><div class="callout-label">Caesar Cipher</div>
+<p>The Caesar cipher is the special case</p>
+<div class="formula-block"><div class="formula-body">k=3.</div></div>
+<p>The source example is</p>
+<div class="formula-block"><div class="formula-body">\\text{CAT}\\to\\text{FDW}\\to\\text{CAT}.</div></div>
+</div>
+<div class="callout callout-warn"><div class="callout-label">Limitation</div>
+<p>There are only 25 possible nontrivial shift keys, so the key space is tiny and easy to search exhaustively.</p>
+</div>
+` },
+{ num: '2', title: 'Substitution Cipher', content: `
+<p>Instead of shifting every letter by the same amount, a substitution cipher uses an arbitrary permutation of the 26 symbols.</p>
+<p>Thus its key space is</p>
+<p>$$ \\boxed{26!} $$</p>
+<p>with approximate size</p>
+<p>$$ \\boxed{26!\\approx4.03\\times10^{26}}. $$</p>
+<p>This is vastly larger than the shift-cipher key space.</p>
+<div class="callout callout-def"><div class="callout-label">But it is still vulnerable</div>
+<p>The lecture emphasizes <strong>frequency analysis</strong>. Even a huge key space does not automatically prevent attacks if the structure of the language leaks useful information.</p>
+</div>
+` },
+{ num: '3', title: 'Enigma and Known Plaintext', content: `
+<p>The <strong>Enigma Machine</strong> is presented as a complex polyalphabetic substitution cipher.</p>
+<p>The lecture highlights:</p>
+<ul><li>Alan Turing;</li>
+<li>the room-sized “Bombe” machine;</li>
+<li>the use of information about the types of messages being sent.</li></ul>
+<p>This is connected to a <strong>Known Plaintext Attack</strong>: an attacker has information about corresponding plaintext/ciphertext and uses it to reduce the unknown key possibilities.</p>
+` },
+{ num: '4', title: 'One-Time Pad', content: `
+<p>The lecture presents the one-time pad as the “perfect cipher” in the information-theoretic sense.</p>
+<div class="callout callout-def"><div class="callout-label">Key requirements</div>
+<p>The key $k$ must be:</p>
+<ul><li>completely random;</li>
+<li>as long as the plaintext.</li></ul>
+<p>For each position $i$,</p>
+<div class="formula-block"><div class="formula-body">\\boxed{c_i\\equiv p_i+k_i\\pmod{26}}.</div></div>
+<p>The ciphertext yields zero information about the plaintext under the ideal assumptions.</p>
+</div>
+<div class="callout callout-def"><div class="callout-label">Practical problem</div>
+<p>The drawback is key management:</p>
+<ul><li>Alice and Bob need to share a huge random key securely.</li>
+<li>If the key is shorter than the message, the ideal one-time-pad guarantee is lost.</li></ul>
+</div>
+` },
+{ num: '5', title: 'Diffie-Hellman Key Exchange', content: `
+<p>Diffie-Hellman allows two parties to establish a common secret over an insecure channel.</p>
+<div class="callout callout-def"><div class="callout-label">Public agreement</div>
+<p>Choose:</p>
+<ul><li>a large prime $p$;</li>
+<li>a generator $g$.</li></ul>
+</div>
+<div class="callout callout-def"><div class="callout-label">Alice</div>
+<p>Choose private</p>
+<div class="formula-block"><div class="formula-body">a.</div></div>
+<p>Send</p>
+<div class="formula-block"><div class="formula-body">\\boxed{A\\equiv g^a\\pmod p}.</div></div>
+</div>
+<div class="callout callout-def"><div class="callout-label">Bob</div>
+<p>Choose private</p>
+<div class="formula-block"><div class="formula-body">b.</div></div>
+<p>Send</p>
+<div class="formula-block"><div class="formula-body">\\boxed{B\\equiv g^b\\pmod p}.</div></div>
+<p>Eve can see</p>
+<div class="formula-block"><div class="formula-body">p,g,A,B</div></div>
+<p>but does not know $a,b$.</p>
+</div>
+<div class="callout callout-def"><div class="callout-label">Shared key</div>
+<p>Alice computes</p>
+<div class="formula-block"><div class="formula-body">\\boxed{K_{\\text{Alice}}\\equiv B^a\\pmod p}.</div></div>
+<p>Bob computes</p>
+<div class="formula-block"><div class="formula-body">\\boxed{K_{\\text{Bob}}\\equiv A^b\\pmod p}.</div></div>
+<p>Why are they equal?</p>
+<div class="formula-block"><div class="formula-body">B^a
+\\equiv(g^b)^a
+\\equiv g^{ba}
+\\equiv g^{ab}
+\\equiv(g^a)^b
+\\equiv A^b
+\\pmod p.</div></div>
+<p>So</p>
+<div class="formula-block"><div class="formula-body">\\boxed{K_{\\text{Alice}}=K_{\\text{Bob}}}.</div></div>
+</div>
+` },
+{ num: '6', title: 'Diffie-Hellman Example', content: `
+<p>The lecture uses</p>
+<p>$$ p=11,\\qquad g=2. $$</p>
+<p>Alice chooses</p>
+<p>$$ a=3. $$</p>
+<p>Then</p>
+<p>$$ A\\equiv2^3\\equiv8\\pmod{11}. $$</p>
+<p>Bob chooses</p>
+<p>$$ b=4. $$</p>
+<p>Then</p>
+<p>$$ B\\equiv2^4\\equiv5\\pmod{11}. $$</p>
+<p>Alice computes</p>
+<p>$$ K\\equiv5^3\\equiv4\\pmod{11}. $$</p>
+<p>Bob computes</p>
+<p>$$ K\\equiv8^4\\equiv4\\pmod{11}. $$</p>
+<p>So both obtain</p>
+<p>$$ \\boxed{K=4}. $$</p>
+<div class="callout callout-def"><div class="callout-label">Eve's problem</div>
+<p>Eve knows</p>
+<div class="formula-block"><div class="formula-body">p=11,\\;g=2,\\;A=8,\\;B=5.</div></div>
+<p>She would have to solve equations such as</p>
+<div class="formula-block"><div class="formula-body">g^x\\equiv A\\pmod p</div></div>
+<p>to recover a private exponent. This is the <strong>Discrete Log Problem (DLP)</strong>. The lecture's security point is that efficient calculation of the discrete logarithm is not known for large parameters of the type being used.</p>
+</div>
+` },
+{ num: '7', title: 'Why RSA?', content: `
+<p>The lecture identifies two practical limitations of Diffie-Hellman:</p>
+<ul><li>the parties must actively agree on a key before communicating;</li>
+<li>both systems need to be active during that coordination.</li></ul>
+<p>RSA instead uses separate encryption and decryption keys.</p>
+<div class="callout callout-def"><div class="callout-label">RSA key roles</div>
+<ul><li><strong>Public key:</strong> can be published; anyone can encrypt to the owner.</li>
+<li><strong>Private key:</strong> kept secret; only the owner uses it for decryption.</li></ul>
+<p>RSA is named for Rivest, Shamir, and Adleman.</p>
+</div>
+` },
+{ num: '8', title: 'RSA Key Generation', content: `
+<p>Choose two distinct large primes:</p>
+<p>$$ p,q. $$</p>
+<p>Define</p>
+<p>$$ \\boxed{n=pq}. $$</p>
+<p>For two distinct primes,</p>
+<p>$$ \\boxed{\\varphi(n)=(p-1)(q-1)}. $$</p>
+<p>Choose public exponent $e$ satisfying</p>
+<p>$$ \\boxed{\\gcd(e,\\varphi(n))=1}. $$</p>
+<p>Choose $d$ satisfying</p>
+<p>$$ \\boxed{ed\\equiv1\\pmod{\\varphi(n)}}. $$</p>
+<p>The lecture writes this via an integer linear combination:</p>
+<p>$$ ed+k\\varphi(n)=1. $$</p>
+<p>Thus the Extended Euclidean Algorithm can be used to obtain $d$.</p>
+` },
+{ num: '9', title: 'RSA Encryption and Decryption', content: `
+<div class="callout callout-def"><div class="callout-label">Encryption</div>
+<div class="formula-block"><div class="formula-body">\\boxed{c\\equiv m^e\\pmod n}.</div></div>
+</div>
+<div class="callout callout-def"><div class="callout-label">Decryption</div>
+<div class="formula-block"><div class="formula-body">\\boxed{m\\equiv c^d\\pmod n}.</div></div>
+<p>The public information includes $c,n,e$. The private information includes $m,p,q,d$ as described in the lecture's security discussion.</p>
+</div>
+` },
+{ num: '10', title: 'RSA Toy Example', content: `
+<p>The source chooses</p>
+<p>$$ p=3,\\qquad q=11. $$</p>
+<p>Then</p>
+<p>$$ n=33 $$</p>
+<p>and</p>
+<p>$$ \\varphi(33)=2\\cdot10=20. $$</p>
+<p>Take</p>
+<p>$$ e=3,\\qquad d=7 $$</p>
+<p>because</p>
+<p>$$ 3\\cdot7=21\\equiv1\\pmod{20}. $$</p>
+<p>For message</p>
+<p>$$ m=2, $$</p>
+<p>encrypt:</p>
+<p>$$ c\\equiv2^3\\equiv8\\pmod{33}. $$</p>
+<p>Decrypt:</p>
+<p>$$ m\\equiv8^7\\equiv2\\pmod{33}. $$</p>
+<p>So the plaintext is recovered.</p>
+` },
+{ num: '11', title: 'Why RSA Works: Euler\'s Totient Theorem', content: `
+<p>Assume</p>
+<p>$$ \\gcd(m,n)=1. $$</p>
+<p>Because</p>
+<p>$$ ed\\equiv1\\pmod{\\varphi(n)}, $$</p>
+<p>there exists $k$ such that</p>
+<p>$$ ed=1+k\\varphi(n). $$</p>
+<p>Then</p>
+<p>$$ m^{ed} = m^{1+k\\varphi(n)} = m(m^{\\varphi(n)})^k. $$</p>
+<p>Euler's Totient Theorem gives</p>
+<p>$$ m^{\\varphi(n)}\\equiv1\\pmod n $$</p>
+<p>when $\\gcd(m,n)=1$.</p>
+<p>Therefore</p>
+<p>$$ \\boxed{m^{ed}\\equiv m\\pmod n}. $$</p>
+<p>That is exactly why encrypting with $e$ and then applying $d$ recovers the original message.</p>
+` },
+{ num: '12', title: 'Finding Huge Primes', content: `
+<p>The lecture mentions <strong>Miller-Rabin</strong> as a primality-testing method and gives this simplified procedure:</p>
+<ol><li>Pick a random 300-digit number.</li>
+<li>Test it for primality.</li>
+<li>Repeat until a prime is found.</li></ol>
+<p>The lecture uses the Prime Number Theorem estimate</p>
+<p>$$ \\boxed{\\pi(n)\\approx\\frac{n}{\\ln n}}. $$</p>
+<p>For $n=10^{300}$, the lecture states an expected frequency corresponding to roughly one prime in about 700 random trials.</p>
+` },
+{ num: '13', title: 'Chinese Remainder Theorem (CRT)', content: `
+<div class="callout callout-def"><div class="callout-label">Statement</div>
+<p>Let</p>
+<div class="formula-block"><div class="formula-body">n_1,\\ldots,n_k>1</div></div>
+<p>and</p>
+<div class="formula-block"><div class="formula-body">N=n_1n_2\\cdots n_k.</div></div>
+<p>If the moduli are pairwise coprime, then there exists exactly one</p>
+<div class="formula-block"><div class="formula-body">x,\\qquad0\\le x<N</div></div>
+<p>satisfying</p>
+<div class="formula-block"><div class="formula-body">x\\equiv a_i\\pmod{n_i}</div></div>
+<p>for each $i$. The construction uses</p>
+<div class="formula-block"><div class="formula-body">N_i=\\frac N{n_i}</div></div>
+<p>and a modular inverse $M_i$ satisfying</p>
+<div class="formula-block"><div class="formula-body">N_iM_i\\equiv1\\pmod{n_i}.</div></div>
+<p>Then</p>
+<div class="formula-block"><div class="formula-body">\\boxed{x\\equiv\\sum_{i=1}^k a_iN_iM_i\\pmod N}.</div></div>
+</div>
+` },
+{ num: '14', title: 'CRT Example', content: `
+<p>Solve</p>
+<p>$$ x\\equiv2\\pmod3, $$</p>
+<p>$$ x\\equiv3\\pmod5, $$</p>
+<p>$$ x\\equiv2\\pmod7. $$</p>
+<p>The moduli are pairwise coprime.</p>
+<p>$$ N=3\\cdot5\\cdot7=105. $$</p>
+<p>Partial products:</p>
+<p>$$ N_1=105/3=35, $$</p>
+<p>$$ N_2=105/5=21, $$</p>
+<p>$$ N_3=105/7=15. $$</p>
+<p>Find inverses:</p>
+<p>$$ 35M_1\\equiv1\\pmod3\\Rightarrow M_1=2, $$</p>
+<p>$$ 21M_2\\equiv1\\pmod5\\Rightarrow M_2=1, $$</p>
+<p>$$ 15M_3\\equiv1\\pmod7\\Rightarrow M_3=1. $$</p>
+<p>Then</p>
+<p>$$ x\\equiv 2(35)(2)+ 3(21)(1)+ 2(15)(1) \\pmod{105}. $$</p>
+<p>Thus</p>
+<p>$$ x\\equiv140+63+30=233\\pmod{105}. $$</p>
+<p>Therefore</p>
+<p>$$ \\boxed{x\\equiv23\\pmod{105}}. $$</p>
+` },
+{ num: '15', title: 'Completing the RSA Proof with CRT', content: `
+<p>The lecture removes the assumption $\\gcd(m,n)=1$.</p>
+<p>Since</p>
+<p>$$ n=pq $$</p>
+<p>with distinct primes, it is enough to show</p>
+<p>$$ m^{ed}\\equiv m\\pmod p $$</p>
+<p>and</p>
+<p>$$ m^{ed}\\equiv m\\pmod q. $$</p>
+<p>Then CRT guarantees</p>
+<p>$$ \\boxed{m^{ed}\\equiv m\\pmod n}. $$</p>
+<div class="callout callout-def"><div class="callout-label">Case 1: $p\\nmid m$</div>
+<p>Then</p>
+<div class="formula-block"><div class="formula-body">\\gcd(m,p)=1.</div></div>
+<p>Using</p>
+<div class="formula-block"><div class="formula-body">ed=1+k(p-1)(q-1)</div></div>
+<p>and Fermat's Little Theorem,</p>
+<div class="formula-block"><div class="formula-body">m^{p-1}\\equiv1\\pmod p,</div></div>
+<p>so</p>
+<div class="formula-block"><div class="formula-body">m^{ed}\\equiv m\\pmod p.</div></div>
+</div>
+<div class="callout callout-def"><div class="callout-label">Case 2: $p\\mid m$</div>
+<p>Then</p>
+<div class="formula-block"><div class="formula-body">m\\equiv0\\pmod p</div></div>
+<p>and so</p>
+<div class="formula-block"><div class="formula-body">m^{ed}\\equiv0\\pmod p\\equiv m\\pmod p.</div></div>
+<p>The cases are exhaustive, so the congruence holds modulo $p$; similarly it holds modulo $q$. CRT then gives the full RSA result modulo $n$.</p>
+</div>
+` },
+{ num: '16', title: 'Efficient RSA Decryption Idea', content: `
+<p>The lecture closes by noting that directly computing</p>
+<p>$$ c^d\\pmod n $$</p>
+<p>can be difficult because $d$ and $n$ are large.</p>
+<p>It then observes that one can instead work modulo $p$ and modulo $q$, then combine the results with CRT.</p>
+<p>This is the mathematical basis for the RSA decryption speedup discussed in the slides.</p>
+` },
+{ num: '17', title: 'Finals Checklist', content: `
+<ul><li>[x] Alice/Bob/Eve communication model</li>
+<li>[x] Plaintext, ciphertext, encryption, decryption</li>
+<li>[x] Shift cipher</li>
+<li>[x] Caesar cipher and $k=3$ example</li>
+<li>[x] Shift-cipher key-space limitation</li>
+<li>[x] Substitution cipher</li>
+<li>[x] $26!$ key space</li>
+<li>[x] Frequency analysis vulnerability</li>
+<li>[x] Enigma, Bombe, and known-plaintext attack</li>
+<li>[x] One-time pad</li>
+<li>[x] Perfect-secrecy idea and key-sharing limitation</li>
+<li>[x] Diffie-Hellman setup</li>
+<li>[x] Shared-key derivation</li>
+<li>[x] $p=11,g=2$ worked example</li>
+<li>[x] Discrete Log Problem</li>
+<li>[x] RSA motivation</li>
+<li>[x] RSA key generation</li>
+<li>[x] Euler totient for $pq$</li>
+<li>[x] Extended Euclidean role in finding $d$</li>
+<li>[x] RSA encryption/decryption formulas</li>
+<li>[x] RSA toy example</li>
+<li>[x] Euler-based RSA correctness proof</li>
+<li>[x] Miller-Rabin and prime-search discussion</li>
+<li>[x] Prime Number Theorem estimate</li>
+<li>[x] Chinese Remainder Theorem</li>
+<li>[x] Full CRT example</li>
+<li>[x] CRT completion of RSA proof</li>
+<li>[x] Case split for messages divisible/not divisible by a prime</li>
+<li>[x] CRT-based RSA decryption idea</li></ul>
+` },
+{ num: '18', title: 'Source Crosswalk', content: `
+<p><details><summary style="cursor:pointer;color:var(--text-2);font-size:13px;margin:16px 0">Source Structure Crosswalk</summary> <p>The following headings appear in the source PDF. Each is represented in the guide above, either directly or by a clearly corresponding explanation.</p> <li>[x] The Situationship of Alice, Bob, and Eve</li> <li>[x] Caesar’s Did Not Age Well</li> <li>[x] 26 Factorial Ways to Get Hacked</li> <li>[x] The Perfect Cipher You’ll Never Use</li> <li>[x] Passing Notes While Eve is Watching</li> <li>[x] Discrete Logs Keep Eve Guessing</li> <li>[x] Stop Coordinating Keys before Talking</li> <li>[x] Recipe for Primes and Pulverizers</li> <li>[x] Euler’s Totient Saves the Message</li> <li>[x] Finding Huge Primes via Lucky Guesses</li> <li>[x] Sunzi’s 5th-Century Leftover Riddle</li> <li>[x] Unraveling the Mystery Modulo Soup</li> <li>[x] Why RSA Needed Ancient Leftovers</li> <li>[x] Fermat Tames the Remaining Edge Cases</li> <li>[x] Ancient Math Makes Decryption Go Brrr!</li> <li>[x] Suggested Readings</li></p>
+` }
+]
+},
+{
+  id: 4,
+  code: 'LS10',
+  title: 'Graphs and Coloring',
+  source: 'LS10 — Graphs and Coloring (July 17, 2026).',
+  desc: 'Comprehensive study guide for Graphs and Coloring. Source: LS10 — Graphs and Coloring (July 17, 2026).',
+  tags: ['Graphs', 'Coloring', 'Chromatic'],
+  formulas: ["\\deg(v)=\\text{number of edges incident to }v", "\\sum_{v\\in V}\\deg(v)=2|E|", "|E|\\le\\frac{n(n-1)}2", "\\sum_{u\\in L}\\deg(u) = \\sum_{v\\in R}\\deg(v) = |E|", "\\frac{A_L}{A_R} = \\frac{|R|}{|L|}", "f(u)\\ne f(v)", "\\chi(G)", "d+1"],
+  sections: [
+{ num: '1', title: 'Graph Terminology', content: `
+<div class="callout callout-def"><div class="callout-label">Adjacency</div>
+<p>Vertices $u,v$ are adjacent iff</p>
+<div class="formula-block"><div class="formula-body">\\{u,v\\}\\in E.</div></div>
+</div>
+<div class="callout callout-def"><div class="callout-label">Endpoints</div>
+<p>For edge $\\{u,v\\}$, the endpoints are $u$ and $v$.</p>
+</div>
+<div class="callout callout-def"><div class="callout-label">Incidence</div>
+<p>The edge $\\{u,v\\}$ is incident on both $u$ and $v$.</p>
+</div>
+<div class="callout callout-def"><div class="callout-label">Real-world examples</div>
+<p>Undirected-graph examples in the lecture:</p>
+<ul><li>Facebook friendship;</li>
+<li>brain neurons and synapses;</li>
+<li>Internet devices and network connections.</li></ul>
+<p>Non-examples because direction matters:</p>
+<ul><li>Twitter followers;</li>
+<li>unrequited relations;</li>
+<li>hyperlinks.</li></ul>
+</div>
+` },
+{ num: '2', title: 'Degree and Degree Sequence', content: `
+<div class="callout callout-def"><div class="callout-label">Degree</div>
+<p>For $v\\in V$,</p>
+<div class="formula-block"><div class="formula-body">\\boxed{\\deg(v)=\\text{number of edges incident to }v}.</div></div>
+<p>A vertex with no incident edge has degree 0.</p>
+</div>
+<div class="callout callout-def"><div class="callout-label">Degree sequence</div>
+<p>The list of vertex degrees, usually sorted in non-increasing order. The source asks whether</p>
+<div class="formula-block"><div class="formula-body">(2,2,1)</div></div>
+<p>can be a degree sequence and points toward a contradiction using the Handshake Lemma.</p>
+</div>
+` },
+{ num: '3', title: 'Handshake Lemma', content: `
+<div class="callout callout-important"><div class="callout-label">Lemma</div>
+<p>For a graph $G=(V,E)$,</p>
+<div class="formula-block"><div class="formula-body">\\boxed{\\sum_{v\\in V}\\deg(v)=2|E|}.</div></div>
+<p>Every edge contributes exactly 2 to the total degree count, once for each endpoint.</p>
+</div>
+<div class="callout callout-def"><div class="callout-label">Consequence</div>
+<p>The sum of all degrees must be even. Thus the degree sequence</p>
+<div class="formula-block"><div class="formula-body">(2,2,2,2,2,1)</div></div>
+<p>has total</p>
+<div class="formula-block"><div class="formula-body">11,</div></div>
+<p>which cannot equal $2|E|$. Therefore it is impossible.</p>
+</div>
+<div class="callout callout-def"><div class="callout-label">Maximum number of edges</div>
+<p>If</p>
+<div class="formula-block"><div class="formula-body">|V|=n,</div></div>
+<p>each vertex has degree at most</p>
+<div class="formula-block"><div class="formula-body">n-1.</div></div>
+<p>Hence</p>
+<div class="formula-block"><div class="formula-body">\\sum\\deg(v)\\le n(n-1).</div></div>
+<p>Therefore</p>
+<div class="formula-block"><div class="formula-body">\\boxed{|E|\\le\\frac{n(n-1)}2}.</div></div>
+<p>The bound is achieved by the <strong>complete graph $K_n$</strong>.</p>
+</div>
+` },
+{ num: '4', title: 'Bipartite Graphs', content: `
+<p>The lecture introduces bipartite graphs through a student-friendship example.</p>
+<div class="callout callout-def"><div class="callout-label">Definition</div>
+<p>A graph $G=(V,E)$ is <strong>bipartite</strong> if its vertex set can be partitioned into disjoint sets $L,R$ such that every edge has one endpoint in $L$ and one in $R$. So</p>
+<div class="formula-block"><div class="formula-body">V=L\\sqcup R.</div></div>
+<p>There are no edges entirely inside $L$ or entirely inside $R$. The sizes $|L|$ and $|R|$ do not have to be equal.</p>
+</div>
+` },
+{ num: '5', title: 'Bipartite-Degree Identity', content: `
+<p>Every cross-edge contributes:</p>
+<ul><li>1 to the degree of one vertex in $L$;</li>
+<li>1 to the degree of one vertex in $R$.</li></ul>
+<p>Therefore</p>
+<p>$$ \\boxed{ \\sum_{u\\in L}\\deg(u) = \\sum_{v\\in R}\\deg(v) = |E| }. $$</p>
+<div class="callout callout-def"><div class="callout-label">Average degree</div>
+<p>For the left side:</p>
+<div class="formula-block"><div class="formula-body">A_L
+=
+\\frac{\\sum_{u\\in L}\\deg(u)}{|L|}
+=
+\\frac{|E|}{|L|}.</div></div>
+<p>For the right side:</p>
+<div class="formula-block"><div class="formula-body">A_R
+=
+\\frac{\\sum_{v\\in R}\\deg(v)}{|R|}
+=
+\\frac{|E|}{|R|}.</div></div>
+<p>Hence</p>
+<div class="formula-block"><div class="formula-body">\\boxed{
+\\frac{A_L}{A_R}
+=
+\\frac{|R|}{|L|}
+}.</div></div>
+<p>The edge count cancels.</p>
+</div>
+` },
+{ num: '6', title: 'IUT Demographics Example', content: `
+<p>The lecture uses:</p>
+<p>$$ |F|=599,\\qquad |M|=2246. $$</p>
+<p>Therefore</p>
+<p>$$ \\frac{A_M}{A_F} = \\frac{|F|}{|M|} = \\frac{599}{2246} \\approx0.266. $$</p>
+<p>So the average male student has about 27% as many female friends as the average female student has male friends.</p>
+<div class="callout callout-def"><div class="callout-label">Main mathematical lesson</div>
+<p>This ratio depends only on the sizes of the two groups:</p>
+<div class="formula-block"><div class="formula-body">\\frac{A_M}{A_F}=\\frac{|F|}{|M|}.</div></div>
+<p>It does <strong>not</strong> tell us anything about the actual pattern of friendships. The lecture uses the same principle to explain why certain survey averages can appear contradictory even when the underlying counts are mutually constrained by a bipartite graph.</p>
+</div>
+` },
+{ num: '7', title: 'Graph Coloring', content: `
+<p>The lecture models exam scheduling with a graph:</p>
+<ul><li>each vertex = a course;</li>
+<li>an edge joins two courses that conflict because some student is enrolled in both.</li></ul>
+<p>Conflicting courses cannot be assigned the same exam time.</p>
+<div class="callout callout-def"><div class="callout-label">Proper $k$-coloring</div>
+<p>A proper coloring is a function</p>
+<div class="formula-block"><div class="formula-body">f:V\\to C</div></div>
+<p>with</p>
+<div class="formula-block"><div class="formula-body">|C|\\le k</div></div>
+<p>such that for every edge $\\{u,v\\}$,</p>
+<div class="formula-block"><div class="formula-body">\\boxed{f(u)\\ne f(v)}.</div></div>
+<p>Colors can represent timeslots.</p>
+</div>
+` },
+{ num: '8', title: 'Chromatic Number', content: `
+<div class="callout callout-def"><div class="callout-label">Definition</div>
+<p>The <strong>chromatic number</strong></p>
+<div class="formula-block"><div class="formula-body">\\boxed{\\chi(G)}</div></div>
+<p>is the smallest number of colors required for a proper coloring of $G$.</p>
+</div>
+<div class="callout callout-def"><div class="callout-label">How to prove $\\chi(G)=k$</div>
+<p>You need both:</p>
+<ol><li><strong>Upper bound</strong></li></ol>
+<div class="formula-block"><div class="formula-body">\\chi(G)\\le k</div></div>
+<p>by exhibiting a $k$-coloring.</p>
+<ol><li><strong>Lower bound</strong></li></ol>
+<div class="formula-block"><div class="formula-body">\\chi(G)>k-1</div></div>
+<p>by showing a $(k-1)$-coloring is impossible, usually by contradiction. The actual names of colors do not matter; only the number matters.</p>
+</div>
+` },
+{ num: '9', title: 'Applications of Coloring', content: `
+<div class="callout callout-def"><div class="callout-label">Map coloring</div>
+<ul><li>vertices = regions;</li>
+<li>edges = shared boundaries;</li>
+<li>$\\chi(G)$ = minimum number of colors.</li></ul>
+<p>The lecture mentions the <strong>Four-Color Theorem</strong>.</p>
+</div>
+<div class="callout callout-def"><div class="callout-label">Register allocation</div>
+<ul><li>vertices = program variables;</li>
+<li>an edge means two variables must be alive simultaneously;</li>
+<li>colors = CPU registers;</li>
+<li>$\\chi(G)$ = minimum number of registers needed.</li></ul>
+</div>
+<div class="callout callout-def"><div class="callout-label">Frequency assignment</div>
+<ul><li>vertices = radio towers;</li>
+<li>an edge means two towers interfere if they use the same frequency;</li>
+<li>colors = frequencies;</li>
+<li>$\\chi(G)$ = minimum frequency count.</li></ul>
+<p>Other applications named:</p>
+<ul><li>Sudoku;</li>
+<li>sports/class/task scheduling;</li>
+<li>resource allocation;</li>
+<li>memory management;</li>
+<li>PCB wiring.</li></ul>
+</div>
+` },
+{ num: '10', title: 'Computational Complexity', content: `
+<p>The lecture states:</p>
+<ul><li>deciding whether an arbitrary graph is $k$-colorable is <strong>NP-Complete</strong>;</li>
+<li>computing $\\chi(G)$ is <strong>NP-Hard</strong>.</li></ul>
+<p>The practical goal is therefore often not an obviously optimal algorithm, but an algorithm that is good enough in practice.</p>
+` },
+{ num: '11', title: 'Greedy Coloring Algorithm', content: `
+<div class="callout callout-def"><div class="callout-label">Algorithm</div>
+<ol><li>Choose an order</li></ol>
+<div class="formula-block"><div class="formula-body">v_1,v_2,\\ldots,v_n.</div></div>
+<ol><li>Order colors</li></ol>
+<div class="formula-block"><div class="formula-body">c_1,c_2,\\ldots</div></div>
+<ol><li>Process each vertex in order.</li>
+<li>Assign it the smallest color that does not conflict with already-colored neighbors.</li></ol>
+</div>
+<div class="callout callout-def"><div class="callout-label">Important issue</div>
+<p>Different vertex orders can produce:</p>
+<ul><li>different colorings;</li>
+<li>different numbers of colors.</li></ul>
+<p>So greedy coloring is sensitive to ordering.</p>
+</div>
+` },
+{ num: '12', title: 'Brute-Force Search Over All Orders', content: `
+<p>If you try all vertex orderings and take the minimum number of colors produced, you obtain the chromatic number in principle.</p>
+<p>But there are</p>
+<p>$$ n! $$</p>
+<p>possible vertex orders, so the approach has factorial growth and is inefficient for large $n$.</p>
+` },
+{ num: '13', title: 'Greedy Coloring Bound', content: `
+<div class="callout callout-important"><div class="callout-label">Theorem</div>
+<p>If every vertex in $G$ has degree at most $d$, then for <strong>every</strong> vertex ordering, the Greedy Coloring Algorithm uses at most</p>
+<div class="formula-block"><div class="formula-body">\\boxed{d+1}</div></div>
+<p>colors.</p>
+</div>
+<div class="callout callout-def"><div class="callout-label">Reason</div>
+<p>When a vertex is colored, it has at most $d$ neighbors. Therefore at most $d$ colors can be blocked by its neighbors. Among the first $d+1$ colors, at least one must remain available.</p>
+</div>
+` },
+{ num: '14', title: 'Proof by Induction', content: `
+<p>Let $P(n)$ be:</p>
+<div class="callout callout-note"><div class="callout-label">Source Note</div>For every $d$ and every $n$-vertex graph whose maximum degree is at most $d$, greedy coloring uses at most $d+1$ colors for every vertex order.</div>
+<div class="callout callout-def"><div class="callout-label">Base case</div>
+<p>For $n=1$, there are no edges, so $d=0$. One color is enough.</p>
+</div>
+<div class="callout callout-def"><div class="callout-label">Inductive step</div>
+<p>Assume $P(n)$. Take an $(n+1)$-vertex graph with maximum degree $d$. Greedy-color the first $n$ vertices; by $P(n)$, they use at most $d+1$ colors. The final vertex $v_{n+1}$ has at most $d$ neighbors, so at most $d$ colors are blocked. Therefore at least one of the first $d+1$ colors is available. Thus</p>
+<div class="formula-block"><div class="formula-body">P(n)\\Rightarrow P(n+1).</div></div>
+<p>So the theorem holds for all $n$.</p>
+</div>
+` },
+{ num: '15', title: 'Finals Checklist', content: `
+<ul><li>[x] Simple graph definition</li>
+<li>[x] Undirected/no-loop/no-parallel-edge conditions</li>
+<li>[x] Real-world graph examples and non-examples</li>
+<li>[x] Adjacency</li>
+<li>[x] Endpoints</li>
+<li>[x] Incidence</li>
+<li>[x] Degree</li>
+<li>[x] Degree sequence</li>
+<li>[x] Impossible degree-sequence example</li>
+<li>[x] Handshake Lemma</li>
+<li>[x] Maximum-edge bound</li>
+<li>[x] Complete graph $K_n$</li>
+<li>[x] Bipartite graph definition</li>
+<li>[x] Bipartite degree-sum identity</li>
+<li>[x] Average-degree formulas</li>
+<li>[x] IUT demographic calculation</li>
+<li>[x] Interpretation of the ratio</li>
+<li>[x] Exam-scheduling graph</li>
+<li>[x] Proper $k$-coloring</li>
+<li>[x] Chromatic number</li>
+<li>[x] Upper/lower-bound proof strategy</li>
+<li>[x] Map coloring</li>
+<li>[x] Register allocation</li>
+<li>[x] Frequency assignment</li>
+<li>[x] Other coloring applications</li>
+<li>[x] NP-Complete / NP-Hard statements from the lecture</li>
+<li>[x] Greedy coloring algorithm</li>
+<li>[x] Sensitivity to vertex ordering</li>
+<li>[x] Factorial brute-force idea</li>
+<li>[x] $d+1$ greedy bound</li>
+<li>[x] Inductive proof</li></ul>
+` },
+{ num: '16', title: 'Source Crosswalk', content: `
+<p><details><summary style="cursor:pointer;color:var(--text-2);font-size:13px;margin:16px 0">Source Structure Crosswalk</summary> <p>The following headings appear in the source PDF. Each is represented in the guide above, either directly or by a clearly corresponding explanation.</p> <li>[x] Graphs: No Loops, No Drama</li> <li>[x] Friendship Is Mutual, Twitter Is Not</li> <li>[x] Neighbors, Endpoints, and Other Incidents</li> <li>[x] How Popular Is Your Vertex?</li> <li>[x] You Can’t Have Half An Edge</li> <li>[x] Campus Drama Becomes Math Homework</li> <li>[x] Bipartite Graphs Separate the Drama</li> <li>[x] Math Doesn’t Care About Your Feelings</li> <li>[x] When the Ratios Work Against You</li> <li>[x] It’s Not You, It’s Just Demographics</li> <li>[x] Survey Says That Everyone Lies</li> <li>[x] Your Exam Schedule Is a Conflict</li> <li>[x] Pass Crayons, We’re Scheduling Exams</li> <li>[x] The Smallest Rainbow You Can Buy</li> <li>[x] Maps, Microchips, and Radio Waves</li> <li>[x] Solve This and Break the World</li> <li>[x] Being Greedy Is Easier Than Thinking</li> <li>[x] How Badly Can Greedy Fail?</li> <li>[x] Induction to the Resuce</li> <li>[x] Suggested Readings</li></p>
+` }
+]
+},
+{
+  id: 5,
+  code: 'LS11',
+  title: 'Matching',
+  source: 'LS11 — Matching (July 21, 2026).',
+  desc: 'Comprehensive study guide for Matching. Source: LS11 — Matching (July 21, 2026).',
+  tags: ['Matching', 'Bipartite', 'Halls'],
+  formulas: ["\\deg_M(v)\\le1", "|L|\\ne|R|", "\\text{Every bipartite graph has a stable matching}", "A\\to\\text{CVLab},\\; B\\to\\text{SSL},\\; C\\to\\text{NDAG},\\; D\\to\\text{Network},\\; E\\to\\text{Bio}", "n^2+1"],
+  sections: [
+{ num: '1', title: 'Matching', content: `
+<div class="callout callout-def"><div class="callout-label">Definition</div>
+<p>A matching $M$ is a subgraph in which every vertex has degree at most 1:</p>
+<div class="formula-block"><div class="formula-body">\\boxed{\\deg_M(v)\\le1}.</div></div>
+<p>Equivalent edge-set formulation: > A matching is a subset of $E$ in which no two selected edges share an endpoint.</p>
+</div>
+<div class="callout callout-def"><div class="callout-label">Practical test</div>
+<p>To decide whether a set of edges is a matching:</p>
+<ul><li>choose any selected edge;</li>
+<li>check that neither endpoint appears in any other selected edge.</li></ul>
+<p>If two selected edges touch the same vertex, it is not a matching.</p>
+</div>
+` },
+{ num: '2', title: 'Maximal Matching', content: `
+<div class="callout callout-def"><div class="callout-label">Definition</div>
+<p>A matching $M$ is <strong>maximal</strong> if no additional edge can be added while preserving the matching property. So there is no edge $e\\in E\\setminus M$ such that</p>
+<div class="formula-block"><div class="formula-body">M\\cup\\{e\\}</div></div>
+<p>is still a matching.</p>
+</div>
+<div class="callout callout-def"><div class="callout-label">Important distinction</div>
+<p>“Maximal” means: > <strong>cannot be extended.</strong> It does <strong>not</strong> mean: > “has the greatest possible size.” The source gives</p>
+<div class="formula-block"><div class="formula-body">M=\\{be,dg\\}</div></div>
+<p>as a maximal matching.</p>
+</div>
+` },
+{ num: '3', title: 'Maximum Matching', content: `
+<div class="callout callout-def"><div class="callout-label">Definition</div>
+<p>A matching $M$ is <strong>maximum</strong> if there does not exist another matching $M'$ with</p>
+<div class="formula-block"><div class="formula-body">|M'|>|M|.</div></div>
+<p>Thus a maximum matching has the largest possible number of edges.</p>
+</div>
+<div class="callout callout-def"><div class="callout-label">Important distinction</div>
+<p>A maximum matching is always maximal, but a maximal matching need not be maximum.</p>
+</div>
+<div class="callout callout-def"><div class="callout-label">Source example</div>
+<div class="formula-block"><div class="formula-body">M=\\{ad,bg,ce\\}</div></div>
+<p>is a maximum matching in the illustrated graph. The lecture notes that there may be multiple maximum matchings. The proof idea is based on counting vertices: a matching with four edges would require at least eight distinct endpoints, which is impossible in the illustrated graph of seven vertices.</p>
+</div>
+` },
+{ num: '4', title: 'Perfect Matching', content: `
+<div class="callout callout-def"><div class="callout-label">Definition</div>
+<p>A matching $M$ is <strong>perfect</strong> iff it includes all vertices. Equivalently, every vertex is matched to exactly one other vertex.</p>
+</div>
+<div class="callout callout-def"><div class="callout-label">Bipartite case</div>
+<p>If a bipartite graph has sides $L$ and $R$, a perfect matching cannot exist when</p>
+<div class="formula-block"><div class="formula-body">\\boxed{|L|\\ne|R|}.</div></div>
+<p>However,</p>
+<div class="formula-block"><div class="formula-body">|L|=|R|</div></div>
+<p>does <strong>not</strong> guarantee that a perfect matching exists. This is an important necessary-but-not-sufficient condition.</p>
+</div>
+` },
+{ num: '5', title: 'Weighted Bipartite Matching', content: `
+<p>The lecture also considers weighted edges:</p>
+<p>$$ w:E\\to\\mathbb R. $$</p>
+<p>Then the objective can be:</p>
+<div class="callout callout-note"><div class="callout-label">Source Note</div>Find a perfect matching having minimum total weight.</div>
+<p>Application examples:</p>
+<ul><li>planes to airport gates;</li>
+<li>servers to tasks.</li></ul>
+<p>This is a useful modeling pattern: the matching constraint chooses who is paired with whom; weights represent the cost or value of each pairing.</p>
+` },
+{ num: '7', title: 'Problem setup', content: `
+<p>There are:</p>
+<ul><li>$n$ student groups;</li>
+<li>$n$ research-lab seats.</li></ul>
+<p>Each student group ranks the research labs.</p>
+<p>Each research lab ranks the student groups.</p>
+<p>Goal:</p>
+<div class="callout callout-note"><div class="callout-label">Source Note</div>assign every group to a lab while avoiding a pair that would both prefer one another to their current assignments.</div>
+<p>The lecture calls such a mutually dissatisfied pair a <strong>rogue pair</strong>.</p>
+` },
+{ num: '8', title: 'Stable Matching Example', content: `
+<p>The lecture first gives</p>
+<p>$$ M=\\{AD,BC\\} $$</p>
+<p>and explains that $B$ and $D$ are happy, but $A$ and $C$ would rather be with each other. Thus $AC$ is a rogue pair.</p>
+<p>Another matching</p>
+<p>$$ M'=\\{AC,BD\\} $$</p>
+<p>is stable because the remaining pair $B,D$ has no incentive to “elope”.</p>
+<div class="callout callout-def"><div class="callout-label">Stability concept</div>
+<p>A matching is stable when there is <strong>no rogue pair</strong>.</p>
+</div>
+` },
+{ num: '9', title: 'Non-Bipartite vs Bipartite Stable Matching', content: `
+<p>The source gives a non-bipartite preference example with candidate matchings:</p>
+<p>$$ M_1=\\{AD,BC\\} $$</p>
+<p>has rogue pair $AC$;</p>
+<p>$$ M_2=\\{AB,CD\\} $$</p>
+<p>has rogue pair $BC$;</p>
+<p>$$ M_3=\\{AC,BD\\} $$</p>
+<p>has rogue pair $AB$.</p>
+<p>Therefore a non-bipartite graph may have no stable matching.</p>
+<p>The lecture then states:</p>
+<p>$$ \\boxed{\\text{Every bipartite graph has a stable matching}} $$</p>
+<p>and points to the Gale-Shapley algorithm as the constructive method.</p>
+` },
+{ num: '10', title: 'Gale-Shapley Algorithm', content: `
+<p>The lecture assumes a bipartite instance with</p>
+<p>$$ |L|=|R|. $$</p>
+<div class="callout callout-def"><div class="callout-label">Algorithm</div>
+<p>Repeatedly:</p>
+<ol><li>Every unmatched proposer approaches their favorite research group/lab that has not yet rejected them.</li>
+<li>Each research lab keeps its favorite proposal received that day.</li>
+<li>The lab rejects every other proposer.</li>
+<li>Continue until there are no more rejections.</li></ol>
+<p>The lecture describes this as: > <strong>Propose, Reject, Repeat.</strong></p>
+</div>
+` },
+{ num: '11', title: 'Toy Example', content: `
+<p>The five student-group preferences are:</p>
+<ul><li>$A:$ Network $>$ CVLab $>$ SSL $>$ Bio $>$ NDAG</li>
+<li>$B:$ Bio $>$ CVLab $>$ SSL $>$ Network $>$ NDAG</li>
+<li>$C:$ NDAG $>$ Network $>$ CVLab $>$ Bio $>$ SSL</li>
+<li>$D:$ Bio $>$ Network $>$ NDAG $>$ CVLab $>$ SSL</li>
+<li>$E:$ Bio $>$ CVLab $>$ NDAG $>$ SSL $>$ Network</li></ul>
+<p>Research-lab preferences:</p>
+<ul><li>Bio: $C>E>A>B>D$</li>
+<li>CVLab: $E>A>B>D>C$</li>
+<li>Network: $D>C>E>B>A$</li>
+<li>NDAG: $B>A>C>D>E$</li>
+<li>SSL: $A>C>D>B>E$</li></ul>
+<p>Applying the student-group-proposing Gale-Shapley procedure gives:</p>
+<p>$$ \\boxed{ A\\to\\text{CVLab},\\; B\\to\\text{SSL},\\; C\\to\\text{NDAG},\\; D\\to\\text{Network},\\; E\\to\\text{Bio} } $$</p>
+<p>which is the stable matching obtained when the student groups are the proposers.</p>
+<div class="callout callout-def"><div class="callout-label">Proposer-side asymmetry</div>
+<p>The lecture notes that flipping the roles of students and labs usually produces a different matching.</p>
+</div>
+` },
+{ num: '12', title: 'Termination of Gale-Shapley', content: `
+<p>The lecture asks whether the algorithm terminates and answers <strong>yes</strong>.</p>
+<div class="callout callout-def"><div class="callout-label">Reason</div>
+<p>There is at least one rejection per nonterminal day. A proposer never applies to the same receiver twice. With $n$ proposers and $n$ receivers, there can be at most</p>
+<div class="formula-block"><div class="formula-body">n^2</div></div>
+<p>rejections. Therefore the process lasts at most</p>
+<div class="formula-block"><div class="formula-body">\\boxed{n^2+1}</div></div>
+<p>days in the lecture's bound.</p>
+</div>
+` },
+{ num: '13', title: 'Does Gale-Shapley Match Everyone?', content: `
+<p>The source argues yes.</p>
+<p>A proposer’s options get worse over time because they move downward through their preference list.</p>
+<p>A receiver’s held choice gets better over time because the receiver always keeps its favorite proposal so far.</p>
+<p>Suppose, for contradiction, some proposer $X$ is rejected by every receiver.</p>
+<p>Then every receiver must have found someone they prefer to $X$.</p>
+<p>But there are exactly $n$ proposers and $n$ receivers. Excluding $X$, only $n-1$ other proposers exist, so all $n$ receivers cannot simultaneously be matched to a proposer other than $X$.</p>
+<p>Contradiction.</p>
+<p>Hence everyone is matched.</p>
+` },
+{ num: '14', title: 'Why the Final Matching Is Stable', content: `
+<p>Consider any research lab $R$.</p>
+<div class="callout callout-def"><div class="callout-label">Case 1: $R$ rejected $Y$</div>
+<p>If $R$ rejected $Y$, it did so while holding another proposer $X$ preferred over $Y$. Therefore $R$ cannot later prefer $Y$ to its final match. So $R,Y$ cannot be a rogue pair.</p>
+</div>
+<div class="callout callout-def"><div class="callout-label">Case 2: $R$ never considered $Z$</div>
+<p>If $Z$ never reached $R$, then $Z$ stopped before $R$ in its own preference list. Therefore $Z$ must already be matched to someone it prefers to $R$. So $Z,R$ cannot be a rogue pair.</p>
+</div>
+<div class="callout callout-def"><div class="callout-label">Case 3: $R$ accepted $X$</div>
+<p>Then $X$ is at least as good as every proposal $R$ rejected. So $R$ cannot want a rejected proposer more than its final choice. Since every possible rogue-pair situation is ruled out, there are no rogue pairs. Thus the output is stable.</p>
+</div>
+` },
+{ num: '15', title: 'Feasible Partners and Optimality', content: `
+<div class="callout callout-def"><div class="callout-label">Definition</div>
+<p>For $s\\in S$ and $r\\in R$, $(s,r)$ are <strong>feasible partners</strong> iff they can be paired together in some stable matching.</p>
+</div>
+<div class="callout callout-important"><div class="callout-label">Proposer-optimal theorem</div>
+<p>The lecture states: > Gale-Shapley pairs every proposer $s\\in S$ with their <strong>most preferred feasible partner</strong>.</p>
+</div>
+<div class="callout callout-important"><div class="callout-label">Receiver-pessimal theorem</div>
+<p>The lecture also states: > Gale-Shapley pairs every receiver $r\\in R$ with their <strong>least preferred feasible partner</strong>. Thus the choice of which side proposes matters. Swapping proposer and receiver roles swaps these preference advantages.</p>
+</div>
+` },
+{ num: '16', title: 'Finals Checklist', content: `
+<ul><li>[x] Subgraph definition</li>
+<li>[x] Matching definition</li>
+<li>[x] Equivalent edge-set view of matching</li>
+<li>[x] Maximal matching</li>
+<li>[x] Maximum matching</li>
+<li>[x] Maximal vs maximum distinction</li>
+<li>[x] Perfect matching</li>
+<li>[x] Bipartite matching</li>
+<li>[x] $|L|\\ne|R|$ impossibility condition</li>
+<li>[x] $|L|=|R|$ is not sufficient</li>
+<li>[x] Weighted matching and minimum-weight objective</li>
+<li>[x] Stable matching problem</li>
+<li>[x] Rogue pair concept</li>
+<li>[x] Stable/non-stable examples</li>
+<li>[x] Non-bipartite caveat</li>
+<li>[x] Existence of stable matching in bipartite setting</li>
+<li>[x] Gale-Shapley algorithm</li>
+<li>[x] Full toy preference lists</li>
+<li>[x] Stable matching for the toy instance</li>
+<li>[x] Termination argument and $n^2$ rejection bound</li>
+<li>[x] Everyone-is-matched proof</li>
+<li>[x] Stability proof by cases</li>
+<li>[x] Feasible partner definition</li>
+<li>[x] Proposer-optimal theorem</li>
+<li>[x] Receiver-pessimal theorem</li></ul>
+` },
+{ num: '17', title: 'Source Crosswalk', content: `
+<p><details><summary style="cursor:pointer;color:var(--text-2);font-size:13px;margin:16px 0">Source Structure Crosswalk</summary> <p>The following headings appear in the source PDF. Each is represented in the guide above, either directly or by a clearly corresponding explanation.</p> <li>[x] Pair Up or Stand Alone</li> <li>[x] Stuck and Cannot Add More</li> <li>[x] As Big As It Gets</li> <li>[x] Leave No Vertex Behind</li> <li>[x] Nobody Wants to Elope</li> <li>[x] Cause They Were Roommates</li> <li>[x] Propose, Reject, Repeat</li> <li>[x] Watching the Drama Unfold</li> <li>[x] It Ends with... Everyone?</li> <li>[x] Proving No One Will Cheat</li> <li>[x] Fortune Favors the Proposer</li> <li>[x] Suggested Readings</li></p>
+` }
+]
+},
+{
+  id: 6,
+  code: 'LS12',
+  title: 'Connectivity and Trees',
+  source: 'LS12 — Connectivity and Trees (July 28, 2026).',
+  desc: 'Comprehensive study guide for Connectivity and Trees. Source: LS12 — Connectivity and Trees (July 28, 2026).',
+  tags: ['Trees', 'Connectivity', 'Walks'],
+  formulas: ["\\text{There is a walk from }u\\text{ to }v \\iff \\text{there is a path from }u\\text{ to }v", "G\\text{ has an Euler tour} \\iff G\\text{ is connected and every }\\deg(v)\\text{ is even}", "\\text{Euler walk}\\iff\\text{connected + exactly two odd-degree vertices}", "\\text{Tree}=\\text{connected + no cycles}", "1", "T'=T-l", "n-1"],
+  sections: [
+{ num: '1', title: 'Walk Relation as an Equivalence Relation', content: `
+<p>The lecture notes that “there is a walk from $u$ to $v$” has:</p>
+<div class="callout callout-def"><div class="callout-label">Reflexivity</div>
+<p>Allow a walk of length 0:</p>
+<div class="formula-block"><div class="formula-body">u\\to u.</div></div>
+</div>
+<div class="callout callout-def"><div class="callout-label">Symmetry</div>
+<p>If a walk exists from $u$ to $v$, reverse its edges to obtain a walk from $v$ to $u$.</p>
+</div>
+<div class="callout callout-def"><div class="callout-label">Transitivity</div>
+<p>If there is a walk from $u$ to $v$, and another from $v$ to $w$, concatenate them to obtain one from $u$ to $w$. This becomes important later when connected components are treated as equivalence classes.</p>
+</div>
+` },
+{ num: '2', title: 'Path and Trail', content: `
+<div class="callout callout-def"><div class="callout-label">Path</div>
+<p>A path is a walk with no repeated vertices (and therefore no unnecessary repeated edges). Example from the source:</p>
+<div class="formula-block"><div class="formula-body">a\\to b\\to d\\to c.</div></div>
+</div>
+<div class="callout callout-def"><div class="callout-label">Trail</div>
+<p>A trail does not repeat edges, but it may repeat vertices. Source example:</p>
+<div class="formula-block"><div class="formula-body">a\\to b\\to d\\to e\\to b\\to c.</div></div>
+</div>
+<div class="callout callout-def"><div class="callout-label">Applications named</div>
+<ul><li>Google Maps;</li>
+<li>routing;</li>
+<li>social networks;</li>
+<li>puzzle solving.</li></ul>
+</div>
+` },
+{ num: '3', title: 'Walk Exists iff Path Exists', content: `
+<div class="callout callout-important"><div class="callout-label">Theorem</div>
+<div class="formula-block"><div class="formula-body">\\boxed{\\text{There is a walk from }u\\text{ to }v
+\\iff
+\\text{there is a path from }u\\text{ to }v}.</div></div>
+</div>
+<div class="callout callout-note"><div class="callout-label">Proof idea</div>
+<p>If there is a walk, take a shortest walk from $u$ to $v$. If it repeated a vertex, removing the section between the two appearances would produce a shorter walk. That contradicts minimality. Therefore the shortest walk has no repeated vertices, so it is a path. The reverse implication is immediate because every path is a walk.</p>
+</div>
+` },
+{ num: '4', title: 'Connectedness', content: `
+<div class="callout callout-def"><div class="callout-label">Definition</div>
+<p>Vertices $u,v$ are <strong>connected</strong> if there exists a walk from $u$ to $v$. By the previous theorem, this is equivalent to the existence of a path.</p>
+</div>
+<div class="callout callout-def"><div class="callout-label">Properties</div>
+<p>Connectedness is:</p>
+<ul><li>reflexive;</li>
+<li>symmetric;</li>
+<li>transitive.</li></ul>
+</div>
+<div class="callout callout-def"><div class="callout-label">Connected graph</div>
+<p>A graph $G=(V,E)$ is connected if every pair</p>
+<div class="formula-block"><div class="formula-body">u,v\\in V</div></div>
+<p>is connected. The source also calls this <strong>pairwise connected</strong>. If one vertex is connected to every other vertex, transitivity shows the entire graph is connected.</p>
+</div>
+` },
+{ num: '5', title: 'Connected Components', content: `
+<div class="callout callout-def"><div class="callout-label">Definition</div>
+<p>The connected component of a vertex $v$ is the subgraph induced by all vertices connected to $v$. So</p>
+<div class="formula-block"><div class="formula-body">V'=\\{u\\in V\\mid u\\text{ is connected to }v\\},</div></div>
+<p>and</p>
+<div class="formula-block"><div class="formula-body">E'=\\{\\{u,w\\}\\in E\\mid u,w\\in V'\\}.</div></div>
+</div>
+<div class="callout callout-def"><div class="callout-label">Key property</div>
+<p>Connected components partition the graph. Every vertex (and therefore every edge) belongs to exactly one connected component.</p>
+</div>
+<div class="callout callout-def"><div class="callout-label">Applications</div>
+<ul><li>road networks;</li>
+<li>puzzle solving.</li></ul>
+</div>
+` },
+{ num: '6', title: 'Closed Walk, Cycle, Euler Walk', content: `
+<div class="callout callout-def"><div class="callout-label">Closed walk</div>
+<p>A walk that starts and ends at the same vertex.</p>
+</div>
+<div class="callout callout-def"><div class="callout-label">Cycle</div>
+<p>A closed walk of positive length with no other repeated vertices or edges.</p>
+</div>
+<div class="callout callout-def"><div class="callout-label">Euler walk</div>
+<p>An Euler walk visits every edge exactly once, together with the vertices encountered along the walk. The source's example is</p>
+<div class="formula-block"><div class="formula-body">a\\to b\\to c\\to d\\to e\\to a\\to d\\to b\\to e.</div></div>
+</div>
+` },
+{ num: '7', title: 'Euler Tours and Königsberg Bridges', content: `
+<div class="callout callout-def"><div class="callout-label">Euler's Tour</div>
+<p>An Euler tour is an <strong>Euler closed walk</strong>. The famous Seven Bridges of Königsberg problem asks whether all bridges can be crossed without repeating a bridge. The lecture answers <strong>no</strong> and presents the problem as one of the earliest graph-theory questions concerning Euler walks.</p>
+</div>
+` },
+{ num: '8', title: 'Euler\'s Theorem', content: `
+<div class="callout callout-important"><div class="callout-label">Theorem</div>
+<p>A graph has an Euler tour <strong>iff</strong></p>
+<ol><li>the graph is connected; and</li>
+<li>every vertex has even degree.</li></ol>
+<div class="formula-block"><div class="formula-body">\\boxed{
+G\\text{ has an Euler tour}
+\\iff
+G\\text{ is connected and every }\\deg(v)\\text{ is even}
+}</div></div>
+</div>
+<div class="callout callout-note"><div class="callout-label">Proof idea</div>
+<p>Every time a tour enters an internal vertex, it must later leave it, so the incident edges are used in pairs. Thus every vertex has even degree. For sufficiency, the lecture's proof sketch takes a longest trail. The trail must be closed; otherwise one would obtain a vertex with an unpaired edge. If an edge were left unused while incident to a visited vertex, the trail could be extended, contradicting maximality.</p>
+</div>
+` },
+{ num: '9', title: 'Euler Walk Corollary', content: `
+<p>A graph has an Euler walk iff:</p>
+<ul><li>the graph is connected; and</li>
+<li>it has exactly two vertices of odd degree.</li></ul>
+<p>So:</p>
+<p>$$ \\boxed{\\text{Euler walk}\\iff\\text{connected + exactly two odd-degree vertices}} $$</p>
+<p>for the non-closed case described by the lecture.</p>
+` },
+{ num: '10', title: 'Trees and Forests', content: `
+<div class="callout callout-def"><div class="callout-label">Tree</div>
+<p>A <strong>tree</strong> is a connected acyclic graph.</p>
+<div class="formula-block"><div class="formula-body">\\boxed{\\text{Tree}=\\text{connected + no cycles}}</div></div>
+</div>
+<div class="callout callout-def"><div class="callout-label">Forest</div>
+<p>A forest is a collection of trees. Thus a forest is acyclic but need not be connected.</p>
+</div>
+` },
+{ num: '11', title: 'Leaves', content: `
+<div class="callout callout-def"><div class="callout-label">Definition</div>
+<p>A <strong>leaf</strong> is a vertex of degree</p>
+<div class="formula-block"><div class="formula-body">\\boxed{1}.</div></div>
+</div>
+<div class="callout callout-important"><div class="callout-label">Leaf Lemma</div>
+<p>Every tree with</p>
+<div class="formula-block"><div class="formula-body">|V|\\ge2</div></div>
+<p>has at least two leaves.</p>
+</div>
+<div class="callout callout-note"><div class="callout-label">Proof idea</div>
+<p>Take a longest path. If an endpoint had degree greater than 1, there would be another edge leaving it. That edge would either:</p>
+<ul><li>extend the path, contradicting maximality; or</li>
+<li>create a repeated vertex/cycle, which cannot happen in a tree.</li></ul>
+<p>Hence both endpoints are leaves.</p>
+</div>
+` },
+{ num: '12', title: 'Tree Pruning', content: `
+<p>For any leaf $l$ of a tree $T$,</p>
+<p>$$ \\boxed{T'=T-l} $$</p>
+<p>is still a tree.</p>
+<p>The source describes this as clipping off the leaf and its incident edge.</p>
+<div class="callout callout-def"><div class="callout-label">Properties</div>
+<div class="formula-block"><div class="formula-body">|V'|=|V|-1</div></div>
+<p>and</p>
+<div class="formula-block"><div class="formula-body">|E'|=|E|-1.</div></div>
+<p>Removing a leaf:</p>
+<ul><li>does not create a cycle;</li>
+<li>does not disconnect the remainder because the removed vertex was an endpoint, not a middle vertex.</li></ul>
+<p>This gives a useful inductive tool for proving tree properties.</p>
+</div>
+` },
+{ num: '13', title: 'Tree Size Theorem', content: `
+<div class="callout callout-important"><div class="callout-label">Theorem</div>
+<p>A tree with $n$ vertices has exactly</p>
+<div class="formula-block"><div class="formula-body">\\boxed{n-1}</div></div>
+<p>edges.</p>
+</div>
+<div class="callout callout-note"><div class="callout-label">Proof by induction</div>
+<p>Let $P(n)$ be: > Every tree with $n$ vertices has $n-1$ edges.</p>
+<h4 class="subsection-heading">Base case</h4>
+<p>For $n=1$, there is one vertex and zero edges. Thus</p>
+<div class="formula-block"><div class="formula-body">0=1-1.</div></div>
+<h4 class="subsection-heading">Inductive step</h4>
+<p>Suppose the theorem holds for $n$. Take a tree with $n+1$ vertices. By the Leaf Lemma, it has a leaf $l$. Prune $l$. The remaining graph $T'$ is a tree with $n$ vertices. By induction:</p>
+<div class="formula-block"><div class="formula-body">|E'|=n-1.</div></div>
+<p>Putting the leaf and its incident edge back adds exactly one edge:</p>
+<div class="formula-block"><div class="formula-body">|E|=(n-1)+1=n.</div></div>
+<p>Since the original graph has $n+1$ vertices,</p>
+<div class="formula-block"><div class="formula-body">|E|=(n+1)-1.</div></div>
+<p>Therefore the theorem holds.</p>
+</div>
+` },
+{ num: '14', title: 'Six Equivalent Ways to Recognize a Tree', content: `
+<p>For a graph $G$ with $n$ vertices, the lecture lists equivalent characterizations:</p>
+<ol><li>$G$ is connected and acyclic.</li>
+<li>$G$ is connected and has exactly $n-1$ edges.</li>
+<li>$G$ is acyclic and has exactly $n-1$ edges.</li>
+<li>Every pair of vertices is connected by a unique path.</li>
+<li>$G$ is minimally connected.</li>
+<li>$G$ is maximally acyclic.</li></ol>
+<p>These are extremely important exam equivalences.</p>
+<div class="callout callout-def"><div class="callout-label">Interpretations</div>
+<ul><li><strong>Minimally connected:</strong> remove any edge and the graph becomes disconnected.</li>
+<li><strong>Maximally acyclic:</strong> add any new edge and a cycle is created.</li>
+<li><strong>Unique path:</strong> between any two vertices, exactly one simple path exists.</li></ul>
+</div>
+` },
+{ num: '15', title: 'Finals Checklist', content: `
+<ul><li>[x] Walk definition</li>
+<li>[x] Walk length</li>
+<li>[x] Walk relation and equivalence properties</li>
+<li>[x] Path definition</li>
+<li>[x] Trail definition</li>
+<li>[x] Walk iff path theorem</li>
+<li>[x] Connectedness</li>
+<li>[x] Connected graph</li>
+<li>[x] Connected components</li>
+<li>[x] Partition property</li>
+<li>[x] Closed walk</li>
+<li>[x] Cycle</li>
+<li>[x] Euler walk</li>
+<li>[x] Königsberg problem</li>
+<li>[x] Euler tour</li>
+<li>[x] Euler's theorem</li>
+<li>[x] Euler-walk corollary</li>
+<li>[x] Tree</li>
+<li>[x] Forest</li>
+<li>[x] Leaf</li>
+<li>[x] Leaf Lemma</li>
+<li>[x] Tree pruning</li>
+<li>[x] Tree size theorem and induction proof</li>
+<li>[x] Six equivalent tree characterizations</li>
+<li>[x] Suggested readings</li></ul>
+` },
+{ num: '16', title: 'Source Crosswalk', content: `
+<p><details><summary style="cursor:pointer;color:var(--text-2);font-size:13px;margin:16px 0">Source Structure Crosswalk</summary> <p>The following headings appear in the source PDF. Each is represented in the guide above, either directly or by a clearly corresponding explanation.</p> <li>[x] Taking the Scenic, Repetitive Route</li> <li>[x] No Backtracking Allowed This Time</li> <li>[x] Shortcuts Always Eliminate Unnecessary Loops</li> <li>[x] Can We Get There From Here?</li> <li>[x] Dividing Graphs Into Isolated Islands</li> <li>[x] Going in Circles with Purpose</li> <li>[x] Euler Ruined Sunday Afternoon Strolls</li> <li>[x] Count Degree-ula</li> <li>[x] Branching Out Without Any Loops</li> <li>[x] Every Family Tree Has Dead Ends</li> <li>[x] Snip Snap, Snip Snap!</li> <li>[x] Always One Edge Short of Perfect</li> <li>[x] Six Ways to Spot a Tree</li> <li>[x] Suggested Readings</li></p>
+` }
+]
+},
+{
+  id: 7,
+  code: 'LS13',
+  title: 'Digraphs and DAGs',
+  source: 'LS13 — Digraphs and DAGs (August 9, 2026).',
+  desc: 'Comprehensive study guide for Digraphs and DAGs. Source: LS13 — Digraphs and DAGs (August 9, 2026).',
+  tags: ['Digraphs', 'DAGs', 'Topological'],
+  formulas: ["\\operatorname{in-deg}(v) = |\\{(u,v)\\in E\\mid u\\in V\\}|", "\\operatorname{out-deg}(v) = |\\{(v,u)\\in E\\mid u\\in V\\}|", "\\sum_{v\\in V}\\operatorname{in-deg}(v) = \\sum_{v\\in V}\\operatorname{out-deg}(v) = |E|", "\\text{shortest walk from }u\\text{ to }v \\iff \\text{path from }u\\text{ to }v", "d\\to d", "u\\text{ can reach }v", "\\operatorname{in-deg}(v)=\\operatorname{out-deg}(v)", "|V|"],
+  sections: [
+{ num: '1', title: 'In-Degree and Out-Degree', content: `
+<div class="callout callout-def"><div class="callout-label">In-degree</div>
+<div class="formula-block"><div class="formula-body">\\boxed{
+\\operatorname{in-deg}(v)
+=
+|\\{(u,v)\\in E\\mid u\\in V\\}|
+}</div></div>
+<p>counts edges entering $v$.</p>
+</div>
+<div class="callout callout-def"><div class="callout-label">Out-degree</div>
+<div class="formula-block"><div class="formula-body">\\boxed{
+\\operatorname{out-deg}(v)
+=
+|\\{(v,u)\\in E\\mid u\\in V\\}|
+}</div></div>
+<p>counts edges leaving $v$.</p>
+</div>
+<div class="callout callout-important"><div class="callout-label">Directed Handshaking Lemma</div>
+<div class="formula-block"><div class="formula-body">\\boxed{
+\\sum_{v\\in V}\\operatorname{in-deg}(v)
+=
+\\sum_{v\\in V}\\operatorname{out-deg}(v)
+=
+|E|
+}</div></div>
+<p>Every directed edge contributes exactly once to the total in-degree and once to the total out-degree.</p>
+</div>
+` },
+{ num: '2', title: 'Directed Walks and Paths', content: `
+<div class="callout callout-def"><div class="callout-label">Walk</div>
+<p>A sequence</p>
+<div class="formula-block"><div class="formula-body">v_0\\to v_1\\to\\cdots\\to v_k</div></div>
+<p>where each directed edge</p>
+<div class="formula-block"><div class="formula-body">(v_i,v_{i+1})\\in E.</div></div>
+</div>
+<div class="callout callout-def"><div class="callout-label">Path</div>
+<p>A walk with no repeated vertices (or edges in the lecture's wording). The same shortest-walk argument as in undirected graphs gives:</p>
+<div class="formula-block"><div class="formula-body">\\boxed{\\text{shortest walk from }u\\text{ to }v
+\\iff
+\\text{path from }u\\text{ to }v}.</div></div>
+</div>
+` },
+{ num: '3', title: 'Directed Cycles', content: `
+<div class="callout callout-def"><div class="callout-label">Definition</div>
+<p>A directed cycle is a closed directed walk of positive length with no other repeated vertices/edges. The lecture includes:</p>
+<div class="formula-block"><div class="formula-body">a\\to c\\to b\\to a</div></div>
+<p>as an example. Because self-loops are allowed in directed graphs, a length-1 cycle is possible:</p>
+<div class="formula-block"><div class="formula-body">\\boxed{d\\to d}.</div></div>
+</div>
+` },
+{ num: '4', title: 'Reachability', content: `
+<div class="callout callout-def"><div class="callout-label">Definition</div>
+<p>A vertex $v$ is <strong>reachable from</strong> $u$ if there is a directed walk from $u$ to $v$. Reachability is:</p>
+<ul><li>reflexive;</li>
+<li>transitive;</li>
+<li><strong>not symmetric</strong>.</li></ul>
+<p>The lack of symmetry is the major conceptual difference from ordinary connectedness in undirected graphs.</p>
+</div>
+` },
+{ num: '5', title: 'Strong Connectivity', content: `
+<p>Vertices $u,v$ are <strong>strongly connected</strong> if:</p>
+<ul><li>$v$ is reachable from $u$; and</li>
+<li>$u$ is reachable from $v$.</li></ul>
+<p>A directed graph is <strong>strongly connected</strong> if every ordered pair of vertices satisfies mutual reachability.</p>
+<p>Thus, for all $u,v\\in V$,</p>
+<p>$$ \\boxed{u\\text{ can reach }v}. $$</p>
+` },
+{ num: '6', title: 'Directed Euler Tour', content: `
+<div class="callout callout-def"><div class="callout-label">Definition</div>
+<p>A directed Euler tour is a closed walk that visits:</p>
+<ul><li>every edge exactly once;</li>
+<li>every vertex.</li></ul>
+</div>
+<div class="callout callout-def"><div class="callout-label">Existence condition from the lecture</div>
+<p>A directed Euler tour exists if:</p>
+<ol><li>the graph is strongly connected;</li>
+<li>every vertex satisfies</li></ol>
+<div class="formula-block"><div class="formula-body">\\boxed{\\operatorname{in-deg}(v)=\\operatorname{out-deg}(v)}.</div></div>
+<p>Both conditions are important.</p>
+</div>
+` },
+{ num: '7', title: 'Strongly Connected Components (SCCs)', content: `
+<div class="callout callout-def"><div class="callout-label">Definition</div>
+<p>The SCC of a vertex $v$, denoted</p>
+<div class="formula-block"><div class="formula-body">[v],</div></div>
+<p>is the graph induced by all vertices strongly connected to $v$.</p>
+</div>
+<div class="callout callout-def"><div class="callout-label">Key property</div>
+<p>Each vertex belongs to exactly one SCC. Edges can connect different SCCs.</p>
+</div>
+` },
+{ num: '8', title: 'Condensation Graph', content: `
+<p>The <strong>condensation graph</strong> is formed by shrinking each SCC into one super-vertex.</p>
+<p>If</p>
+<p>$$ C=\\{[v]\\mid v\\in V\\}, $$</p>
+<p>then its edge set is</p>
+<p>$$ F= \\{([u],[v])\\mid(u,v)\\in E,\\;[u]\\ne[v]\\}. $$</p>
+<p>The purpose is to replace complicated strongly connected regions with single nodes.</p>
+` },
+{ num: '9', title: 'Directed Acyclic Graphs (DAGs)', content: `
+<div class="callout callout-def"><div class="callout-label">Definition</div>
+<p>A <strong>Directed Acyclic Graph (DAG)</strong> is a directed graph with no cycles. Applications in the lecture:</p>
+<ul><li>condensation graphs;</li>
+<li>task scheduling;</li>
+<li>concurrency control;</li>
+<li>data processing.</li></ul>
+<p>The condensation graph is a DAG because a directed cycle among SCCs would contradict the fact that those SCCs were already maximally strongly connected.</p>
+</div>
+` },
+{ num: '10', title: 'Topological Ordering', content: `
+<p>A topological ordering of a DAG is an ordering of the vertices such that every vertex appears before every vertex it can reach.</p>
+<div class="callout callout-def"><div class="callout-label">Source and sink</div>
+<ul><li><strong>Source:</strong> in-degree 0.</li>
+<li><strong>Sink:</strong> out-degree 0.</li></ul>
+<p>The lecture also notes that in a DAG, walks and paths coincide because a repeated vertex would create a cycle.</p>
+</div>
+` },
+{ num: '11', title: 'Every DAG Has a Source and a Sink', content: `
+<div class="callout callout-important"><div class="callout-label">Lemma</div>
+<p>Every DAG has at least one source and at least one sink.</p>
+</div>
+<div class="callout callout-note"><div class="callout-label">Proof idea</div>
+<p>Take a longest path</p>
+<div class="formula-block"><div class="formula-body">v_0\\to v_1\\to\\cdots\\to v_k.</div></div>
+<p>If $v_0$ had an incoming edge $u\\to v_0$:</p>
+<ul><li>if $u$ were already on the path, a cycle would be formed;</li>
+<li>if $u$ were not on the path, the path could be extended.</li></ul>
+<p>Both are contradictions. Therefore $v_0$ is a source. A symmetric argument shows $v_k$ is a sink.</p>
+</div>
+` },
+{ num: '12', title: 'Topological-Sort Algorithm', content: `
+<p>The lecture's algorithm is:</p>
+<ol><li>Choose a source.</li>
+<li>Remove the source.</li>
+<li>The remaining graph is still a DAG.</li>
+<li>Repeat.</li></ol>
+<p>This produces a topological order.</p>
+<div class="callout callout-def"><div class="callout-label">Multiple valid orders</div>
+<p>A DAG can have multiple topological orders. For the getting-dressed example, one valid order shown by the lecture is:</p>
+<div class="formula-block"><div class="formula-body">\\text{Pants, Shirt, Belt, L Sock, R Sock, Jacket, Scarf, Overcoat, Hat, L Shoe, R Shoe}.</div></div>
+<p>The important requirement is that all prerequisites appear before the tasks that depend on them.</p>
+</div>
+<div class="callout callout-def"><div class="callout-label">Running time statement</div>
+<p>The lecture says the source-removal process requires</p>
+<div class="formula-block"><div class="formula-body">\\boxed{|V|}</div></div>
+<p>amount of time in the presented model.</p>
+</div>
+` },
+{ num: '13', title: 'Every DAG Has a Topological Ordering', content: `
+<div class="callout callout-important"><div class="callout-label">Theorem</div>
+<p>Every DAG has a topological ordering.</p>
+</div>
+<div class="callout callout-note"><div class="callout-label">Proof by induction on $|V|$</div>
+<h4 class="subsection-heading">Base case</h4>
+<p>For one vertex, the graph has no cycle and that single vertex is a valid topological ordering.</p>
+<h4 class="subsection-heading">Inductive step</h4>
+<p>Assume every DAG with $n$ vertices has a topological ordering. Take a DAG with $n+1$ vertices. By the source lemma, it has a source $s$. Remove $s$. The remaining graph is still a DAG because removing vertices cannot create cycles. By induction, the remaining $n$-vertex graph has a topological order</p>
+<div class="formula-block"><div class="formula-body">v_1,\\ldots,v_n.</div></div>
+<p>Place $s$ at the front:</p>
+<div class="formula-block"><div class="formula-body">s,v_1,\\ldots,v_n.</div></div>
+<p>Since $s$ had no incoming dependency, this is a topological ordering.</p>
+</div>
+` },
+{ num: '14', title: 'Parallel Task Scheduling', content: `
+<p>A schedule assigns a time</p>
+<p>$$ t(v)\\in\\mathbb N $$</p>
+<p>to each vertex such that whenever $u$ can reach $v$ and $u\\ne v$,</p>
+<p>$$ \\boxed{t(u)<t(v)}. $$</p>
+<div class="callout callout-def"><div class="callout-label">Span</div>
+<p>The <strong>span</strong> is the number of distinct times used.</p>
+</div>
+<div class="callout callout-important"><div class="callout-label">Theorem</div>
+<p>The minimum possible span equals the number of vertices in the longest path.</p>
+<div class="formula-block"><div class="formula-body">\\boxed{\\text{minimum span}=
+\\text{number of vertices in the longest path}}</div></div>
+<p>The intuition is that vertices on a dependency chain must occur at strictly increasing times, while unrelated tasks may execute together. The lecture's example groups tasks into simultaneous layers such as:</p>
+<div class="formula-block"><div class="formula-body">\\{\\text{L Sock,R Sock,Pants,Shirt}\\},</div></div>
+<p>then</p>
+<div class="formula-block"><div class="formula-body">\\{\\text{L Shoe,R Shoe,Belt,Jacket}\\},</div></div>
+<p>then</p>
+<div class="formula-block"><div class="formula-body">\\{\\text{Scarf,Hat}\\},</div></div>
+<p>then</p>
+<div class="formula-block"><div class="formula-body">\\{\\text{Overcoat}\\}.</div></div>
+</div>
+` },
+{ num: '15', title: 'Comparable Vertices, Chains, and Antichains', content: `
+<div class="callout callout-def"><div class="callout-label">Comparable</div>
+<p>Vertices $u,v$ are comparable if</p>
+<div class="formula-block"><div class="formula-body">u\\text{ reaches }v</div></div>
+<p>or</p>
+<div class="formula-block"><div class="formula-body">v\\text{ reaches }u.</div></div>
+<p>Otherwise they are incomparable.</p>
+</div>
+<div class="callout callout-def"><div class="callout-label">Chain</div>
+<p>A set of pairwise-comparable vertices. The lecture observes that chains are subsets of a path.</p>
+</div>
+<div class="callout callout-def"><div class="callout-label">Antichain</div>
+<p>A set of pairwise-incomparable vertices. Antichains identify tasks that are not ordered by the dependency relation.</p>
+</div>
+<div class="callout callout-def"><div class="callout-label">Corollary</div>
+<p>Partitioning the vertices into the fewest number of antichains has the same size as the largest chain. This gives a strong connection between dependency structure and parallel scheduling.</p>
+</div>
+` },
+{ num: '16', title: 'Finals Checklist', content: `
+<ul><li>[x] Directed-graph definition</li>
+<li>[x] Ordered-pair representation</li>
+<li>[x] Parallel/anti-parallel/self-loop rules</li>
+<li>[x] In-degree</li>
+<li>[x] Out-degree</li>
+<li>[x] Directed Handshaking Lemma</li>
+<li>[x] Directed walks</li>
+<li>[x] Directed paths</li>
+<li>[x] Shortest-walk/path equivalence</li>
+<li>[x] Directed cycle</li>
+<li>[x] Length-1 self-loop cycle</li>
+<li>[x] Reachability</li>
+<li>[x] Reflexive/transitive/non-symmetric nature</li>
+<li>[x] Strong connectivity</li>
+<li>[x] Strongly connected graph</li>
+<li>[x] Directed Euler tour</li>
+<li>[x] Euler-tour existence conditions</li>
+<li>[x] SCC definition</li>
+<li>[x] Condensation graph</li>
+<li>[x] DAG definition and applications</li>
+<li>[x] Topological ordering</li>
+<li>[x] Source and sink</li>
+<li>[x] Every-DAG-source/sink lemma</li>
+<li>[x] Source-removal topological sort</li>
+<li>[x] Inductive proof of topological ordering</li>
+<li>[x] Parallel task scheduling</li>
+<li>[x] Span</li>
+<li>[x] Longest-path/minimum-span theorem</li>
+<li>[x] Comparable vertices</li>
+<li>[x] Chain</li>
+<li>[x] Antichain</li>
+<li>[x] Minimum-antichain/maximum-chain corollary</li></ul>
+` },
+{ num: '17', title: 'Source Crosswalk', content: `
+<p><details><summary style="cursor:pointer;color:var(--text-2);font-size:13px;margin:16px 0">Source Structure Crosswalk</summary> <p>The following headings appear in the source PDF. Each is represented in the guide above, either directly or by a clearly corresponding explanation.</p> <li>[x] Arrows Change Everything in This Graph</li> <li>[x] Count Direct-ula</li> <li>[x] One-Way Scenic Routes and Shortest Paths</li> <li>[x] Going in Circles, One-Way Edition</li> <li>[x] Can We Ever Get Back Home?</li> <li>[x] Count Degree-ula (Directed)</li> <li>[x] Shrinking Island Clusters Into Single Nodes</li> <li>[x] No Way Home</li> <li>[x] Socks Before Shoes, Always in Order</li> <li>[x] Every DAG Has a Start Point</li> <li>[x] Peel the Sources, Get the Schedule</li> <li>[x] Inductively Prove You Can Get Dressed</li> <li>[x] Dress Faster by Multitasking Socks</li> <li>[x] Sequential Chains vs Parallel Antichains</li> <li>[x] Suggested Readings</li></p>
+` }
+]
+},
+{
+  id: 8,
+  code: 'LS14',
+  title: 'Relations and Counting',
+  source: 'LS14 — Relations and Counting (August 13, 2026).',
+  desc: 'Comprehensive study guide for Relations and Counting. Source: LS14 — Relations and Counting (August 13, 2026).',
+  tags: ['Relations', 'Functions', 'Counting'],
+  formulas: ["\\text{exactly one output per input}", "|A|\\le|B|", "|A|\\ge|B|", "|A|=|B|", "\\text{walk relation of a digraph is a WPO} \\iff \\text{the digraph is a DAG}", "|A\\times B|=|A||B|", "2^n", "|S_n|=2^n"],
+  sections: [
+{ num: '1', title: 'Course Example of Relations', content: `
+<p>The lecture defines:</p>
+<ul><li>Students $S=\\{\\text{Alice,Bob,Charlie,Dave}\\}$</li>
+<li>Classes $C=\\{\\text{DLD,ToC,SP,DM}\\}$</li>
+<li>Professors $P=\\{\\text{Frank,Grace,Heidi,Ivan}\\}$</li></ul>
+<p>Learning relation:</p>
+<p>$$ L\\subseteq S\\times C $$</p>
+<p>with pairs</p>
+<p>$$ (\\text{Alice,DLD}),(\\text{Alice,SP}), (\\text{Bob,DLD}),(\\text{Bob,ToC}),(\\text{Bob,SP}), (\\text{Charlie,ToC}),(\\text{Charlie,SP}), (\\text{Dave,SP}). $$</p>
+<p>Teaching relation:</p>
+<p>$$ T\\subseteq C\\times P $$</p>
+<p>with</p>
+<p>$$ (\\text{DLD,Heidi}), (\\text{ToC,Ivan}), (\\text{SP,Frank}), (\\text{DM,Grace}). $$</p>
+<p>These examples illustrate that a relation need not assign each left-side element to exactly one right-side element.</p>
+` },
+{ num: '2', title: 'Ways to Write a Relation', content: `
+<p>If</p>
+<p>$$ (a,b)\\in R, $$</p>
+<p>the source gives three notational styles.</p>
+<div class="callout callout-def"><div class="callout-label">Infix</div>
+<div class="formula-block"><div class="formula-body">aRb.</div></div>
+<p>Examples:</p>
+<div class="formula-block"><div class="formula-body">3<7,\\qquad S\\subseteq T.</div></div>
+</div>
+<div class="callout callout-def"><div class="callout-label">Predicate notation</div>
+<div class="formula-block"><div class="formula-body">R(a,b).</div></div>
+</div>
+<div class="callout callout-def"><div class="callout-label">Phrasal notation</div>
+<p>“$a$ relates to $b$”. These are different ways of expressing the same membership fact.</p>
+</div>
+` },
+{ num: '3', title: 'Function', content: `
+<div class="callout callout-def"><div class="callout-label">Definition</div>
+<p>A relation</p>
+<div class="formula-block"><div class="formula-body">R\\subseteq A\\times B</div></div>
+<p>is a <strong>function</strong> iff every $a\\in A$ relates to <strong>at most one</strong> $b\\in B$. Graphically: > every $a\\in A$ has at most one arrow leaving it. In the course example:</p>
+<ul><li>$L$ is not a function;</li>
+<li>$T$ is a function.</li></ul>
+</div>
+<div class="callout callout-def"><div class="callout-label">Important distinction</div>
+<p>A function condition restricts the number of arrows <strong>out of each input</strong>. It does not yet require every input to have an output.</p>
+</div>
+` },
+{ num: '4', title: 'Function Notation', content: `
+<p>If $R$ is a function and</p>
+<p>$$ (a,b)\\in R, $$</p>
+<p>we may write</p>
+<p>$$ R(a)=b. $$</p>
+<p>The lecture also gives</p>
+<p>$$ f:\\mathbb R\\to\\mathbb R,\\qquad f(x)=\\frac1{x^2}. $$</p>
+<p>Its relation form is</p>
+<p>$$ f=\\{(x,y)\\subseteq\\mathbb R\\times\\mathbb R\\mid y=1/x^2\\}. $$</p>
+<p>The lecture then notes the equivalent explicit domain restriction:</p>
+<p>$$ f=\\{(x,1/x^2)\\mid x\\in\\mathbb R\\setminus\\{0\\}\\}. $$</p>
+` },
+{ num: '5', title: 'Total Relation', content: `
+<div class="callout callout-def"><div class="callout-label">Definition</div>
+<p>A relation</p>
+<div class="formula-block"><div class="formula-body">R\\subseteq A\\times B</div></div>
+<p>is <strong>total</strong> iff every $a\\in A$ has at least one $b\\in B$. Graphically: > every $a\\in A$ has at least one arrow leaving. The course relation $L$ is total, and $T$ is total. For</p>
+<div class="formula-block"><div class="formula-body">f:\\mathbb R\\to\\mathbb R,\\qquad f(x)=1/x^2,</div></div>
+<p>the relation is <strong>not total</strong> over all of $\\mathbb R$, because $f(0)$ is undefined. The lecture fixes this by using</p>
+<div class="formula-block"><div class="formula-body">g:\\mathbb R\\setminus\\{0\\}\\to\\mathbb R\\setminus\\{0\\},
+\\qquad
+g(x)=1/x^2,</div></div>
+<p>which is total on its specified domain.</p>
+</div>
+` },
+{ num: '6', title: 'Total Function and Partial Function', content: `
+<p>A <strong>total function</strong> has exactly one arrow out for each $a\\in A$.</p>
+<p>Thus it combines:</p>
+<ul><li>function condition: at most one output;</li>
+<li>total condition: at least one output.</li></ul>
+<p>Together:</p>
+<p>$$ \\boxed{\\text{exactly one output per input}}. $$</p>
+<p>The lecture notes that “function” usually means total function, while “partial function” means a function that is not necessarily total.</p>
+` },
+{ num: '7', title: 'Injective Function', content: `
+<div class="callout callout-def"><div class="callout-label">Definition</div>
+<div class="formula-block"><div class="formula-body">R\\subseteq A\\times B</div></div>
+<p>is injective iff every $b\\in B$ has at most one arrow coming in. In ordinary language: > distinct inputs cannot map to the same output. In the course example:</p>
+<ul><li>$L$ is neither injective nor surjective;</li>
+<li>$T$ is both.</li></ul>
+</div>
+` },
+{ num: '8', title: 'Surjective Function', content: `
+<div class="callout callout-def"><div class="callout-label">Definition</div>
+<div class="formula-block"><div class="formula-body">R\\subseteq A\\times B</div></div>
+<p>is surjective iff every $b\\in B$ has at least one arrow coming in. In ordinary language: > every codomain element is hit by at least one domain element.</p>
+</div>
+` },
+{ num: '9', title: 'Size Theorems', content: `
+<p>For finite sets $A,B$:</p>
+<div class="callout callout-def"><div class="callout-label">Total injection</div>
+<p>If $R\\subseteq A\\times B$ is a total injection, then</p>
+<div class="formula-block"><div class="formula-body">\\boxed{|A|\\le|B|}.</div></div>
+<p>Reason:</p>
+<ul><li>totality ensures every element of $A$ contributes an arrow;</li>
+<li>injectivity prevents two arrows from landing on the same element of $B$.</li></ul>
+</div>
+<div class="callout callout-def"><div class="callout-label">Surjective function</div>
+<p>If $R\\subseteq A\\times B$ is a surjective function, then</p>
+<div class="formula-block"><div class="formula-body">\\boxed{|A|\\ge|B|}.</div></div>
+<p>Every codomain element must have at least one preimage, so the domain cannot be smaller.</p>
+</div>
+` },
+{ num: '10', title: 'Bijection', content: `
+<p>A relation is a <strong>bijection</strong> when it is simultaneously:</p>
+<ul><li>a function;</li>
+<li>total;</li>
+<li>injective;</li>
+<li>surjective.</li></ul>
+<p>Equivalently, every domain element maps to exactly one codomain element and every codomain element is hit exactly once.</p>
+<div class="callout callout-important"><div class="callout-label">Theorem</div>
+<p>If</p>
+<div class="formula-block"><div class="formula-body">R:A\\to B</div></div>
+<p>is a bijection, then</p>
+<div class="formula-block"><div class="formula-body">\\boxed{|A|=|B|}.</div></div>
+<p>Bijections are therefore called <strong>1-to-1 correspondences</strong>.</p>
+</div>
+` },
+{ num: '11', title: 'Relations on One Set', content: `
+<p>If</p>
+<p>$$ A=B, $$</p>
+<p>then</p>
+<p>$$ R\\subseteq A\\times A $$</p>
+<p>is a <strong>binary relation on $A$</strong>.</p>
+<p>The lecture gives examples:</p>
+<ul><li>$a=b$;</li>
+<li>$a\\equiv b\\pmod5$;</li>
+<li>$a\\le b$;</li>
+<li>$A\\subseteq B$;</li>
+<li>$a\\mid b$;</li>
+<li>connected components in an undirected graph;</li>
+<li>reachability/walk relation in a directed graph.</li></ul>
+<p>The lecture notes that a digraph itself can be viewed as a relation.</p>
+` },
+{ num: '12', title: 'Equivalence Relation', content: `
+<div class="callout callout-def"><div class="callout-label">Definition</div>
+<p>A relation $R\\subseteq A\\times A$ is an <strong>equivalence relation</strong> iff it is:</p>
+</div>
+<div class="callout callout-def"><div class="callout-label">Reflexive</div>
+<div class="formula-block"><div class="formula-body">\\forall a\\in A,\\quad aRa.</div></div>
+</div>
+<div class="callout callout-def"><div class="callout-label">Symmetric</div>
+<div class="formula-block"><div class="formula-body">aRb\\iff bRa.</div></div>
+</div>
+<div class="callout callout-def"><div class="callout-label">Transitive</div>
+<p>The source writes the intended transitivity condition as:</p>
+<div class="formula-block"><div class="formula-body">aRb\\text{ and }bRc\\Rightarrow aRc.</div></div>
+</div>
+<div class="callout callout-def"><div class="callout-label">Examples in the lecture</div>
+<ul><li>equality;</li>
+<li>congruence modulo 5;</li>
+<li>connectedness in an undirected graph.</li></ul>
+</div>
+` },
+{ num: '13', title: 'Equivalence Relations Partition Sets', content: `
+<div class="callout callout-important"><div class="callout-label">Theorem</div>
+<p>If $R$ is an equivalence relation on $A$, then $R$ partitions $A$ into disjoint subsets</p>
+<div class="formula-block"><div class="formula-body">A_1\\sqcup A_2\\sqcup A_3\\sqcup\\cdots</div></div>
+<p>such that</p>
+<div class="formula-block"><div class="formula-body">aRb</div></div>
+<p>iff $a$ and $b$ lie in the same subset. This is the abstract reason residue classes and connected components form natural “blocks”.</p>
+</div>
+` },
+{ num: '14', title: 'Antisymmetry', content: `
+<p>The lecture contrasts equivalence relations with one-way relations such as:</p>
+<ul><li>$\\le$;</li>
+<li>$\\subseteq$;</li>
+<li>divisibility.</li></ul>
+<p>These are reflexive and transitive but generally not symmetric.</p>
+<div class="callout callout-def"><div class="callout-label">Definition</div>
+<p>A relation $R$ is <strong>antisymmetric</strong> if</p>
+<div class="formula-block"><div class="formula-body">aRb\\text{ and }bRa
+\\Rightarrow
+a=b.</div></div>
+<p>Antisymmetric does <strong>not</strong> mean “opposite of symmetric”; it is a separate logical condition.</p>
+</div>
+` },
+{ num: '15', title: 'Weak Partial Order', content: `
+<p>A relation is a <strong>Weak Partial Order (WPO)</strong> iff it is:</p>
+<ol><li>reflexive;</li>
+<li>antisymmetric;</li>
+<li>transitive.</li></ol>
+<p>The lecture proves the important graph connection:</p>
+<p>$$ \\boxed{ \\text{walk relation of a digraph is a WPO} \\iff \\text{the digraph is a DAG} } $$</p>
+<p>because cycles destroy antisymmetry.</p>
+` },
+{ num: '16', title: 'Comparable Elements and Total Orders', content: `
+<p>If $R$ is a WPO, elements $a,b$ are <strong>comparable</strong> when</p>
+<p>$$ aRb $$</p>
+<p>or</p>
+<p>$$ bRa. $$</p>
+<p>Otherwise they are incomparable.</p>
+<div class="callout callout-def"><div class="callout-label">Total order</div>
+<p>A WPO is a <strong>total order</strong> iff every pair of elements is comparable. This means all elements can be placed in one complete ordering.</p>
+</div>
+` },
+{ num: '18', title: 'Why Counting Matters', content: `
+<p>The lecture motivates combinatorics with:</p>
+<ul><li>the number of card permutations;</li>
+<li>counting trees;</li>
+<li>algorithm step counts;</li>
+<li>probability.</li></ul>
+<p>A bijection is presented as a conceptual way to count one set by matching it with another set whose size is already known.</p>
+` },
+{ num: '19', title: 'Product Rule', content: `
+<div class="callout callout-important"><div class="callout-label">Theorem</div>
+<p>For finite sets $A,B$,</p>
+<div class="formula-block"><div class="formula-body">\\boxed{|A\\times B|=|A||B|}.</div></div>
+<p>More generally,</p>
+<div class="formula-block"><div class="formula-body">|A_1\\times A_2\\times\\cdots\\times A_n|
+=
+|A_1||A_2|\\cdots|A_n|.</div></div>
+</div>
+<div class="callout callout-def"><div class="callout-label">Interpretation</div>
+<p>The product rule usually models an <strong>and</strong> situation: make one choice and another choice, then another, etc.</p>
+</div>
+<div class="callout callout-def"><div class="callout-label">Binary-sequence example</div>
+<p>Each of $n$ positions in a binary sequence has 2 choices. Therefore:</p>
+<div class="formula-block"><div class="formula-body">\\boxed{2^n}</div></div>
+<p>binary sequences of length $n$.</p>
+</div>
+` },
+{ num: '20', title: 'Bijection Rule', content: `
+<div class="callout callout-important"><div class="callout-label">Theorem</div>
+<p>If there exists a bijection</p>
+<div class="formula-block"><div class="formula-body">A\\to B,</div></div>
+<p>then</p>
+<div class="formula-block"><div class="formula-body">\\boxed{|A|=|B|}.</div></div>
+</div>
+<div class="callout callout-def"><div class="callout-label">Subset example</div>
+<p>Let $S_n$ be the set of subsets of</p>
+<div class="formula-block"><div class="formula-body">\\{1,2,\\ldots,n\\}.</div></div>
+<p>For each element:</p>
+<ul><li>choose 1 if included;</li>
+<li>choose 0 if not included.</li></ul>
+<p>This produces a binary sequence of length $n$, giving a bijection with the set of binary sequences. Hence:</p>
+<div class="formula-block"><div class="formula-body">\\boxed{|S_n|=2^n}.</div></div>
+</div>
+` },
+{ num: '21', title: 'Sum Rule', content: `
+<div class="callout callout-important"><div class="callout-label">Theorem</div>
+<p>If $A$ and $B$ are disjoint,</p>
+<div class="formula-block"><div class="formula-body">\\boxed{|A\\sqcup B|=|A|+|B|}.</div></div>
+<p>More generally, for pairwise disjoint sets:</p>
+<div class="formula-block"><div class="formula-body">|A_1\\sqcup\\cdots\\sqcup A_n|
+=
+|A_1|+\\cdots+|A_n|.</div></div>
+</div>
+<div class="callout callout-def"><div class="callout-label">Interpretation</div>
+<p>The sum rule usually models an <strong>or</strong> situation.</p>
+</div>
+` },
+{ num: '22', title: 'Password Counting Example', content: `
+<p>The source asks for passwords of lengths 6, 7, or 8 that:</p>
+<ul><li>begin with a capital letter;</li>
+<li>thereafter use letters/digits.</li></ul>
+<p>Let</p>
+<p>$$ P=P_6\\sqcup P_7\\sqcup P_8. $$</p>
+<p>For length 6:</p>
+<p>$$ |P_6|=26\\cdot62^5. $$</p>
+<p>For length 7:</p>
+<p>$$ |P_7|=26\\cdot62^6. $$</p>
+<p>For length 8:</p>
+<p>$$ |P_8|=26\\cdot62^7. $$</p>
+<p>Therefore</p>
+<p>$$ \\boxed{|P|=26\\cdot62^5+26\\cdot62^6+26\\cdot62^7}. $$</p>
+<p>The key modeling step is the disjoint split by password length.</p>
+` },
+{ num: '23', title: 'Generalized Product Rule', content: `
+<p>Suppose a set $A$ consists of length-$k$ sequences.</p>
+<p>If there are:</p>
+<ul><li>$n_1$ choices for $a_1$;</li>
+<li>$n_2$ choices for $a_2$, no matter what $a_1$ was;</li>
+<li>$\\ldots$</li>
+<li>$n_i$ choices for $a_i$, no matter what previous choices were,</li></ul>
+<p>then</p>
+<p>$$ \\boxed{|A|=n_1n_2\\cdots n_k}. $$</p>
+<p>This rule is the main tool for counting step-by-step constructions.</p>
+<div class="callout callout-warn"><div class="callout-label">Important warning</div>
+<p>Do not use the simple product-rule interpretation if the number of choices changes because of earlier selections without accounting for that dependence. The lecture uses a shuffled 52-card deck as the motivating example:</p>
+<div class="formula-block"><div class="formula-body">52\\cdot51\\cdot50\\cdots2\\cdot1=52!.</div></div>
+<p>The number of choices changes after each card is selected, so it is the <strong>generalized</strong> product rule that provides the correct counting model.</p>
+</div>
+` },
+{ num: '24', title: 'Finals Checklist', content: `
+<ul><li>[x] Binary relations</li>
+<li>[x] Domain and codomain</li>
+<li>[x] Relation examples</li>
+<li>[x] Relation notation</li>
+<li>[x] Function</li>
+<li>[x] Function graph interpretation</li>
+<li>[x] Function example $f(x)=1/x^2$</li>
+<li>[x] Total relation</li>
+<li>[x] Total function</li>
+<li>[x] Partial function</li>
+<li>[x] Injective function</li>
+<li>[x] Surjective function</li>
+<li>[x] Size theorems</li>
+<li>[x] Bijection</li>
+<li>[x] Equality of finite cardinalities</li>
+<li>[x] Binary relations on one set</li>
+<li>[x] Equivalence relation</li>
+<li>[x] Equivalence-relation partition theorem</li>
+<li>[x] Antisymmetric relation</li>
+<li>[x] Weak Partial Order</li>
+<li>[x] DAG/walk-relation characterization</li>
+<li>[x] Comparable/incomparable elements</li>
+<li>[x] Total order</li>
+<li>[x] Counting motivation</li>
+<li>[x] Product Rule</li>
+<li>[x] Binary-sequence example</li>
+<li>[x] Bijection Rule</li>
+<li>[x] Subset-counting example</li>
+<li>[x] Sum Rule</li>
+<li>[x] Password-counting example</li>
+<li>[x] Generalized Product Rule</li>
+<li>[x] Card-shuffling example</li>
+<li>[x] Suggested readings</li></ul>
+` },
+{ num: '25', title: 'Source Crosswalk', content: `
+<p><details><summary style="cursor:pointer;color:var(--text-2);font-size:13px;margin:16px 0">Source Structure Crosswalk</summary> <p>The following headings appear in the source PDF. Each is represented in the guide above, either directly or by a clearly corresponding explanation.</p> <li>[x] Matchmaking between Two Sets</li> <li>[x] Mapping Who Learns What Where</li> <li>[x] Expressing Relationships in a Throuple</li> <li>[x] Pick One Target and Stick</li> <li>[x] Watch Out, Watch Out, Watch Out...</li> <li>[x] Nobody Gets Left Behind Here</li> <li>[x] Counting Arrows</li> <li>[x] Size Theorems</li> <li>[x] Arrows Don’t Lie</li> <li>[x] Perfect Matches Prove Equal Sizes</li> <li>[x] One-Sided Drama</li> <li>[x] One-Way Streets with No Loopbacks</li> <li>[x] Apples and Oranges Cannot Compare</li> <li>[x] How Shepherds Learned Math Tricks</li> <li>[x] Multiply Choices to Count Sets</li> <li>[x] Password Math and Disjoint Choices</li> <li>[x] Shufling Cards and Dependent Options</li> <li>[x] Suggested Readings</li></p>
+` }
+]
+},
+{
+  id: 9,
+  code: 'LS15',
+  title: 'Counting Techniques',
+  source: 'LS15 — Counting Techniques (August 19, 2026).',
+  desc: 'Comprehensive study guide for Counting Techniques. Source: LS15 — Counting Techniques (August 19, 2026).',
+  tags: ['Counting', 'Permutations', 'Combinations'],
+  formulas: ["|A|=|B|", "|A\\times B|=|A||B|", "|A_1\\sqcup\\cdots\\sqcup A_n| = \\sum_i|A_i|", "|A|=n_1n_2\\cdots n_k", "10^7", "10\\cdot9\\cdot8\\cdot7\\cdot6\\cdot5\\cdot4", "0.6048\\%", "|A|/K=|B|"],
+  sections: [
+{ num: '1', title: 'Bijection Rule', content: `
+<p>If</p>
+<p>$$ R\\subseteq A\\times B $$</p>
+<p>is a bijection, then</p>
+<p>$$ \\boxed{|A|=|B|}. $$</p>
+` },
+{ num: '2', title: 'Product Rule', content: `
+<p>For finite $A,B$,</p>
+<p>$$ \\boxed{|A\\times B|=|A||B|}. $$</p>
+<p>More generally,</p>
+<p>$$ |A_1\\times\\cdots\\times A_n| = \\prod_i|A_i|. $$</p>
+` },
+{ num: '3', title: 'Sum Rule', content: `
+<p>If sets are disjoint,</p>
+<p>$$ \\boxed{|A_1\\sqcup\\cdots\\sqcup A_n| = \\sum_i|A_i|}. $$</p>
+` },
+{ num: '4', title: 'Generalized Product Rule', content: `
+<p>If a length-$k$ sequence has $n_i$ choices at step $i$, independent of earlier choices in the stated sense, then</p>
+<p>$$ \\boxed{|A|=n_1n_2\\cdots n_k}. $$</p>
+` },
+{ num: '5', title: 'Banknote Serial Numbers', content: `
+<p>The lecture considers a Bangladeshi bank note with a 7-digit serial number, ignoring the first two characters.</p>
+<div class="callout callout-def"><div class="callout-label">With repetition allowed</div>
+<p>Each of the 7 positions has 10 choices:</p>
+<div class="formula-block"><div class="formula-body">\\boxed{10^7}.</div></div>
+</div>
+<div class="callout callout-def"><div class="callout-label">Without repetition</div>
+<p>The numbers of choices are:</p>
+<div class="formula-block"><div class="formula-body">10,9,8,7,6,5,4.</div></div>
+<p>Thus:</p>
+<div class="formula-block"><div class="formula-body">\\boxed{10\\cdot9\\cdot8\\cdot7\\cdot6\\cdot5\\cdot4}.</div></div>
+</div>
+<div class="callout callout-def"><div class="callout-label">Percentage with distinct digits</div>
+<p>The source gives:</p>
+<div class="formula-block"><div class="formula-body">\\frac{10\\cdot9\\cdot8\\cdot7\\cdot6\\cdot5\\cdot4}{10^7}
+=
+\\boxed{0.6048\\%}.</div></div>
+</div>
+` },
+{ num: '6', title: 'Division Rule', content: `
+<div class="callout callout-important"><div class="callout-label">Theorem</div>
+<p>Suppose $R\\subseteq A\\times B$ satisfies:</p>
+<ul><li>every $a\\in A$ has exactly one arrow out;</li>
+<li>every $b\\in B$ has exactly $K$ arrows in.</li></ul>
+<p>Then</p>
+<div class="formula-block"><div class="formula-body">\\boxed{|A|/K=|B|}.</div></div>
+<p>Equivalently,</p>
+<div class="formula-block"><div class="formula-body">\\boxed{|A|=K|B|}.</div></div>
+<p>This is called a <strong>$K$-to-1 correspondence</strong>. It generalizes the bijection rule, which is the special case $K=1$.</p>
+</div>
+` },
+{ num: '7', title: 'Circular Seating', content: `
+<p>Suppose $k$ knights sit around a round table and seatings are considered equivalent under rotation.</p>
+<p>Let</p>
+<p>$$ A=\\{\\text{permutations of }1,\\ldots,k\\}. $$</p>
+<p>Then</p>
+<p>$$ |A|=k!. $$</p>
+<p>Let $B$ be the cyclic seating arrangements.</p>
+<p>Every cyclic arrangement corresponds to $k$ ordinary permutations, because any of the $k$ people can serve as the chosen starting position.</p>
+<p>Thus the mapping is $k$-to-1, so by the Division Rule:</p>
+<p>$$ |B| = \\frac{k!}{k} = \\boxed{(k-1)!}. $$</p>
+<div class="callout callout-def"><div class="callout-label">Exam pattern</div>
+<p>When rotations are considered equivalent, fixing one person as an anchor gives the same result:</p>
+<div class="formula-block"><div class="formula-body">(k-1)!.</div></div>
+</div>
+` },
+{ num: '8', title: 'Increasing Digit Sequences and Combinations', content: `
+<p>The lecture counts 3-digit serials whose digits are strictly increasing.</p>
+<p>Start with permutations of</p>
+<p>$$ \\{0,1,\\ldots,9\\}. $$</p>
+<p>Sort the first three selected digits into increasing order.</p>
+<p>For a fixed 3-element set, there are</p>
+<p>$$ 3! $$</p>
+<p>orders of those three digits.</p>
+<p>The remaining 7 digits can be ordered in</p>
+<p>$$ 7! $$</p>
+<p>ways.</p>
+<p>So each increasing 3-digit serial corresponds to</p>
+<p>$$ 3!\\cdot7! $$</p>
+<p>permutations.</p>
+<p>Therefore:</p>
+<p>$$ |Q| = \\frac{10!}{3!7!}. $$</p>
+<p>This is exactly the binomial coefficient</p>
+<p>$$ \\boxed{\\binom{10}{3}}. $$</p>
+<div class="callout callout-def"><div class="callout-label">General formula</div>
+<p>The number of $k$-subsets of an $n$-element set is</p>
+<div class="formula-block"><div class="formula-body">\\boxed{
+\\binom nk
+=
+\\frac{n!}{k!(n-k)!}
+}.</div></div>
+</div>
+` },
+{ num: '9', title: 'Counting by Sequences', content: `
+<p>The lecture's general strategy is:</p>
+<ol><li>Construct the desired objects through a sequence of choices.</li>
+<li>Count the choice sequences.</li>
+<li>Ensure the construction is correct.</li></ol>
+<p>Two checks are crucial:</p>
+<ul><li>every desired object must be constructible;</li>
+<li>every desired object must be constructed in exactly the intended number of ways.</li></ul>
+<p>This idea is the foundation of the poker examples.</p>
+` },
+{ num: '10', title: 'Poker Hands: Basic Setup', content: `
+<p>A standard deck has:</p>
+<ul><li>52 cards;</li>
+<li>4 suits: Hearts, Clubs, Spades, Diamonds;</li>
+<li>13 ranks: $A,2,3,\\ldots,10,J,Q,K$.</li></ul>
+<p>A poker hand is a subset of 5 cards.</p>
+` },
+{ num: '11', title: 'Four-of-a-Kind', content: `
+<p>A 4-of-a-kind hand consists of:</p>
+<ul><li>all four suits of one rank $R$;</li>
+<li>one additional card $X$ whose rank is not $R$.</li></ul>
+<p>Define</p>
+<p>$$ A=\\{(R,X)\\mid R\\text{ is a rank and }X\\text{ has rank }\\ne R\\}. $$</p>
+<p>Map</p>
+<p>$$ (R,X) $$</p>
+<p>to the hand containing all four cards of rank $R$ plus $X$.</p>
+<p>The lecture shows this map is a bijection.</p>
+<div class="callout callout-def"><div class="callout-label">Why it is a bijection</div>
+<p>Every sequence $(R,X)$ produces exactly one 4-of-a-kind hand. Every 4-of-a-kind hand uniquely identifies:</p>
+<ul><li>the repeated rank $R$;</li>
+<li>the fifth card $X$.</li></ul>
+<p>Therefore one-to-one correspondence holds.</p>
+</div>
+<div class="callout callout-def"><div class="callout-label">Count</div>
+<p>Choose $R$:</p>
+<div class="formula-block"><div class="formula-body">13\\text{ choices}.</div></div>
+<p>Choose $X$:</p>
+<div class="formula-block"><div class="formula-body">52-4=48\\text{ choices}.</div></div>
+<p>Hence:</p>
+<div class="formula-block"><div class="formula-body">\\boxed{13\\cdot48=624}.</div></div>
+</div>
+` },
+{ num: '12', title: 'Full Bijection Example', content: `
+<p>For the hand</p>
+<p>$$ \\{3_H,7_H,3_D,3_C,3_S\\}, $$</p>
+<p>the corresponding sequence is</p>
+<p>$$ (3,7_H). $$</p>
+<p>The point is not merely the numerical count. The lecture wants the student to recognize the pattern:</p>
+<div class="callout callout-note"><div class="callout-label">Source Note</div>Find a bijection with an easier-to-count sequence set.</div>
+` },
+{ num: '13', title: 'Hands Containing All Four Suits', content: `
+<p>Now consider 5-card hands that contain all four suits.</p>
+<p>A first attempt defines a sequence</p>
+<p>$$ (W_C,X_H,Y_S,Z_D,V). $$</p>
+<p>The construction chooses:</p>
+<ul><li>one Clubs card;</li>
+<li>one Hearts card;</li>
+<li>one Spades card;</li>
+<li>one Diamonds card;</li>
+<li>one fifth card.</li></ul>
+<div class="callout callout-def"><div class="callout-label">Why this is not a bijection</div>
+<p>A given hand can arise in two different sequences, because the fifth card may itself have one of the four suits already selected. For example,</p>
+<div class="formula-block"><div class="formula-body">\\{6_D,Q_H,A_S,2_C,J_S\\}</div></div>
+<p>can be constructed by choosing the Spades card in one of two positions. Thus the mapping is <strong>2-to-1</strong>, not 1-to-1.</p>
+</div>
+` },
+{ num: '14', title: 'Correcting the Overcounting', content: `
+<p>Since the map is 2-to-1,</p>
+<p>$$ |B|=\\frac{|A|}{2}. $$</p>
+<p>There are:</p>
+<p>$$ 13 $$</p>
+<p>choices for each suit-specific card, and</p>
+<p>$$ 52-4=48 $$</p>
+<p>choices for the fifth card.</p>
+<p>Thus</p>
+<p>$$ |A| = 13^4\\cdot48. $$</p>
+<p>Therefore:</p>
+<p>$$ \\boxed{|B|=\\frac{13^4\\cdot48}{2}}. $$</p>
+` },
+{ num: '15', title: 'Smarter Sequence Without Double Counting', content: `
+<p>The lecture gives a cleaner construction.</p>
+<p>Choose the suit $S$ that will have <strong>two</strong> cards. There are</p>
+<p>$$ 4 $$</p>
+<p>choices.</p>
+<p>Choose the two cards of suit $S$:</p>
+<p>$$ \\binom{13}{2}. $$</p>
+<p>The remaining three suits are fixed in alphabetical order, say $T_1,T_2,T_3$.</p>
+<p>Choose one card from each:</p>
+<p>$$ 13\\cdot13\\cdot13. $$</p>
+<p>Hence:</p>
+<p>$$ \\boxed{ 4\\binom{13}{2}13^3 }. $$</p>
+<p>The important lesson is that a carefully designed sequence can eliminate overcounting altogether.</p>
+` },
+{ num: '16', title: 'At Least One Pair', content: `
+<p>A pair means two cards of the same rank.</p>
+<p>The lecture first considers a direct construction:</p>
+<p>$$ (R_P,R_Q,X,Y,Z) $$</p>
+<p>where:</p>
+<ul><li>choose a rank $R$;</li>
+<li>choose two cards of that rank;</li>
+<li>choose three other cards.</li></ul>
+<p>The problem is that a hand may contain more than one pair.</p>
+<p>Then the same hand can be generated by choosing any one of its pairs as the designated $R$.</p>
+` },
+{ num: '17', title: 'How Much Can the Direct Method Overcount?', content: `
+<p>The lecture gives examples.</p>
+<div class="callout callout-def"><div class="callout-label">Example 1</div>
+<div class="formula-block"><div class="formula-body">\\{A_H,A_S,2_C,2_D,3_H\\}</div></div>
+<p>contains two pairs, so there are</p>
+<div class="formula-block"><div class="formula-body">\\boxed{2}</div></div>
+<p>ways to designate the pair.</p>
+</div>
+<div class="callout callout-def"><div class="callout-label">Example 2</div>
+<div class="formula-block"><div class="formula-body">\\{A_H,A_D,A_C,3_C,5_S\\}</div></div>
+<p>contains three ways to choose a pair from the three aces:</p>
+<div class="formula-block"><div class="formula-body">\\boxed{3}.</div></div>
+</div>
+<div class="callout callout-def"><div class="callout-label">Example 4</div>
+<div class="formula-block"><div class="formula-body">\\{A_H,A_D,A_C,3_C,3_S\\}</div></div>
+<p>contains:</p>
+<ul><li>3 choices among the three aces;</li>
+<li>1 choice for the pair of threes.</li></ul>
+<p>Total:</p>
+<div class="formula-block"><div class="formula-body">\\boxed{4}.</div></div>
+</div>
+<div class="callout callout-def"><div class="callout-label">Example 5</div>
+<div class="formula-block"><div class="formula-body">\\{A_H,A_D,A_S,A_C,Q_D\\}</div></div>
+<p>contains four aces, so the number of 2-card subsets that can serve as “the pair” is</p>
+<div class="formula-block"><div class="formula-body">\\binom42=6.</div></div>
+<p>Hence the hand is generated in</p>
+<div class="formula-block"><div class="formula-body">\\boxed{6}</div></div>
+<p>ways.</p>
+</div>
+<div class="callout callout-warn"><div class="callout-label">Main warning</div>
+<p>There is no single fixed overcount factor because different hands contain different numbers of pairs. Therefore direct multiplication is not a safe way to count “at least one pair” here.</p>
+</div>
+` },
+{ num: '18', title: 'Count What You Don\'t Want', content: `
+<p>The lecture's alternative is to count the complement.</p>
+<p>Total 5-card hands:</p>
+<p>$$ \\boxed{\\binom{52}{5}}. $$</p>
+<p>Hands with five distinct ranks:</p>
+<ol><li>choose 5 distinct ranks:</li></ol>
+<p>$$ \\binom{13}{5}; $$</p>
+<ol><li>choose one suit for each rank:</li></ol>
+<p>$$ 4^5. $$</p>
+<p>So the number of hands with <strong>no pair</strong> is</p>
+<p>$$ \\binom{13}{5}4^5. $$</p>
+<p>Hence the number with <strong>at least one pair</strong> is:</p>
+<p>$$ \\boxed{ \\binom{52}{5} - \\binom{13}{5}4^5 }. $$</p>
+<p>This is the clean complement-counting solution shown in the lecture.</p>
+` },
+{ num: '19', title: 'Core Strategy Lessons', content: `
+<p>These examples illustrate three powerful exam strategies.</p>
+<div class="callout callout-def"><div class="callout-label">Strategy A — Bijection</div>
+<p>Construct a one-to-one correspondence with a set that is easier to count.</p>
+</div>
+<div class="callout callout-def"><div class="callout-label">Strategy B — Correct overcounting</div>
+<p>If every object is constructed exactly $K$ times, use the Division Rule:</p>
+<div class="formula-block"><div class="formula-body">|B|=\\frac{|A|}{K}.</div></div>
+</div>
+<div class="callout callout-def"><div class="callout-label">Strategy C — Complement counting</div>
+<p>If the desired property causes unpredictable overlap, count the opposite property and subtract from the total.</p>
+</div>
+` },
+{ num: '20', title: 'Finals Checklist', content: `
+<ul><li>[x] Bijection Rule</li>
+<li>[x] Product Rule</li>
+<li>[x] Sum Rule</li>
+<li>[x] Generalized Product Rule</li>
+<li>[x] Banknote serial-number counting</li>
+<li>[x] Repetition vs no repetition</li>
+<li>[x] Distinct-digit percentage</li>
+<li>[x] Division Rule</li>
+<li>[x] $K$-to-1 correspondence</li>
+<li>[x] Circular seating</li>
+<li>[x] $(k-1)!$ derivation</li>
+<li>[x] Increasing-digit serials</li>
+<li>[x] Binomial coefficient</li>
+<li>[x] Counting by sequences</li>
+<li>[x] Poker-hand setup</li>
+<li>[x] 4-of-a-kind construction</li>
+<li>[x] 4-of-a-kind bijection proof idea</li>
+<li>[x] 4-of-a-kind count $13\\cdot48$</li>
+<li>[x] Four-suits counting attempt</li>
+<li>[x] Why it is 2-to-1</li>
+<li>[x] Division-rule correction</li>
+<li>[x] Smarter sequence avoiding double counting</li>
+<li>[x] At-least-one-pair construction</li>
+<li>[x] Multiple-pair overcounting examples</li>
+<li>[x] Complement-counting solution</li>
+<li>[x] Strategic lessons</li>
+<li>[x] Suggested readings</li></ul>
+` },
+{ num: '21', title: 'Source Crosswalk', content: `
+<p><details><summary style="cursor:pointer;color:var(--text-2);font-size:13px;margin:16px 0">Source Structure Crosswalk</summary> <p>The following headings appear in the source PDF. Each is represented in the guide above, either directly or by a clearly corresponding explanation.</p> <li>[x] On the Last Episode of Discrete Mathematics</li> <li>[x] How Rare Is Your Banknote?</li> <li>[x] When K Arrows Hit One Target</li> <li>[x] Round Tables Make Rotations Equivalent</li> <li>[x] Sorting Digits to Find Combinations</li> <li>[x] Dealing Discrete Math at Poker Night</li> <li>[x] The Quad Squad</li> <li>[x] Proving Your Quad Hand Is Unique</li> <li>[x] One Bijection to Rule Them All</li> <li>[x] Four Suits and a Duplicate Guest</li> <li>[x] Poker Salvage Yard</li> <li>[x] A Smarter Sequence Avoids Double Counting</li> <li>[x] Pairs Cause Unexpected Double Counting</li> <li>[x] Count What You Don’t Want</li> <li>[x] Suggested Readings</li> <p>### Source numerical fidelity note</p> <p>The banknote slide prints the percentage as <strong>0.6048%</strong>. The guide preserves the PDF's printed result because the PDF is the authoritative course source. The displayed numerator/denominator, if independently evaluated as written, produces a different percentage, so this is explicitly flagged rather than silently corrected.</p></p>
+` }
+]
+}
+];
+
+// ══════════════════════════════════════════════════════
+//  BUILD SEARCH INDEX
+// ══════════════════════════════════════════════════════
+let searchIndex = [];
+
+function buildSearchIndex() {
+  SUBJECTS.forEach(subj => {
+    subj.sections.forEach(sec => {
+      const stripped = sec.content.replace(/<[^>]+>/g, ' ').replace(/\s+/g,' ').trim();
+      searchIndex.push({
+        subjId: subj.id,
+        subjTitle: subj.title,
+        secNum: sec.num,
+        secTitle: sec.title,
+        text: stripped.toLowerCase(),
+        displayText: stripped.substring(0, 200)
+      });
+    });
+  });
+}
+
+// ══════════════════════════════════════════════════════
+//  RENDER FUNCTIONS
+// ══════════════════════════════════════════════════════
+function renderDashboard() {
+  const grid = document.getElementById('subjects-grid');
+  grid.innerHTML = SUBJECTS.map(s => `
+    <div class="subject-card" onclick="showPage(${s.id})">
+      <div class="subject-card-header">
+        <span class="subject-card-num">${s.code}</span>
+        <span class="subject-card-arrow"><svg class="icon" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span>
+      </div>
+      <h3>${s.title}</h3>
+      <p>${s.desc}</p>
+      <div class="subject-card-tags">${s.tags.map(t=>`<span class="tag">${t}</span>`).join('')}</div>
+    </div>
+  `).join('');
+}
+
+function renderSidebar() {
+  const nav = document.getElementById('sidebar-nav');
+  nav.innerHTML = SUBJECTS.map(s => `
+    <div class="sidebar-section" id="sb-sec-${s.id}">
+      <div class="sidebar-subject" id="sb-subj-${s.id}" role="button" tabindex="0" aria-expanded="false" aria-controls="sb-toc-${s.id}" onclick="sidebarToggle(${s.id})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();sidebarToggle(${s.id})}">
+        <span class="subj-num">${s.code}</span>
+        <span style="flex:1;font-size:11px">${s.title}</span>
+        <span class="sidebar-chevron"><svg class="icon icon-sm" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></span>
+      </div>
+      <div class="sidebar-toc" id="sb-toc-${s.id}" role="region" aria-label="${s.title} sections">
+        ${s.sections.map(sec=>`
+          <a href="#sec-${s.id}-${sec.num}" onclick="showPage(${s.id});closeSidebar()" id="sb-link-${s.id}-${sec.num}">${sec.num}. ${sec.title}</a>
+        `).join('')}
+      </div>
+    </div>
+  `).join('');
+}
+
+function renderRefPanel() {
+  const el = document.getElementById('ref-panel-content');
+  if (!SUBJECTS.length) {
+    el.innerHTML = '<div class="ref-empty"><div class="ref-empty-icon"><svg class="icon" viewBox="0 0 24 24" style="width:1em;height:1em;fill:none;stroke:currentColor;stroke-width:2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg></div>No subjects loaded.</div>';
+    return;
+  }
+  el.innerHTML = SUBJECTS.map(s => `
+    <div class="ref-subject">
+      <div class="ref-subject-title">${s.title}</div>
+      ${s.formulas.map(f=>`<div class="ref-formula">$${f}$</div>`).join('')}
+    </div>
+  `).join('');
+  if (typeof renderMathInElement !== 'undefined') {
+    renderMathInElement(el, {
+      delimiters: [
+        {left:'$$',right:'$$',display:true},
+        {left:'$',right:'$',display:false}
+      ],
+      throwOnError: false,
+      errorColor: 'var(--red)'
+    });
+  }
+}
+
+function renderStudyPage(subj) {
+  const page = document.getElementById(`page-${subj.id}`);
+  let html = `
+    <div class="study-header">
+      <h2>${subj.title}</h2>
+      <div class="src-note">Source: ${subj.source}</div>
+    </div>
+    <div class="breadcrumb">
+      <a href="#" onclick="showPage('home');return false">Dashboard</a>
+      <span><svg class="icon icon-sm" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></span>
+      <span>${subj.title}</span>
+    </div>
+    <div class="study-content">
+  `;
+
+  subj.sections.forEach((sec, idx) => {
+    html += `
+      <div class="section-group" id="sec-${subj.id}-${sec.num}">
+        <div class="section-heading" role="button" tabindex="0" aria-expanded="true" aria-controls="sec-body-${subj.id}-${sec.num}" onclick="toggleSection(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleSection(this)}">
+          <span class="section-num">${sec.num}</span>
+          <h3>${sec.title}</h3>
+          <span class="section-toggle"><svg class="icon icon-sm" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></span>
+        </div>
+        <div class="section-body content-body" id="sec-body-${subj.id}-${sec.num}">
+          ${sec.content}
+        </div>
+      </div>
+    `;
+  });
+
+  html += `</div>`; // close study-content
+  page.innerHTML = html;
+
+  // Wrap formula-body content in $ delimiters for KaTeX, then render
+  page.querySelectorAll('.formula-body').forEach(el => {
+    if (!el.querySelector('.katex') && el.textContent.trim()) {
+      el.innerHTML = '$' + el.textContent.trim() + '$';
+    }
+  });
+  if (typeof renderMathInElement !== 'undefined') {
+    renderMathInElement(page, {
+      delimiters: [
+        {left:'$$',right:'$$',display:true},
+        {left:'$',right:'$',display:false}
+      ],
+      throwOnError: false,
+      errorColor: 'var(--red)'
+    });
+    page.classList.add('katex-rendered');
+  }
+}
+
+
+
+// ══════════════════════════════════════════════════════
+//  NAVIGATION
+// ══════════════════════════════════════════════════════
+let currentPage = 'home';
+
+function showPage(id) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.sidebar-subject').forEach(s => s.classList.remove('active'));
+
+  if (id === 'home') {
+    document.getElementById('page-home').classList.add('active');
+    currentPage = 'home';
+  } else {
+    const page = document.getElementById(`page-${id}`);
+    if (page) {
+      page.classList.add('active');
+      currentPage = id;
+      const sb = document.getElementById(`sb-subj-${id}`);
+      if (sb) sb.classList.add('active');
+      window.scrollTo(0,0);
+    }
+  }
+}
+
+function sidebarToggle(id) {
+  const toc = document.getElementById(`sb-toc-${id}`);
+  const subj = document.getElementById(`sb-subj-${id}`);
+  const isOpen = toc.classList.contains('open');
+  // close all
+  document.querySelectorAll('.sidebar-toc').forEach(t => { t.classList.remove('open'); t.setAttribute('aria-expanded', 'false'); });
+  document.querySelectorAll('.sidebar-subject').forEach(s => { s.classList.remove('open'); s.setAttribute('aria-expanded', 'false'); });
+  if (!isOpen) {
+    toc.classList.add('open');
+    subj.classList.add('open');
+    toc.setAttribute('aria-expanded', 'true');
+    subj.setAttribute('aria-expanded', 'true');
+  }
+  showPage(id);
+}
+
+function toggleSection(heading) {
+  const body = heading.nextElementSibling;
+  const isCollapsed = heading.classList.toggle('collapsed');
+  body.classList.toggle('hidden');
+  heading.setAttribute('aria-expanded', !isCollapsed);
+}
+
+function toggleProblem(header) {
+  const body = header.nextElementSibling;
+  const isOpen = header.classList.toggle('open');
+  body.classList.toggle('hidden');
+  header.setAttribute('aria-expanded', isOpen);
+}
+
+function toggleRefPanel() {
+  const panel = document.getElementById('ref-panel');
+  const content = document.getElementById('ref-panel-content');
+  panel.classList.toggle('open');
+  if (panel.classList.contains('open')) {
+    content.style.animation = 'none';
+    content.offsetHeight;
+    content.style.animation = '';
+  }
+}
+
+function closeSidebar() {
+  document.getElementById('sidebar').classList.remove('open');
+  document.getElementById('overlay').classList.remove('visible');
+}
+
+// ══════════════════════════════════════════════════════
+//  SEARCH
+// ══════════════════════════════════════════════════════
+function doSearch(q) {
+  if (!q || q.length < 2) {
+    document.getElementById('search-results').style.display='none';
+    document.getElementById('search-clear').style.display='none';
+    return;
+  }
+  document.getElementById('search-clear').style.display='block';
+  const terms = q.toLowerCase().split(/\s+/);
+  const results = searchIndex.filter(item => terms.every(t => item.text.includes(t))).slice(0,8);
+  const container = document.getElementById('search-results');
+  const empty = document.getElementById('search-empty');
+  container.style.display = 'block';
+  if (results.length === 0) {
+    empty.style.display = 'block';
+    container.querySelectorAll('.search-result-item').forEach(el=>el.remove());
+    return;
+  }
+  empty.style.display = 'none';
+  const existing = container.querySelectorAll('.search-result-item');
+  existing.forEach(e=>e.remove());
+  results.forEach(r => {
+    const div = document.createElement('div');
+    div.className = 'search-result-item';
+    const snip = r.displayText.substring(0,120);
+    div.innerHTML = `
+      <div class="search-result-subject">${r.subjTitle}</div>
+      <div class="search-result-title">${r.secNum}. ${r.secTitle}</div>
+      <div class="search-result-snippet">${snip}…</div>
+    `;
+    div.onclick = () => {
+      showPage(r.subjId);
+      container.style.display='none';
+      document.getElementById('search-input').value='';
+      document.getElementById('search-clear').style.display='none';
+      searchFocusIdx = -1;
+      setTimeout(()=>{
+        const el = document.getElementById(`sec-${r.subjId}-${r.secNum}`);
+        if (el) el.scrollIntoView({behavior:'smooth',block:'start'});
+      }, 100);
+    };
+    container.appendChild(div);
+  });
+}
+
+// ══════════════════════════════════════════════════════
+//  SCROLL SPY
+// ══════════════════════════════════════════════════════
+function initScrollSpy() {
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const id = entry.target.id;
+        const parts = id.split('-');
+        if (parts.length >= 3) {
+          const subjId = parts[1];
+          const secNum = parts[2];
+          document.querySelectorAll('.sidebar-toc a').forEach(a=>a.classList.remove('active'));
+          const link = document.getElementById(`sb-link-${subjId}-${secNum}`);
+          if (link) link.classList.add('active');
+        }
+      }
+    });
+  }, { rootMargin: '-20% 0px -70% 0px', threshold: 0 });
+
+  document.querySelectorAll('.section-group').forEach(el => observer.observe(el));
+}
+
+// ══════════════════════════════════════════════════════
+//  THEME
+// ══════════════════════════════════════════════════════
+function initTheme() {
+  const btn = document.getElementById('theme-toggle');
+  const saved = localStorage.getItem('theme') || 'dark';
+  document.documentElement.setAttribute('data-theme', saved);
+  updateThemeBtn(btn, saved);
+  btn.onclick = () => {
+    const cur = document.documentElement.getAttribute('data-theme');
+    const next = cur === 'dark' ? 'light' : 'dark';
+    document.documentElement.setAttribute('data-theme', next);
+    localStorage.setItem('theme', next);
+    updateThemeBtn(btn, next);
+  };
+}
+
+function updateThemeBtn(btn, theme) {
+  const sunSvg = '<svg class="icon icon-sm" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>';
+  const moonSvg = '<svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>';
+  btn.innerHTML = theme === 'dark' ? sunSvg + ' Light' : moonSvg + ' Dark';
+  document.body.classList.add('theme-transitioning');
+  setTimeout(() => document.body.classList.remove('theme-transitioning'), 350);
+}
+
+// ══════════════════════════════════════════════════════
+//  BACK TO TOP & SCROLL EVENTS
+// ══════════════════════════════════════════════════════
+window.addEventListener('scroll', () => {
+  const btn = document.getElementById('back-top');
+  if (window.scrollY > 400) btn.classList.add('visible');
+  else btn.classList.remove('visible');
+});
+
+// ══════════════════════════════════════════════════════
+//  KATEX RESILIENT LOADING
+// ══════════════════════════════════════════════════════
+function tryRenderMath(retries) {
+  retries = retries || 10;
+  if (typeof renderMathInElement !== 'undefined') {
+    // Only process elements not already rendered by renderStudyPage/renderRefPanel
+    document.querySelectorAll('.page:not(.katex-rendered)').forEach(el => {
+      renderMathInElement(el, {
+        delimiters: [
+          {left:'$$',right:'$$',display:true},
+          {left:'$',right:'$',display:false}
+        ],
+        throwOnError: false,
+        errorColor: 'var(--red)'
+      });
+      el.classList.add('katex-rendered');
+    });
+    document.querySelectorAll('.katex-error').forEach(el => {
+      el.title = 'Formula rendering unavailable — raw LaTeX shown';
+    });
+  } else if (retries > 0) {
+    setTimeout(function() { tryRenderMath(retries - 1); }, 100);
+  } else {
+    document.querySelectorAll('.formula-body').forEach(el => {
+      if (el.textContent.includes('\\') && !el.querySelector('.katex')) {
+        el.classList.add('katex-error');
+        el.title = 'KaTeX failed to load — raw LaTeX displayed';
+      }
+    });
+  }
+}
+
+// ══════════════════════════════════════════════════════
+//  POST-RENDER A11Y FIXES
+// ══════════════════════════════════════════════════════
+function initPostRender() {
+  // Convert subsection-heading divs to h4 for semantic HTML
+  document.querySelectorAll('.subsection-heading').forEach(el => {
+    const h4 = document.createElement('h4');
+    h4.className = el.className;
+    h4.innerHTML = el.innerHTML;
+    el.parentNode.replaceChild(h4, el);
+  });
+
+  // Add ARIA to problem headers (injected via content HTML)
+  document.querySelectorAll('.problem-header').forEach(el => {
+    if (!el.getAttribute('role')) {
+      el.setAttribute('role', 'button');
+      el.setAttribute('tabindex', '0');
+      el.setAttribute('aria-expanded', 'false');
+      const body = el.nextElementSibling;
+      if (body) {
+        const bodyId = 'prob-body-' + Math.random().toString(36).slice(2, 8);
+        body.id = bodyId;
+        el.setAttribute('aria-controls', bodyId);
+      }
+      el.addEventListener('keydown', e => {
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggleProblem(el); }
+      });
+    }
+  });
+}
+
+// ══════════════════════════════════════════════════════
+//  SEARCH KEYBOARD NAVIGATION
+// ══════════════════════════════════════════════════════
+let searchFocusIdx = -1;
+
+function navigateSearch(direction) {
+  const container = document.getElementById('search-results');
+  const items = container.querySelectorAll('.search-result-item');
+  if (!items.length) return;
+  items.forEach(i => i.style.background = '');
+  searchFocusIdx = Math.max(-1, Math.min(items.length - 1, searchFocusIdx + direction));
+  if (searchFocusIdx >= 0) {
+    items[searchFocusIdx].style.background = 'var(--bg-2)';
+    items[searchFocusIdx].scrollIntoView({ block: 'nearest' });
+  }
+}
+
+function activateSearchResult() {
+  const container = document.getElementById('search-results');
+  const items = container.querySelectorAll('.search-result-item');
+  if (searchFocusIdx >= 0 && searchFocusIdx < items.length) {
+    items[searchFocusIdx].click();
+  }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  renderDashboard();
+  renderSidebar();
+  renderRefPanel();
+  SUBJECTS.forEach(s => renderStudyPage(s));
+
+  buildSearchIndex();
+  initTheme();
+
+  setTimeout(() => {
+    initScrollSpy();
+    initPostRender();
+    tryRenderMath();
+  }, 200);
+
+  // Search events
+  const input = document.getElementById('search-input');
+  input.addEventListener('input', e => { searchFocusIdx = -1; doSearch(e.target.value); });
+  input.addEventListener('keydown', e => {
+    if (e.key === 'Escape') { input.value = ''; document.getElementById('search-results').style.display = 'none'; document.getElementById('search-clear').style.display = 'none'; searchFocusIdx = -1; }
+    else if (e.key === 'ArrowDown') { e.preventDefault(); navigateSearch(1); }
+    else if (e.key === 'ArrowUp') { e.preventDefault(); navigateSearch(-1); }
+    else if (e.key === 'Enter') { e.preventDefault(); activateSearchResult(); }
+  });
+  document.getElementById('search-clear').onclick = () => { input.value=''; document.getElementById('search-results').style.display='none'; document.getElementById('search-clear').style.display='none'; };
+  document.addEventListener('click', e => { if (!e.target.closest('#search-wrap')) { document.getElementById('search-results').style.display='none'; } });
+
+  // Sidebar toggle (desktop + mobile)
+  const savedSidebar = localStorage.getItem('sidebar');
+  if (savedSidebar === 'collapsed' && window.innerWidth > 900) {
+    document.body.classList.add('sidebar-collapsed');
+  }
+  document.getElementById('sidebar-toggle').onclick = () => {
+    if (window.innerWidth <= 900) {
+      document.getElementById('sidebar').classList.toggle('open');
+      document.getElementById('overlay').classList.toggle('visible');
+    } else {
+      document.body.classList.toggle('sidebar-collapsed');
+      localStorage.setItem('sidebar', document.body.classList.contains('sidebar-collapsed') ? 'collapsed' : 'expanded');
+    }
+  };
+
+  // Mobile search toggle
+  document.getElementById('mobile-search-toggle').onclick = () => {
+    const input = document.getElementById('search-input');
+    const isOpen = input.classList.toggle('mobile-open');
+    if (isOpen) { input.focus(); }
+    else { input.value = ''; input.classList.remove('mobile-open'); document.getElementById('search-results').style.display = 'none'; document.getElementById('search-clear').style.display = 'none'; }
+  };
+});
+
+</script>
+</body>
+</html>

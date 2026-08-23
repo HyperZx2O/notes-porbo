@@ -1,0 +1,2708 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chem 4241 — Chemistry Study Guide</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=IBM+Plex+Serif:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+<style>
+/* ═══════════════════════════════════════════════
+   DESIGN TOKENS — Dark Academic Chemistry Theme
+   Palette: Deep navy + amber gold accent
+   Signature: Glowing formula blocks + periodic-
+   table-grid section indicators
+═══════════════════════════════════════════════ */
+:root {
+  --bg-0:       #0d0f14;
+  --bg-1:       #141720;
+  --bg-2:       #1a1e2e;
+  --bg-3:       #222840;
+  --bg-4:       #2c3355;
+  --border:     #2e3454;
+  --border-hi:  #3d4870;
+
+  --text-0:     #e8eaf2;
+  --text-1:     #b8bdd4;
+  --text-2:     #7c85ab;
+  --text-3:     #4e5678;
+
+  --gold:       #c9a227;
+  --gold-dim:   #7a610f;
+  --gold-glow:  rgba(201,162,39,0.10);
+
+  --teal:       #2cbfbf;
+  --teal-dim:   rgba(44,191,191,0.12);
+
+  --red:        #e05c5c;
+  --red-dim:    rgba(224,92,92,0.12);
+
+  --green:      #4dbb7a;
+  --green-dim:  rgba(77,187,122,0.12);
+
+  --purple:     #9b7fd4;
+  --purple-dim: rgba(155,127,212,0.12);
+
+  --font-sans:  'IBM Plex Sans', system-ui, sans-serif;
+  --font-serif: 'IBM Plex Serif', Georgia, serif;
+  --font-mono:  'IBM Plex Mono', 'Courier New', monospace;
+
+  --radius-sm:  4px;
+  --radius:     8px;
+  --radius-lg:  12px;
+
+  --sidebar-w:  260px;
+  --header-h:   56px;
+
+  --transition: 180ms ease;
+}
+
+[data-theme="light"] {
+  --bg-0:      #f4f5f9;
+  --bg-1:      #ffffff;
+  --bg-2:      #eef0f8;
+  --bg-3:      #e2e5f2;
+  --bg-4:      #ccd0e8;
+  --border:    #d0d4e8;
+  --border-hi: #b8bedc;
+  --text-0:    #111828;
+  --text-1:    #2c3654;
+  --text-2:    #5a6289;
+  --text-3:    #6b7394;
+  --gold:      #996d00;
+  --gold-dim:  #e8d49a;
+  --gold-glow: rgba(153,109,0,0.08);
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; font-size: 16px; overflow-x: clip; transition: background-color 0.3s ease, color 0.3s ease; }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+  }
+}
+
+body {
+  font-family: var(--font-sans);
+  background: var(--bg-0);
+  color: var(--text-0);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+.theme-transitioning,
+.theme-transitioning *,
+.theme-transitioning *::before,
+.theme-transitioning *::after {
+  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease !important;
+}
+
+/* ── SCROLLBAR ── */
+::selection { background: var(--gold-dim); color: var(--text-0); }
+
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--bg-0); }
+::-webkit-scrollbar-thumb { background: var(--border-hi); border-radius: 3px; }
+
+/* ── FOCUS INDICATORS ── */
+*:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 2px;
+}
+#search-input:focus-visible { outline-offset: -1px; }
+
+/* KaTeX error fallback */
+.katex-error {
+  color: var(--red);
+  border: 1px dashed var(--red);
+  border-radius: var(--radius-sm);
+  padding: 2px 6px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  background: var(--red-dim);
+}
+.icon { display: inline-block; width: 1em; height: 1em; vertical-align: -0.125em; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.icon-sm { width: 0.875em; height: 0.875em; }
+
+/* ══════════════════════════════════════
+   LAYOUT
+══════════════════════════════════════ */
+#app { display: flex; flex-direction: column; min-height: 100vh; }
+
+/* ── HEADER ── */
+#header {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  height: var(--header-h);
+  background: var(--bg-1);
+  border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; gap: 12px;
+  padding: 0 16px;
+}
+#header-logo {
+  display: flex; align-items: baseline; gap: 8px; text-decoration: none;
+  color: var(--text-0);
+}
+#header-logo .course-code {
+  font-family: var(--font-mono); font-size: 12px;
+  color: var(--gold); letter-spacing: .06em;
+}
+#header-logo .course-name {
+  font-family: var(--font-sans); font-weight: 600; font-size: 14px;
+}
+#header-spacer { flex: 1; }
+
+/* Search */
+#search-wrap {
+  position: relative; width: 280px;
+}
+#search-input {
+  width: 100%;
+  background: var(--bg-2); border: 1px solid var(--border);
+  color: var(--text-0); font-family: var(--font-sans); font-size: 13px;
+  padding: 7px 32px 7px 12px; border-radius: var(--radius);
+  outline: none; transition: border-color var(--transition);
+}
+#search-input:focus { border-color: var(--gold); }
+#search-input::placeholder { color: var(--text-3); }
+#search-clear {
+  position: absolute; right: 8px; top: 50%; transform: translateY(-50%);
+  background: none; border: none; color: var(--text-3); cursor: pointer;
+  font-size: 16px; padding: 2px; display: none; line-height: 1;
+}
+#search-results {
+  position: absolute; top: calc(100% + 4px); left: 0; right: 0;
+  background: var(--bg-1); border: 1px solid var(--border);
+  border-radius: var(--radius); max-height: 340px; overflow-y: auto;
+  z-index: 200; display: none;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+}
+.search-result-item {
+  padding: 10px 14px; cursor: pointer; border-bottom: 1px solid var(--border);
+  transition: background var(--transition);
+}
+.search-result-item:last-child { border-bottom: none; }
+.search-result-item:hover { background: var(--bg-2); }
+.search-result-subject {
+  font-size: 10px; font-family: var(--font-mono); color: var(--gold);
+  text-transform: uppercase; letter-spacing: .08em; margin-bottom: 2px;
+}
+.search-result-title { font-size: 13px; color: var(--text-0); font-weight: 500; }
+.search-result-snippet { font-size: 12px; color: var(--text-2); margin-top: 2px; }
+#search-empty { padding: 16px; text-align: center; color: var(--text-2); font-size: 13px; display: none; }
+
+/* Header buttons */
+.hdr-btn {
+  background: var(--bg-2); border: 1px solid var(--border);
+  color: var(--text-1); border-radius: var(--radius-sm);
+  padding: 6px 10px; font-size: 12px; cursor: pointer;
+  transition: all var(--transition); font-family: var(--font-sans);
+  white-space: nowrap;
+}
+.hdr-btn:hover { border-color: var(--gold); color: var(--gold); }
+
+#sidebar-toggle { display: block; min-width: 44px; min-height: 44px; }
+.hdr-btn-search { display: none; }
+
+/* ── BODY WRAP ── */
+#body-wrap {
+  display: flex;
+  margin-top: var(--header-h);
+  min-height: calc(100vh - var(--header-h));
+}
+
+/* ── SIDEBAR ── */
+#sidebar {
+  position: fixed; left: 0;
+  top: var(--header-h);
+  width: var(--sidebar-w);
+  height: calc(100vh - var(--header-h));
+  overflow-y: auto; overflow-x: hidden;
+  background: var(--bg-1);
+  border-right: 1px solid var(--border);
+  padding: 16px 0 32px;
+  transition: transform var(--transition);
+  z-index: 90;
+}
+#sidebar::-webkit-scrollbar { width: 4px; }
+
+.sidebar-section { margin-bottom: 4px; }
+.sidebar-subject {
+  display: flex; align-items: center; gap: 8px;
+  padding: 8px 16px; cursor: pointer;
+  font-size: 12px; font-weight: 600;
+  text-transform: uppercase; letter-spacing: .08em;
+  color: var(--text-2);
+  border-left: 2px solid transparent;
+  transition: all var(--transition);
+  user-select: none;
+}
+.sidebar-subject:hover { color: var(--text-0); border-left-color: var(--border-hi); }
+.sidebar-subject.active { color: var(--gold); border-left-color: var(--gold); background: var(--gold-glow); }
+.sidebar-subject .subj-num {
+  font-family: var(--font-mono); font-size: 10px;
+  background: var(--bg-3); border-radius: 3px;
+  padding: 1px 5px; min-width: 20px; text-align: center;
+}
+.sidebar-subject.active .subj-num { background: var(--gold-dim); color: var(--bg-0); }
+.sidebar-chevron { margin-left: auto; font-size: 10px; transition: transform var(--transition); }
+.sidebar-subject.open .sidebar-chevron { transform: rotate(90deg); }
+
+.sidebar-toc { display: none; }
+.sidebar-toc.open { display: block; }
+.sidebar-toc a {
+  display: block; padding: 5px 16px 5px 28px;
+  font-size: 12px; color: var(--text-2); text-decoration: none;
+  border-left: 2px solid transparent;
+  transition: color 0.2s ease, border-left-color 0.2s ease, background 0.2s ease;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.sidebar-toc a:hover { color: var(--text-0); border-left-color: var(--border-hi); background: var(--bg-2); }
+.sidebar-toc a.active { color: var(--gold); border-left-color: var(--gold); background: var(--gold-glow); }
+.sidebar-toc a { transition: color 0.3s ease, border-left-color 0.3s ease, background 0.3s ease; }
+
+.sidebar-home {
+  display: flex; align-items: center; gap: 8px;
+  padding: 8px 16px 16px; cursor: pointer;
+  font-size: 13px; font-weight: 500; color: var(--text-1);
+  border-bottom: 1px solid var(--border); margin-bottom: 8px;
+  text-decoration: none;
+}
+.sidebar-home:hover { color: var(--gold); }
+
+/* ── MAIN CONTENT ── */
+#main {
+  margin-left: var(--sidebar-w);
+  flex: 1;
+  max-width: 100%;
+  transition: margin-left 0.25s ease;
+}
+
+/* ══════════════════════════════════════
+   PAGES
+══════════════════════════════════════ */
+.page { display: none; min-height: calc(100vh - var(--header-h)); }
+.page.active { display: block; }
+
+/* ── DASHBOARD ── */
+#page-home { padding: 0; }
+
+.dashboard-hero {
+  padding: 64px 48px 48px;
+  border-bottom: 1px solid var(--border);
+  background: var(--bg-1);
+  animation: heroFadeIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+@keyframes heroFadeIn {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.dashboard-hero h1 {
+  font-family: var(--font-serif); font-size: clamp(30px, 5vw, 48px);
+  font-weight: 600; color: var(--text-0); line-height: 1.15; margin-bottom: 12px;
+  overflow-wrap: anywhere; min-width: 0;
+}
+.dashboard-hero .subtitle {
+  font-size: 15px; color: var(--text-2); max-width: 560px; line-height: 1.6;
+}
+.dashboard-meta {
+  display: flex; gap: 24px; margin-top: 24px; flex-wrap: wrap;
+}
+.dashboard-meta-item {
+  display: flex; flex-direction: column;
+}
+.dashboard-meta-item .meta-val {
+  font-size: 22px; font-weight: 600; color: var(--gold); font-family: var(--font-mono);
+}
+.dashboard-meta-item .meta-label {
+  font-size: 11px; color: var(--text-3); text-transform: uppercase; letter-spacing: .08em;
+}
+
+.subjects-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1px;
+  background: var(--border);
+  border-top: 1px solid var(--border);
+}
+.subject-card {
+  background: var(--bg-1); padding: 28px 32px;
+  cursor: pointer; transition: background 0.2s ease, transform 0.2s ease;
+  display: flex; flex-direction: column; gap: 10px;
+  opacity: 0; transform: translateY(12px);
+  animation: cardReveal 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+.subject-card:nth-child(1) { animation-delay: 0ms; }
+.subject-card:nth-child(2) { animation-delay: 60ms; }
+.subject-card:nth-child(3) { animation-delay: 120ms; }
+.subject-card:nth-child(4) { animation-delay: 180ms; }
+.subject-card:nth-child(5) { animation-delay: 240ms; }
+.subject-card:nth-child(6) { animation-delay: 300ms; }
+@keyframes cardReveal {
+  to { opacity: 1; transform: translateY(0); }
+}
+.subject-card:hover { background: var(--bg-2); transform: translateY(-2px); }
+.subject-card-header { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; }
+.subject-card-num {
+  font-family: var(--font-mono); font-size: 11px; color: var(--gold);
+  background: var(--gold-glow); border: 1px solid var(--gold-dim);
+  padding: 3px 8px; border-radius: var(--radius-sm); white-space: nowrap;
+  flex-shrink: 0;
+}
+.subject-card-arrow { color: var(--text-3); font-size: 18px; transition: transform var(--transition), color var(--transition); }
+.subject-card:hover .subject-card-arrow { transform: translateX(4px); color: var(--gold); }
+.subject-card h3 {
+  font-family: var(--font-serif); font-size: 18px; font-weight: 600;
+  color: var(--text-0); line-height: 1.3;
+  overflow-wrap: anywhere; min-width: 0;
+}
+.subject-card p { font-size: 13px; color: var(--text-2); line-height: 1.5; }
+.subject-card-tags { display: flex; flex-wrap: wrap; gap: 6px; }
+.tag {
+  font-size: 10px; font-family: var(--font-mono);
+  padding: 2px 7px; border-radius: var(--radius-sm);
+  border: 1px solid var(--border); color: var(--text-3);
+  letter-spacing: .04em;
+}
+
+/* ── STUDY PAGE ── */
+.study-page { padding: 0 0 80px; }
+
+.study-header {
+  padding: 40px 48px 32px;
+  border-bottom: 1px solid var(--border);
+  background: var(--bg-1);
+  position: sticky; top: var(--header-h); z-index: 50;
+}
+.study-header h2 {
+  font-family: var(--font-serif); font-size: clamp(22px, 3.5vw, 32px);
+  font-weight: 600; color: var(--text-0); line-height: 1.2;
+  overflow-wrap: anywhere; min-width: 0;
+}
+.study-header .src-note {
+  font-size: 11px; color: var(--text-3); margin-top: 6px; font-family: var(--font-mono);
+  letter-spacing: .04em;
+}
+
+.study-content { padding: 0 48px; }
+
+/* ── SECTION GROUPS ── */
+.section-group {
+  margin-top: 48px;
+  padding-bottom: 32px;
+  border-bottom: 1px solid var(--border);
+}
+.section-group:last-of-type { border-bottom: none; }
+
+.section-heading {
+  display: flex; align-items: center; gap: 12px;
+  margin-bottom: 20px; cursor: pointer;
+  user-select: none;
+}
+.section-num {
+  font-family: var(--font-mono); font-size: 11px; color: var(--gold);
+  background: var(--gold-glow); border: 1px solid var(--gold-dim);
+  padding: 3px 8px; border-radius: var(--radius-sm); flex-shrink: 0;
+}
+.section-heading h3 {
+  font-family: var(--font-serif); font-size: 20px; font-weight: 600;
+  color: var(--text-0); flex: 1;
+  overflow-wrap: anywhere; min-width: 0;
+}
+.section-toggle {
+  color: var(--text-3); font-size: 14px; transition: transform var(--transition);
+  flex-shrink: 0;
+}
+.section-heading.collapsed .section-toggle { transform: rotate(-90deg); }
+.section-body { }
+.section-body.hidden {
+  opacity: 0; max-height: 0; overflow: hidden;
+  transition: opacity 0.2s ease, max-height 0.25s ease;
+  margin-top: 0; padding-top: 0;
+}
+.section-body:not(.hidden) {
+  opacity: 1; max-height: 50000px;
+  transition: opacity 0.2s ease 0.05s, max-height 0.3s ease;
+}
+
+/* subsection */
+.subsection { margin-top: 32px; }
+h4.subsection-heading {
+  font-family: var(--font-sans); font-size: 13px; font-weight: 600;
+  color: var(--gold); text-transform: uppercase; letter-spacing: .08em;
+  margin-bottom: 12px; padding-bottom: 6px;
+  border-bottom: 1px solid var(--gold-dim);
+}
+
+/* ── TYPOGRAPHY WITHIN CONTENT ── */
+.content-body p { margin-bottom: 16px; color: var(--text-1); font-size: 15px; max-width: 70ch; }
+.content-body ul, .content-body ol { margin: 0 0 14px 20px; max-width: 70ch; }
+.content-body li { color: var(--text-1); font-size: 15px; margin-bottom: 5px; }
+.content-body strong { color: var(--text-0); font-weight: 600; }
+
+/* ── CALLOUT BLOCKS ── */
+.callout {
+  border-left: 3px solid; border-radius: 0 var(--radius) var(--radius) 0;
+  padding: 14px 18px; margin: 16px 0; font-size: 14px;
+}
+.callout-def {
+  border-color: var(--teal);
+  background: var(--teal-dim);
+}
+.callout-def .callout-label { color: var(--teal); font-size: 10px; font-family: var(--font-mono); text-transform: uppercase; letter-spacing: .1em; margin-bottom: 10px; }
+
+.callout-important {
+  border-color: var(--gold);
+  background: var(--gold-glow);
+}
+.callout-important .callout-label { color: var(--gold); font-size: 10px; font-family: var(--font-mono); text-transform: uppercase; letter-spacing: .1em; margin-bottom: 10px; }
+
+.callout-warn {
+  border-color: var(--red);
+  background: var(--red-dim);
+}
+.callout-warn .callout-label { color: var(--red); font-size: 10px; font-family: var(--font-mono); text-transform: uppercase; letter-spacing: .1em; margin-bottom: 10px; }
+
+.callout-note {
+  border-color: var(--purple);
+  background: var(--purple-dim);
+}
+.callout-note .callout-label { color: var(--purple); font-size: 10px; font-family: var(--font-mono); text-transform: uppercase; letter-spacing: .1em; margin-bottom: 10px; }
+
+.callout p, .callout ul, .callout li { color: var(--text-1); margin-bottom: 6px; }
+.callout p:last-child, .callout li:last-child { margin-bottom: 0; }
+
+/* ── FORMULA BLOCKS — signature element ── */
+.formula-block {
+  background: var(--bg-2);
+  border: 1px solid var(--gold-dim);
+  border-radius: var(--radius);
+  padding: 16px 20px;
+  margin: 16px 0;
+  position: relative;
+  overflow-x: auto;
+  max-width: 70ch;
+}
+.formula-block::before {
+  content: '';
+  position: absolute; left: 0; top: 0; bottom: 0; width: 3px;
+  background: var(--gold);
+  border-radius: var(--radius-sm) 0 0 var(--radius-sm);
+}
+.formula-label {
+  font-family: var(--font-mono); font-size: 10px; color: var(--gold);
+  text-transform: uppercase; letter-spacing: .1em; margin-bottom: 8px;
+}
+.formula-body {
+  font-family: var(--font-mono); font-size: 15px; color: var(--text-0);
+  white-space: pre-wrap; word-break: break-word;
+  font-variant-numeric: tabular-nums;
+}
+
+/* inline code */
+code {
+  font-family: var(--font-mono); font-size: 13px;
+  background: var(--bg-3); color: var(--text-0);
+  padding: 1px 5px; border-radius: var(--radius-sm);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ── TABLES ── */
+.table-wrap { overflow-x: auto; margin: 16px 0; max-width: 70ch; }
+table {
+  width: 100%; border-collapse: collapse;
+  font-size: 14px;
+  font-variant-numeric: tabular-nums;
+}
+th {
+  background: var(--bg-3); color: var(--gold);
+  font-family: var(--font-mono); font-size: 11px;
+  text-transform: uppercase; letter-spacing: .07em;
+  padding: 10px 14px; text-align: left;
+  border-bottom: 2px solid var(--gold-dim);
+}
+td {
+  padding: 9px 14px; border-bottom: 1px solid var(--border);
+  color: var(--text-1); vertical-align: top;
+}
+tr:last-child td { border-bottom: none; }
+tr:hover td { background: var(--bg-3); }
+
+/* comparison table */
+.compare-table th:first-child { border-right: 1px solid var(--border); }
+.compare-table td:first-child { border-right: 1px solid var(--border); color: var(--text-0); font-weight: 500; }
+
+/* ── PROBLEM/SOLUTION BLOCKS ── */
+.problem-block {
+  background: var(--bg-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  margin: 20px 0;
+}
+.problem-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 12px 18px;
+  background: var(--bg-3);
+  border-bottom: 1px solid var(--border);
+  cursor: pointer;
+}
+.problem-label { font-family: var(--font-mono); font-size: 11px; color: var(--purple); text-transform: uppercase; letter-spacing: .1em; }
+.problem-title { font-size: 14px; color: var(--text-0); font-weight: 500; }
+.problem-toggle { color: var(--text-3); font-size: 14px; transition: transform var(--transition); }
+.problem-header.open .problem-toggle { transform: rotate(180deg); }
+.problem-body { padding: 18px; }
+.problem-body.hidden {
+  opacity: 0; max-height: 0; overflow: hidden;
+  transition: opacity 0.2s ease, max-height 0.25s ease;
+  padding-top: 0; padding-bottom: 0;
+}
+.problem-body:not(.hidden) {
+  opacity: 1; max-height: 50000px;
+  transition: opacity 0.2s ease 0.05s, max-height 0.3s ease;
+}
+.problem-step { margin-bottom: 14px; }
+.problem-step-label { font-size: 11px; font-family: var(--font-mono); color: var(--gold); letter-spacing: .1em; text-transform: uppercase; margin-bottom: 6px; }
+.problem-answer {
+  background: var(--bg-3); border: 1px solid var(--green);
+  border-radius: var(--radius); padding: 12px 16px;
+  margin-top: 12px;
+}
+.problem-answer .answer-label { font-size: 10px; font-family: var(--font-mono); color: var(--green); text-transform: uppercase; letter-spacing: .1em; margin-bottom: 6px; }
+
+/* ── FORMULA QUICK-REFERENCE PANEL ── */
+#ref-panel {
+  position: fixed; right: -340px; top: var(--header-h);
+  width: 320px; height: calc(100vh - var(--header-h));
+  background: var(--bg-1); border-left: 1px solid var(--border);
+  overflow-y: auto; padding: 20px; z-index: 80;
+  transition: right 0.25s ease;
+}
+#ref-panel::after {
+  content: '';
+  position: sticky; bottom: 0; left: 0; right: 0;
+  display: block; height: 40px;
+  background: linear-gradient(transparent, var(--bg-1));
+  pointer-events: none;
+  margin: -40px 0 0;
+}
+#ref-panel.open { right: 0; }
+.ref-panel-header {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1px solid var(--border);
+}
+.ref-panel-header h4 { font-family: var(--font-serif); font-size: 15px; color: var(--text-0); }
+#ref-panel-close {
+  background: none; border: 1px solid var(--border);
+  color: var(--text-2); cursor: pointer; font-size: 18px;
+  width: 32px; height: 32px; border-radius: var(--radius-sm);
+  display: flex; align-items: center; justify-content: center;
+  transition: all var(--transition);
+}
+#ref-panel-close:hover { border-color: var(--gold); color: var(--gold); background: var(--gold-glow); }
+#ref-panel-content { animation: fadeSlideIn 0.3s ease both; }
+@keyframes fadeSlideIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.ref-subject { margin-bottom: 24px; }
+.ref-subject-title {
+  font-size: 12px; font-family: var(--font-mono); color: var(--gold);
+  text-transform: uppercase; letter-spacing: .1em; margin-bottom: 12px;
+  padding-bottom: 8px; border-bottom: 2px solid var(--gold-dim);
+  position: sticky; top: 0; background: var(--bg-1); z-index: 1;
+}
+.ref-empty { text-align: center; padding: 40px 16px; color: var(--text-3); font-size: 13px; line-height: 1.6; }
+.ref-empty .ref-empty-icon { font-size: 28px; margin-bottom: 12px; opacity: 0.4; }
+.ref-formula { background: var(--bg-2); border-radius: var(--radius-sm); padding: 8px 10px; margin-bottom: 6px; font-family: var(--font-mono); font-size: 12px; color: var(--text-0); }
+
+/* ── BACK TO TOP ── */
+#back-top {
+  position: fixed; bottom: 24px; right: 24px; z-index: 99;
+  width: 40px; height: 40px; border-radius: 50%;
+  background: var(--bg-3); border: 1px solid var(--border-hi);
+  color: var(--text-1); font-size: 18px; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  opacity: 0; transform: translateY(8px);
+  transition: opacity 0.3s ease, transform 0.3s ease, background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+  pointer-events: none;
+}
+#back-top.visible { opacity: 1; transform: translateY(0); pointer-events: auto; }
+
+/* ── BREADCRUMB ── */
+.breadcrumb {
+  padding: 10px 48px;
+  font-size: 12px; color: var(--text-3);
+  border-bottom: 1px solid var(--border);
+  background: var(--bg-0);
+  position: sticky; top: calc(var(--header-h) + 89px); z-index: 40;
+}
+.breadcrumb a { color: var(--text-3); text-decoration: none; }
+.breadcrumb a:hover { color: var(--gold); }
+.breadcrumb span { margin: 0 6px; }
+
+/* ══════════════════════════════════════
+   RESPONSIVE
+══════════════════════════════════════ */
+@media (max-width: 900px) {
+  :root { --sidebar-w: 0px; }
+  #sidebar { transform: translateX(-260px); width: 260px; --sidebar-w: 260px; }
+  #sidebar.open { transform: translateX(0); }
+  #main { margin-left: 0; }
+  .dashboard-hero { padding: 32px 24px 24px; }
+  .subjects-grid { grid-template-columns: 1fr; }
+  .study-header { padding: 24px 24px 20px; position: static; }
+  .breadcrumb { padding: 8px 24px; position: static; }
+  .study-content { padding: 0 20px; }
+  #search-wrap { width: 180px; }
+  #ref-panel { width: 280px; right: -280px; }
+  .section-heading { min-height: 44px; }
+  .problem-header { min-height: 44px; }
+}
+
+@media (max-width: 600px) {
+  #search-wrap {
+    position: static; width: auto;
+  }
+  #search-input {
+    position: fixed; top: var(--header-h); left: 0; right: 0;
+    width: 100%; border-radius: 0; border-left: none; border-right: none;
+    padding: 10px 40px 10px 12px; font-size: 14px;
+    z-index: 150; display: none;
+  }
+  #search-input.mobile-open { display: block; }
+  #search-clear { right: 12px; z-index: 151; }
+  #search-results { position: fixed; top: calc(var(--header-h) + 42px); left: 0; right: 0; border-radius: 0; z-index: 150; }
+  .hdr-btn-search { display: flex; min-width: 44px; min-height: 44px; }
+  .dashboard-hero h1 { font-size: 22px; }
+  .study-content { padding: 0 16px; }
+  .dashboard-hero { padding: 24px 16px; }
+  .breadcrumb { padding: 8px 16px; }
+  .study-header { padding: 20px 16px; }
+  #ref-panel { width: 100%; right: -100%; }
+}
+
+/* ── OVERLAY ── */
+#overlay {
+  display: none; position: fixed; inset: 0; z-index: 80;
+  background: rgba(0,0,0,0);
+  transition: background 0.25s ease;
+}
+#overlay.visible { display: block; background: rgba(0,0,0,0.5); }
+
+/* ── SIDEBAR COLLAPSED (desktop) ── */
+.sidebar-collapsed #sidebar { transform: translateX(-260px); }
+.sidebar-collapsed #main { margin-left: 0; }
+</style>
+</head>
+<body>
+<div id="app">
+
+<!-- ══════════ HEADER ══════════ -->
+<header id="header">
+  <button class="hdr-btn" id="sidebar-toggle" aria-label="Toggle sidebar"><svg class="icon" viewBox="0 0 24 24"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg></button>
+  <a id="header-logo" href="#" onclick="showPage('home'); return false;">
+    <span class="course-code">Chem 4241</span>
+    <span class="course-name">Chemistry</span>
+  </a>
+  <div id="header-spacer"></div>
+  <div id="search-wrap">
+    <input type="search" id="search-input" placeholder="Search formulas, topics…" autocomplete="off">
+    <button id="search-clear" aria-label="Clear search"><svg class="icon icon-sm" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+    <div id="search-results" aria-label="Search results">
+      <div id="search-empty">No results found</div>
+    </div>
+  </div>
+  <button class="hdr-btn" onclick="toggleRefPanel()"><svg class="icon icon-sm" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg> Formulas</button>
+  <button class="hdr-btn hdr-btn-search" id="mobile-search-toggle" aria-label="Search"><svg class="icon icon-sm" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></button>
+  <button class="hdr-btn" id="theme-toggle"><svg class="icon icon-sm" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg> Light</button>
+</header>
+
+<!-- ══════════ SIDEBAR ══════════ -->
+<div id="sidebar">
+  <a class="sidebar-home" href="#" onclick="showPage('home'); closeSidebar(); return false;">
+    <svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M3 12l9-9 9 9"/><path d="M5 10v10h14V10"/></svg>
+    Dashboard
+  </a>
+  <div id="sidebar-nav"></div>
+</div>
+<div id="overlay" onclick="closeSidebar()"></div>
+
+<!-- ══════════ MAIN ══════════ -->
+<div id="body-wrap">
+<main id="main">
+
+<!-- ═══════ DASHBOARD ═══════ -->
+<div id="page-home" class="page active">
+  <div class="dashboard-hero">
+    <h1>Chemistry</h1>
+    <p class="subtitle">Comprehensive exam revision covering chemical bonding, kinetics, electrochemistry, conductance, molecular geometry, and phase equilibria. Content sourced strictly from lecture PDFs.</p>
+    <p class="src-note" style="margin-top:16px">6 subjects · 100+ topics · KaTeX math rendering</p>
+  </div>
+  <div class="subjects-grid" id="subjects-grid"></div>
+</div>
+
+<!-- ═══════ STUDY PAGES (generated by JS) ═══════ -->
+<div id="page-1" class="page study-page"></div>
+<div id="page-2" class="page study-page"></div>
+<div id="page-3" class="page study-page"></div>
+<div id="page-4" class="page study-page"></div>
+<div id="page-5" class="page study-page"></div>
+<div id="page-6" class="page study-page"></div>
+
+</main>
+</div><!-- /body-wrap -->
+
+</div><!-- /app -->
+
+<!-- Reference Panel -->
+<div id="ref-panel">
+  <div class="ref-panel-header">
+    <h4>Formula Quick Reference</h4>
+    <button id="ref-panel-close" onclick="toggleRefPanel()" aria-label="Close reference panel"><svg class="icon" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+  </div>
+  <div id="ref-panel-content"></div>
+</div>
+
+<button id="back-top" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="Back to top" aria-label="Back to top"><svg class="icon" viewBox="0 0 24 24"><polyline points="18 15 12 9 6 15"/></svg></button>
+
+<script>
+// ══════════════════════════════════════════════════════
+//  STUDY GUIDE DATA
+// ══════════════════════════════════════════════════════
+const SUBJECTS = [
+
+// ─────────────────────────────────────────────────────
+// 1. CHEMICAL BONDING
+// ─────────────────────────────────────────────────────
+{
+  id: 1,
+  code: 'CB',
+  title: 'Chemical Bonding',
+  source: 'Chemical Bonding.pdf (53 pages)',
+  desc: 'Ionic, covalent & metallic bonds; octet rule; Lewis structures; resonance; Fajan\'s rules; hydrogen bonding; VSEPR; VBT; hybridization; MOT.',
+  tags: ['Bonding', 'VSEPR', 'MOT', 'Hybridization'],
+  formulas: [
+    'Bond order = (N_b − N_a) / 2',
+    'EN difference ≥ 2 → ionic bond',
+    'sp³: 109.5° | sp²: 120° | sp: 180°',
+    'ΔH_net (NaCl) = +119 − 187 − 85 = −153',
+  ],
+  sections: [
+    {
+      num: '1', title: 'Chemical Bond', content: `
+<div class="callout callout-def"><div class="callout-label">Definition</div>
+A <strong>chemical bond</strong> is an attractive force that holds atoms together in different chemical species such as molecules and ions.
+</div>
+<div class="subsection"><div class="subsection-heading">Why Atoms Bond</div>
+<ul>
+<li>Isolated atoms are at relatively high potential energy.</li>
+<li>Bonding lowers the potential energy of the atoms.</li>
+<li>Lower potential energy corresponds to a more stable arrangement.</li>
+<li>Therefore, bonding is favored when it produces a more stable, lower-energy arrangement.</li>
+</ul>
+</div>`
+    },
+    {
+      num: '2', title: 'Ionic Bond', content: `
+<div class="callout callout-def"><div class="callout-label">Definition</div>
+An <strong>ionic bond</strong> is a chemical bond formed by the electrostatic attraction between positively and negatively charged ions.
+</div>
+<div class="subsection"><div class="subsection-heading">NaCl Example</div>
+<div class="formula-block"><div class="formula-label">Half-reactions</div><div class="formula-body">Na → Na⁺ + e⁻
+Cl + e⁻ → Cl⁻</div></div>
+The oppositely charged Na⁺ and Cl⁻ ions are held together by electrostatic attraction.
+</div>
+<div class="subsection"><div class="subsection-heading">Factors Favouring Ionic-Bond Formation</div>
+<ol style="margin-left:20px;margin-top:8px">
+<li style="margin-bottom:10px"><strong>Number of valence electrons:</strong> Atom A should have 1, 2 or 3 valence electrons (Groups IA–IIIA); Atom B should have 5, 6 or 7 (Groups VA–VIIA).</li>
+<li style="margin-bottom:10px"><strong>Net lowering of energy:</strong> Ionization energy (IE) of A should be <em>low</em>; electron affinity (EA) of B should be <em>high</em>; electrostatic attraction energy should be <em>high</em>. Energy released must exceed energy consumed.</li>
+<li style="margin-bottom:10px"><strong>Electronegativity difference:</strong> A difference of <strong>2 or more</strong> is required. EN(Na) = 0.9, EN(Cl) = 3.0, difference = 2.1 → ionic.</li>
+<li style="margin-bottom:10px"><strong>Size of ions:</strong> Smaller ions allow stronger attraction (charge closer together).</li>
+<li><strong>Charge on ions:</strong> Greater ionic charge → greater electrostatic attraction → stronger bond.</li>
+</ol>
+</div>
+<div class="problem-block">
+<div class="problem-header" onclick="toggleProblem(this)">
+<span class="problem-label">Numerical Example</span>
+<span class="problem-title">NaCl Enthalpy (PDF source)</span>
+<span class="problem-toggle"><svg class="icon icon-sm" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></span>
+</div>
+<div class="problem-body">
+<div class="problem-step"><div class="problem-step-label">Given</div>
+<div class="formula-block"><div class="formula-body">Na → Na⁺ + e⁻     ΔH = +119 kJ
+Cl + e⁻ → Cl⁻     ΔH = −85 kJ
+Na⁺ + Cl⁻ → NaCl  ΔH = −187 kJ</div></div>
+</div>
+<div class="problem-step"><div class="problem-step-label">Calculation</div>
+<div class="formula-block"><div class="formula-body">ΔH_net = +119 − 187 − 85 = −153</div></div>
+</div>
+<div class="problem-answer"><div class="answer-label">Result (from PDF)</div>
+−153 kcal [<strong>Source note:</strong> preceding values are in kJ but the PDF prints the final result as kcal — unit inconsistency preserved as-is from the source.]</div>
+</div>
+</div>
+`
+    },
+    {
+      num: '3', title: 'Covalent Bond', content: `
+<div class="callout callout-def"><div class="callout-label">Definition</div>
+Covalent bonding results from <strong>sharing electron pairs between two atoms</strong>. In a purely covalent bond, electrons are shared equally.
+</div>
+<div class="subsection"><div class="subsection-heading">Factors Favouring Covalent Bonding</div>
+<ol style="margin-left:20px;margin-top:8px">
+<li style="margin-bottom:8px"><strong>Number of valence electrons:</strong> Each atom A and B should generally have 5, 6 or 7 valence electrons to attain a stable octet by sharing. H has one valence electron and attains a duplet.</li>
+<li style="margin-bottom:8px"><strong>Equal electronegativity:</strong> If both atoms have equal electronegativity, electron transfer is not favored, so sharing occurs.</li>
+<li><strong>Equal sharing of electrons:</strong> Nearly equal electron affinity → nonpolar covalent bond.</li>
+</ol>
+</div>
+<div class="subsection"><div class="subsection-heading">Electronegativity Difference & Bond Character</div>
+<div class="callout callout-important"><div class="callout-label">Key Rule</div>
+<strong>0–0.3 EN difference</strong> → nonpolar covalent (0–5% ionic character)<br>
+<strong>0.3–2.0 EN difference</strong> → polar covalent<br>
+<strong>≥ 2.0 EN difference</strong> → ionic bond
+</div>
+<p>Example: F (4.0) – Cs (0.7) = 3.3 → ionic. Greater EN difference → greater ionic character.</p>
+</div>
+<div class="subsection"><div class="subsection-heading">Potential-Energy View</div>
+<ul>
+<li>At large separation, atoms do not significantly influence each other (PE ≈ 0).</li>
+<li>As atoms approach, electron–proton attractions lower PE.</li>
+<li>At an optimum distance, attraction and repulsion balance → PE minimum → stable bond.</li>
+<li>If pushed closer, repulsion dominates and PE rises sharply.</li>
+</ul>
+<div class="callout callout-important"><div class="callout-label">Key Idea</div>Bonded atoms have lower potential energy than separated atoms.</div>
+</div>`
+    },
+    {
+      num: '4', title: 'Octet Rule & Limitations', content: `
+<div class="callout callout-def"><div class="callout-label">Statement</div>
+Chemical compounds tend to form so that each atom, by gaining, losing or sharing electrons, has an <strong>octet of electrons in its highest occupied energy level</strong>.
+</div>
+<div class="subsection"><div class="subsection-heading">Examples</div>
+<ul>
+<li><strong>F₂:</strong> Each F has 7 valence electrons; sharing one pair allows each F to reach an octet.</li>
+<li><strong>HCl:</strong> H and Cl share one pair; H attains a duplet, Cl attains an octet.</li>
+</ul>
+</div>
+<div class="subsection"><div class="subsection-heading">Limitations of the Octet Rule</div>
+<div class="callout callout-warn"><div class="callout-label">Limitations</div>
+<ol style="margin-left:18px">
+<li style="margin-bottom:6px"><strong>Noble-gas compounds:</strong> Xe and Kr form compounds (XeF₂, KrF₂, XeOF₂) — not explained by simple octet rule.</li>
+<li style="margin-bottom:6px"><strong>Molecular shape:</strong> Octet rule does not account for shape.</li>
+<li style="margin-bottom:6px"><strong>Incomplete octet:</strong> H–H has only 2 electrons; boron can be stable with 6 electrons.</li>
+<li><strong>Expanded octet:</strong> Elements in period 3+ can use additional orbitals (PF₅, SF₆, H₂SO₄).</li>
+</ol>
+</div>
+</div>`
+    },
+    {
+      num: '5', title: 'Lewis Structures & Resonance', content: `
+<div class="callout callout-def"><div class="callout-label">Lewis Structures</div>
+A Lewis structure uses:
+<ul style="margin-top:6px">
+<li>Atomic symbols for nuclei and inner-shell electrons.</li>
+<li>Dot pairs or dashes between atoms for shared electron pairs.</li>
+<li>Dots next to an atom symbol for unshared electrons.</li>
+</ul>
+</div>
+<div class="subsection"><div class="subsection-heading">Resonance</div>
+<p>When one Lewis structure cannot accurately describe a molecule, several structures with similar energy and the same nuclear arrangement can be used as <strong>canonical/resonance structures</strong>.</p>
+<div class="callout callout-important"><div class="callout-label">O₃ Example</div>
+Ozone is represented by two canonical structures. The actual molecule is the <strong>resonance hybrid</strong> — not any single canonical structure alone.
+</div>
+</div>`
+    },
+    {
+      num: '6', title: "Fajan's Rules", content: `
+<div class="callout callout-def"><div class="callout-label">Purpose</div>
+Fajan's rules explain <strong>partial covalent character in ionic bonds</strong> through polarisation.
+</div>
+<div class="subsection"><div class="subsection-heading">Rules</div>
+<ol style="margin-left:20px;margin-top:8px">
+<li style="margin-bottom:8px"><strong>Smaller cation + larger anion → greater covalent character.</strong></li>
+<li style="margin-bottom:8px"><strong>Greater cation charge → greater covalent character.</strong></li>
+<li>For cations of the same size and charge, a cation with a transition-metal-type configuration is more polarising than one with a noble-gas configuration.</li>
+</ol>
+</div>
+<div class="subsection"><div class="subsection-heading">Polarisation Mechanism</div>
+<ul>
+<li>The cation polarises the anion, pulling electron density toward itself.</li>
+<li>Increased electron density between nuclei increases covalent character.</li>
+<li>Factors: polarising power of cation; polarisability of anion; extent of anion distortion.</li>
+</ul>
+</div>`
+    },
+    {
+      num: '7', title: 'Metallic Bonding', content: `
+<div class="callout callout-def"><div class="callout-label">Definition</div>
+Metallic bonding is the electrostatic attraction between positively charged metal ions and <strong>delocalized outer electrons</strong> (electron sea model).
+</div>
+<ul style="margin:10px 0 0 20px">
+<li>Most metal atoms have few electrons in their highest energy levels.</li>
+<li>s-block metals have one or two valence electrons with empty p orbitals.</li>
+<li>d-block metals have empty d orbitals near the highest energy level.</li>
+<li>Outer orbitals overlap within the metal; electrons move freely (delocalized).</li>
+<li>The electron sea holds metal atoms/ions together.</li>
+</ul>`
+    },
+    {
+      num: '8', title: 'Hydrogen Bonding', content: `
+<div class="callout callout-def"><div class="callout-label">Definition</div>
+A <strong>hydrogen bond</strong> is the attractive force between hydrogen attached to an electronegative atom of one molecule and an electronegative atom of another molecule (or within the same molecule). Electronegative atoms involved: O, N, F, Cl.
+</div>
+<div class="subsection"><div class="subsection-heading">Types</div>
+<div class="table-wrap"><table>
+<tr><th>Type</th><th>Description</th><th>Examples</th></tr>
+<tr><td>Intermolecular</td><td>Between <em>different</em> molecules</td><td>HF, NH₃, H₂O</td></tr>
+<tr><td>Intramolecular</td><td>Between groups <em>within the same</em> molecule</td><td>o-nitrophenol, salicylaldehyde</td></tr>
+</table></div>
+<div class="callout callout-note"><div class="callout-label">Source Note</div>
+p-nitrophenol does <em>not</em> show intramolecular hydrogen bonding (groups too far apart); it shows intermolecular hydrogen bonding instead.
+</div>
+</div>`
+    },
+    {
+      num: '9', title: 'VSEPR Theory', content: `
+<div class="callout callout-def"><div class="callout-label">VSEPR</div>
+Valence Shell Electron Pair Repulsion theory explains molecular shape in terms of electron-pair repulsions around the central atom.
+</div>
+<div class="subsection"><div class="subsection-heading">Main Postulates</div>
+<ul>
+<li>Molecular shape depends on the number of valence-shell electron pairs.</li>
+<li>Electron pairs repel each other and arrange to minimise repulsion.</li>
+<li><strong>Repulsion order: LP–LP > LP–BP > BP–BP</strong></li>
+<li>Lone pairs occupy more space, causing deviations from ideal angles.</li>
+</ul>
+</div>
+<div class="subsection"><div class="subsection-heading">Ideal Electron-Pair Arrangements</div>
+<div class="table-wrap"><table>
+<tr><th>Total Pairs</th><th>Arrangement</th><th>Ideal Angle</th></tr>
+<tr><td>2</td><td>Linear</td><td>180°</td></tr>
+<tr><td>3</td><td>Trigonal planar</td><td>120°</td></tr>
+<tr><td>4</td><td>Tetrahedral</td><td>109.5°</td></tr>
+<tr><td>5</td><td>Trigonal bipyramidal</td><td>90° / 120°</td></tr>
+<tr><td>6</td><td>Octahedral</td><td>90°</td></tr>
+</table></div>
+</div>
+<div class="subsection"><div class="subsection-heading">Molecular Geometry Table</div>
+<div class="table-wrap"><table>
+<tr><th>Total Pairs</th><th>Bonding</th><th>Lone</th><th>Geometry</th><th>Example</th></tr>
+<tr><td>2</td><td>2</td><td>0</td><td>Linear AX₂</td><td>BeF₂</td></tr>
+<tr><td>3</td><td>3</td><td>0</td><td>Trigonal planar AX₃</td><td>BF₃</td></tr>
+<tr><td>3</td><td>2</td><td>1</td><td>Bent/angular AX₂</td><td>SO₂</td></tr>
+<tr><td>4</td><td>4</td><td>0</td><td>Tetrahedral AX₄</td><td>CH₄</td></tr>
+<tr><td>4</td><td>3</td><td>1</td><td>Trigonal pyramidal AX₃</td><td>NH₃</td></tr>
+<tr><td>4</td><td>2</td><td>2</td><td>Bent/angular AX₂</td><td>H₂O</td></tr>
+<tr><td>5</td><td>5</td><td>0</td><td>Trigonal bipyramidal AX₅</td><td>PCl₅</td></tr>
+<tr><td>5</td><td>4</td><td>1</td><td>Seesaw AX₄</td><td>SF₄</td></tr>
+<tr><td>5</td><td>3</td><td>2</td><td>T-shaped AX₃</td><td>ClF₃</td></tr>
+<tr><td>5</td><td>2</td><td>3</td><td>Linear AX₂</td><td>XeF₂</td></tr>
+<tr><td>6</td><td>6</td><td>0</td><td>Octahedral AX₆</td><td>SF₆</td></tr>
+<tr><td>6</td><td>5</td><td>1</td><td>Square pyramidal AX₅</td><td>IF₅</td></tr>
+<tr><td>6</td><td>4</td><td>2</td><td>Square planar AX₄</td><td>XeF₄</td></tr>
+</table></div>
+</div>`
+    },
+    {
+      num: '10', title: 'Valence Bond Theory', content: `
+<div class="callout callout-def"><div class="callout-label">Main Postulates</div>
+<ul style="margin-top:4px">
+<li>A covalent bond forms by overlap of outermost <em>half-filled</em> orbitals.</li>
+<li>Bond strength depends on extent of overlap.</li>
+<li>The two bonding electrons have <strong>opposite spins</strong>.</li>
+<li>Completely filled orbitals do <em>not</em> participate.</li>
+<li>s orbitals are non-directional; p and d orbitals bond in directions of maximum overlap.</li>
+<li>Valence = number of half-filled orbitals.</li>
+</ul>
+</div>
+<div class="subsection"><div class="subsection-heading">H₂ Formation</div>
+<p>Each H: <code>1s¹</code>. The two 1s orbitals overlap → H–H covalent bond.</p>
+</div>
+<div class="subsection"><div class="subsection-heading">Why He₂ Does Not Form</div>
+<p>Each He 1s orbital is already doubly occupied. Overlap would place four electrons in the same region → strong electron–electron repulsion → atoms separate.</p>
+</div>
+<div class="subsection"><div class="subsection-heading">Energy Interactions</div>
+<ol style="margin-left:20px;margin-top:8px">
+<li>Electron–nucleus <em>attractive</em> interactions</li>
+<li>Electron–electron <em>repulsive</em> interactions</li>
+<li>Nucleus–nucleus <em>repulsive</em> interactions</li>
+</ol>
+<p style="margin-top:8px">If attractive interactions dominate: energy released → molecule becomes stable.</p>
+</div>
+<div class="subsection"><div class="subsection-heading">Types of Orbital Overlap</div>
+<div class="table-wrap"><table>
+<tr><th>Type</th><th>Description</th></tr>
+<tr><td>s–s</td><td>Two half-filled s orbitals overlap</td></tr>
+<tr><td>s–p</td><td>Half-filled s overlaps half-filled p</td></tr>
+<tr><td>p–p head-on</td><td>End-to-end linear overlap along internuclear axis (also: end-on)</td></tr>
+<tr><td>p–p sideways</td><td>Lateral overlap; parallel p orbitals perpendicular to internuclear axis</td></tr>
+</table></div>
+</div>`
+    },
+    {
+      num: '11', title: 'Sigma & Pi Bonds', content: `
+<div class="subsection"><div class="subsection-heading">Sigma (σ) Bond</div>
+<p>Formed by <strong>axial overlap</strong> along the line joining the two nuclei. Possible overlaps: s–s, s–p, p–p head-on.</p>
+</div>
+<div class="subsection"><div class="subsection-heading">Pi (π) Bond</div>
+<p>Formed by <strong>sideways overlap</strong> of parallel p orbitals.</p>
+</div>
+<div class="subsection"><div class="subsection-heading">Comparison</div>
+<div class="table-wrap"><table class="compare-table">
+<tr><th>Sigma (σ)</th><th>Pi (π)</th></tr>
+<tr><td>Axial overlap</td><td>Lateral/sideways overlap</td></tr>
+<tr><td>s–s, s–p, p–p head-on</td><td>Sideways p–p only</td></tr>
+<tr><td>Only one σ between two atoms</td><td>More than one π may occur</td></tr>
+<tr><td>Cylindrically symmetrical electron density</td><td>Electron density at right angles to bond axis</td></tr>
+<tr><td>Relatively strong</td><td>Relatively weak</td></tr>
+<tr><td>Free rotation possible</td><td>Free rotation NOT possible</td></tr>
+<tr><td>Can exist independently</td><td>Forms only after σ bond</td></tr>
+</table></div>
+</div>`
+    },
+    {
+      num: '12', title: 'Hybridization', content: `
+<div class="callout callout-def"><div class="callout-label">Definition</div>
+Hybridization is the mixing of atomic orbitals of nearly the same energy to produce an <strong>equal number</strong> of new, identical hybrid orbitals.
+</div>
+<div class="subsection"><div class="subsection-heading">Conditions</div>
+<ol style="margin-left:20px;margin-top:8px">
+<li>Orbitals must belong to the <em>same atom</em>.</li>
+<li>Orbitals must have <em>nearly equal energies</em>.</li>
+</ol>
+</div>
+<div class="subsection"><div class="subsection-heading">Characteristics</div>
+<ul>
+<li>Number of hybrid orbitals = number of atomic orbitals mixed.</li>
+<li>Hybrid orbitals of one type are equivalent in shape and energy.</li>
+<li>A bonding hybrid orbital initially has one electron; maximum occupancy = two paired electrons.</li>
+<li>Hybrid orbitals orient to maximise separation (repulsion).</li>
+</ul>
+</div>
+<div class="subsection"><div class="subsection-heading">Types of Hybridization</div>
+<div class="table-wrap"><table>
+<tr><th>Type</th><th>Mix</th><th>Orbitals</th><th>Geometry</th><th>Angle</th><th>Example</th></tr>
+<tr><td><strong>sp³</strong></td><td>1s + 3p</td><td>4 sp³</td><td>Tetrahedral</td><td>109.5°</td><td>CH₄</td></tr>
+<tr><td><strong>sp²</strong></td><td>1s + 2p</td><td>3 sp²</td><td>Trigonal planar</td><td>120°</td><td>C₂H₄</td></tr>
+<tr><td><strong>sp</strong></td><td>1s + 1p</td><td>2 sp</td><td>Linear</td><td>180°</td><td>C₂H₂</td></tr>
+<tr><td><strong>sp³d</strong></td><td>1s+3p+1d</td><td>5 sp³d</td><td>Trigonal bipyramidal</td><td>90°/120°</td><td>PCl₅</td></tr>
+<tr><td><strong>sp³d²</strong></td><td>1s+3p+2d</td><td>6 sp³d²</td><td>Octahedral</td><td>90°</td><td>SF₆</td></tr>
+</table></div>
+<div class="callout callout-note"><div class="callout-label">sp³d note (PCl₅)</div>
+Axial bonds experience greater repulsion from equatorial bonds. Therefore axial bonds are slightly longer and weaker, contributing to the reactivity of PCl₅.
+</div>
+</div>`
+    },
+    {
+      num: '13', title: 'Molecular Orbital Theory', content: `
+<div class="callout callout-def"><div class="callout-label">Definition</div>
+MOT describes molecular electronic structure using <strong>molecular orbitals</strong> that may extend over several atoms or the whole molecule. Uses the <strong>LCAO</strong> (Linear Combination of Atomic Orbitals) method.
+</div>
+<div class="subsection"><div class="subsection-heading">Main Postulates</div>
+<ol style="margin-left:20px;margin-top:8px">
+<li style="margin-bottom:6px">The electron wave function in a molecule is a <em>molecular orbital</em>.</li>
+<li style="margin-bottom:6px">AOs of nearly equal energy and appropriate symmetry combine to form equal numbers of MOs.</li>
+<li style="margin-bottom:6px">Lower-energy MO = <strong>bonding MO</strong>; higher-energy MO = <strong>antibonding MO</strong>.</li>
+<li style="margin-bottom:6px">Electrons fill MOs by Aufbau principle, Pauli exclusion principle, Hund's rule.</li>
+</ol>
+</div>
+<div class="subsection"><div class="subsection-heading">H₂ Molecular Orbitals</div>
+<div class="formula-block"><div class="formula-label">H₂ Configuration</div><div class="formula-body">(σ1s)²(σ*1s)⁰</div></div>
+<div class="table-wrap"><table>
+<tr><th>MO Type</th><th>Interference</th><th>Electron Probability</th><th>Effect</th></tr>
+<tr><td>Bonding (σ1s)</td><td>Constructive</td><td>Increased between nuclei</td><td>Stabilises molecule</td></tr>
+<tr><td>Antibonding (σ*1s)</td><td>Destructive</td><td>Reduced/zero (nodal plane)</td><td>Destabilises molecule</td></tr>
+</table></div>
+</div>
+<div class="subsection"><div class="subsection-heading">Conditions for MO Formation</div>
+<ol style="margin-left:20px;margin-top:8px">
+<li style="margin-bottom:6px"><strong>Similar energy:</strong> 1s + 1s can combine; 1s of one atom cannot combine with 2s/2p of another (source example).</li>
+<li style="margin-bottom:6px"><strong>Same symmetry:</strong> pₓ can combine with pₓ; pₓ cannot combine with pz.</li>
+<li><strong>Effective overlap:</strong> Atomic orbitals must overlap to a reasonable extent.</li>
+</ol>
+</div>
+<div class="subsection"><div class="subsection-heading">Bond Order & Magnetism</div>
+<div class="formula-block"><div class="formula-label">Bond Order Formula</div><div class="formula-body">Bond order = (N_b − N_a) / 2
+
+where N_b = bonding MO electrons
+      N_a = antibonding MO electrons</div></div>
+<ul>
+<li>Bond order > 0 → stable bond formation</li>
+<li>Bond order = 0 → unstable; bond not formed</li>
+<li>Unpaired electrons → <strong>paramagnetic</strong></li>
+<li>All electrons paired → <strong>diamagnetic</strong></li>
+</ul>
+</div>
+<div class="subsection"><div class="subsection-heading">Source MO Examples</div>
+<div class="problem-block">
+<div class="problem-header" onclick="toggleProblem(this)">
+<span class="problem-label">Example 1</span>
+<span class="problem-title">8 bonding, 4 antibonding electrons</span>
+<span class="problem-toggle"><svg class="icon icon-sm" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></span>
+</div>
+<div class="problem-body">
+<div class="formula-block"><div class="formula-body">Bond order = (8 − 4) / 2 = 2</div></div>
+<div class="problem-answer"><div class="answer-label">Result</div>Bond order = 2; species is <strong>paramagnetic</strong> (two unpaired electrons). The source labels this as O₂.</div>
+</div>
+</div>
+<div class="problem-block" style="margin-top:12px">
+<div class="problem-header" onclick="toggleProblem(this)">
+<span class="problem-label">Example 2</span>
+<span class="problem-title">8 bonding, 2 antibonding electrons</span>
+<span class="problem-toggle"><svg class="icon icon-sm" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></span>
+</div>
+<div class="problem-body">
+<div class="formula-block"><div class="formula-body">Bond order = (8 − 2) / 2 = 3</div></div>
+<div class="problem-answer"><div class="answer-label">Result</div>Bond order = 3; source states diamagnetic — but also labels this as "O₂". <span style="color:var(--red)">⚠ Source labeling inconsistency preserved as-is.</span></div>
+</div>
+</div>
+</div>
+<div class="callout callout-note"><div class="callout-label">Important Note</div>
+The relative energies of σ and π bonding MOs are reversed in some second-row diatomics (source note).
+</div>`
+    },
+    {
+      num: '14', title: 'Formula Sheet & Revision', content: `
+<div class="subsection"><div class="subsection-heading">Must Memorise</div>
+<ul>
+<li>Ionic bond definition; factors favouring ionic bonding</li>
+<li>Covalent bond definition; nonpolar vs polar covalent</li>
+<li>Octet rule and all four limitations</li>
+<li>Lewis structures and resonance</li>
+<li>Fajan's rules (all 3)</li>
+<li>Metallic bonding (electron sea model)</li>
+<li>Hydrogen-bond types with examples</li>
+<li>VSEPR repulsion order: LP–LP > LP–BP > BP–BP</li>
+<li>All VSEPR geometries and angles</li>
+<li>VBT postulates; σ vs π differences</li>
+<li>All hybridization types and geometries</li>
+<li>MOT postulates; bond order formula; para/diamagnetism</li>
+</ul>
+</div>
+<div class="subsection"><div class="subsection-heading">Key Numerical Facts</div>
+<div class="formula-block"><div class="formula-label">Quick Reference</div><div class="formula-body">EN(Na) = 0.9 | EN(Cl) = 3.0 | diff = 2.1 → ionic
+EN(F) = 4.0  | EN(Cs) = 0.7 | diff = 3.3 → ionic
+sp³ angle = 109.5°
+sp²  angle = 120°
+sp   angle = 180°
+Bond order = (N_b − N_a) / 2
+ΔH_net NaCl (PDF) = −153</div></div>
+</div>`,
+
+    },
+  ]
+},
+
+// ─────────────────────────────────────────────────────
+// 2. CHEMICAL KINETICS
+// ─────────────────────────────────────────────────────
+{
+  id: 2,
+  code: 'CK',
+  title: 'Chemical Kinetics',
+  source: 'Chemical Kinetics.pdf (56 pages)',
+  desc: 'Rate of reaction; rate laws; reaction order; integration methods; half-life; Arrhenius equation; catalysts; collision theory; transition-state theory.',
+  tags: ['Rate Laws', 'Arrhenius', 'Half-life', 'Catalysis'],
+  formulas: [
+    'Rate = k[A]^α[B]^β',
+    'First order: ln([A]₀/[A]) = kt; t₁/₂ = 0.693/k',
+    'Second order: 1/[A] − 1/[A]₀ = kt',
+    'Zero order: [A] = [A]₀ − kt',
+    'k = A·e^(−Ea/RT)',
+    'ln(k₁/k₂) = (Ea/R)(1/T₂ − 1/T₁)',
+  ],
+  sections: [
+    {
+      num: '1', title: 'Introduction to Chemical Kinetics', content: `
+<div class="callout callout-def"><div class="callout-label">Definition</div>
+Chemical kinetics (reaction kinetics) is the study of the <strong>rate of chemical processes</strong>.
+</div>
+<div class="subsection"><div class="subsection-heading">Rate of a Reaction</div>
+<div class="formula-block"><div class="formula-label">Rate Definition</div><div class="formula-body">r = ΔC / Δt
+
+Instantaneous rate = ± d[concentration]/dt
+(use sign to make rate positive)</div></div>
+<ul>
+<li>Rate describes: formation of product, loss of reactant, or change of intermediate.</li>
+<li>Product concentration generally <em>increases</em> with time.</li>
+<li>Reactant concentration generally <em>decreases</em> with time.</li>
+</ul>
+</div>
+<div class="subsection"><div class="subsection-heading">Types of Rate</div>
+<ul>
+<li><strong>Initial rate</strong> — at t = 0</li>
+<li><strong>Average rate</strong> — over a time interval</li>
+<li><strong>Instantaneous rate</strong> — at a specific moment (preferred, since rate changes with time)</li>
+</ul>
+</div>
+<div class="subsection"><div class="subsection-heading">Units of Rate</div>
+<p>Typical unit: <strong>mol L⁻¹ s⁻¹</strong> (also mol dm⁻³ s⁻¹). For gaseous reactions: pressure/time (e.g. torr s⁻¹).</p>
+</div>`
+    },
+    {
+      num: '2', title: 'Rate Law & Reaction Order', content: `
+<div class="formula-block"><div class="formula-label">General Rate Law</div><div class="formula-body">Rate = k[A]^α[B]^β ...
+
+Overall order = α + β
+α, β = partial orders w.r.t. A, B</div></div>
+<div class="subsection"><div class="subsection-heading">Rate Constant k</div>
+<ul>
+<li>Proportionality constant; also called specific rate or velocity constant.</li>
+<li><strong>Independent</strong> of concentration and time.</li>
+<li>Has a specific value at a given temperature.</li>
+</ul>
+<div class="table-wrap"><table>
+<tr><th>Order</th><th>Rate Law</th><th>Unit of k</th></tr>
+<tr><td>Zero</td><td>Rate = k</td><td>mol L⁻¹ s⁻¹</td></tr>
+<tr><td>First</td><td>Rate = k[A]</td><td>s⁻¹</td></tr>
+<tr><td>Second</td><td>Rate = k[A]²</td><td>L mol⁻¹ s⁻¹</td></tr>
+<tr><td>n</td><td>Rate = k[A]ⁿ</td><td>[concentration]^(1−n) s⁻¹</td></tr>
+</table></div>
+</div>
+<div class="callout callout-warn"><div class="callout-label">Critical Point</div>
+<strong>Reaction order is NOT necessarily the stoichiometric coefficient.</strong> Order must be determined experimentally.<br><br>
+Fractional orders can occur. Example: CH₃CHO → CH₄ + CO has Rate = k[CH₃CHO]^(3/2), order = 1.5.
+</div>
+<div class="subsection"><div class="subsection-heading">Law of Mass Action</div>
+<p>Formulated by Peter Waage and Cato Guldberg (1864). States that the rate of an <em>elementary reaction</em> is proportional to the product of the concentrations of the participating molecules.</p>
+</div>`
+    },
+    {
+      num: '3', title: 'Methods for Determining Order', content: `
+<div class="callout callout-important"><div class="callout-label">The Four Methods</div>
+<ol style="margin-left:18px;margin-top:4px">
+<li>Differential method</li>
+<li>Isolation method</li>
+<li>Method of integration</li>
+<li>Half-life method</li>
+</ol>
+</div>
+<div class="subsection"><div class="subsection-heading">1. Differential Method</div>
+<div class="formula-block"><div class="formula-label">Log-Log Plot</div><div class="formula-body">log r = log k + n·log C
+
+Plot: y = log r, x = log C
+slope = n (reaction order)
+intercept = log k</div></div>
+<p>Two implementations:</p>
+<ul>
+<li><strong>Different initial concentrations:</strong> Several runs with different C₀; measure initial rates → plot log r vs log C → <em>true order (n_C)</em>. Avoids product interference.</li>
+<li><strong>Different times (one run):</strong> Measure rates at different times → <em>order w.r.t. time (n_t)</em>.</li>
+</ul>
+<div class="formula-block"><div class="formula-label">Two-Concentration Formula</div><div class="formula-body">n = log(r₁/r₂) / log(C₁/C₂)</div></div>
+</div>
+<div class="subsection"><div class="subsection-heading">2. Isolation Method</div>
+<p>All reactants except one are in excess → apparent order = order w.r.t. isolated reactant.</p>
+<div class="callout callout-warn"><div class="callout-label">Limitation</div>Taking a reactant in very large excess can sometimes change the mechanism of a composite reaction.</div>
+</div>
+<div class="subsection"><div class="subsection-heading">3. Method of Integration</div>
+<ol style="margin-left:20px;margin-top:8px">
+<li>Guess the order.</li>
+<li>Write the differential rate equation.</li>
+<li>Integrate it.</li>
+<li>Calculate k.</li>
+<li>Constant k supports the assumed order.</li>
+</ol>
+</div>`
+    },
+    {
+      num: '4', title: 'Integrated Rate Laws', content: `
+<div class="subsection"><div class="subsection-heading">Zero-Order Reaction</div>
+<div class="formula-block"><div class="formula-label">Zero Order</div><div class="formula-body">Rate = k
+[A] = [A]₀ − kt
+Plot [A] vs t → slope = −k
+t₁/₂ = [A]₀ / (2k)  ∝ [A]₀</div></div>
+</div>
+<div class="subsection"><div class="subsection-heading">First-Order Reaction</div>
+<div class="formula-block"><div class="formula-label">First Order</div><div class="formula-body">Rate = k[A]
+−d[A]/dt = k[A]
+
+ln([A]₀/[A]) = kt
+ln[A] = ln[A]₀ − kt
+log([A]₀/[A]) = kt / 2.303
+
+Plot ln[A] vs t → slope = −k
+Plot log([A]₀/[A]) vs t → slope = k/2.303
+
+t₁/₂ = 0.693 / k  (independent of [A]₀)</div></div>
+</div>
+<div class="subsection"><div class="subsection-heading">Second-Order Reaction</div>
+<div class="formula-block"><div class="formula-label">Second Order (single reactant)</div><div class="formula-body">Rate = k[A]²
+−d[A]/dt = k[A]²
+
+1/[A] − 1/[A]₀ = kt
+
+t₁/₂ = 1 / (k·[A]₀)  ∝ 1/[A]₀</div></div>
+<p>For A + B → P with equal initial concentrations, the same form applies. For unequal concentrations:</p>
+<div class="formula-block"><div class="formula-body">Rate = k(a₀ − x)(b₀ − x)</div></div>
+</div>
+<div class="subsection"><div class="subsection-heading">nth-Order Reaction</div>
+<div class="formula-block"><div class="formula-label">nth Order (n ≠ 1)</div><div class="formula-body">1/[A]^(n−1) − 1/[A]₀^(n−1) = (n−1)kt
+
+t₁/₂ = [2^(n−1) − 1] / [(n−1)·k·[A]₀^(n−1)]
+
+(t₁/₂)₁/(t₁/₂)₂ = ([A]₀,₂/[A]₀,₁)^(n−1)</div></div>
+</div>
+<div class="subsection"><div class="subsection-heading">Half-Life Summary</div>
+<div class="table-wrap"><table>
+<tr><th>Order</th><th>t₁/₂ Formula</th><th>Dependence on [A]₀</th></tr>
+<tr><td>Zero</td><td>[A]₀ / (2k)</td><td>Directly proportional</td></tr>
+<tr><td>First</td><td>0.693 / k</td><td>Independent</td></tr>
+<tr><td>Second</td><td>1 / (k[A]₀)</td><td>Inversely proportional</td></tr>
+</table></div>
+<p><strong>t₁/₄:</strong> time to reduce to ¼ of initial (75% completion). <strong>t₃/₄:</strong> concentration at ¾ initial (25% completion).</p>
+</div>`
+    },
+    {
+      num: '5', title: 'Factors Affecting Rate', content: `
+<div class="callout callout-important"><div class="callout-label">Factors Listed in Source</div>
+<ol style="margin-left:18px;margin-top:4px">
+<li>Concentration of reactants</li>
+<li>Nature of reactants (physical state, surface area, molecular nature)</li>
+<li>Temperature</li>
+<li>Catalyst</li>
+</ol>
+</div>
+<div class="subsection"><div class="subsection-heading">Physical State & Surface Area</div>
+<p>Rate trend: <strong>gaseous phase > solution phase > solid phase</strong>. Greater surface area → greater contact → faster reaction.</p>
+</div>
+<div class="subsection"><div class="subsection-heading">Molecular Nature</div>
+<p>Greater structural similarity between reactant and product can mean faster reaction (source: <em>not always</em>). Less bond rearrangement needed → faster reaction.</p>
+<p>Examples: <code>NO + ½O₂ → NO₂</code> vs <code>CH₄ + 2O₂ → CO₂ + 2H₂O</code></p>
+</div>
+<div class="subsection"><div class="subsection-heading">Effect of Temperature</div>
+<p>Temperature can initiate a reaction and increase its rate. For many reactions, increasing T by 10 K doubles or triples the rate.</p>
+<div class="formula-block"><div class="formula-label">Temperature Coefficient</div><div class="formula-body">Temperature coefficient = k(T + 10 K) / k(T K)</div></div>
+<p>Temperature also affects ΔG: <strong>ΔG = ΔH − TΔS</strong>. Increasing T increases TΔS and can make ΔG negative, enabling reaction initiation.</p>
+</div>`
+    },
+    {
+      num: '6', title: 'Arrhenius Equation', content: `
+<div class="formula-block"><div class="formula-label">Arrhenius Equation</div><div class="formula-body">k = A · e^(−Ea/RT)
+
+ln k = ln A − Ea/(RT)
+
+where:
+  k  = rate constant
+  A  = pre-exponential / frequency factor
+  Ea = activation energy
+  R  = gas constant
+  T  = absolute temperature</div></div>
+<div class="subsection"><div class="subsection-heading">Arrhenius Plot</div>
+<div class="formula-block"><div class="formula-body">Plot: y = ln k, x = 1/T
+slope = −Ea/R
+intercept = ln A
+
+A and Ea are called Arrhenius parameters.
+Higher Ea → rate constant depends more strongly on T.</div></div>
+</div>
+<div class="subsection"><div class="subsection-heading">Two-Temperature Form</div>
+<div class="formula-block"><div class="formula-label">Two-Temperature Arrhenius</div><div class="formula-body">ln(k₁/k₂) = (Ea/R)(1/T₂ − 1/T₁)</div></div>
+</div>
+<div class="subsection"><div class="subsection-heading">Activation Energy</div>
+<div class="callout callout-important"><div class="callout-label">Activation Energy</div>
+Molecules need a minimum amount of energy (the <strong>activation energy, Ea</strong>) to react.
+<ul style="margin-top:6px">
+<li>Lower activation barrier → faster reaction.</li>
+<li>Even an exothermic reaction requires activation energy.</li>
+</ul>
+</div>
+</div>`
+    },
+    {
+      num: '7', title: 'Catalysts', content: `
+<div class="callout callout-def"><div class="callout-label">Catalyst</div>
+A catalyst may increase or decrease reaction rate by providing an alternative pathway with <strong>lower activation energy</strong>.
+<ul style="margin-top:6px">
+<li><strong>Positive catalyst/promoter</strong> → increases rate</li>
+<li><strong>Negative catalyst/inhibitor</strong> → decreases rate</li>
+</ul>
+</div>
+<div class="subsection"><div class="subsection-heading">Types of Catalysis</div>
+<div class="table-wrap"><table>
+<tr><th>Type</th><th>Phase Relationship</th><th>Examples</th></tr>
+<tr><td>Homogeneous</td><td>Same phase as reactants</td><td>Acid-base catalysis, enzymatic catalysis</td></tr>
+<tr><td>Heterogeneous</td><td>Different phase from reactants</td><td>Solid catalyst for gas-phase reaction</td></tr>
+<tr><td>Enzymatic</td><td>Biological catalysts</td><td>Key-and-lock mechanism (substrate fits active site)</td></tr>
+</table></div>
+</div>
+<div class="callout callout-important"><div class="callout-label">Effect on Equilibrium</div>
+A catalyst affects forward and backward reactions <em>equally</em>. It does <strong>not change the state of equilibrium</strong> — only hastens the approach to equilibrium.
+</div>`
+    },
+    {
+      num: '8', title: 'Collision Theory', content: `
+<div class="callout callout-def"><div class="callout-label">Collision Theory</div>
+Oldest theory based on kinetic theory of collisions. Originally proposed for gas-phase reactions. Molecules must collide with sufficient energy and correct orientation.
+</div>
+<div class="subsection"><div class="subsection-heading">Assumptions</div>
+<ul>
+<li>Molecules/atoms behave as hard spheres.</li>
+<li>Motion follows classical/Newtonian mechanics.</li>
+<li>Molecular size negligible compared with intermolecular distance.</li>
+<li>Molecules move and collide due to kinetic energy.</li>
+<li>Collisions are perfectly elastic.</li>
+<li>Maxwell distribution describes molecular velocities.</li>
+</ul>
+</div>
+<div class="subsection"><div class="subsection-heading">Collision Frequencies</div>
+<div class="formula-block"><div class="formula-label">Mean Velocity & Collision Number</div><div class="formula-body">ū = √(8k_B T / πm)         [mean velocity of molecule]
+
+ū_rel = √(8k_B T / πμ)    [mean relative velocity A–B]
+where μ = m_A·m_B / (m_A + m_B)  [reduced mass]
+
+Z_AB = N_A·N_B·π(r_A+r_B)²·ū_rel
+     = N_A·N_B·σ·√(8k_B T / πμ)
+where σ = π(r_A+r_B)²  [collision cross-section]</div></div>
+</div>
+<div class="subsection"><div class="subsection-heading">Effective Collisions</div>
+<p>Fraction of molecules with sufficient energy (≥ Ea) is proportional to:</p>
+<div class="formula-block"><div class="formula-body">e^(−Ea/RT)   [Boltzmann factor]
+
+Rate = (Z_AB · e^(−Ea/RT)) / N
+
+For bimolecular: r = k[A][B]
+k = bimolecular / second-order rate constant</div></div>
+<p>A <strong>steric factor</strong> is introduced when comparing collision theory with the Arrhenius equation.</p>
+</div>`
+    },
+    {
+      num: '9', title: 'Transition-State Theory', content: `
+<div class="callout callout-def"><div class="callout-label">Also Known As</div>
+Activated Complex Theory · Absolute Reaction Rate Theory<br>
+Proposed by Eyring, Evans, Polanyi (1935)
+</div>
+<div class="subsection"><div class="subsection-heading">Central Idea</div>
+<p>Reactants form a short-lived <strong>activated complex</strong> (transition state) with a structure intermediate between reactants and products.</p>
+<div class="callout callout-important"><div class="callout-label">Reaction Coordinate Diagram</div>
+Reactants (R) → Transition State (T.S.) → Products (P)<br>
+The energy barrier from R to T.S. is the <strong>activation energy (Ea)</strong>.
+</div>
+</div>`
+    },
+    {
+      num: '10', title: 'Numerical Problem', content: `
+<div class="problem-block">
+<div class="problem-header" onclick="toggleProblem(this)">
+<span class="problem-label">Numerical Problem</span>
+<span class="problem-title">Determine orders and rate constant from initial-rate data</span>
+<span class="problem-toggle"><svg class="icon icon-sm" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></span>
+</div>
+<div class="problem-body">
+<div class="problem-step"><div class="problem-step-label">Data Table</div>
+<div class="table-wrap"><table>
+<tr><th>Run</th><th>[A] mol dm⁻³</th><th>[B] mol dm⁻³</th><th>Initial Rate mol dm⁻³ s⁻¹</th></tr>
+<tr><td>1</td><td>0.50</td><td>1.0</td><td>2.0</td></tr>
+<tr><td>2</td><td>0.50</td><td>2.0</td><td>8.0</td></tr>
+<tr><td>3</td><td>0.50</td><td>3.0</td><td>18.0</td></tr>
+<tr><td>4</td><td>1.0</td><td>3.0</td><td>36.0</td></tr>
+<tr><td>5</td><td>2.0</td><td>3.0</td><td>72.0</td></tr>
+</table></div>
+</div>
+<div class="problem-step"><div class="problem-step-label">Order w.r.t. A (runs 3–5, B constant)</div>
+<p>PDF conclusion: when A doubles, rate doubles → <strong>m = 1</strong></p>
+<div class="callout callout-warn" style="margin-top:8px"><div class="callout-label">Source Note</div>The source also contains a statement that "when A becomes four times, the rate becomes three times as large" — internally inconsistent with the conclusion m = 1. The guide preserves the PDF's stated conclusion (m = 1) rather than correcting it.</div>
+</div>
+<div class="problem-step"><div class="problem-step-label">Order w.r.t. B (runs 1 & 2, [A] constant)</div>
+<div class="formula-block"><div class="formula-body">B doubles (1.0 → 2.0), rate: 2.0 → 8.0 = 4×
+4 = 2^n  →  n = 2</div></div>
+</div>
+<div class="problem-step"><div class="problem-step-label">Rate Equation</div>
+<div class="formula-block"><div class="formula-body">Rate = k[A][B]²</div></div>
+</div>
+<div class="problem-step"><div class="problem-step-label">Rate Constant (using Run 1)</div>
+<div class="formula-block"><div class="formula-body">2.0 = k(0.50)(1.0)²
+k = 2.0 / 0.50 = 4.0 dm³ mol⁻¹ s⁻¹</div></div>
+</div>
+<div class="problem-answer"><div class="answer-label">Final Answers</div>
+Order w.r.t. A = <strong>1</strong><br>
+Order w.r.t. B = <strong>2</strong><br>
+Overall order = <strong>3</strong><br>
+Rate law = <strong>Rate = 4[A][B]²</strong><br>
+k = <strong>4.0 dm³ mol⁻¹ s⁻¹</strong>
+</div>
+</div>
+</div>`,
+
+    }
+  ]
+},
+
+// ─────────────────────────────────────────────────────
+// 3. ELECTROCHEMISTRY
+// ─────────────────────────────────────────────────────
+{
+  id: 3,
+  code: 'EC',
+  title: 'Electrochemistry',
+  source: 'Electrochemistry.pdf (63 pages)',
+  desc: 'Electrolytes; electrolysis; Faraday\'s laws; electrochemical cells; EMF; electrode potentials; Nernst equation; batteries; fuel cells; electroplating; corrosion.',
+  tags: ['Faraday', 'EMF', 'Nernst', 'Corrosion'],
+  formulas: [
+    'm = ZIt | w₁/w₂ = Z₁/Z₂',
+    'Ecell = Ecathode − Eanode',
+    'ΔG = −nFEcell | ΔG° = −nFE°cell',
+    'E = E° − (0.0592/n)logQ (25°C)',
+    'F = 96,500 C mol⁻¹',
+  ],
+  sections: [
+    {
+      num: '1', title: 'Electrochemistry Basics', content: `
+<div class="callout callout-def"><div class="callout-label">Definition</div>
+Electrochemistry deals with the relationship between <strong>electrical energy and chemical energy</strong>:
+<ul style="margin-top:6px">
+<li>Chemical reactions brought about by electric current.</li>
+<li>Chemical reactions that produce electrical current.</li>
+</ul>
+</div>
+<div class="subsection"><div class="subsection-heading">Electrolytes vs Non-electrolytes</div>
+<div class="table-wrap"><table>
+<tr><th>Type</th><th>Description</th><th>Examples</th></tr>
+<tr><td>Electrolyte</td><td>Conducts electricity in solution and fused state</td><td>NaCl, HCl, CuSO₄</td></tr>
+<tr><td>Non-electrolyte</td><td>Does not conduct electricity</td><td>Sugar, urea, alcohol</td></tr>
+<tr><td>Strong electrolyte</td><td>Completely ionizes in solution</td><td>NaOH, KCl, NaCl</td></tr>
+<tr><td>Weak electrolyte</td><td>Does not completely ionize</td><td>Acetic acid, oxalic acid</td></tr>
+</table></div>
+</div>`
+    },
+    {
+      num: '2', title: 'Electrolysis', content: `
+<div class="callout callout-def"><div class="callout-label">Definition</div>
+Electrolysis = decomposition of an electrolyte by passing electric current.<br>
+<strong>Electrical energy → Chemical energy</strong>
+</div>
+<div class="subsection"><div class="subsection-heading">HCl Electrolysis</div>
+<div class="table-wrap"><table>
+<tr><th>Electrode</th><th>Ion</th><th>Process</th><th>Product</th></tr>
+<tr><td>Cathode (−)</td><td>H⁺ (cation)</td><td>Reduction: gain e⁻</td><td>H₂ gas</td></tr>
+<tr><td>Anode (+)</td><td>Cl⁻ (anion)</td><td>Oxidation: lose e⁻</td><td>Cl₂ gas</td></tr>
+</table></div>
+</div>
+<div class="subsection"><div class="subsection-heading">Industrial Applications</div>
+<ol style="margin-left:20px;margin-top:8px">
+<li>Electroplating</li>
+<li>Anodization of aluminium</li>
+<li>Electrolytic refining of metals</li>
+</ol>
+</div>`
+    },
+    {
+      num: '3', title: "Faraday's Laws", content: `
+<div class="subsection"><div class="subsection-heading">First Law</div>
+<div class="callout callout-def"><div class="callout-label">Statement</div>
+The amount of product liberated at an electrode is directly proportional to the quantity of electricity passed.
+</div>
+<div class="formula-block"><div class="formula-label">Faraday First Law</div><div class="formula-body">m ∝ Q
+Q = It
+m = ZIt   (Z = electrochemical equivalent)
+
+If I = 1 A, t = 1 s: m = Z
+∴ Z = mass deposited by one coulomb</div></div>
+<p><strong>Applications:</strong> Calculate electrochemical equivalents; calculate masses produced by a known quantity of electricity.</p>
+</div>
+<div class="subsection"><div class="subsection-heading">Second Law</div>
+<div class="callout callout-def"><div class="callout-label">Statement</div>
+For the same quantity of electricity passed through different electrolytes, deposited masses are proportional to their chemical equivalents/equivalent weights.
+</div>
+<div class="formula-block"><div class="formula-label">Faraday Second Law</div><div class="formula-body">w ∝ Z
+w₁/w₂ = Z₁/Z₂</div></div>
+<p><strong>Applications:</strong> Calculate equivalent weights of metals; unit of electric charge; Avogadro's number.</p>
+</div>`
+    },
+    {
+      num: '4', title: 'Electrochemical Cells', content: `
+<div class="table-wrap"><table>
+<tr><th>Cell Type</th><th>Description</th><th>Energy Conversion</th></tr>
+<tr><td>Voltaic/Galvanic</td><td>Spontaneous reaction generates current</td><td>Chemical → Electrical</td></tr>
+<tr><td>Electrolytic</td><td>External current drives nonspontaneous reaction</td><td>Electrical → Chemical</td></tr>
+</table></div>
+<div class="subsection"><div class="subsection-heading">Zn–Cu Voltaic Cell</div>
+<div class="formula-block"><div class="formula-label">Half-Reactions</div><div class="formula-body">At Zn (anode):   Zn → Zn²⁺ + 2e⁻    [oxidation]
+At Cu (cathode): Cu²⁺ + 2e⁻ → Cu    [reduction]
+
+Overall: Zn(s) + Cu²⁺(aq) → Zn²⁺(aq) + Cu(s)
+
+Electron flow: Zn electrode → external circuit → Cu electrode</div></div>
+</div>
+<div class="subsection"><div class="subsection-heading">Salt Bridge</div>
+<p>Functions: allows ion flow between half-cells; prevents direct mixing; prevents direct reaction; maintains electrical continuity.</p>
+</div>
+<div class="callout callout-important"><div class="callout-label">Memory Rule</div>
+<strong>Anode = Oxidation | Cathode = Reduction</strong>
+</div>
+<div class="subsection"><div class="subsection-heading">Cell Notation</div>
+<div class="formula-block"><div class="formula-label">Example Notation</div><div class="formula-body">Zn(s)|Zn²⁺(aq)||Cu²⁺(aq)|Cu(s)
+
+| = phase boundary
+|| = salt bridge
+Left = anode | Right = cathode
+
+Gas electrode: Pt|H₂(g)|H⁺(aq)
+Full: Zn(s)|Zn²⁺(1.0 M)||H⁺(aq)|H₂(1.0 atm)|Pt</div></div>
+</div>`
+    },
+    {
+      num: '5', title: 'EMF & Electrode Potentials', content: `
+<div class="callout callout-def"><div class="callout-label">EMF</div>
+The maximum potential difference between electrodes of a voltaic cell.<br>
+Unit: <strong>volt (V)</strong> — 1 V = 1 J/C
+</div>
+<div class="formula-block"><div class="formula-label">Cell Potential</div><div class="formula-body">Ecell = oxidation potential + reduction potential
+Ecell = E_cathode − E_anode   (both as reduction potentials)
+
+Standard conditions: 1 M concentration, 1 atm gas, 25°C</div></div>
+<div class="subsection"><div class="subsection-heading">Worked Problems</div>
+<div class="problem-block">
+<div class="problem-header" onclick="toggleProblem(this)">
+<span class="problem-label">Problem</span>
+<span class="problem-title">Standard EMF — Cd–Ag Cell</span>
+<span class="problem-toggle"><svg class="icon icon-sm" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></span>
+</div>
+<div class="problem-body">
+<div class="problem-step"><div class="problem-step-label">Given</div>
+Cd²⁺ + 2e⁻ → Cd, E° = −0.40 V<br>
+Ag⁺ + e⁻ → Ag, E° = +0.80 V
+</div>
+<div class="problem-step"><div class="problem-step-label">Cell Notation (spontaneous)</div>
+<div class="formula-block"><div class="formula-body">Cd(s)|Cd²⁺(aq)||Ag⁺(aq)|Ag(s)
+Cd = anode (more negative E°); Ag = cathode</div></div>
+</div>
+<div class="problem-step"><div class="problem-step-label">Cell Potential</div>
+<div class="formula-block"><div class="formula-body">E°cell = 0.80 − (−0.40) = +1.20 V  [spontaneous]
+Reverse: E°cell = −0.40 − 0.80 = −1.20 V  [nonspontaneous]</div></div>
+</div>
+<div class="problem-answer"><div class="answer-label">Overall Reaction</div>
+Cd(s) + 2Ag⁺(aq) → Cd²⁺(aq) + 2Ag(s)<br>
+<strong>E°cell = +1.20 V</strong>
+</div>
+</div>
+</div>
+
+<div class="problem-block" style="margin-top:12px">
+<div class="problem-header" onclick="toggleProblem(this)">
+<span class="problem-label">Problem</span>
+<span class="problem-title">Standard EMF — Al–Fe Cell</span>
+<span class="problem-toggle"><svg class="icon icon-sm" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></span>
+</div>
+<div class="problem-body">
+<div class="problem-step"><div class="problem-step-label">Given</div>
+Al³⁺ + 3e⁻ → Al, E° = −1.66 V<br>
+Fe²⁺ + 2e⁻ → Fe, E° = −0.41 V
+</div>
+<div class="problem-step"><div class="problem-step-label">Cell</div>
+<div class="formula-block"><div class="formula-body">Al(s)|Al³⁺(aq)||Fe²⁺(aq)|Fe(s)
+Al = anode; Fe = cathode
+E°cell = (−0.41) − (−1.66) = +1.25 V</div></div>
+</div>
+<div class="problem-step"><div class="problem-step-label">Balanced Overall Reaction</div>
+<div class="formula-block"><div class="formula-body">2Al → 2Al³⁺ + 6e⁻
+3Fe²⁺ + 6e⁻ → 3Fe
+─────────────────────────
+2Al + 3Fe²⁺ → 2Al³⁺ + 3Fe</div></div>
+</div>
+<div class="problem-answer"><div class="answer-label">Answer</div><strong>E°cell = +1.25 V</strong></div>
+</div>
+</div>
+</div>`
+    },
+    {
+      num: '6', title: 'ΔG, Free Energy & Nernst Equation', content: `
+<div class="formula-block"><div class="formula-label">Faraday Constant & Free Energy</div><div class="formula-body">F = 96,500 C mol⁻¹
+
+w_max = −nF·E_cell
+ΔG = −nFE_cell
+ΔG° = −nFE°_cell</div></div>
+<div class="formula-block"><div class="formula-label">Nernst Equation</div><div class="formula-body">E = E° − (RT/nF) ln Q
+At 25°C:  E = E° − (0.0592/n) log Q</div></div>
+<div class="subsection"><div class="subsection-heading">Worked Problems</div>
+<div class="problem-block">
+<div class="problem-header" onclick="toggleProblem(this)">
+<span class="problem-label">Problem</span>
+<span class="problem-title">Maximum Electrical Work (H₂ cell, 0.500 g H₂)</span>
+<span class="problem-toggle"><svg class="icon icon-sm" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></span>
+</div>
+<div class="problem-body">
+<div class="problem-step"><div class="problem-step-label">Given</div>E_cell = 0.650 V; 0.500 g H₂ consumed; n = 2</div>
+<div class="problem-step"><div class="problem-step-label">One mole of H₂</div>
+<div class="formula-block"><div class="formula-body">w_max = −(2)(9.65×10⁴)(0.650) = −1.25×10⁵ J</div></div>
+</div>
+<div class="problem-step"><div class="problem-step-label">Scale to 0.500 g</div>
+<div class="formula-block"><div class="formula-body">0.500 g × (1 mol / 2.02 g) × (−1.25×10⁵ J/mol)</div></div>
+</div>
+<div class="problem-answer"><div class="answer-label">Answer (from PDF)</div><strong>w_max ≈ −3.09 × 10⁴ J</strong></div>
+</div>
+</div>
+
+<div class="problem-block" style="margin-top:12px">
+<div class="problem-header" onclick="toggleProblem(this)">
+<span class="problem-label">Problem</span>
+<span class="problem-title">ΔG° for Zn–Ag reaction</span>
+<span class="problem-toggle"><svg class="icon icon-sm" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></span>
+</div>
+<div class="problem-body">
+<div class="problem-step"><div class="problem-step-label">Reaction: Zn(s) + 2Ag⁺(aq) → Zn²⁺(aq) + 2Ag(s)</div></div>
+<div class="problem-step"><div class="problem-step-label">E°cell</div>
+<div class="formula-block"><div class="formula-body">E°cell = 0.80 − (−0.76) = 1.56 V   [n = 2]</div></div>
+</div>
+<div class="problem-step"><div class="problem-step-label">ΔG°</div>
+<div class="formula-block"><div class="formula-body">ΔG° = −(2)(96500)(1.56) = −3.01 × 10⁵ J</div></div>
+</div>
+<div class="problem-answer"><div class="answer-label">Answer</div><strong>ΔG° = −3.01 × 10⁵ J</strong></div>
+</div>
+</div>
+</div>`
+    },
+    {
+      num: '7', title: 'Batteries & Fuel Cells', content: `
+<div class="subsection"><div class="subsection-heading">Cell vs Battery</div>
+<p>A <strong>cell</strong> is the basic building block (two dissimilar electrodes + electrolyte + separator + container). A <strong>battery</strong> is two or more cells in series or parallel.</p>
+<div class="table-wrap"><table>
+<tr><th>Type</th><th>Description</th></tr>
+<tr><td>Primary cell</td><td>Chemical → electrical; becomes exhausted; irreversible reaction</td></tr>
+<tr><td>Secondary cell</td><td>Reversible; can be recharged (storage cell)</td></tr>
+</table></div>
+</div>
+<div class="subsection"><div class="subsection-heading">Alkaline Dry Cell</div>
+<p>Hollow steel drum (cathode) + MnO₂/coal dust + zinc powder + KOH electrolyte + brass collector.</p>
+<div class="formula-block"><div class="formula-label">Half-Reactions</div><div class="formula-body">Anode:   Zn(s) + 2OH⁻(aq) → ZnO(s) + H₂O(l) + 2e⁻   E° = −1.28 V
+Cathode: 2MnO₂(s) + H₂O(l) + 2e⁻ → Mn₂O₃(s) + 2OH⁻(aq)  E° = +0.15 V
+Overall: Zn(s) + 2MnO₂(s) ⇌ Mn₂O₃(s) + ZnO(s)   E° = 1.43 V</div></div>
+</div>
+<div class="subsection"><div class="subsection-heading">Lead–Acid Battery</div>
+<p>Spongy Pb anode; PbO₂ cathode; aqueous H₂SO₄ electrolyte.</p>
+<div class="formula-block"><div class="formula-label">Discharge</div><div class="formula-body">Anode:   Pb + HSO₄⁻ → PbSO₄ + H⁺ + 2e⁻         [oxidation]
+Cathode: PbO₂ + 3H⁺ + HSO₄⁻ + 2e⁻ → PbSO₄ + 2H₂O [reduction]
+Both electrodes become PbSO₄ during discharge.</div></div>
+<div class="formula-block"><div class="formula-label">Charging</div><div class="formula-body">+ electrode: PbSO₄(s) + 2H₂O(l) → PbO₂(s) + 4H⁺(aq) + SO₄²⁻(aq) + 2e⁻
+− electrode: PbSO₄(s) + 2e⁻ → Pb(s) + SO₄²⁻(aq)</div></div>
+</div>
+<div class="subsection"><div class="subsection-heading">Hydrogen–Oxygen Fuel Cell</div>
+<p>H₂ at anode; O₂ at cathode; NaOH or KOH electrolyte; Pt or Ni/NiO electrodes; 50 atm gas pressure (source).</p>
+<div class="formula-block"><div class="formula-label">Fuel Cell Reactions</div><div class="formula-body">Anode:   2H₂(g) + 4OH⁻(aq) → 4H₂O(l) + 4e⁻
+Cathode: 2H₂O(l) + O₂(g) + 4e⁻ → 4OH⁻(aq)
+Overall: 2H₂(g) + O₂(g) → 2H₂O(l)</div></div>
+<p><strong>Advantages (source):</strong> Water only by-product; heat also generated; light (suitable for spacecraft); no storage tank required; non-toxic by-products.</p>
+<p><strong>Types listed:</strong> Polymer electrolyte membrane; hydrogen; hydrocarbon-oxygen; coal-oxygen; alkaline; phosphoric acid; molten carbonate; solid oxide.</p>
+</div>`
+    },
+    {
+      num: '8', title: 'Electroplating & Corrosion', content: `
+<div class="callout callout-def"><div class="callout-label">Electroplating</div>
+Using electrolysis to apply a thin metal layer over another surface.
+<ul style="margin-top:6px">
+<li>Anode = metal being deposited</li>
+<li>Cathode = object being coated</li>
+<li>Electrolyte = salt solution containing ions of plating metal</li>
+</ul>
+</div>
+<div class="subsection"><div class="subsection-heading">Silver Plating Example</div>
+<div class="formula-block"><div class="formula-body">Anode:   Ag(s) → Ag⁺(aq) + e⁻
+Cathode: Ag⁺(aq) + e⁻ → Ag(s)</div></div>
+<p><strong>Uses:</strong> Protective barrier; improved appearance; increased hardness; better adhesion; heat resistance; corrosion prevention.</p>
+</div>
+<div class="problem-block">
+<div class="problem-header" onclick="toggleProblem(this)">
+<span class="problem-label">Sample Problem</span>
+<span class="problem-title">Gold-plated knife setup</span>
+<span class="problem-toggle"><svg class="icon icon-sm" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></span>
+</div>
+<div class="problem-body">
+<div class="formula-block"><div class="formula-body">Anode (gold plate):  Au(s) → Au³⁺(aq) + 3e⁻   [oxidation]
+Cathode (knife):     Au³⁺(aq) + 3e⁻ → Au(s)   [reduction]
+Electrolyte: solution containing Au³⁺ ions</div></div>
+</div>
+</div>
+<div class="subsection"><div class="subsection-heading">Corrosion</div>
+<div class="callout callout-def"><div class="callout-label">Definition</div>Destruction of a material by chemical or electrochemical reaction with its environment, typically involving electron transfer (redox).</div>
+<div class="formula-block"><div class="formula-label">Steel Corrosion (source)</div><div class="formula-body">2Fe + O₂ + 2H₂O → 2Fe(OH)₂          [initial oxidation]
+2Fe(OH)₂ + ½O₂ + H₂O → 2Fe(OH)₃    [secondary oxidation → rust]</div></div>
+<p><strong>Factors accelerating corrosion:</strong> Longer exposure; acidic environment; sulfur gases; higher temperature; moisture with oxygen.</p>
+</div>
+<div class="subsection"><div class="subsection-heading">Corrosion Prevention Methods</div>
+<div class="table-wrap"><table>
+<tr><th>Method</th><th>Mechanism</th></tr>
+<tr><td>Barrier (painting/greasing)</td><td>Prevents O₂ and H₂O from reaching metal</td></tr>
+<tr><td>Sacrificial protection</td><td>More active metal donates electrons; corrodes faster</td></tr>
+<tr><td>Cathodic protection</td><td>Connect metal to negative terminal of battery → continuous e⁻ supply</td></tr>
+<tr><td>Galvanizing</td><td>Coat in zinc; physical barrier + sacrificial protection if scratched</td></tr>
+<tr><td>Electroplating</td><td>Electrically coat with another metal (Au, Ag, Cr)</td></tr>
+</table></div>
+</div>`,
+
+    }
+  ]
+},
+
+// ─────────────────────────────────────────────────────
+// 4. CONDUCTANCE
+// ─────────────────────────────────────────────────────
+{
+  id: 4,
+  code: 'CN',
+  title: 'Conductance',
+  source: 'Conductance.pdf (11 pages)',
+  desc: "Specific conductance; equivalent & molar conductance; strong vs weak electrolytes; Ostwald's dilution law; Kohlrausch's law; dissociation constant; sparingly soluble salts.",
+  tags: ['Conductivity', 'Kohlrausch', 'Ostwald', 'Dissociation'],
+  formulas: [
+    'C = 1/R | κ = (1/R)(L/A)',
+    'Λ = κ × 1000/N | μ = κ × 1000/M',
+    'Kc = α²C/(1−α)',
+    'λ⁰ = λ⁰_a + λ⁰_c  (Kohlrausch)',
+    'α = Λm/Λm⁰',
+  ],
+  sections: [
+    {
+      num: '1', title: 'Conductance & Conductivity', content: `
+<div class="callout callout-def"><div class="callout-label">Conductance</div>
+Indicates how well an electrolytic solution conducts electricity. Reciprocal of resistance.<br>
+<strong>C = 1/R</strong> &nbsp;|&nbsp; Unit: Ω⁻¹ (ohm⁻¹)
+</div>
+<div class="formula-block"><div class="formula-label">Key Relationships</div><div class="formula-body">C ∝ A/L  (A = electrode area, L = electrode separation)
+C = κA/L  →  κ = (1/R)(L/A)
+
+κ = specific conductance / conductivity</div></div>
+<div class="callout callout-def"><div class="callout-label">Conductivity Definition (Source)</div>
+The conductance of a volume of solution containing <em>one mole</em> of dissolved electrolyte between parallel electrodes of area = 1 cm² and separation = 1 cm. Equivalently: conductance of 1 cm³ of electrolyte solution.
+</div>`
+    },
+    {
+      num: '2', title: 'Equivalent & Molar Conductance', content: `
+<div class="subsection"><div class="subsection-heading">Equivalent Conductance (Λ)</div>
+<div class="callout callout-def"><div class="callout-label">Definition</div>
+Conductance of an electrolyte obtained by dissolving <strong>one gram-equivalent</strong> in V cc of water.
+</div>
+<div class="formula-block"><div class="formula-body">Λ = κV
+V = 1000/N  (N = gram-equivalents per 1000 cc)
+∴ Λ = κ × 1000/N</div></div>
+</div>
+<div class="subsection"><div class="subsection-heading">Molar Conductance (μ)</div>
+<div class="callout callout-def"><div class="callout-label">Definition</div>
+Conductance of all ions produced by <strong>one mole</strong> of an electrolyte dissolved in a specified volume.
+</div>
+<div class="formula-block"><div class="formula-body">μ = κV
+μ = κ × 1000/M  (M = moles per 1000 cc)</div></div>
+</div>`
+    },
+    {
+      num: '3', title: 'Variation with Concentration', content: `
+<div class="table-wrap"><table>
+<tr><th>Property</th><th>Strong Electrolyte</th><th>Weak Electrolyte</th></tr>
+<tr><td>Ionization</td><td>Complete at all concentrations</td><td>Incomplete</td></tr>
+<tr><td>Conductance change on dilution</td><td>Increases gradually (approaches λ⁰)</td><td>Increases considerably; rises sharply at low conc.</td></tr>
+<tr><td>Reason for increase</td><td>Reduced interionic interference; increased ionic mobility</td><td>Increased degree of ionization → more charge carriers</td></tr>
+<tr><td>Limiting law</td><td>λc = λ⁰ − bC</td><td>Sharp non-linear increase</td></tr>
+</table></div>
+<div class="subsection"><div class="subsection-heading">Strong Electrolyte Detail</div>
+<div class="formula-block"><div class="formula-label">Empirical Relation</div><div class="formula-body">λc = λ⁰ − bC    (b = constant)
+As C → 0: λc → λ⁰  (infinite dilution limiting value)</div></div>
+<div class="callout callout-note"><div class="callout-label">Ionic Interference</div>
+The electrostatic attraction between oppositely charged ions (F ∝ q₁q₂/r²) slows ionic movement. Dilution reduces this interference, increasing ionic mobility. The source calls this effect <em>ionic interference</em>.
+</div>
+</div>`
+    },
+    {
+      num: '4', title: 'Measurement of Conductance', content: `
+<p>Conductance is measured by measuring the resistance of the electrolyte solution placed in a <strong>conductance cell</strong>.</p>
+<div class="subsection"><div class="subsection-heading">Apparatus (from source)</div>
+<ul>
+<li>Manganin wire AB stretched over a meter rule</li>
+<li>Sliding contact H</li>
+<li>Resistance R</li>
+<li>Induction coil I (supplies AC)</li>
+<li>Headphone instead of galvanometer</li>
+</ul>
+<p>The sliding contact is moved until the sound in the headphone is minimum — this corresponds to the balance condition.</p>
+</div>
+<div class="subsection"><div class="subsection-heading">Calculations</div>
+<div class="formula-block"><div class="formula-label">Specific, Equivalent & Molar Conductance</div><div class="formula-body">κ = (1/R)(l/A)         [specific conductance]
+μ = κ × 1000/M        [molar conductance]
+Λ = κ × 1000/N        [equivalent conductance]</div></div>
+</div>`
+    },
+    {
+      num: "5", title: "Ostwald's Dilution Law", content: `
+<div class="callout callout-def"><div class="callout-label">Equilibrium Considered</div>
+AB ⇌ A⁺ + B⁻ &nbsp;|&nbsp; C = concentration (mol L⁻¹), α = degree of dissociation
+</div>
+<div class="formula-block"><div class="formula-label">Derivation</div><div class="formula-body">At equilibrium:
+[AB] = C(1−α)
+[A⁺] = Cα
+[B⁻] = Cα
+
+By law of mass action:
+Kc = α²C / (1−α)
+
+If 1 mole dissolved in V litres, C = 1/V:
+Kc = α² / [(1−α)V]</div></div>
+<div class="callout callout-important"><div class="callout-label">Ostwald's Dilution Law</div>
+The relation <strong>Kc = α² / [(1−α)V]</strong> correlating degree of dissociation with dilution is called <em>Ostwald's Dilution Law</em>.
+</div>`
+    },
+    {
+      num: "6", title: "Kohlrausch's Law", content: `
+<div class="callout callout-def"><div class="callout-label">Statement</div>
+The law of independent migration of ions states that dissociation is complete at infinite dilution. The limiting equivalent conductivity of an electrolyte is the <strong>algebraic sum</strong> of the limiting equivalent conductivities of its constituent ions.
+</div>
+<div class="formula-block"><div class="formula-label">Kohlrausch's Law</div><div class="formula-body">λ⁰ = λ⁰_a + λ⁰_c
+
+where λ⁰_a = limiting equiv. conductance of anion
+      λ⁰_c = limiting equiv. conductance of cation</div></div>
+<div class="subsection"><div class="subsection-heading">Application: Weak Electrolyte at Infinite Dilution</div>
+<p>Limiting molar conductivity of weak electrolytes cannot be obtained by direct extrapolation. Use Kohlrausch's law with related strong electrolytes:</p>
+<div class="formula-block"><div class="formula-label">Example: Acetic Acid</div><div class="formula-body">Λ⁰(CH₃COOH) = Λ⁰(CH₃COONa) + Λ⁰(HCl) − Λ⁰(NaCl)</div></div>
+</div>`
+    },
+    {
+      num: '7', title: 'Degree of Dissociation & Dissociation Constant', content: `
+<div class="formula-block"><div class="formula-label">Degree of Dissociation</div><div class="formula-body">α = Λm / Λm⁰
+
+where Λm  = molar conductivity at given concentration
+      Λm⁰ = molar conductivity at infinite dilution
+
+Note: Applicable to weak electrolytes (source explicit).</div></div>
+<div class="formula-block"><div class="formula-label">Dissociation Constant</div><div class="formula-body">K = α²C / (1−α)   [use α obtained from conductivity]</div></div>
+<div class="subsection"><div class="subsection-heading">Sparingly Soluble Salts</div>
+<p>Examples: AgCl, BaSO₄, PbSO₄. These dissolve only slightly in water. The saturated solution's concentration ≈ solubility. Specific conductivity and molar conductivity can be used to determine solubility.</p>
+</div>`,
+
+    }
+  ]
+},
+
+// ─────────────────────────────────────────────────────
+// 5. MOLECULAR GEOMETRY
+// ─────────────────────────────────────────────────────
+{
+  id: 5,
+  code: 'MG',
+  title: 'Molecular Geometry',
+  source: 'Molecular Geometry.pdf (32 pages)',
+  desc: 'VSEPR theory; VBT; orbital overlap types; σ and π bonds; hybridization (sp to sp³d²); MOT; bond order; paramagnetism.',
+  tags: ['VSEPR', 'VBT', 'MOT', 'Hybridization'],
+  formulas: [
+    'Bond order = (Nb − Na)/2',
+    'sp: 180° | sp²: 120° | sp³: 109.5°',
+    'LP–LP > LP–BP > BP–BP',
+  ],
+  sections: [
+    {
+      num: '1', title: 'VSEPR Theory', content: `
+<div class="callout callout-def"><div class="callout-label">Postulates</div>
+<ol style="margin-left:18px;margin-top:4px">
+<li>Molecular shape depends on number of valence-shell electron pairs around central atom.</li>
+<li>Electron pairs repel one another.</li>
+<li>They arrange to minimise repulsion and maximise separation.</li>
+<li>Repulsion order: <strong>LP–LP > LP–BP > BP–BP</strong></li>
+<li>Lone pairs are localised on the central atom and occupy more space than bonding pairs.</li>
+<li>Stronger lone-pair repulsion causes deviations from ideal geometries and changes bond angles.</li>
+</ol>
+</div>
+<div class="subsection"><div class="subsection-heading">Molecular Geometry Table</div>
+<div class="table-wrap"><table>
+<tr><th>Total</th><th>Bonding</th><th>Lone</th><th>Geometry</th><th>Example</th></tr>
+<tr><td>2</td><td>2</td><td>0</td><td>Linear AX₂</td><td>BeF₂</td></tr>
+<tr><td>3</td><td>3</td><td>0</td><td>Trigonal planar AX₃</td><td>BF₃</td></tr>
+<tr><td>3</td><td>2</td><td>1</td><td>Bent/angular AX₂</td><td>SO₂</td></tr>
+<tr><td>4</td><td>4</td><td>0</td><td>Tetrahedral AX₄</td><td>CH₄</td></tr>
+<tr><td>4</td><td>3</td><td>1</td><td>Trigonal pyramidal AX₃</td><td>NH₃</td></tr>
+<tr><td>4</td><td>2</td><td>2</td><td>Bent/angular AX₂</td><td>H₂O</td></tr>
+<tr><td>5</td><td>5</td><td>0</td><td>Trigonal bipyramidal AX₅</td><td>PCl₅</td></tr>
+<tr><td>5</td><td>4</td><td>1</td><td>Seesaw AX₄</td><td>SF₄</td></tr>
+<tr><td>5</td><td>3</td><td>2</td><td>T-shaped AX₃</td><td>ClF₃</td></tr>
+<tr><td>5</td><td>2</td><td>3</td><td>Linear AX₂</td><td>XeF₂</td></tr>
+<tr><td>6</td><td>6</td><td>0</td><td>Octahedral AX₆</td><td>SF₆</td></tr>
+<tr><td>6</td><td>5</td><td>1</td><td>Square pyramidal AX₅</td><td>IF₅</td></tr>
+<tr><td>6</td><td>4</td><td>2</td><td>Square planar AX₄</td><td>XeF₄</td></tr>
+</table></div>
+</div>`
+    },
+    {
+      num: '2', title: 'Valence Bond Theory', content: `
+<div class="callout callout-def"><div class="callout-label">Main Postulates</div>
+<ul style="margin-top:4px">
+<li>Covalent bonds form by overlap of outermost half-filled orbitals.</li>
+<li>Bond strength depends on extent of overlap.</li>
+<li>Bonding electrons in overlapping orbitals have <strong>opposite spins</strong>.</li>
+<li>Completely filled orbitals do not participate.</li>
+<li>s orbitals: non-directional. p and d orbitals: bond in directions of maximum overlap.</li>
+<li>Valence = number of half-filled orbitals.</li>
+</ul>
+</div>
+<div class="subsection"><div class="subsection-heading">H₂ and He₂</div>
+<p><strong>H₂:</strong> Each H: 1s¹. Two 1s orbitals overlap → H–H bond.</p>
+<p><strong>He₂ does not form:</strong> Each He 1s is already filled. Four electrons in the same region → strong electron–electron repulsion → atoms separate.</p>
+</div>
+<div class="subsection"><div class="subsection-heading">Types of Orbital Overlap & Sigma/Pi Bonds</div>
+<div class="table-wrap"><table>
+<tr><th>Bond Type</th><th>Overlap Type</th><th>Possible Orbitals</th></tr>
+<tr><td>σ (Sigma)</td><td>Axial (along internuclear axis)</td><td>s–s, s–p, p–p head-on</td></tr>
+<tr><td>π (Pi)</td><td>Lateral (perpendicular to axis)</td><td>p–p sideways only</td></tr>
+</table></div>
+<div class="table-wrap" style="margin-top:12px"><table class="compare-table">
+<tr><th>σ bond</th><th>π bond</th></tr>
+<tr><td>Axial overlap</td><td>Lateral overlap</td></tr>
+<tr><td>s–s, s–p or p–p</td><td>Sideways p–p</td></tr>
+<tr><td>Only one σ between two atoms</td><td>More than one π can occur</td></tr>
+<tr><td>Cylindrically symmetrical</td><td>Electron density at right angles</td></tr>
+<tr><td>Stronger</td><td>Weaker</td></tr>
+<tr><td>Free rotation possible</td><td>Free rotation NOT possible</td></tr>
+<tr><td>Can exist independently</td><td>Forms only after σ</td></tr>
+</table></div>
+</div>`
+    },
+    {
+      num: '3', title: 'Hybridization', content: `
+<div class="callout callout-def"><div class="callout-label">Definition</div>
+Mixing of atomic orbitals of nearly the same energy to form an equal number of new, identical orbitals.
+</div>
+<div class="table-wrap"><table>
+<tr><th>Type</th><th>Orbitals Mixed</th><th>Number</th><th>Geometry</th><th>Angle</th><th>Example</th></tr>
+<tr><td>sp³</td><td>s + pₓ + pᵧ + pz</td><td>4</td><td>Tetrahedral</td><td>109.5°</td><td>CH₄</td></tr>
+<tr><td>sp²</td><td>s + pₓ + pᵧ</td><td>3</td><td>Trigonal planar</td><td>120°</td><td>C₂H₄</td></tr>
+<tr><td>sp</td><td>s + pₓ</td><td>2</td><td>Linear</td><td>180°</td><td>C₂H₂</td></tr>
+<tr><td>sp³d</td><td>s+3p+d</td><td>5</td><td>Trigonal bipyramidal</td><td>90°/120°</td><td>PCl₅</td></tr>
+<tr><td>sp³d²</td><td>s+3p+2d</td><td>6</td><td>Octahedral</td><td>90°</td><td>SF₆</td></tr>
+</table></div>
+<div class="callout callout-note"><div class="callout-label">sp³d (PCl₅) Note</div>
+Three equatorial bonds (120° apart); two axial bonds (90° to equatorial plane). Axial bond pairs experience greater repulsion from equatorial pairs → axial bonds slightly longer and weaker → greater reactivity of PCl₅.
+</div>`
+    },
+    {
+      num: '4', title: 'Molecular Orbital Theory', content: `
+<div class="callout callout-def"><div class="callout-label">Definition</div>
+MO theory describes electronic structure using molecular orbitals that may extend over several atoms. Uses LCAO method.
+</div>
+<div class="subsection"><div class="subsection-heading">Postulates</div>
+<ol style="margin-left:20px;margin-top:8px">
+<li>Electron wave function in molecule = molecular orbital.</li>
+<li>MO surrounds all nuclei.</li>
+<li>AOs of nearly equal energy + appropriate symmetry → equal number of MOs.</li>
+<li>Lower-energy MO = bonding; higher = antibonding.</li>
+<li>Electrons fill MOs: Aufbau → Pauli → Hund's rule.</li>
+</ol>
+</div>
+<div class="subsection"><div class="subsection-heading">MO Formation Conditions</div>
+<ol style="margin-left:20px;margin-top:8px">
+<li><strong>Similar energy:</strong> 1s + 1s ✓; 1s + 2s or 2p ✗ (source example).</li>
+<li><strong>Same symmetry:</strong> pₓ + pₓ ✓; pₓ + pz ✗.</li>
+<li><strong>Effective overlap.</strong></li>
+</ol>
+</div>
+<div class="formula-block"><div class="formula-label">Bond Order & Magnetism</div><div class="formula-body">Bond order = (N_b − N_a) / 2
+
+Unpaired electrons → Paramagnetic
+All paired → Diamagnetic
+
+Example 1: 8 bonding, 4 antibonding
+  Bond order = (8−4)/2 = 2; paramagnetic (source: O₂)
+
+Example 2: 8 bonding, 2 antibonding
+  Bond order = (8−2)/2 = 3; diamagnetic
+  ⚠ Source labels this also as O₂ — inconsistency preserved.</div></div>
+<div class="callout callout-note"><div class="callout-label">Note from Source</div>
+Relative energies of σ and π bonding MOs are reversed in some second-row diatomics.
+</div>`
+    }
+  ]
+},
+
+// ─────────────────────────────────────────────────────
+// 6. PHASE RULE & PHASE DIAGRAM
+// ─────────────────────────────────────────────────────
+{
+  id: 6,
+  code: 'PR',
+  title: 'Phase Rule & Phase Diagrams',
+  source: 'Phase Rule and Phase Diagram.pdf (14 pages)',
+  desc: 'Gibbs phase rule; degrees of freedom; components; water system (triple point, critical point); sulphur system; metastable equilibria.',
+  tags: ['Gibbs', 'Water System', 'Sulphur', 'Triple Point'],
+  formulas: [
+    'F = C − P + 2  (Gibbs Phase Rule)',
+    'Water triple point: 0.0076°C, 4.58 mm Hg',
+    'Water critical point: 218 atm, 374°C',
+    'Single phase: F=2 | Two phases: F=1 | Triple point: F=0',
+  ],
+  sections: [
+    {
+      num: '1', title: 'Key Definitions', content: `
+<div class="callout callout-def"><div class="callout-label">Phase</div>
+A homogeneous, physically distinct and mechanically separable portion of material with a given chemical composition and structure.
+<ul style="margin-top:6px">
+<li>Liquid water only → 1-phase system</li>
+<li>Liquid water + water vapour → 2-phase system</li>
+<li>Liquid water + vapour + ice → 3-phase system</li>
+</ul>
+</div>
+<div class="callout callout-def"><div class="callout-label">Phase Diagram</div>
+A graphical presentation of the phases present in a system under different conditions of <strong>pressure, temperature, and composition</strong>.
+</div>
+<div class="callout callout-def"><div class="callout-label">Degree of Freedom / Variance (F)</div>
+The minimum number of variables (T, P, concentration) that can be changed independently without changing the phases of the system at equilibrium.
+<br><br>Example: Pure gas — specify P and T; V is fixed. Therefore <strong>F = 2</strong>.
+</div>
+<div class="callout callout-def"><div class="callout-label">Component (C)</div>
+The minimum number of independent species necessary to define the composition of all phases in the system.
+<br><br>Water system: Ice, liquid water, and vapour all expressed in terms of H₂O. Therefore <strong>C = 1</strong>.
+</div>`
+    },
+    {
+      num: '2', title: 'Gibbs Phase Rule', content: `
+<div class="callout callout-important"><div class="callout-label">Gibbs Phase Rule</div>
+When equilibrium is influenced only by T, P, and concentration (not gravity, electrical/magnetic forces, or surface action):
+<div class="formula-block" style="margin-top:12px"><div class="formula-label">Gibbs Phase Rule</div><div class="formula-body">F + P = C + 2
+or
+F = C − P + 2
+
+F = degrees of freedom
+C = number of components
+P = number of phases</div></div>
+</div>
+<div class="subsection"><div class="subsection-heading">Derivation</div>
+<div class="formula-block"><div class="formula-label">Step-by-step Derivation</div><div class="formula-body">Step 1: Count variables
+  Temperature & pressure: 2 variables (common to all phases)
+  Composition: (C−1) independent variables per phase (mole fractions sum to 1)
+  Total: P(C−1) + 2
+
+Step 2: Equilibrium constraints
+  Chemical potential of each component must be equal in all phases.
+  For 1 component: P phases → (P−1) equations
+  For C components: C(P−1) constraints total
+
+Step 3: Degrees of freedom
+  F = [P(C−1) + 2] − C(P−1)
+    = PC − P + 2 − PC + C
+  ∴ F = C − P + 2  ✓</div></div>
+</div>
+<div class="subsection"><div class="subsection-heading">Chemical Potential</div>
+<div class="formula-block"><div class="formula-body">μᵢ = (∂G/∂nᵢ) at constant T, P, other nⱼ
+
+At equilibrium: μ of each component equal across all phases.
+A difference in μ causes migration until equalised.</div></div>
+</div>`
+    },
+    {
+      num: '3', title: 'Water System', content: `
+<div class="callout callout-important"><div class="callout-label">Water: C = 1, three phases (ice, liquid, vapour)</div>
+Phase diagram contains curves OA, OB, OC; triple point O; areas AOC, AOB, BOC.
+</div>
+<div class="subsection"><div class="subsection-heading">Curve OA — Vapour-Pressure Curve of Water</div>
+<ul>
+<li>Water + water vapour in equilibrium.</li>
+<li>Ends at A, the <strong>critical point</strong>: P = <strong>218 atm</strong>, T = <strong>374°C</strong>.</li>
+<li>At critical point, liquid and vapour merge into one phase.</li>
+<li>At vapour pressure = 1 atm, T = <strong>100°C</strong> (normal boiling point).</li>
+</ul>
+</div>
+<div class="subsection"><div class="subsection-heading">Curve OB — Sublimation Curve of Ice</div>
+<ul>
+<li>Ice + vapour in equilibrium.</li>
+<li>Shows vapour pressure of solid ice at different temperatures.</li>
+<li>Terminates at absolute zero (−273°C), where no vapour exists.</li>
+</ul>
+</div>
+<div class="subsection"><div class="subsection-heading">Curve OC — Fusion Curve of Ice</div>
+<ul>
+<li>Ice + water in equilibrium; shows effect of pressure on melting point.</li>
+<li>Curve <strong>slopes to the left</strong> → melting point decreases as pressure increases.</li>
+<li>Related to Le Chatelier's principle and the volume change on melting.</li>
+<li>At 1 atm: normal melting point = <strong>0°C</strong>.</li>
+</ul>
+</div>
+<div class="subsection"><div class="subsection-heading">Phase Rule Along Curves</div>
+<div class="formula-block"><div class="formula-body">Along OA, OB, OC: C=1, P=2
+F = 1 − 2 + 2 = 1  →  monovariant
+
+Examples:
+Water/vapour → OA
+Ice/vapour   → OB
+Ice/water    → OC</div></div>
+</div>
+<div class="subsection"><div class="subsection-heading">Triple Point O</div>
+<div class="callout callout-important"><div class="callout-label">Triple Point of Water (Source Values)</div>
+T = <strong>0.0076°C</strong> &nbsp;|&nbsp; Vapour pressure = <strong>4.58 mm Hg</strong>
+<div class="formula-block" style="margin-top:10px"><div class="formula-body">C=1, P=3: F = 1 − 3 + 2 = 0  →  nonvariant</div></div>
+If either P or T changes, all three phases cannot remain in equilibrium; one phase disappears.
+</div>
+</div>
+<div class="subsection"><div class="subsection-heading">Single-Phase Areas</div>
+<div class="table-wrap"><table>
+<tr><th>Area</th><th>Phase</th><th>F</th><th>Variance</th></tr>
+<tr><td>AOC</td><td>Liquid water</td><td>1−1+2 = 2</td><td>Bivariant</td></tr>
+<tr><td>AOB</td><td>Water vapour</td><td>2</td><td>Bivariant</td></tr>
+<tr><td>BOC</td><td>Ice</td><td>2</td><td>Bivariant</td></tr>
+</table></div>
+</div>
+<div class="subsection"><div class="subsection-heading">Metastable Supercooled Water</div>
+<p>Curve OA extended past triple point as dashed line OA′. Water supercooled by eliminating solid particles. A slight disturbance or ice crystal introduction causes reversion to stable ice/vapour system.</p>
+</div>`
+    },
+    {
+      num: '4', title: 'Sulphur System', content: `
+<div class="callout callout-important"><div class="callout-label">Sulphur: C = 1, Four Phases</div>
+<ol style="margin-left:18px;margin-top:4px">
+<li><strong>Rhombic sulphur (Sᵣ)</strong> — m.p. = 114°C</li>
+<li><strong>Monoclinic sulphur (Sₘ)</strong> — m.p. = 120°C</li>
+<li>Liquid sulphur</li>
+<li>Sulphur vapour</li>
+</ol>
+</div>
+<div class="subsection"><div class="subsection-heading">Phase-Diagram Curves</div>
+<div class="table-wrap"><table>
+<tr><th>Curve</th><th>Meaning</th></tr>
+<tr><td>AB</td><td>Sublimation curve of rhombic sulphur</td></tr>
+<tr><td>BC</td><td>Sublimation curve of monoclinic sulphur</td></tr>
+<tr><td>CD</td><td>Vapour-pressure curve of liquid sulphur</td></tr>
+<tr><td>CE</td><td>Fusion curve of monoclinic sulphur</td></tr>
+<tr><td>BE</td><td>Transition curve of solid sulphur</td></tr>
+<tr><td>EG</td><td>Fusion curve of rhombic sulphur</td></tr>
+</table></div>
+</div>
+<div class="subsection"><div class="subsection-heading">Triple Points</div>
+<p>B, C, and E are triple points. At each: C=1, P=3; F = 3−P = 3−3 = <strong>0 (nonvariant)</strong>.</p>
+</div>
+<div class="subsection"><div class="subsection-heading">Single-Phase Areas</div>
+<div class="table-wrap"><table>
+<tr><th>Area</th><th>Phase</th><th>F</th></tr>
+<tr><td>ABEG</td><td>Rhombic sulphur</td><td>2 (bivariant)</td></tr>
+<tr><td>BCEB</td><td>Monoclinic sulphur</td><td>2</td></tr>
+<tr><td>DCEG</td><td>Liquid sulphur</td><td>2</td></tr>
+<tr><td>ABCD</td><td>Sulphur vapour</td><td>2</td></tr>
+</table></div>
+</div>
+<div class="subsection"><div class="subsection-heading">Metastable Sulphur</div>
+<div class="table-wrap"><table>
+<tr><th>Dashed Curve</th><th>Meaning</th></tr>
+<tr><td>BF</td><td>Sublimation curve of metastable rhombic sulphur</td></tr>
+<tr><td>CF</td><td>Vapour-pressure curve of supercooled liquid sulphur</td></tr>
+<tr><td>FE</td><td>Fusion curve of metastable rhombic sulphur</td></tr>
+</table></div>
+<p>Metastable triple point: F. Metastable regions: ABFE (rhombic), ABFCD (vapour), DCFE (supercooled liquid).</p>
+</div>`
+    }
+  ]
+}
+];
+
+// ══════════════════════════════════════════════════════
+//  BUILD SEARCH INDEX
+// ══════════════════════════════════════════════════════
+let searchIndex = [];
+
+function buildSearchIndex() {
+  SUBJECTS.forEach(subj => {
+    subj.sections.forEach(sec => {
+      const stripped = sec.content.replace(/<[^>]+>/g, ' ').replace(/\s+/g,' ').trim();
+      searchIndex.push({
+        subjId: subj.id,
+        subjTitle: subj.title,
+        secNum: sec.num,
+        secTitle: sec.title,
+        text: stripped.toLowerCase(),
+        displayText: stripped.substring(0, 200)
+      });
+    });
+  });
+}
+
+// ══════════════════════════════════════════════════════
+//  RENDER FUNCTIONS
+// ══════════════════════════════════════════════════════
+function renderDashboard() {
+  const grid = document.getElementById('subjects-grid');
+  grid.innerHTML = SUBJECTS.map(s => `
+    <div class="subject-card" onclick="showPage(${s.id})">
+      <div class="subject-card-header">
+        <span class="subject-card-num">${s.code}</span>
+        <span class="subject-card-arrow"><svg class="icon" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span>
+      </div>
+      <h3>${s.title}</h3>
+      <p>${s.desc}</p>
+      <div class="subject-card-tags">${s.tags.map(t=>`<span class="tag">${t}</span>`).join('')}</div>
+    </div>
+  `).join('');
+}
+
+function renderSidebar() {
+  const nav = document.getElementById('sidebar-nav');
+  nav.innerHTML = SUBJECTS.map(s => `
+    <div class="sidebar-section" id="sb-sec-${s.id}">
+      <div class="sidebar-subject" id="sb-subj-${s.id}" role="button" tabindex="0" aria-expanded="false" aria-controls="sb-toc-${s.id}" onclick="sidebarToggle(${s.id})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();sidebarToggle(${s.id})}">
+        <span class="subj-num">${s.code}</span>
+        <span style="flex:1;font-size:11px">${s.title}</span>
+        <span class="sidebar-chevron"><svg class="icon icon-sm" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></span>
+      </div>
+      <div class="sidebar-toc" id="sb-toc-${s.id}" role="region" aria-label="${s.title} sections">
+        ${s.sections.map(sec=>`
+          <a href="#sec-${s.id}-${sec.num}" onclick="showPage(${s.id});closeSidebar()" id="sb-link-${s.id}-${sec.num}">${sec.num}. ${sec.title}</a>
+        `).join('')}
+      </div>
+    </div>
+  `).join('');
+}
+
+function renderRefPanel() {
+  const el = document.getElementById('ref-panel-content');
+  if (!SUBJECTS.length) {
+    el.innerHTML = '<div class="ref-empty"><div class="ref-empty-icon"><svg class="icon" viewBox="0 0 24 24" style="width:1em;height:1em;fill:none;stroke:currentColor;stroke-width:2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg></div>No subjects loaded.</div>';
+    return;
+  }
+  el.innerHTML = SUBJECTS.map(s => `
+    <div class="ref-subject">
+      <div class="ref-subject-title">${s.title}</div>
+      ${s.formulas.map(f=>`<div class="ref-formula">${f}</div>`).join('')}
+    </div>
+  `).join('');
+}
+
+function renderStudyPage(subj) {
+  const page = document.getElementById(`page-${subj.id}`);
+  let html = `
+    <div class="study-header">
+      <h2>${subj.title}</h2>
+      <div class="src-note">Source: ${subj.source}</div>
+    </div>
+    <div class="breadcrumb">
+      <a href="#" onclick="showPage('home');return false">Dashboard</a>
+      <span><svg class="icon icon-sm" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></span>
+      <span>${subj.title}</span>
+    </div>
+    <div class="study-content">
+  `;
+
+  subj.sections.forEach((sec, idx) => {
+    html += `
+      <div class="section-group" id="sec-${subj.id}-${sec.num}">
+        <div class="section-heading" role="button" tabindex="0" aria-expanded="true" aria-controls="sec-body-${subj.id}-${sec.num}" onclick="toggleSection(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleSection(this)}">
+          <span class="section-num">${sec.num}</span>
+          <h3>${sec.title}</h3>
+          <span class="section-toggle"><svg class="icon icon-sm" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></span>
+        </div>
+        <div class="section-body content-body" id="sec-body-${subj.id}-${sec.num}">
+          ${sec.content}
+        </div>
+      </div>
+    `;
+  });
+
+  html += `</div>`; // close study-content
+  page.innerHTML = html;
+}
+
+
+
+// ══════════════════════════════════════════════════════
+//  NAVIGATION
+// ══════════════════════════════════════════════════════
+let currentPage = 'home';
+
+function showPage(id) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.sidebar-subject').forEach(s => s.classList.remove('active'));
+
+  if (id === 'home') {
+    document.getElementById('page-home').classList.add('active');
+    currentPage = 'home';
+  } else {
+    const page = document.getElementById(`page-${id}`);
+    if (page) {
+      page.classList.add('active');
+      currentPage = id;
+      const sb = document.getElementById(`sb-subj-${id}`);
+      if (sb) sb.classList.add('active');
+      window.scrollTo(0,0);
+    }
+  }
+}
+
+function sidebarToggle(id) {
+  const toc = document.getElementById(`sb-toc-${id}`);
+  const subj = document.getElementById(`sb-subj-${id}`);
+  const isOpen = toc.classList.contains('open');
+  // close all
+  document.querySelectorAll('.sidebar-toc').forEach(t => { t.classList.remove('open'); t.setAttribute('aria-expanded', 'false'); });
+  document.querySelectorAll('.sidebar-subject').forEach(s => { s.classList.remove('open'); s.setAttribute('aria-expanded', 'false'); });
+  if (!isOpen) {
+    toc.classList.add('open');
+    subj.classList.add('open');
+    toc.setAttribute('aria-expanded', 'true');
+    subj.setAttribute('aria-expanded', 'true');
+  }
+  showPage(id);
+}
+
+function toggleSection(heading) {
+  const body = heading.nextElementSibling;
+  const isCollapsed = heading.classList.toggle('collapsed');
+  body.classList.toggle('hidden');
+  heading.setAttribute('aria-expanded', !isCollapsed);
+}
+
+function toggleProblem(header) {
+  const body = header.nextElementSibling;
+  const isOpen = header.classList.toggle('open');
+  body.classList.toggle('hidden');
+  header.setAttribute('aria-expanded', isOpen);
+}
+
+function toggleRefPanel() {
+  const panel = document.getElementById('ref-panel');
+  const content = document.getElementById('ref-panel-content');
+  panel.classList.toggle('open');
+  if (panel.classList.contains('open')) {
+    content.style.animation = 'none';
+    content.offsetHeight;
+    content.style.animation = '';
+  }
+}
+
+function closeSidebar() {
+  document.getElementById('sidebar').classList.remove('open');
+  document.getElementById('overlay').classList.remove('visible');
+}
+
+// ══════════════════════════════════════════════════════
+//  SEARCH
+// ══════════════════════════════════════════════════════
+function doSearch(q) {
+  if (!q || q.length < 2) {
+    document.getElementById('search-results').style.display='none';
+    document.getElementById('search-clear').style.display='none';
+    return;
+  }
+  document.getElementById('search-clear').style.display='block';
+  const terms = q.toLowerCase().split(/\s+/);
+  const results = searchIndex.filter(item => terms.every(t => item.text.includes(t))).slice(0,8);
+  const container = document.getElementById('search-results');
+  const empty = document.getElementById('search-empty');
+  container.style.display = 'block';
+  if (results.length === 0) {
+    empty.style.display = 'block';
+    container.querySelectorAll('.search-result-item').forEach(el=>el.remove());
+    return;
+  }
+  empty.style.display = 'none';
+  const existing = container.querySelectorAll('.search-result-item');
+  existing.forEach(e=>e.remove());
+  results.forEach(r => {
+    const div = document.createElement('div');
+    div.className = 'search-result-item';
+    const snip = r.displayText.substring(0,120);
+    div.innerHTML = `
+      <div class="search-result-subject">${r.subjTitle}</div>
+      <div class="search-result-title">${r.secNum}. ${r.secTitle}</div>
+      <div class="search-result-snippet">${snip}…</div>
+    `;
+    div.onclick = () => {
+      showPage(r.subjId);
+      container.style.display='none';
+      document.getElementById('search-input').value='';
+      document.getElementById('search-clear').style.display='none';
+      searchFocusIdx = -1;
+      setTimeout(()=>{
+        const el = document.getElementById(`sec-${r.subjId}-${r.secNum}`);
+        if (el) el.scrollIntoView({behavior:'smooth',block:'start'});
+      }, 100);
+    };
+    container.appendChild(div);
+  });
+}
+
+// ══════════════════════════════════════════════════════
+//  SCROLL SPY
+// ══════════════════════════════════════════════════════
+function initScrollSpy() {
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const id = entry.target.id;
+        const parts = id.split('-');
+        if (parts.length >= 3) {
+          const subjId = parts[1];
+          const secNum = parts[2];
+          document.querySelectorAll('.sidebar-toc a').forEach(a=>a.classList.remove('active'));
+          const link = document.getElementById(`sb-link-${subjId}-${secNum}`);
+          if (link) link.classList.add('active');
+        }
+      }
+    });
+  }, { rootMargin: '-20% 0px -70% 0px', threshold: 0 });
+
+  document.querySelectorAll('.section-group').forEach(el => observer.observe(el));
+}
+
+// ══════════════════════════════════════════════════════
+//  THEME
+// ══════════════════════════════════════════════════════
+function initTheme() {
+  const btn = document.getElementById('theme-toggle');
+  const saved = localStorage.getItem('theme') || 'dark';
+  document.documentElement.setAttribute('data-theme', saved);
+  updateThemeBtn(btn, saved);
+  btn.onclick = () => {
+    const cur = document.documentElement.getAttribute('data-theme');
+    const next = cur === 'dark' ? 'light' : 'dark';
+    document.documentElement.setAttribute('data-theme', next);
+    localStorage.setItem('theme', next);
+    updateThemeBtn(btn, next);
+  };
+}
+
+function updateThemeBtn(btn, theme) {
+  const sunSvg = '<svg class="icon icon-sm" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>';
+  const moonSvg = '<svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>';
+  btn.innerHTML = theme === 'dark' ? sunSvg + ' Light' : moonSvg + ' Dark';
+  document.body.classList.add('theme-transitioning');
+  setTimeout(() => document.body.classList.remove('theme-transitioning'), 350);
+}
+
+// ══════════════════════════════════════════════════════
+//  BACK TO TOP & SCROLL EVENTS
+// ══════════════════════════════════════════════════════
+window.addEventListener('scroll', () => {
+  const btn = document.getElementById('back-top');
+  if (window.scrollY > 400) btn.classList.add('visible');
+  else btn.classList.remove('visible');
+});
+
+// ══════════════════════════════════════════════════════
+//  KATEX RESILIENT LOADING
+// ══════════════════════════════════════════════════════
+function tryRenderMath(retries) {
+  retries = retries || 10;
+  if (typeof renderMathInElement !== 'undefined') {
+    renderMathInElement(document.body, {
+      delimiters: [
+        {left:'$$',right:'$$',display:true},
+        {left:'$',right:'$',display:false}
+      ],
+      throwOnError: false,
+      errorColor: 'var(--red)'
+    });
+    document.querySelectorAll('.katex-error').forEach(el => {
+      el.title = 'Formula rendering unavailable — raw LaTeX shown';
+    });
+  } else if (retries > 0) {
+    setTimeout(function() { tryRenderMath(retries - 1); }, 100);
+  } else {
+    document.querySelectorAll('.formula-body').forEach(el => {
+      if (el.textContent.includes('\\') && !el.querySelector('.katex')) {
+        el.classList.add('katex-error');
+        el.title = 'KaTeX failed to load — raw LaTeX displayed';
+      }
+    });
+  }
+}
+
+// ══════════════════════════════════════════════════════
+//  POST-RENDER A11Y FIXES
+// ══════════════════════════════════════════════════════
+function initPostRender() {
+  // Convert subsection-heading divs to h4 for semantic HTML
+  document.querySelectorAll('.subsection-heading').forEach(el => {
+    const h4 = document.createElement('h4');
+    h4.className = el.className;
+    h4.innerHTML = el.innerHTML;
+    el.parentNode.replaceChild(h4, el);
+  });
+
+  // Add ARIA to problem headers (injected via content HTML)
+  document.querySelectorAll('.problem-header').forEach(el => {
+    if (!el.getAttribute('role')) {
+      el.setAttribute('role', 'button');
+      el.setAttribute('tabindex', '0');
+      el.setAttribute('aria-expanded', 'false');
+      const body = el.nextElementSibling;
+      if (body) {
+        const bodyId = 'prob-body-' + Math.random().toString(36).slice(2, 8);
+        body.id = bodyId;
+        el.setAttribute('aria-controls', bodyId);
+      }
+      el.addEventListener('keydown', e => {
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggleProblem(el); }
+      });
+    }
+  });
+}
+
+// ══════════════════════════════════════════════════════
+//  SEARCH KEYBOARD NAVIGATION
+// ══════════════════════════════════════════════════════
+let searchFocusIdx = -1;
+
+function navigateSearch(direction) {
+  const container = document.getElementById('search-results');
+  const items = container.querySelectorAll('.search-result-item');
+  if (!items.length) return;
+  items.forEach(i => i.style.background = '');
+  searchFocusIdx = Math.max(-1, Math.min(items.length - 1, searchFocusIdx + direction));
+  if (searchFocusIdx >= 0) {
+    items[searchFocusIdx].style.background = 'var(--bg-2)';
+    items[searchFocusIdx].scrollIntoView({ block: 'nearest' });
+  }
+}
+
+function activateSearchResult() {
+  const container = document.getElementById('search-results');
+  const items = container.querySelectorAll('.search-result-item');
+  if (searchFocusIdx >= 0 && searchFocusIdx < items.length) {
+    items[searchFocusIdx].click();
+  }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  renderDashboard();
+  renderSidebar();
+  renderRefPanel();
+  SUBJECTS.forEach(s => renderStudyPage(s));
+
+  buildSearchIndex();
+  initTheme();
+
+  setTimeout(() => {
+    initScrollSpy();
+    initPostRender();
+    tryRenderMath();
+  }, 200);
+
+  // Search events
+  const input = document.getElementById('search-input');
+  input.addEventListener('input', e => { searchFocusIdx = -1; doSearch(e.target.value); });
+  input.addEventListener('keydown', e => {
+    if (e.key === 'Escape') { input.value = ''; document.getElementById('search-results').style.display = 'none'; document.getElementById('search-clear').style.display = 'none'; searchFocusIdx = -1; }
+    else if (e.key === 'ArrowDown') { e.preventDefault(); navigateSearch(1); }
+    else if (e.key === 'ArrowUp') { e.preventDefault(); navigateSearch(-1); }
+    else if (e.key === 'Enter') { e.preventDefault(); activateSearchResult(); }
+  });
+  document.getElementById('search-clear').onclick = () => { input.value=''; document.getElementById('search-results').style.display='none'; document.getElementById('search-clear').style.display='none'; };
+  document.addEventListener('click', e => { if (!e.target.closest('#search-wrap')) { document.getElementById('search-results').style.display='none'; } });
+
+  // Sidebar toggle (desktop + mobile)
+  const savedSidebar = localStorage.getItem('sidebar');
+  if (savedSidebar === 'collapsed' && window.innerWidth > 900) {
+    document.body.classList.add('sidebar-collapsed');
+  }
+  document.getElementById('sidebar-toggle').onclick = () => {
+    if (window.innerWidth <= 900) {
+      document.getElementById('sidebar').classList.toggle('open');
+      document.getElementById('overlay').classList.toggle('visible');
+    } else {
+      document.body.classList.toggle('sidebar-collapsed');
+      localStorage.setItem('sidebar', document.body.classList.contains('sidebar-collapsed') ? 'collapsed' : 'expanded');
+    }
+  };
+
+  // Mobile search toggle
+  document.getElementById('mobile-search-toggle').onclick = () => {
+    const input = document.getElementById('search-input');
+    const isOpen = input.classList.toggle('mobile-open');
+    if (isOpen) { input.focus(); }
+    else { input.value = ''; input.classList.remove('mobile-open'); document.getElementById('search-results').style.display = 'none'; document.getElementById('search-clear').style.display = 'none'; }
+  };
+});
+</script>
+</body>
+</html>

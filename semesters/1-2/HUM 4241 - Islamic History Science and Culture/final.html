@@ -1,0 +1,1769 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="theme-color" content="#0f0e0b" />
+<title>HUM 4241 — Final Exam Solutions + Memory Chains</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --ink:        #eae4d8;
+    --ink-soft:   #c2b89a;
+    --ink-muted:  #7a7060;
+    --parchment:  #0f0e0b;
+    --cream:      #181610;
+    --card-bg:    #1c1a14;
+    --card-hover: #221f17;
+    --gold:       #c9973a;
+    --gold-light: #e0b85a;
+    --gold-glow:  rgba(201,151,58,0.10);
+    --teal:       #0e3535;
+    --teal-mid:   #134040;
+    --teal-light: #1a5555;
+    --teal-pale:  rgba(26,85,85,0.12);
+    --border:     rgba(201,151,58,0.18);
+    --shadow:     rgba(0,0,0,0.45);
+    --sidebar-w:  300px;
+    --radius:     8px;
+    --radius-lg:  12px;
+    --font-display: 'Playfair Display', Georgia, serif;
+    --font-body:    'Inter', system-ui, sans-serif;
+    --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; font-size: 16px; overflow-x: clip; min-width: 0; }
+  body { overflow-x: clip; min-width: 0; font-family: var(--font-body); background: var(--parchment); color: var(--ink); line-height: 1.75; display: flex; -webkit-font-smoothing: antialiased; }
+
+  #progress-bar { position: fixed; top: 0; left: 0; height: 2px; background: linear-gradient(to right, var(--gold), var(--gold-light)); width: 0%; z-index: 300; transition: width 0.1s linear; }
+
+  #sidebar {
+    width: var(--sidebar-w); min-height: 100vh; background: #080807;
+    position: sticky; top: 0; height: 100vh; overflow-y: auto; flex-shrink: 0;
+    display: flex; flex-direction: column; scrollbar-width: thin; scrollbar-color: var(--gold) transparent;
+    transition: transform 0.3s var(--ease-out); z-index: 100; border-right: 1px solid rgba(201,151,58,0.1);
+  }
+  #sidebar::-webkit-scrollbar { width: 4px; }
+  #sidebar::-webkit-scrollbar-thumb { background: var(--gold); border-radius: 2px; }
+
+  .sidebar-brand { padding: 24px 20px 16px; border-bottom: 1px solid rgba(201,151,58,0.12); }
+  .sidebar-brand .arabic-motif { font-size: 20px; color: var(--gold-light); text-align: center; letter-spacing: 4px; margin-bottom: 8px; opacity: 0.85; }
+  .sidebar-brand h2 { font-family: var(--font-display); font-size: 0.88rem; color: #fff; font-weight: 700; line-height: 1.4; text-align: center; }
+  .sidebar-brand p { font-size: 0.68rem; color: var(--ink-muted); text-align: center; margin-top: 4px; text-transform: uppercase; letter-spacing: 0.8px; }
+
+  .page-tabs { display: flex; gap: 4px; padding: 12px 16px 8px; border-bottom: 1px solid rgba(201,151,58,0.08); }
+  .page-tab { flex: 1; padding: 7px 8px; font-size: 0.68rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; border: 1px solid rgba(201,151,58,0.15); border-radius: 6px; background: transparent; color: var(--ink-muted); cursor: pointer; transition: background 0.25s, color 0.25s, border-color 0.25s; font-family: var(--font-body); text-align: center; line-height: 1.3; }
+  .page-tab:hover { color: var(--ink-soft); border-color: rgba(201,151,58,0.3); }
+  .page-tab.active { background: var(--gold); color: #0f0e0b; border-color: var(--gold); }
+
+  .nav-group { display: none; padding: 8px 0 12px; flex: 1; }
+  .nav-group.active { display: block; }
+
+  nav a { display: flex; align-items: flex-start; gap: 10px; padding: 7px 20px; text-decoration: none; color: rgba(194,184,154,0.55); font-size: 0.76rem; font-weight: 400; line-height: 1.4; transition: color 0.2s, background 0.2s; border-left: 2px solid transparent; }
+  nav a:hover, nav a.active-link { color: var(--gold-light); background: rgba(201,151,58,0.06); border-left-color: var(--gold); }
+  nav a .q-num { flex-shrink: 0; width: 22px; height: 22px; border-radius: 50%; background: rgba(212,168,67,0.2); color: var(--gold-light); font-size: 0.65rem; font-weight: 600; display: flex; align-items: center; justify-content: center; margin-top: 1px; transition: background 0.2s, color 0.2s; }
+  nav a:hover .q-num, nav a.active-link .q-num { background: var(--gold); color: #fff; }
+
+  .sidebar-footer { padding: 14px 20px; border-top: 1px solid rgba(201,151,58,0.08); font-size: 0.65rem; color: rgba(194,184,154,0.25); text-align: center; }
+
+  #menu-toggle { display: none; position: fixed; top: 16px; left: 16px; z-index: 200; background: #080807; border: 1px solid rgba(201,151,58,0.2); border-radius: var(--radius); width: 42px; height: 42px; cursor: pointer; flex-direction: column; align-items: center; justify-content: center; gap: 5px; box-shadow: 0 2px 12px var(--shadow); }
+  #menu-toggle span { display: block; width: 20px; height: 2px; background: var(--gold-light); border-radius: 2px; transition: all 0.3s; }
+
+  #overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 90; }
+  #overlay.show { display: block; }
+
+  #scroll-top { position: fixed; bottom: 28px; right: 28px; width: 44px; height: 44px; border-radius: 50%; background: var(--gold); border: none; color: #0f0e0b; font-size: 1.1rem; font-weight: 700; cursor: pointer; box-shadow: 0 4px 16px rgba(0,0,0,0.4); z-index: 150; opacity: 0; pointer-events: none; transition: opacity 0.25s, transform 0.25s; transform: translateY(8px); }
+  #scroll-top.show { opacity: 1; pointer-events: auto; transform: translateY(0); }
+
+  main { flex: 1; min-width: 0; padding: 0 0 80px; }
+
+  .hero { background: linear-gradient(135deg, #050504 0%, #0a0f0a 50%, #080c08 100%); padding: 60px 48px 56px; position: relative; overflow: hidden; border-bottom: 1px solid rgba(201,151,58,0.15); }
+  .hero::before { content: ''; position: absolute; inset: 0; background-image: radial-gradient(circle at 75% 30%, rgba(201,151,58,0.12) 0%, transparent 50%), radial-gradient(circle at 15% 75%, rgba(26,85,85,0.18) 0%, transparent 40%); pointer-events: none; }
+  .hero::after { content: ''; position: absolute; top: -40px; right: -40px; width: 320px; height: 320px; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80' viewBox='0 0 80 80'%3E%3Cg fill='none' stroke='rgba(212,168,67,0.18)' stroke-width='1'%3E%3Cpolygon points='40,4 76,22 76,58 40,76 4,58 4,22'/%3E%3Cpolygon points='40,16 64,28 64,52 40,64 16,52 16,28'/%3E%3Cline x1='40' y1='4' x2='40' y2='76'/%3E%3Cline x1='4' y1='40' x2='76' y2='40'/%3E%3C/g%3E%3C/svg%3E"); background-size: 80px 80px; opacity: 0.6; pointer-events: none; }
+  .hero-inner { position: relative; z-index: 1; max-width: 760px; }
+  .hero-eyebrow { display: inline-flex; align-items: center; gap: 8px; background: rgba(184,134,11,0.2); border: 1px solid rgba(184,134,11,0.35); color: var(--gold-light); font-size: 0.72rem; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; padding: 5px 14px; border-radius: 20px; margin-bottom: 20px; }
+  .hero-eyebrow::before { content: '✦'; font-size: 0.6rem; }
+  .hero h1 { font-family: var(--font-display); font-size: clamp(2rem, 5vw, 3.2rem); color: #fff; font-weight: 700; line-height: 1.15; margin-bottom: 16px; }
+  .hero h1 em { color: var(--gold-light); font-style: normal; }
+  .hero p.lead { color: var(--ink-soft); font-size: 0.95rem; max-width: 580px; margin-top: 4px; }
+  .hero-meta { display: flex; flex-wrap: wrap; gap: 20px; margin-top: 28px; }
+  .hero-stat { display: flex; flex-direction: column; gap: 2px; }
+  .hero-stat strong { font-size: 1.6rem; font-weight: 700; color: var(--gold-light); font-family: var(--font-display); line-height: 1; }
+  .hero-stat span { font-size: 0.72rem; color: rgba(194,184,154,0.45); text-transform: uppercase; letter-spacing: 1px; }
+  .hero-divider { width: 1px; height: 40px; background: rgba(201,151,58,0.2); align-self: center; }
+
+  .content-wrap { max-width: 860px; margin: 0 auto; padding: 48px 48px 0; position: relative; }
+
+  .page { display: none; pointer-events: none; }
+  .page.active { display: block; pointer-events: auto; animation: pageIn 0.35s var(--ease-out) forwards; }
+  @keyframes pageIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+  @keyframes cardIn { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: translateY(0); } }
+
+  .search-wrap { margin-bottom: 28px; position: relative; }
+  .search-wrap input { width: 100%; padding: 11px 16px 11px 42px; background: var(--card-bg); border: 1px solid rgba(201,151,58,0.12); border-radius: var(--radius); color: var(--ink); font-size: 0.88rem; font-family: var(--font-body); transition: border-color 0.25s, box-shadow 0.25s; outline: none; }
+  .search-wrap input::placeholder { color: var(--ink-muted); }
+  .search-wrap input:focus { border-color: var(--gold); box-shadow: 0 0 0 3px var(--gold-glow); }
+  .search-wrap .search-icon { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: var(--ink-muted); pointer-events: none; }
+  .search-count { font-size: 0.75rem; color: var(--ink-muted); margin: -20px 0 24px; min-height: 1.2em; }
+  .search-count:empty { margin: 0; }
+
+  .howto { background: var(--teal-pale); border: 1px solid rgba(26,85,85,0.4); border-left: 3px solid var(--teal-light); border-radius: var(--radius); padding: 16px 20px; margin-bottom: 32px; font-size: 0.88rem; color: var(--ink-soft); line-height: 1.6; }
+  .howto strong { color: #6bbfbf; }
+  .howto-chain { background: rgba(201,151,58,0.05); border: 1px solid rgba(201,151,58,0.15); border-left: 3px solid var(--gold); }
+  .howto-chain strong { color: var(--gold-light); }
+
+  .no-results { display: none; text-align: center; padding: 60px 20px; color: var(--ink-muted); }
+  .no-results.visible { display: block; }
+  .no-results span { font-size: 2.4rem; display: block; margin-bottom: 12px; opacity: 0.4; }
+  .no-results p { font-size: 0.9rem; }
+
+  /* Q CARDS */
+  .q-card { background: var(--card-bg); border-radius: var(--radius-lg); box-shadow: 0 2px 20px rgba(0,0,0,0.4); margin-bottom: 28px; overflow: hidden; border: 1px solid rgba(201,151,58,0.1); transition: box-shadow 0.3s var(--ease-out), transform 0.3s var(--ease-out), border-color 0.3s var(--ease-out); animation: cardIn 0.45s var(--ease-out) backwards; animation-delay: calc(var(--i, 0) * 30ms); }
+  @media (hover: hover) { .q-card:hover { box-shadow: 0 6px 36px rgba(0,0,0,0.55); transform: translateY(-2px); border-color: rgba(201,151,58,0.22); } }
+  .q-header { display: flex; align-items: flex-start; gap: 16px; padding: 24px 28px; background: linear-gradient(to right, rgba(26,85,85,0.14), transparent); border-bottom: 1px solid rgba(201,151,58,0.1); cursor: pointer; user-select: none; }
+  .q-badge { flex-shrink: 0; width: 40px; height: 40px; border-radius: 50%; background: var(--teal); color: #fff; display: flex; align-items: center; justify-content: center; font-size: 0.8rem; font-weight: 700; margin-top: 2px; box-shadow: 0 2px 8px rgba(26,92,92,0.3); transition: background 0.3s; }
+  .q-card.open .q-badge { background: var(--teal-light); }
+  .q-text { flex: 1; font-family: var(--font-display); font-size: 1.0rem; line-height: 1.55; color: var(--ink); }
+  .q-toggle { flex-shrink: 0; width: 28px; height: 28px; border-radius: 50%; background: rgba(201,151,58,0.08); border: 1px solid rgba(201,151,58,0.2); display: flex; align-items: center; justify-content: center; color: var(--gold); font-size: 0.75rem; transition: transform 0.3s, background 0.2s; margin-top: 4px; cursor: pointer; }
+  .q-card.open .q-toggle { transform: rotate(180deg); background: var(--gold); color: #0f0e0b; }
+  .q-answer { max-height: 0; overflow: hidden; transition: max-height 0.5s cubic-bezier(0.4, 0, 0.2, 1); }
+  .q-card.open .q-answer { max-height: 5000px; }
+  .q-answer-inner { padding: 24px 28px 28px; border-top: 1px solid rgba(201,151,58,0.08); }
+  .answer-label { display: inline-flex; align-items: center; gap: 6px; font-size: 0.68rem; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--gold); margin-bottom: 14px; }
+  .answer-label::before { content: ''; width: 16px; height: 2px; background: var(--gold); display: inline-block; }
+  .ref-note { font-size: 0.74rem; color: var(--ink-muted); font-style: italic; margin-bottom: 16px; }
+  .q-answer-inner p { font-size: 0.935rem; color: var(--ink-soft); line-height: 1.85; margin-bottom: 14px; }
+  .q-answer-inner p:last-child { margin-bottom: 0; }
+  .q-answer-inner strong { color: var(--ink); font-weight: 600; }
+  .q-answer-inner em { color: #6bbfbf; font-style: normal; font-weight: 500; }
+  .tag-row { display: flex; flex-wrap: wrap; gap: 6px; margin: 14px 0 0; }
+  .tag { font-size: 0.72rem; font-weight: 600; padding: 3px 10px; border-radius: 12px; letter-spacing: 0.3px; }
+  .tag-gold { background: rgba(201,151,58,0.1); color: var(--gold-light); border: 1px solid rgba(201,151,58,0.2); }
+  .tag-teal { background: rgba(26,85,85,0.2); color: #6bbfbf; border: 1px solid rgba(26,85,85,0.35); }
+
+  /* CHAIN CARDS */
+  .chain-card { background: var(--card-bg); border-radius: var(--radius-lg); box-shadow: 0 2px 20px rgba(0,0,0,0.4); margin-bottom: 28px; overflow: hidden; border: 1px solid rgba(201,151,58,0.1); transition: box-shadow 0.3s var(--ease-out), transform 0.3s var(--ease-out), border-color 0.3s var(--ease-out); scroll-margin-top: 100px; animation: cardIn 0.45s var(--ease-out) backwards; animation-delay: calc(var(--i, 0) * 30ms); }
+  @media (hover: hover) { .chain-card:hover { box-shadow: 0 6px 36px rgba(0,0,0,0.55); transform: translateY(-2px); border-color: rgba(201,151,58,0.22); } }
+  .chain-card .chain-header { display: flex; align-items: center; gap: 16px; padding: 20px 28px; background: linear-gradient(to right, rgba(201,151,58,0.07), transparent); border-bottom: 1px solid rgba(201,151,58,0.1); cursor: pointer; user-select: none; }
+  .chain-card .chain-badge { flex-shrink: 0; width: 36px; height: 36px; border-radius: 50%; background: rgba(201,151,58,0.15); color: var(--gold-light); display: flex; align-items: center; justify-content: center; font-size: 0.78rem; font-weight: 700; border: 1px solid rgba(201,151,58,0.25); transition: background 0.3s; }
+  .chain-card.open .chain-badge { background: var(--gold); color: #0f0e0b; }
+  .chain-card .chain-title { flex: 1; font-family: var(--font-display); font-size: 0.95rem; color: var(--ink); line-height: 1.4; }
+  .chain-card .chain-toggle { flex-shrink: 0; width: 28px; height: 28px; border-radius: 50%; background: rgba(201,151,58,0.08); border: 1px solid rgba(201,151,58,0.2); display: flex; align-items: center; justify-content: center; color: var(--gold); font-size: 0.75rem; transition: transform 0.3s, background 0.2s; cursor: pointer; }
+  .chain-card.open .chain-toggle { transform: rotate(180deg); background: var(--gold); color: #0f0e0b; }
+  .chain-card .chain-body { max-height: 0; overflow: hidden; transition: max-height 0.5s cubic-bezier(0.4, 0, 0.2, 1); }
+  .chain-card.open .chain-body { max-height: 5000px; }
+  .chain-card .chain-inner { padding: 20px 28px 24px; }
+
+  .prompt-line { font-size: 0.8rem; color: var(--gold); font-weight: 600; letter-spacing: 0.3px; margin-bottom: 16px; padding: 8px 14px; background: rgba(201,151,58,0.06); border-radius: 6px; border-left: 2px solid var(--gold); }
+
+  .chain { list-style: none; padding: 0; margin: 0; }
+  .chain li { position: relative; padding-left: 44px; margin-bottom: 14px; font-size: 0.9rem; line-height: 1.7; }
+  .chain li::before { content: counter(chain-counter); counter-increment: chain-counter; position: absolute; left: 0; top: 0; width: 26px; height: 26px; border-radius: 50%; background: var(--teal); color: #fff; font-size: 0.7rem; font-weight: 700; display: flex; align-items: center; justify-content: center; }
+  .chain { counter-reset: chain-counter; }
+  .chain li:not(:last-child)::after { content: ''; position: absolute; left: 12px; top: 28px; width: 2px; bottom: -14px; background: linear-gradient(to bottom, rgba(26,85,85,0.4), transparent); }
+  .chain .label { font-weight: 600; color: var(--gold-light); font-size: 0.88rem; }
+  .chain .detail { color: var(--ink-soft); font-size: 0.875rem; }
+  .chain .detail em { color: #6bbfbf; font-style: normal; }
+
+  .keyfacts { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 16px; padding-top: 14px; border-top: 1px solid rgba(201,151,58,0.1); }
+  .fact { font-size: 0.72rem; font-weight: 600; padding: 4px 10px; border-radius: 20px; background: rgba(201,151,58,0.08); color: var(--gold-light); border: 1px solid rgba(201,151,58,0.18); letter-spacing: 0.3px; }
+
+  /* RESPONSIVE */
+  @media (max-width: 900px) {
+    #menu-toggle { display: flex; }
+    #sidebar { position: fixed; left: 0; top: 0; transform: translateX(-100%); }
+    #sidebar.open { transform: translateX(0); }
+    main { width: 100%; }
+    .hero { padding: 60px 24px 40px; }
+    .content-wrap { padding: 32px 20px 0; }
+    .chain-card .chain-header { padding: 18px 20px; }
+    .chain-card .chain-inner { padding: 16px 20px 20px; }
+    .chain li { padding-left: 36px; }
+    .q-header { padding: 18px 20px; }
+    .q-answer-inner { padding: 18px 20px 22px; }
+  }
+
+  @media print {
+    #sidebar, #menu-toggle, #overlay, #scroll-top, #progress-bar, .search-wrap, .howto { display: none !important; }
+    main { width: 100%; padding: 0; }
+    .hero { padding: 24px; background: #fff !important; color: #000 !important; border: none; }
+    .hero h1, .hero p { color: #000 !important; }
+    .content-wrap { padding: 24px; max-width: 100%; }
+    .q-card, .chain-card { box-shadow: none; border: 1px solid #ccc; break-inside: avoid; margin-bottom: 16px; }
+    .q-card.open .q-answer, .chain-card.open .chain-body { max-height: none !important; overflow: visible !important; }
+    .q-answer, .chain-card .chain-body { max-height: none !important; overflow: visible !important; }
+    .q-header, .chain-card .chain-header { background: #f5f5f5 !important; border-bottom-color: #ccc; }
+    .chain .label { color: #333; }
+  }
+</style>
+</head>
+<body>
+
+<div id="progress-bar"></div>
+
+<button id="menu-toggle" aria-label="Open menu" aria-expanded="false" aria-controls="sidebar">
+  <span></span><span></span><span></span>
+</button>
+<div id="overlay" tabindex="0" aria-label="Close menu"></div>
+
+<aside id="sidebar" aria-label="Navigation">
+  <div class="sidebar-brand">
+    <div class="arabic-motif">بسم الله</div>
+    <h2>HUM 4241 — Final Exam</h2>
+    <p>26 Answers · 26 Memory Chains</p>
+  </div>
+
+  <div class="page-tabs" role="tablist">
+    <button class="page-tab active" data-page="answers" role="tab" aria-selected="true">Full Answers</button>
+    <button class="page-tab" data-page="chains" role="tab" aria-selected="false">Memory Chains</button>
+  </div>
+
+  <div class="nav-group active" id="nav-answers" role="tabpanel">
+    <nav aria-label="Answer questions">
+      <a href="#q1"><span class="q-num">1</span>Al-Khwarizmi & Algorithms</a>
+      <a href="#q2"><span class="q-num">2</span>Al-Zahrawi's Design Durability</a>
+      <a href="#q3"><span class="q-num">3</span>Jabir's Crystallization & Distillation</a>
+      <a href="#q4"><span class="q-num">4</span>Ibn al-Haytham's Optics</a>
+      <a href="#q5"><span class="q-num">5</span>Al-Biruni's Triangulation</a>
+      <a href="#q6"><span class="q-num">6</span>Zero & Indian Numerals</a>
+      <a href="#q7"><span class="q-num">7</span>Umar (RA) & the Nile Canal</a>
+      <a href="#q8"><span class="q-num">8</span>Cameras & Fiber Optics</a>
+      <a href="#q9"><span class="q-num">9</span>Free Healthcare in Cairo</a>
+      <a href="#q10"><span class="q-num">10</span>Qur'an & the Water Cycle</a>
+      <a href="#q11"><span class="q-num">11</span>Qur'anic Embryology</a>
+      <a href="#q12"><span class="q-num">12</span>Division of the Atom</a>
+      <a href="#q13"><span class="q-num">13</span>Al-Ma'mun's Observatories</a>
+      <a href="#q14"><span class="q-num">14</span>House of Wisdom & Open Knowledge</a>
+      <a href="#q15"><span class="q-num">15</span>Al-Ma'mun's Inclusive Council</a>
+      <a href="#q16"><span class="q-num">16</span>La Darar wa La Dirar</a>
+      <a href="#q17"><span class="q-num">17</span>Engineer as Khalifah</a>
+      <a href="#q18"><span class="q-num">18</span>Golden Age & AI / Renewables</a>
+      <a href="#q19"><span class="q-num">19</span>Brain Drain to Brain Gain</a>
+      <a href="#q20"><span class="q-num">20</span>South Korea, Singapore & Muslim World</a>
+      <a href="#q21"><span class="q-num">21</span>Maslahah in Biotech & Space</a>
+      <a href="#q22"><span class="q-num">22</span>Al-Jazari's Crank System</a>
+      <a href="#q23"><span class="q-num">23</span>Mountains as Stabilizers</a>
+      <a href="#q24"><span class="q-num">24</span>Islamic Knowledge & Open Source</a>
+      <a href="#q25"><span class="q-num">25</span>Umayyad Shipbuilding</a>
+      <a href="#q26"><span class="q-num">26</span>Al-Ma'mun's Geodesy</a>
+    </nav>
+  </div>
+
+  <div class="nav-group" id="nav-chains" role="tabpanel">
+    <nav aria-label="Memory chain questions">
+      <a href="#chain-q1"><span class="q-num">1</span>Al-Khwarizmi → Algorithm</a>
+      <a href="#chain-q2"><span class="q-num">2</span>Al-Zahrawi → Durability</a>
+      <a href="#chain-q3"><span class="q-num">3</span>Jabir → Chemical Processes</a>
+      <a href="#chain-q4"><span class="q-num">4</span>Ibn al-Haytham → Optics</a>
+      <a href="#chain-q5"><span class="q-num">5</span>Al-Biruni → Earth Radius</a>
+      <a href="#chain-q6"><span class="q-num">6</span>Zero → Computing</a>
+      <a href="#chain-q7"><span class="q-num">7</span>Umar (RA) → Crisis Engineering</a>
+      <a href="#chain-q8"><span class="q-num">8</span>Light Theory → Cameras</a>
+      <a href="#chain-q9"><span class="q-num">9</span>Ibn Tulun Hospital</a>
+      <a href="#chain-q10"><span class="q-num">10</span>Qur'anic Water Cycle</a>
+      <a href="#chain-q11"><span class="q-num">11</span>Embryology & Biomedical Ethics</a>
+      <a href="#chain-q12"><span class="q-num">12</span>Atom → Nuclear Ethics</a>
+      <a href="#chain-q13"><span class="q-num">13</span>Observatories → Space Centers</a>
+      <a href="#chain-q14"><span class="q-num">14</span>Bayt al-Hikmah → Digital Age</a>
+      <a href="#chain-q15"><span class="q-num">15</span>Inclusive Council → Teams</a>
+      <a href="#chain-q16"><span class="q-num">16</span>La Darar → Environment</a>
+      <a href="#chain-q17"><span class="q-num">17</span>Khalifah + Amanah</a>
+      <a href="#chain-q18"><span class="q-num">18</span>Golden Age → AI & Energy</a>
+      <a href="#chain-q19"><span class="q-num">19</span>Brain Drain → Brain Gain</a>
+      <a href="#chain-q20"><span class="q-num">20</span>SK/SG → Muslim World</a>
+      <a href="#chain-q21"><span class="q-num">21</span>Maslahah → Innovation Ethics</a>
+      <a href="#chain-q22"><span class="q-num">22</span>Al-Jazari → Crank → Bicycle</a>
+      <a href="#chain-q23"><span class="q-num">23</span>Mountains → Structural Stability</a>
+      <a href="#chain-q24"><span class="q-num">24</span>Translation → Open Source</a>
+      <a href="#chain-q25"><span class="q-num">25</span>Umayyad Shipyards</a>
+      <a href="#chain-q26"><span class="q-num">26</span>Geodesy → Precision Engineering</a>
+    </nav>
+  </div>
+
+  <div class="sidebar-footer">HUM 4241 · Islamic Engineering Ethics · Finals</div>
+</aside>
+
+<main>
+  <div class="hero">
+    <div class="hero-inner">
+      <div class="hero-eyebrow">Final Exam Solutions</div>
+      <h1>HUM 4241 — <em>Islamic Civilisation</em><br>&amp; Engineering Ethics</h1>
+      <p class="lead">Twenty-six suggested exam questions with full written answers plus memory-chain recall scaffolds — switch between <strong>Full Answers</strong> and <strong>Memory Chains</strong> using the sidebar tabs.</p>
+      <div class="hero-meta">
+        <div class="hero-stat"><strong>26</strong><span>Questions</span></div>
+        <div class="hero-divider"></div>
+        <div class="hero-stat"><strong>26</strong><span>Memory Chains</span></div>
+        <div class="hero-divider"></div>
+        <div class="hero-stat"><strong>Final</strong><span>Exam Prep</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="content-wrap">
+
+    <!-- ═══════════════ FULL ANSWERS PAGE ═══════════════ -->
+    <section id="page-answers" class="page active">
+      <div class="search-wrap">
+        <svg class="search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input class="search-input" data-page="answers" type="search" placeholder="Search questions… (press / to focus)" aria-label="Search answers" />
+      </div>
+      <div class="search-count" aria-live="polite"></div>
+      <div class="howto">
+        <strong>How to use:</strong> Click any question card to expand the full answer. Use the <strong>Memory Chains</strong> tab for condensed recall scaffolds before your exam.
+      </div>
+
+      <div class="answers-container">
+
+        <!-- Q1 -->
+        <article class="q-card" id="q1">
+          <div class="q-header" role="button" tabindex="0" aria-expanded="false">
+            <span class="q-badge">1</span>
+            <span class="q-text">If Al-Khwarizmi's "al-jabr" shaped algebra, how does his legacy live on every time you use an algorithm in coding?</span>
+            <span class="q-toggle" aria-hidden="true">▾</span>
+          </div>
+          <div class="q-answer" aria-hidden="true">
+            <div class="q-answer-inner">
+              <div class="answer-label">Answer</div>
+              <p>Al-Khwarizmi developed the discipline of algebra in his work <em>al-jabr</em>, which gave algebra its name. His step-by-step methods for solving equations also live on in the word <strong>algorithm</strong>, derived from the Latin form of his name. The course material connects his mathematical legacy with computing by noting that every computer program owes something to his work.</p>
+              <p>Whenever a programmer follows a systematic sequence of steps to solve a problem, the legacy of Al-Khwarizmi's method is reflected in the use of algorithms. His contribution shows how mathematical ideas developed during the Islamic Golden Age became the basis for later scientific and technological work. Algebra provided systematic methods for calculation and problem-solving, while his algorithmic approach shows how ordered, logical procedures are central to computation.</p>
+              <div class="tag-row">
+                <span class="tag tag-gold">Al-Khwarizmi</span>
+                <span class="tag tag-teal">al-jabr → Algebra</span>
+                <span class="tag tag-gold">Algorithm (Latin latinisation)</span>
+                <span class="tag tag-teal">Islamic Golden Age</span>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- Q2 -->
+        <article class="q-card" id="q2">
+          <div class="q-header" role="button" tabindex="0" aria-expanded="false">
+            <span class="q-badge">2</span>
+            <span class="q-text">Al-Zahrawi's surgical tools are still in use; what does that tell us about the importance of design durability in engineering?</span>
+            <span class="q-toggle" aria-hidden="true">▾</span>
+          </div>
+          <div class="q-answer" aria-hidden="true">
+            <div class="q-answer-inner">
+              <div class="answer-label">Answer</div>
+              <p>Al-Zahrawi established the foundation of modern surgery and developed many innovative surgical instruments and techniques. The course material lists instruments such as the <strong>syringe, forceps, surgical hook and needle, bone saw, and lithotomy scalpel</strong>, and notes that many of his instruments and techniques are still used today. This demonstrates that an engineering design can remain useful when it successfully addresses the needs for which it was created.</p>
+              <p>For engineers, durability means producing designs that are not only innovative but also reliable and useful over time. Al-Zahrawi's work shows that careful design can have a lasting influence when it combines practical function with sound construction and serves an important human need.</p>
+              <div class="tag-row">
+                <span class="tag tag-gold">Al-Zahrawi</span>
+                <span class="tag tag-teal">Syringe · Forceps · Bone Saw</span>
+                <span class="tag tag-gold">Design Durability</span>
+                <span class="tag tag-teal">Father of Modern Surgery</span>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- Q3 -->
+        <article class="q-card" id="q3">
+          <div class="q-header" role="button" tabindex="0" aria-expanded="false">
+            <span class="q-badge">3</span>
+            <span class="q-text">Jabir ibn Hayyan pioneered crystallization and distillation — what modern engineering fields still rely heavily on these principles?</span>
+            <span class="q-toggle" aria-hidden="true">▾</span>
+          </div>
+          <div class="q-answer" aria-hidden="true">
+            <div class="q-answer-inner">
+              <div class="answer-label">Answer</div>
+              <p>Jabir ibn Hayyan introduced scientific experimentation into alchemy and developed chemical processes including <strong>crystallization and distillation</strong>. The course material describes these processes as foundations of modern chemistry and records his work with chemical substances, refinement of metals, preparation of steel, and other practical processes. These contributions show the importance of controlled separation, purification, and transformation of substances in modern chemical and industrial work.</p>
+              <p>The main engineering lesson is that careful laboratory experimentation can turn basic chemical processes into useful technologies. Crystallization and distillation represent systematic methods for working with substances, while Jabir's wider work demonstrates how experimental chemistry can support practical applications and the development of modern chemical knowledge.</p>
+              <div class="tag-row">
+                <span class="tag tag-gold">Jabir ibn Hayyan</span>
+                <span class="tag tag-teal">Crystallization</span>
+                <span class="tag tag-gold">Distillation</span>
+                <span class="tag tag-teal">Experimental Chemistry</span>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- Q4 -->
+        <article class="q-card" id="q4">
+          <div class="q-header" role="button" tabindex="0" aria-expanded="false">
+            <span class="q-badge">4</span>
+            <span class="q-text">How might Ibn al-Haytham's experimental approach to optics inspire engineers in designing today's cameras and sensors?</span>
+            <span class="q-toggle" aria-hidden="true">▾</span>
+          </div>
+          <div class="q-answer" aria-hidden="true">
+            <div class="q-answer-inner">
+              <div class="answer-label">Answer</div>
+              <p>Ibn al-Haytham is described as the <strong>Father of Modern Optics</strong> and as an early experimental physicist. He insisted that scientific claims should be supported by empirical proof and experimentation. In his <em>Book of Optics</em>, he explained how vision occurs and showed that light enters the eye. He also investigated the camera obscura phenomenon.</p>
+              <p>This experimental approach provides engineers with an important model: optical designs should be based on observation, testing, evidence, and careful understanding of how light behaves. Cameras and sensors depend on the controlled study and use of light, so Ibn al-Haytham's emphasis on experimentation and his discoveries in optics provide an important foundation for developing and improving such technologies.</p>
+              <div class="tag-row">
+                <span class="tag tag-gold">Ibn al-Haytham</span>
+                <span class="tag tag-teal">Book of Optics</span>
+                <span class="tag tag-gold">Camera Obscura</span>
+                <span class="tag tag-teal">Father of Modern Optics</span>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- Q5 -->
+        <article class="q-card" id="q5">
+          <div class="q-header" role="button" tabindex="0" aria-expanded="false">
+            <span class="q-badge">5</span>
+            <span class="q-text">Al-Biruni estimated Earth's radius within 50 km accuracy — how could his triangulation methods guide modern satellite engineering?</span>
+            <span class="q-toggle" aria-hidden="true">▾</span>
+          </div>
+          <div class="q-answer" aria-hidden="true">
+            <div class="q-answer-inner">
+              <div class="answer-label">Answer</div>
+              <p>Al-Biruni established techniques for measuring the Earth and distances using <strong>triangulation</strong>, contributing greatly to geography and geodesy. He solved complex geodesic equations and estimated the Earth's radius at <strong>6,339.6 kilometres</strong>, less than 50 kilometres short of the modern value. His work demonstrates how careful measurement, geometry, mathematical calculation, and systematic observation can produce highly accurate results.</p>
+              <p>Modern satellite engineering similarly depends on accurate measurement of the Earth and geographical positions. Al-Biruni's method provides an example of how geometric measurement and mathematical precision can support work involving the Earth's shape, distances, and location. His achievement also demonstrates that sophisticated engineering results can be obtained through disciplined methods even with limited instruments.</p>
+              <div class="tag-row">
+                <span class="tag tag-gold">Al-Biruni</span>
+                <span class="tag tag-teal">Triangulation</span>
+                <span class="tag tag-gold">6,339.6 km Earth Radius</span>
+                <span class="tag tag-teal">Geodesy</span>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- Q6 -->
+        <article class="q-card" id="q6">
+          <div class="q-header" role="button" tabindex="0" aria-expanded="false">
+            <span class="q-badge">6</span>
+            <span class="q-text">What role did the introduction of zero and Indian numerals play in shaping modern computer engineering?</span>
+            <span class="q-toggle" aria-hidden="true">▾</span>
+          </div>
+          <div class="q-answer" aria-hidden="true">
+            <div class="q-answer-inner">
+              <div class="answer-label">Answer</div>
+              <p>The course material credits Al-Khwarizmi with introducing zero and developing the <strong>Hindu-Arabic numeral system</strong>, while the navigation and mathematics material explains how Indian numerals and zero spread through the Muslim world. Al-Khwarizmi also introduced methods of counting based on numerals and decimal systems and systematized earlier Greek and Hindu mathematical knowledge. These developments made numerical calculation more systematic and powerful.</p>
+              <p>The importance of this legacy to computing lies in the central role of systematic numerical representation and calculation. The course material also directly connects Al-Khwarizmi's mathematical work with algorithms and computer programs. Thus, the development and spread of zero, numerals, algebra, and systematic calculation helped create the mathematical foundations from which later computational methods could develop.</p>
+              <div class="tag-row">
+                <span class="tag tag-gold">Zero</span>
+                <span class="tag tag-teal">Hindu-Arabic Numerals</span>
+                <span class="tag tag-gold">Decimal System</span>
+                <span class="tag tag-teal">Al-Khwarizmi</span>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- Q7 -->
+        <article class="q-card" id="q7">
+          <div class="q-header" role="button" tabindex="0" aria-expanded="false">
+            <span class="q-badge">7</span>
+            <span class="q-text">If Umar (R.A) could design a 69-mile canal to transport food during famine, what modern engineering project could you compare this with in terms of crisis management?</span>
+            <span class="q-toggle" aria-hidden="true">▾</span>
+          </div>
+          <div class="q-answer" aria-hidden="true">
+            <div class="q-answer-inner">
+              <div class="answer-label">Answer</div>
+              <p>During a severe famine in Arabia, Umar (R.A) ordered a <strong>69-mile canal</strong> to be dug from the Nile to the Red Sea. When the work was completed, twenty ships carrying corn travelled from the Nile to the Red Sea and safely reached the port of Madinah. The project demonstrates engineering being used directly to respond to an urgent humanitarian crisis by creating a transportation route for essential supplies.</p>
+              <p>A modern comparison can be made with a large emergency infrastructure project designed to restore or provide essential supply routes during a crisis. The important lesson is not simply the size of the project but its purpose: identifying an urgent need, developing practical infrastructure, and delivering essential resources to affected people. It shows how engineering can support crisis management and public welfare.</p>
+              <div class="tag-row">
+                <span class="tag tag-gold">Umar (RA)</span>
+                <span class="tag tag-teal">69-Mile Canal</span>
+                <span class="tag tag-gold">Nile → Red Sea</span>
+                <span class="tag tag-teal">Crisis Engineering</span>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- Q8 -->
+        <article class="q-card" id="q8">
+          <div class="q-header" role="button" tabindex="0" aria-expanded="false">
+            <span class="q-badge">8</span>
+            <span class="q-text">How different would cameras and fiber-optic technology be without Ibn al-Haytham's optics discoveries?</span>
+            <span class="q-toggle" aria-hidden="true">▾</span>
+          </div>
+          <div class="q-answer" aria-hidden="true">
+            <div class="q-answer-inner">
+              <div class="answer-label">Answer</div>
+              <p>Ibn al-Haytham made major contributions to optics by explaining that humans see when <strong>light reflected from objects enters the eye</strong>. He rejected earlier theories that light was emitted from the eye and also investigated the camera obscura phenomenon. His work established a strong experimental foundation for understanding light and vision. Because cameras depend on the formation and control of images through light, his optical discoveries are closely relevant to the development of camera technology.</p>
+              <p>The course material specifically presents optics as one of the major Muslim contributions that shaped the modern world. His experimental treatment of light provided a systematic way of understanding optical phenomena. Technologies based on optical imaging and the controlled use of light can be viewed in the context of the foundations established by Ibn al-Haytham.</p>
+              <div class="tag-row">
+                <span class="tag tag-gold">Ibn al-Haytham</span>
+                <span class="tag tag-teal">Light enters the eye</span>
+                <span class="tag tag-gold">Camera Obscura</span>
+                <span class="tag tag-teal">Fiber Optics Foundation</span>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- Q9 -->
+        <article class="q-card" id="q9">
+          <div class="q-header" role="button" tabindex="0" aria-expanded="false">
+            <span class="q-badge">9</span>
+            <span class="q-text">If 9th-century Cairo hospitals had not introduced "free healthcare," how would today's medical technology and ethics be shaped?</span>
+            <span class="q-toggle" aria-hidden="true">▾</span>
+          </div>
+          <div class="q-answer" aria-hidden="true">
+            <div class="q-answer-inner">
+              <div class="answer-label">Answer</div>
+              <p>The course material describes the <strong>Ahmad ibn Tulun Hospital in Cairo</strong>, founded in 872, as an early medical centre with wards and teaching facilities that provided <strong>free care for anyone who needed it</strong>. This policy was based on the Muslim tradition of caring for those who were sick, and hospitals of this kind later spread throughout the Muslim world.</p>
+              <p>Without such an example of accessible medical care, the historical development of hospitals as institutions serving the wider community would have been different. The lesson for modern medical technology and ethics is that medical progress should be connected with responsibility toward human well-being. The course material presents healthcare not only as a technical matter but also as a social responsibility.</p>
+              <div class="tag-row">
+                <span class="tag tag-gold">Ahmad ibn Tulun Hospital</span>
+                <span class="tag tag-teal">Founded 872 CE</span>
+                <span class="tag tag-gold">Free Healthcare</span>
+                <span class="tag tag-teal">Cairo</span>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- Q10 -->
+        <article class="q-card" id="q10">
+          <div class="q-header" role="button" tabindex="0" aria-expanded="false">
+            <span class="q-badge">10</span>
+            <span class="q-text">With the Qur'anic explanation of the water cycle, what sustainable engineering solutions can be designed to tackle today's water crisis?</span>
+            <span class="q-toggle" aria-hidden="true">▾</span>
+          </div>
+          <div class="q-answer" aria-hidden="true">
+            <div class="q-answer-inner">
+              <div class="answer-label">Answer</div>
+              <p>The course material explains the <strong>Qur'anic description of the water cycle</strong> through rain, clouds, vegetation, and the replenishment of underground water sources. This presents water as part of a continuing natural process that sustains life. From an engineering perspective, this understanding supports solutions that work with the natural water cycle rather than treating water as an unlimited resource.</p>
+              <p>Sustainable engineering should therefore focus on protecting and replenishing water resources, improving the responsible use of water, and supporting systems that preserve the natural movement of water through the environment. The course material also emphasizes that science and technology can solve real problems such as clean water. Engineering should use knowledge of the water cycle to support long-term water security and responsible resource management.</p>
+              <div class="tag-row">
+                <span class="tag tag-gold">Qur'anic Water Cycle</span>
+                <span class="tag tag-teal">Rain → Clouds → Underground</span>
+                <span class="tag tag-gold">Sustainable Engineering</span>
+                <span class="tag tag-teal">Water Security</span>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- Q11 -->
+        <article class="q-card" id="q11">
+          <div class="q-header" role="button" tabindex="0" aria-expanded="false">
+            <span class="q-badge">11</span>
+            <span class="q-text">In light of Qur'anic verses on embryology, how might biomedical engineers bridge faith and medical innovation?</span>
+            <span class="q-toggle" aria-hidden="true">▾</span>
+          </div>
+          <div class="q-answer" aria-hidden="true">
+            <div class="q-answer-inner">
+              <div class="answer-label">Answer</div>
+              <p>The course material presents Qur'anic verses on embryology as describing stages of human development from conception to fetal formation. It relates these descriptions to contemporary embryological knowledge. For biomedical engineers, this provides a context in which scientific study and faith can be considered together rather than treated as separate areas. The Qur'anic discussion can encourage reflection on human development while scientific and engineering methods provide practical tools for studying and improving healthcare.</p>
+              <p>Biomedical innovation should therefore combine scientific investigation with ethical responsibility. The course material emphasizes that knowledge is connected with faith and that engineering affects human life and society. Biomedical engineers can apply their technical knowledge to medical innovation while maintaining respect for human life, responsibility, and the ethical values emphasized in the course.</p>
+              <div class="tag-row">
+                <span class="tag tag-gold">Qur'anic Embryology</span>
+                <span class="tag tag-teal">Faith + Science</span>
+                <span class="tag tag-gold">Biomedical Ethics</span>
+                <span class="tag tag-teal">Human Dignity</span>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- Q12 -->
+        <article class="q-card" id="q12">
+          <div class="q-header" role="button" tabindex="0" aria-expanded="false">
+            <span class="q-badge">12</span>
+            <span class="q-text">The Qur'an describes the division of the atom — what lessons can nuclear engineers learn from this early reference?</span>
+            <span class="q-toggle" aria-hidden="true">▾</span>
+          </div>
+          <div class="q-answer" aria-hidden="true">
+            <div class="q-answer-inner">
+              <div class="answer-label">Answer</div>
+              <p>The course material includes the <strong>division of the atom</strong> among its examples of scientific references in the Qur'an. For nuclear engineers, the important lesson is that scientific inquiry can explore the structure and behaviour of matter and that knowledge should be approached with seriousness and responsibility. The course presents scientific knowledge as part of the broader human effort to understand creation.</p>
+              <p>Nuclear engineering therefore requires both scientific knowledge and <strong>ethical responsibility</strong>. Engineering decisions affect human life, society, and the environment, and the course's Islamic engineering ethics emphasizes accountability and the avoidance of harm. The study and application of nuclear knowledge should consequently be guided not only by technical capability but also by responsible use and concern for the wider good.</p>
+              <div class="tag-row">
+                <span class="tag tag-gold">Qur'anic Atom Reference</span>
+                <span class="tag tag-teal">Nuclear Ethics</span>
+                <span class="tag tag-gold">Accountability</span>
+                <span class="tag tag-teal">La Darar wa La Dirar</span>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- Q13 -->
+        <article class="q-card" id="q13">
+          <div class="q-header" role="button" tabindex="0" aria-expanded="false">
+            <span class="q-badge">13</span>
+            <span class="q-text">How might modern engineers be inspired by Al-Ma'mun's establishment of observatories in designing today's space research centers?</span>
+            <span class="q-toggle" aria-hidden="true">▾</span>
+          </div>
+          <div class="q-answer" aria-hidden="true">
+            <div class="q-answer-inner">
+              <div class="answer-label">Answer</div>
+              <p>Al-Ma'mun supported systematic scientific observation and established an observatory on the <strong>plain of Tadmor (Palmyra)</strong> for astronomy and geometry. His astronomers made careful observations of celestial movements and carried out precise measurements. The course also describes astronomical instruments such as the <strong>quadrant, astrolabe, dial, and globes</strong>. This demonstrates the importance of dedicated institutions, appropriate instruments, observation, measurement, and sustained scientific inquiry.</p>
+              <p>Modern space research centres can follow the same principles by creating environments where engineers and scientists can work systematically, use suitable instruments, collect accurate data, and develop knowledge through observation and experimentation. Al-Ma'mun's example shows that progress in science requires institutional support and a serious commitment to research.</p>
+              <div class="tag-row">
+                <span class="tag tag-gold">Al-Ma'mun</span>
+                <span class="tag tag-teal">Tadmor Observatory</span>
+                <span class="tag tag-gold">Quadrant · Astrolabe</span>
+                <span class="tag tag-teal">Institutional Science</span>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- Q14 -->
+        <article class="q-card" id="q14">
+          <div class="q-header" role="button" tabindex="0" aria-expanded="false">
+            <span class="q-badge">14</span>
+            <span class="q-text">If Al-Ma'mun's "House of Wisdom" was a hub of global knowledge exchange, what would its equivalent look like in today's digital age of engineering?</span>
+            <span class="q-toggle" aria-hidden="true">▾</span>
+          </div>
+          <div class="q-answer" aria-hidden="true">
+            <div class="q-answer-inner">
+              <div class="answer-label">Answer</div>
+              <p>Al-Ma'mun's <strong>Bayt al-Hikmah (House of Wisdom)</strong> was a state-sponsored academy, library, and centre of translation. Scholars of different backgrounds were welcomed, and works from Sanskrit, Greek, Syriac, and Persian traditions were translated into Arabic. This created an environment where knowledge from different cultures could be collected, preserved, translated, discussed, and developed further.</p>
+              <p>Its modern equivalent would be a large <strong>digital knowledge network</strong> where engineers and researchers from different countries and disciplines can share scientific knowledge, collaborate, translate important material, and build new work on earlier discoveries. The essential principle is the same: knowledge should be preserved, made accessible, and used as a foundation for further innovation.</p>
+              <div class="tag-row">
+                <span class="tag tag-gold">Bayt al-Hikmah</span>
+                <span class="tag tag-teal">Multi-language Translation</span>
+                <span class="tag tag-gold">Open Knowledge Network</span>
+                <span class="tag tag-teal">Global Collaboration</span>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- Q15 -->
+        <article class="q-card" id="q15">
+          <div class="q-header" role="button" tabindex="0" aria-expanded="false">
+            <span class="q-badge">15</span>
+            <span class="q-text">How did Al-Ma'mun's inclusive Council of State model reflect principles of interdisciplinary teamwork crucial in modern engineering projects?</span>
+            <span class="q-toggle" aria-hidden="true">▾</span>
+          </div>
+          <div class="q-answer" aria-hidden="true">
+            <div class="q-answer-inner">
+              <div class="answer-label">Answer</div>
+              <p>Al-Ma'mun established a <strong>Council of State</strong> that included representatives from different communities under his rule, including Muslims, Jews, Christians, and others. His court also welcomed scholars of different backgrounds and supported work across mathematics, astronomy, medicine, philosophy, translation, and other fields. This demonstrates the value of bringing people with different experiences and areas of knowledge into a common intellectual and decision-making environment.</p>
+              <p>Modern engineering projects similarly require cooperation among people with different skills and responsibilities. A project benefits when different perspectives can contribute to planning, problem-solving, and decision-making. Al-Ma'mun's inclusive approach therefore provides a model of cooperation in which diversity of knowledge and experience strengthens collective work and helps address complex problems more effectively.</p>
+              <div class="tag-row">
+                <span class="tag tag-gold">Al-Ma'mun</span>
+                <span class="tag tag-teal">Inclusive Council</span>
+                <span class="tag tag-gold">Interdisciplinary Teams</span>
+                <span class="tag tag-teal">Multi-faith Scholars</span>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- Q16 -->
+        <article class="q-card" id="q16">
+          <div class="q-header" role="button" tabindex="0" aria-expanded="false">
+            <span class="q-badge">16</span>
+            <span class="q-text">In the light of la darar wa la dirar ("no harm, no reciprocating harm"), how would you decide on a project that risks environmental damage?</span>
+            <span class="q-toggle" aria-hidden="true">▾</span>
+          </div>
+          <div class="q-answer" aria-hidden="true">
+            <div class="q-answer-inner">
+              <div class="answer-label">Answer</div>
+              <p>The principle of <strong>la darar wa la dirar</strong>, meaning "no harm, no reciprocating harm," requires an engineer to take potential harm seriously before approving a project. The course explains that engineering decisions affect human life, society, and the environment, and that Islamic ethics requires safety, justice, sustainability, and accountability. Therefore, a project that creates significant environmental damage should not be justified simply because it produces technical or financial benefits.</p>
+              <p>The engineer should identify the risks, apply appropriate safety measures, and seek a solution that protects people and the environment. The course also presents the engineer as a <strong>khalifah</strong> whose work should protect life, preserve the environment, and serve society. Thus, avoiding preventable harm must take priority over short-term gain.</p>
+              <div class="tag-row">
+                <span class="tag tag-gold">La Darar wa La Dirar</span>
+                <span class="tag tag-teal">No Harm Principle</span>
+                <span class="tag tag-gold">Khalifah Responsibility</span>
+                <span class="tag tag-teal">Environmental Ethics</span>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- Q17 -->
+        <article class="q-card" id="q17">
+          <div class="q-header" role="button" tabindex="0" aria-expanded="false">
+            <span class="q-badge">17</span>
+            <span class="q-text">How can an engineer act as a true khalifah (vicegerent) when facing the temptation of profit over safety?</span>
+            <span class="q-toggle" aria-hidden="true">▾</span>
+          </div>
+          <div class="q-answer" aria-hidden="true">
+            <div class="q-answer-inner">
+              <div class="answer-label">Answer</div>
+              <p>The course describes human beings as Allah's <strong>khalifah</strong> on earth and explains that engineers have a responsibility to balance technological advancement with ethical responsibility. An engineer acting as a true khalifah must therefore remember that engineering is an <strong>amanah</strong>, or trust, and that professional decisions can directly affect human life, society, and the environment.</p>
+              <p>When profit conflicts with safety, the engineer should protect life, preserve the environment, and serve society rather than sacrifice these responsibilities for financial gain. The <strong>Rana Plaza case</strong> in the course shows the consequences of poor materials, dishonesty, negligence, and prioritizing profit over human life. A responsible engineer should instead maintain honesty, conduct proper risk assessment, implement safety measures, and uphold accountability.</p>
+              <div class="tag-row">
+                <span class="tag tag-gold">Khalifah</span>
+                <span class="tag tag-teal">Amanah (Trust)</span>
+                <span class="tag tag-gold">Rana Plaza Case</span>
+                <span class="tag tag-teal">Safety over Profit</span>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- Q18 -->
+        <article class="q-card" id="q18">
+          <div class="q-header" role="button" tabindex="0" aria-expanded="false">
+            <span class="q-badge">18</span>
+            <span class="q-text">If the Muslim Golden Age once lit the world with innovation, how can today's engineers rekindle that flame in AI and renewable energy?</span>
+            <span class="q-toggle" aria-hidden="true">▾</span>
+          </div>
+          <div class="q-answer" aria-hidden="true">
+            <div class="q-answer-inner">
+              <div class="answer-label">Answer</div>
+              <p>The course presents the Islamic Golden Age as a period of major achievements in mathematics, astronomy, medicine, optics, chemistry, and other fields. It also identifies <strong>artificial intelligence and renewable energy</strong> as priority sectors for the future. AI can help diagnose disease, personalize education, and support economic growth when developed ethically. Renewable energy can use the abundant sun and wind found across much of the Muslim world while reducing dependence on imported fuel and creating new industries and jobs.</p>
+              <p>Today's engineers can build on this spirit by strengthening STEM education, research, innovation, global collaboration, and ethical responsibility. The course's vision is not simply to reproduce the past but to combine the intellectual legacy of the Golden Age with modern science and technology to solve real problems and serve society.</p>
+              <div class="tag-row">
+                <span class="tag tag-gold">Islamic Golden Age</span>
+                <span class="tag tag-teal">AI & Renewable Energy</span>
+                <span class="tag tag-gold">STEM Education</span>
+                <span class="tag tag-teal">Ethical Innovation</span>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- Q19 -->
+        <article class="q-card" id="q19">
+          <div class="q-header" role="button" tabindex="0" aria-expanded="false">
+            <span class="q-badge">19</span>
+            <span class="q-text">What role should young Muslim engineers play in turning brain drain into brain gain for their nations?</span>
+            <span class="q-toggle" aria-hidden="true">▾</span>
+          </div>
+          <div class="q-answer" aria-hidden="true">
+            <div class="q-answer-inner">
+              <div class="answer-label">Answer</div>
+              <p>The course identifies <strong>brain drain</strong> as a major challenge because talented scientists and engineers often leave for better-funded laboratories abroad. Young Muslim engineers can help turn this into brain gain by developing strong skills and using them to strengthen research and innovation at home. The proposed roadmap includes strengthening STEM education, pairing young scientists with experienced mentors, building specialized research hubs and innovation parks, and creating partnerships between universities and industry.</p>
+              <p>The goal is not simply to keep talented people at home but to create an environment where they can contribute meaningfully. The course's examples show the value of investing in young engineers and building local expertise. In the long term, Muslim countries should aim to become leaders in selected fields and export high-tech solutions rather than depending mainly on imported technology.</p>
+              <div class="tag-row">
+                <span class="tag tag-gold">Brain Drain</span>
+                <span class="tag tag-teal">Brain Gain</span>
+                <span class="tag tag-gold">Research Hubs</span>
+                <span class="tag tag-teal">Mentorship</span>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- Q20 -->
+        <article class="q-card" id="q20">
+          <div class="q-header" role="button" tabindex="0" aria-expanded="false">
+            <span class="q-badge">20</span>
+            <span class="q-text">If South Korea and Singapore transformed through science and technology, what unique strengths can the Muslim world harness to leap forward?</span>
+            <span class="q-toggle" aria-hidden="true">▾</span>
+          </div>
+          <div class="q-answer" aria-hidden="true">
+            <div class="q-answer-inner">
+              <div class="answer-label">Answer</div>
+              <p>The course presents South Korea and Singapore as examples of transformation through sustained investment in knowledge and technology. South Korea developed through government investment in research, strong university-industry links, and technology firms. Singapore, despite having few natural resources, invested heavily in education and recruited global talent and multinational companies to build a competitive knowledge economy.</p>
+              <p>The Muslim world has its own major strengths: a large population of young people, a long history of scholarship and discovery, and significant human talent. The course notes that <strong>more than 60% of the Muslim world's population is under 30</strong>. By investing in STEM education, research hubs, university-industry partnerships, global collaboration, and ethical innovation, the Muslim world can turn this young population and intellectual heritage into a foundation for technological progress.</p>
+              <div class="tag-row">
+                <span class="tag tag-gold">South Korea · Singapore</span>
+                <span class="tag tag-teal">60% Under Age 30</span>
+                <span class="tag tag-gold">University-Industry Links</span>
+                <span class="tag tag-teal">Knowledge Economy</span>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- Q21 -->
+        <article class="q-card" id="q21">
+          <div class="q-header" role="button" tabindex="0" aria-expanded="false">
+            <span class="q-badge">21</span>
+            <span class="q-text">How can maslahah (public interest) guide ethical innovation in biotechnology and space exploration?</span>
+            <span class="q-toggle" aria-hidden="true">▾</span>
+          </div>
+          <div class="q-answer" aria-hidden="true">
+            <div class="q-answer-inner">
+              <div class="answer-label">Answer</div>
+              <p><strong>Maslahah</strong>, or public interest, means favouring the path of innovation that serves the wider good of society. The course applies this principle to modern science and technology and identifies biotechnology and space exploration as important areas of opportunity. Biotechnology can contribute to medicines, better crops, and public-health resilience, while space exploration can support ambitious scientific development and build local engineering expertise.</p>
+              <p>Maslahah requires engineers and scientists to consider not only whether an innovation is technically possible but also whether it benefits society and is consistent with ethical responsibility. Innovation should therefore protect human dignity, serve genuine needs, and contribute to the wider public good rather than being driven only by profit or prestige.</p>
+              <div class="tag-row">
+                <span class="tag tag-gold">Maslahah (Public Interest)</span>
+                <span class="tag tag-teal">Biotechnology</span>
+                <span class="tag tag-gold">Space Exploration</span>
+                <span class="tag tag-teal">Human Dignity</span>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- Q22 -->
+        <article class="q-card" id="q22">
+          <div class="q-header" role="button" tabindex="0" aria-expanded="false">
+            <span class="q-badge">22</span>
+            <span class="q-text">Can we imagine bicycles or engines without Al-Jazari's revolutionary crank system?</span>
+            <span class="q-toggle" aria-hidden="true">▾</span>
+          </div>
+          <div class="q-answer" aria-hidden="true">
+            <div class="q-answer-inner">
+              <div class="answer-label">Answer</div>
+              <p>Al-Jazari is described in the course as the <strong>father of automation and robotics</strong>. His revolutionary <strong>crank-connecting rod system</strong> converted rotary motion into linear motion and made it possible to lift heavy objects with relative ease. The course specifically states that this technology spread widely and led to applications ranging from the <strong>bicycle to the internal combustion engine</strong>.</p>
+              <p>The crank system represents an important example of how a mechanical principle developed in the Islamic world influenced later machines. Its significance lies in the effective conversion of motion, which allowed mechanical systems to perform useful work more efficiently. Al-Jazari's work demonstrates how an apparently simple mechanical innovation can become a foundation for many later technologies.</p>
+              <div class="tag-row">
+                <span class="tag tag-gold">Al-Jazari</span>
+                <span class="tag tag-teal">Crank-Connecting Rod</span>
+                <span class="tag tag-gold">Rotary → Linear Motion</span>
+                <span class="tag tag-teal">Father of Automation</span>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- Q23 -->
+        <article class="q-card" id="q23">
+          <div class="q-header" role="button" tabindex="0" aria-expanded="false">
+            <span class="q-badge">23</span>
+            <span class="q-text">The Qur'an refers to mountains as stabilizers — how can civil engineers connect this with structural stability in mega constructions?</span>
+            <span class="q-toggle" aria-hidden="true">▾</span>
+          </div>
+          <div class="q-answer" aria-hidden="true">
+            <div class="q-answer-inner">
+              <div class="answer-label">Answer</div>
+              <p>The course material describes the Qur'an as referring to mountains as <strong>stabilizers or stakes</strong> and connects this with the role of mountains in anchoring the Earth's crust. This presents stability as an important concept in the natural world. For civil engineers, the idea can serve as a reminder that stability is fundamental when designing large structures.</p>
+              <p>In mega constructions, engineers must therefore give careful attention to the stability and strength of the structures they design. The broader engineering-ethics material emphasizes risk assessment, safety protocols, and the responsibility to protect human life and property. The Qur'anic reference to stabilizing mountains can thus be used as an illustrative principle for thinking about the importance of secure foundations and structural stability.</p>
+              <div class="tag-row">
+                <span class="tag tag-gold">Qur'anic Mountains</span>
+                <span class="tag tag-teal">Stabilizers / Stakes</span>
+                <span class="tag tag-gold">Structural Stability</span>
+                <span class="tag tag-teal">Foundations Engineering</span>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- Q24 -->
+        <article class="q-card" id="q24">
+          <div class="q-header" role="button" tabindex="0" aria-expanded="false">
+            <span class="q-badge">24</span>
+            <span class="q-text">In what ways did the transmission of Islamic scientific texts to Europe resemble the modern concept of open-source knowledge sharing?</span>
+            <span class="q-toggle" aria-hidden="true">▾</span>
+          </div>
+          <div class="q-answer" aria-hidden="true">
+            <div class="q-answer-inner">
+              <div class="answer-label">Answer</div>
+              <p>During Al-Ma'mun's period, important works from Sanskrit, Greek, Syriac, and Persian traditions were translated into Arabic. The House of Wisdom brought scholars together to preserve, translate, and develop knowledge. The course also explains that this translation movement helped transmit scientific and philosophical knowledge onward to Europe, where scholars became reacquainted with earlier Greek learning.</p>
+              <p>This resembles <strong>open-source knowledge sharing</strong> because knowledge is made available so that others can study it, build upon it, and develop new ideas. The important principle is that progress does not require each generation to begin from nothing. Preserving earlier knowledge, sharing it across communities, and adding new contributions creates a continuous process of innovation.</p>
+              <div class="tag-row">
+                <span class="tag tag-gold">Translation Movement</span>
+                <span class="tag tag-teal">House of Wisdom</span>
+                <span class="tag tag-gold">Open Source Analogy</span>
+                <span class="tag tag-teal">Knowledge Preservation</span>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- Q25 -->
+        <article class="q-card" id="q25">
+          <div class="q-header" role="button" tabindex="0" aria-expanded="false">
+            <span class="q-badge">25</span>
+            <span class="q-text">How did the ship-building factories under the Umayyads resemble today's naval industrial complexes?</span>
+            <span class="q-toggle" aria-hidden="true">▾</span>
+          </div>
+          <div class="q-answer" aria-hidden="true">
+            <div class="q-answer-inner">
+              <div class="answer-label">Answer</div>
+              <p>Under the Umayyads, naval activity expanded significantly. Egypt and Syria became important centres of shipbuilding, experts and artisans were appointed, and shipyards were established on the Syrian coast. Akka became a major centre, while Abdul Malik later founded a large ship-building factory in Tunis. By the end of Mu'awiyah's reign, the Arabs had a fleet of about <strong>1,700 ships</strong>, and shipbuilding was carried out at several yards.</p>
+              <p>These features resemble a naval industrial complex because they involved organized facilities, skilled workers, large-scale production, and coordinated support for naval activity. The Umayyad example shows that shipbuilding was not merely individual craftsmanship but an organized technological and industrial effort supporting transportation, trade, and naval power.</p>
+              <div class="tag-row">
+                <span class="tag tag-gold">Umayyad Navy</span>
+                <span class="tag tag-teal">1,700 Ships</span>
+                <span class="tag tag-gold">Akka · Tunis Shipyards</span>
+                <span class="tag tag-teal">Naval Industrial Complex</span>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- Q26 -->
+        <article class="q-card" id="q26">
+          <div class="q-header" role="button" tabindex="0" aria-expanded="false">
+            <span class="q-badge">26</span>
+            <span class="q-text">When Al-Ma'mun's astronomers measured the Earth's circumference with only simple tools, what lesson does that give to engineers about precision and innovation with limited resources?</span>
+            <span class="q-toggle" aria-hidden="true">▾</span>
+          </div>
+          <div class="q-answer" aria-hidden="true">
+            <div class="q-answer-inner">
+              <div class="answer-label">Answer</div>
+              <p>Al-Ma'mun's astronomers carried out a careful geodetic operation to measure the length of a terrestrial degree and determine the size and circumference of the Earth. The course states that they obtained <strong>563 Arabic miles</strong> for a degree of the meridian, a remarkably accurate result, using the equipment available at the time, including instruments such as the quadrant, astrolabe, dial, and globes.</p>
+              <p>The lesson for engineers is that limited resources do not necessarily prevent precise results. Careful observation, appropriate instruments, mathematical reasoning, systematic measurement, and disciplined methods can produce highly accurate outcomes. Engineering innovation therefore depends not only on having advanced technology but also on using available resources intelligently and applying rigorous methods to obtain reliable results.</p>
+              <div class="tag-row">
+                <span class="tag tag-gold">Al-Ma'mun Astronomers</span>
+                <span class="tag tag-teal">563 Arabic Miles/Degree</span>
+                <span class="tag tag-gold">Precision with Limited Tools</span>
+                <span class="tag tag-teal">Systematic Measurement</span>
+              </div>
+            </div>
+          </div>
+        </article>
+
+      </div><!-- /answers-container -->
+      <div class="no-results" aria-live="polite"><span>◌</span><p>No questions match your search.</p></div>
+    </section>
+
+    <!-- ═══════════════ MEMORY CHAINS PAGE ═══════════════ -->
+    <section id="page-chains" class="page">
+      <div class="search-wrap">
+        <svg class="search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input class="search-input" data-page="chains" type="search" placeholder="Search memory chains… (press / to focus)" aria-label="Search chains" />
+      </div>
+      <div class="search-count" aria-live="polite"></div>
+      <div class="howto howto-chain">
+        <strong>Memory Chains:</strong> Each card gives you a condensed recall scaffold — a one-line prompt followed by the key steps in sequence, ending with key facts to lock in. Use these the night before your exam.
+      </div>
+
+      <div class="chains-container">
+
+        <!-- Chain Q1 -->
+        <article class="chain-card" id="chain-q1">
+          <div class="chain-header" role="button" tabindex="0" aria-expanded="false">
+            <span class="chain-badge">1</span>
+            <span class="chain-title">Al-Khwarizmi → Algebra → Algorithm</span>
+            <span class="chain-toggle" aria-hidden="true">▾</span>
+          </div>
+          <div class="chain-body" aria-hidden="true">
+            <div class="chain-inner">
+              <p class="prompt-line">Scholar's name → book title → word origin → step-by-step logic → modern code</p>
+              <ol class="chain">
+                <li><span class="label">The Scholar:</span> <span class="detail">Muhammad ibn Musa al-Khwarizmi — Islamic Golden Age mathematician and astronomer.</span></li>
+                <li><span class="label">al-jabr:</span> <span class="detail">His work <em>Kitab al-mukhtasar fi hisab al-jabr</em> gave algebra its name — systematic methods to solve equations.</span></li>
+                <li><span class="label">Algorithm:</span> <span class="detail">The word "algorithm" derives from the Latin form of his name (Algoritmi) — ordered, logical step-by-step procedure.</span></li>
+                <li><span class="label">Legacy in Code:</span> <span class="detail">Every computer program that follows a sequence of steps to solve a problem echoes Al-Khwarizmi's method.</span></li>
+                <li><span class="label">Lesson:</span> <span class="detail">Mathematical ideas from the Islamic world became the backbone of modern computation.</span></li>
+              </ol>
+              <div class="keyfacts">
+                <span class="fact">Al-Khwarizmi</span>
+                <span class="fact">al-jabr → Algebra</span>
+                <span class="fact">Algoritmi → Algorithm</span>
+                <span class="fact">Islamic Golden Age</span>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- Chain Q2 -->
+        <article class="chain-card" id="chain-q2">
+          <div class="chain-header" role="button" tabindex="0" aria-expanded="false">
+            <span class="chain-badge">2</span>
+            <span class="chain-title">Al-Zahrawi → Surgical Tools → Design Durability</span>
+            <span class="chain-toggle" aria-hidden="true">▾</span>
+          </div>
+          <div class="chain-body" aria-hidden="true">
+            <div class="chain-inner">
+              <p class="prompt-line">Father of Surgery → instruments list → still in use → design principle → engineering lesson</p>
+              <ol class="chain">
+                <li><span class="label">The Surgeon:</span> <span class="detail">Al-Zahrawi — father of modern surgery, established the foundation of surgical medicine.</span></li>
+                <li><span class="label">Instruments:</span> <span class="detail">Syringe, forceps, surgical hook and needle, bone saw, lithotomy scalpel — hundreds of surgical tools.</span></li>
+                <li><span class="label">Still in Use:</span> <span class="detail">Many of his instruments and techniques remain in clinical use over 1,000 years later.</span></li>
+                <li><span class="label">Design Durability:</span> <span class="detail">A design endures when it successfully addresses the need it was created for — practical function + sound construction.</span></li>
+                <li><span class="label">Engineering Lesson:</span> <span class="detail">Innovate to serve genuine human needs; durability is the ultimate test of good engineering design.</span></li>
+              </ol>
+              <div class="keyfacts">
+                <span class="fact">Al-Zahrawi</span>
+                <span class="fact">Syringe · Forceps · Bone Saw</span>
+                <span class="fact">Design Durability</span>
+                <span class="fact">1,000+ Years of Use</span>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- Chain Q3 -->
+        <article class="chain-card" id="chain-q3">
+          <div class="chain-header" role="button" tabindex="0" aria-expanded="false">
+            <span class="chain-badge">3</span>
+            <span class="chain-title">Jabir ibn Hayyan → Crystallization & Distillation → Chemical Engineering</span>
+            <span class="chain-toggle" aria-hidden="true">▾</span>
+          </div>
+          <div class="chain-body" aria-hidden="true">
+            <div class="chain-inner">
+              <p class="prompt-line">Alchemy → experimentation → 2 key processes → modern fields → engineering lesson</p>
+              <ol class="chain">
+                <li><span class="label">The Chemist:</span> <span class="detail">Jabir ibn Hayyan — introduced scientific experimentation into alchemy; father of chemistry.</span></li>
+                <li><span class="label">Crystallization:</span> <span class="detail">Controlled separation of substances by forming crystals — foundational to pharmaceutical and materials science.</span></li>
+                <li><span class="label">Distillation:</span> <span class="detail">Purification by evaporation and condensation — central to petroleum refining, perfumery, food processing.</span></li>
+                <li><span class="label">Wider Work:</span> <span class="detail">Refinement of metals, preparation of steel, working with chemical substances — practical lab-to-industry pathway.</span></li>
+                <li><span class="label">Lesson:</span> <span class="detail">Systematic experimentation transforms basic processes into technologies; the lab is where engineering begins.</span></li>
+              </ol>
+              <div class="keyfacts">
+                <span class="fact">Jabir ibn Hayyan</span>
+                <span class="fact">Crystallization</span>
+                <span class="fact">Distillation</span>
+                <span class="fact">Father of Chemistry</span>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- Chain Q4 -->
+        <article class="chain-card" id="chain-q4">
+          <div class="chain-header" role="button" tabindex="0" aria-expanded="false">
+            <span class="chain-badge">4</span>
+            <span class="chain-title">Ibn al-Haytham → Empirical Optics → Modern Cameras</span>
+            <span class="chain-toggle" aria-hidden="true">▾</span>
+          </div>
+          <div class="chain-body" aria-hidden="true">
+            <div class="chain-inner">
+              <p class="prompt-line">Father of Optics → rejected old theory → empirical method → camera obscura → sensors today</p>
+              <ol class="chain">
+                <li><span class="label">The Physicist:</span> <span class="detail">Ibn al-Haytham — Father of Modern Optics; insisted all scientific claims must be supported by empirical proof.</span></li>
+                <li><span class="label">Rejected Emission Theory:</span> <span class="detail">Proved that light enters the eye from objects — overturned centuries of Greek theory that eyes emit light.</span></li>
+                <li><span class="label">Book of Optics:</span> <span class="detail"><em>Kitab al-Manazir</em> — systematic experimental study of light, vision, reflection, refraction.</span></li>
+                <li><span class="label">Camera Obscura:</span> <span class="detail">Investigated the phenomenon of light passing through a small hole to project an inverted image — precursor to cameras.</span></li>
+                <li><span class="label">Modern Link:</span> <span class="detail">Cameras and optical sensors depend on controlled understanding of how light behaves — the same foundation he built.</span></li>
+              </ol>
+              <div class="keyfacts">
+                <span class="fact">Ibn al-Haytham</span>
+                <span class="fact">Book of Optics</span>
+                <span class="fact">Camera Obscura</span>
+                <span class="fact">Empirical Method</span>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- Chain Q5 -->
+        <article class="chain-card" id="chain-q5">
+          <div class="chain-header" role="button" tabindex="0" aria-expanded="false">
+            <span class="chain-badge">5</span>
+            <span class="chain-title">Al-Biruni → Triangulation → 6,339.6 km → Satellite Engineering</span>
+            <span class="chain-toggle" aria-hidden="true">▾</span>
+          </div>
+          <div class="chain-body" aria-hidden="true">
+            <div class="chain-inner">
+              <p class="prompt-line">Geodesist → method → result (within 50 km) → same principle → GPS/satellites today</p>
+              <ol class="chain">
+                <li><span class="label">The Geodesist:</span> <span class="detail">Al-Biruni — polymath; contributed enormously to geography, geodesy, and mathematical measurement.</span></li>
+                <li><span class="label">Triangulation:</span> <span class="detail">Used geometric triangulation to measure the Earth — solving complex geodesic equations from observation points.</span></li>
+                <li><span class="label">The Result:</span> <span class="detail">Estimated Earth's radius at 6,339.6 km — less than 50 km off the modern value of 6,371 km. Extraordinary precision.</span></li>
+                <li><span class="label">Modern Satellite Link:</span> <span class="detail">Satellite positioning (GPS) depends on precise knowledge of Earth's shape and distances — the same geodesic problem Al-Biruni solved.</span></li>
+                <li><span class="label">Lesson:</span> <span class="detail">Geometric precision + mathematical rigour + systematic observation = engineering accuracy across any era.</span></li>
+              </ol>
+              <div class="keyfacts">
+                <span class="fact">Al-Biruni</span>
+                <span class="fact">Triangulation</span>
+                <span class="fact">6,339.6 km radius</span>
+                <span class="fact">&lt;50 km error</span>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- Chain Q6 -->
+        <article class="chain-card" id="chain-q6">
+          <div class="chain-header" role="button" tabindex="0" aria-expanded="false">
+            <span class="chain-badge">6</span>
+            <span class="chain-title">Zero & Numerals → Decimal System → Computing</span>
+            <span class="chain-toggle" aria-hidden="true">▾</span>
+          </div>
+          <div class="chain-body" aria-hidden="true">
+            <div class="chain-inner">
+              <p class="prompt-line">Hindu-Arabic origin → Al-Khwarizmi spreads it → decimal + zero → algebra → algorithms → computers</p>
+              <ol class="chain">
+                <li><span class="label">Origin:</span> <span class="detail">Indian numeral system with zero — transmitted through the Muslim world; Al-Khwarizmi codified and spread it to the West.</span></li>
+                <li><span class="label">Zero:</span> <span class="detail">Zero is a placeholder and a number — without it, positional decimal notation (and binary systems) cannot function.</span></li>
+                <li><span class="label">Decimal System:</span> <span class="detail">Made calculation faster, more systematic, and scalable — replaced clunky Roman numeral arithmetic.</span></li>
+                <li><span class="label">Algebra:</span> <span class="detail">Al-Khwarizmi's algebra systematized equations — abstracted numerical reasoning from specific examples to general rules.</span></li>
+                <li><span class="label">Computing:</span> <span class="detail">Every computer operates on binary (a positional number system) — its mathematical foundations trace directly to zero and the decimal system.</span></li>
+              </ol>
+              <div class="keyfacts">
+                <span class="fact">Zero</span>
+                <span class="fact">Hindu-Arabic Numerals</span>
+                <span class="fact">Al-Khwarizmi</span>
+                <span class="fact">Decimal → Binary</span>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- Chain Q7 -->
+        <article class="chain-card" id="chain-q7">
+          <div class="chain-header" role="button" tabindex="0" aria-expanded="false">
+            <span class="chain-badge">7</span>
+            <span class="chain-title">Umar (RA) → Famine → 69-Mile Canal → Crisis Engineering</span>
+            <span class="chain-toggle" aria-hidden="true">▾</span>
+          </div>
+          <div class="chain-body" aria-hidden="true">
+            <div class="chain-inner">
+              <p class="prompt-line">Crisis → decision → route (Nile→Red Sea) → distance → 20 ships → humanitarian outcome</p>
+              <ol class="chain">
+                <li><span class="label">The Crisis:</span> <span class="detail">Severe famine struck Arabia — people in Madinah faced starvation; Umar (RA) needed a supply route urgently.</span></li>
+                <li><span class="label">The Decision:</span> <span class="detail">Instead of waiting, Umar ordered engineering action — dig a canal to connect existing waterways for food transport.</span></li>
+                <li><span class="label">The Route:</span> <span class="detail">69-mile canal from the Nile to the Red Sea — reopening an ancient channel to create a navigable freight path.</span></li>
+                <li><span class="label">The Delivery:</span> <span class="detail">Twenty ships carrying corn travelled from the Nile to the Red Sea and reached Madinah safely.</span></li>
+                <li><span class="label">Modern Lesson:</span> <span class="detail">Crisis engineering = identify urgent need → build practical infrastructure → deliver essential resources. Purpose over prestige.</span></li>
+              </ol>
+              <div class="keyfacts">
+                <span class="fact">Umar (RA)</span>
+                <span class="fact">69-Mile Canal</span>
+                <span class="fact">Nile → Red Sea</span>
+                <span class="fact">20 Ships of Corn</span>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- Chain Q8 -->
+        <article class="chain-card" id="chain-q8">
+          <div class="chain-header" role="button" tabindex="0" aria-expanded="false">
+            <span class="chain-badge">8</span>
+            <span class="chain-title">Ibn al-Haytham's Light Theory → Cameras → Fiber Optics</span>
+            <span class="chain-toggle" aria-hidden="true">▾</span>
+          </div>
+          <div class="chain-body" aria-hidden="true">
+            <div class="chain-inner">
+              <p class="prompt-line">Rejected emission → light enters eye → camera obscura → image formation → optical tech today</p>
+              <ol class="chain">
+                <li><span class="label">The Correction:</span> <span class="detail">Ibn al-Haytham disproved the Greek emission theory — light comes FROM objects INTO the eye, not the other way.</span></li>
+                <li><span class="label">Camera Obscura:</span> <span class="detail">Demonstrated that light passing through a pinhole forms an inverted image — the original optical projection device.</span></li>
+                <li><span class="label">Image Formation:</span> <span class="detail">Understanding how light forms images is the direct precursor to photographic and digital cameras.</span></li>
+                <li><span class="label">Fiber Optics:</span> <span class="detail">Fiber optic cables transmit light signals — controlled light behaviour in a medium, extending his foundational optics work.</span></li>
+                <li><span class="label">Without Him:</span> <span class="detail">Without a correct model of how light behaves, systematic optical engineering would have had no scientific basis.</span></li>
+              </ol>
+              <div class="keyfacts">
+                <span class="fact">Light enters the eye</span>
+                <span class="fact">Camera Obscura</span>
+                <span class="fact">Image Formation</span>
+                <span class="fact">Fiber Optics</span>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- Chain Q9 -->
+        <article class="chain-card" id="chain-q9">
+          <div class="chain-header" role="button" tabindex="0" aria-expanded="false">
+            <span class="chain-badge">9</span>
+            <span class="chain-title">Ahmad ibn Tulun Hospital (872 CE) → Free Healthcare → Medical Ethics</span>
+            <span class="chain-toggle" aria-hidden="true">▾</span>
+          </div>
+          <div class="chain-body" aria-hidden="true">
+            <div class="chain-inner">
+              <p class="prompt-line">Hospital founded → location & date → free care policy → Muslim tradition → modern healthcare ethics</p>
+              <ol class="chain">
+                <li><span class="label">The Institution:</span> <span class="detail">Ahmad ibn Tulun Hospital — Cairo, founded 872 CE; wards, teaching facilities, and specialist care.</span></li>
+                <li><span class="label">Free Care Policy:</span> <span class="detail">Provided free treatment for anyone who needed it, regardless of background — one of history's earliest universal healthcare models.</span></li>
+                <li><span class="label">Muslim Tradition:</span> <span class="detail">Grounded in Islamic duty to care for the sick — healthcare as a social and moral responsibility, not a commodity.</span></li>
+                <li><span class="label">Spread:</span> <span class="detail">Similar hospitals spread across the Muslim world — establishing a network of institutional medical care.</span></li>
+                <li><span class="label">Modern Ethics:</span> <span class="detail">Medical progress must be linked to responsibility for human well-being — the Ibn Tulun model prefigured today's public health ethics.</span></li>
+              </ol>
+              <div class="keyfacts">
+                <span class="fact">Ahmad ibn Tulun Hospital</span>
+                <span class="fact">Cairo, 872 CE</span>
+                <span class="fact">Free for All</span>
+                <span class="fact">Teaching Hospital</span>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- Chain Q10 -->
+        <article class="chain-card" id="chain-q10">
+          <div class="chain-header" role="button" tabindex="0" aria-expanded="false">
+            <span class="chain-badge">10</span>
+            <span class="chain-title">Qur'anic Water Cycle → Sustainable Water Engineering</span>
+            <span class="chain-toggle" aria-hidden="true">▾</span>
+          </div>
+          <div class="chain-body" aria-hidden="true">
+            <div class="chain-inner">
+              <p class="prompt-line">Qur'anic description → rain → clouds → vegetation → underground → sustainable engineering solutions</p>
+              <ol class="chain">
+                <li><span class="label">Qur'anic Source:</span> <span class="detail">Qur'an describes the continuous water cycle — rain falls, nourishes vegetation, replenishes underground sources.</span></li>
+                <li><span class="label">Water as Trust:</span> <span class="detail">Water is presented as a gift sustaining life — engineers must treat it as a finite, shared resource to be protected.</span></li>
+                <li><span class="label">Engineering Principle:</span> <span class="detail">Work WITH the natural water cycle, not against it — design systems that replenish rather than deplete.</span></li>
+                <li><span class="label">Solutions:</span> <span class="detail">Rainwater harvesting, aquifer recharge, responsible irrigation, wastewater treatment — all align with the cycle described.</span></li>
+                <li><span class="label">Lesson:</span> <span class="detail">Sustainable engineering = long-term water security + responsible resource management guided by the no-waste ethic.</span></li>
+              </ol>
+              <div class="keyfacts">
+                <span class="fact">Qur'anic Water Cycle</span>
+                <span class="fact">Rain → Underground</span>
+                <span class="fact">Sustainable Engineering</span>
+                <span class="fact">Water Security</span>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- Chain Q11 -->
+        <article class="chain-card" id="chain-q11">
+          <div class="chain-header" role="button" tabindex="0" aria-expanded="false">
+            <span class="chain-badge">11</span>
+            <span class="chain-title">Qur'anic Embryology → Faith + Science → Biomedical Ethics</span>
+            <span class="chain-toggle" aria-hidden="true">▾</span>
+          </div>
+          <div class="chain-body" aria-hidden="true">
+            <div class="chain-inner">
+              <p class="prompt-line">Qur'anic stages → relate to modern embryology → faith + science compatible → innovation + responsibility</p>
+              <ol class="chain">
+                <li><span class="label">Qur'anic Stages:</span> <span class="detail">Describes human development from nutfah (drop) → 'alaqah (clot/embryo) → mudghah (lump) → fully formed fetus.</span></li>
+                <li><span class="label">Modern Link:</span> <span class="detail">These stages correlate with modern embryological knowledge — the Qur'an's description aligns with what science has since detailed.</span></li>
+                <li><span class="label">Faith + Science:</span> <span class="detail">Biomedical engineers can draw on both — scientific methods for practical work; faith for ethical grounding and respect for life.</span></li>
+                <li><span class="label">Innovation:</span> <span class="detail">Pursue advances in IVF, genetic medicine, prenatal care — but guided by human dignity and not harm.</span></li>
+                <li><span class="label">Responsibility:</span> <span class="detail">Engineering affects the beginning of life — ethical accountability is non-negotiable in this domain.</span></li>
+              </ol>
+              <div class="keyfacts">
+                <span class="fact">Nutfah → Mudghah</span>
+                <span class="fact">Faith + Science</span>
+                <span class="fact">Human Dignity</span>
+                <span class="fact">Biomedical Ethics</span>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- Chain Q12 -->
+        <article class="chain-card" id="chain-q12">
+          <div class="chain-header" role="button" tabindex="0" aria-expanded="false">
+            <span class="chain-badge">12</span>
+            <span class="chain-title">Qur'anic Atom → Nuclear Knowledge → Engineering Responsibility</span>
+            <span class="chain-toggle" aria-hidden="true">▾</span>
+          </div>
+          <div class="chain-body" aria-hidden="true">
+            <div class="chain-inner">
+              <p class="prompt-line">Qur'anic atomic reference → knowledge + seriousness → nuclear engineering → la darar principle → accountability</p>
+              <ol class="chain">
+                <li><span class="label">Qur'anic Reference:</span> <span class="detail">The Qur'an references the division of the atom — presented as one of many scientific wonders within divine scripture.</span></li>
+                <li><span class="label">Knowledge + Seriousness:</span> <span class="detail">Approaching the structure of matter demands intellectual seriousness and moral grounding, not reckless curiosity.</span></li>
+                <li><span class="label">Nuclear Engineering:</span> <span class="detail">Nuclear technology can generate power or cause mass destruction — the same knowledge with radically different outcomes depending on ethics.</span></li>
+                <li><span class="label">La Darar Principle:</span> <span class="detail">No harm, no reciprocating harm — nuclear decisions must prioritize the welfare of people and environment above all.</span></li>
+                <li><span class="label">Accountability:</span> <span class="detail">Engineers bear personal and professional responsibility for how powerful knowledge is applied — khalifah framework applies fully.</span></li>
+              </ol>
+              <div class="keyfacts">
+                <span class="fact">Qur'anic Atom</span>
+                <span class="fact">Nuclear Ethics</span>
+                <span class="fact">La Darar</span>
+                <span class="fact">Khalifah Accountability</span>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- Chain Q13 -->
+        <article class="chain-card" id="chain-q13">
+          <div class="chain-header" role="button" tabindex="0" aria-expanded="false">
+            <span class="chain-badge">13</span>
+            <span class="chain-title">Al-Ma'mun's Observatories → Institutional Science → Space Research Centers</span>
+            <span class="chain-toggle" aria-hidden="true">▾</span>
+          </div>
+          <div class="chain-body" aria-hidden="true">
+            <div class="chain-inner">
+              <p class="prompt-line">Caliph's patronage → Tadmor observatory → instruments → systematic observation → modern space centers</p>
+              <ol class="chain">
+                <li><span class="label">The Patron:</span> <span class="detail">Al-Ma'mun — Abbasid Caliph who actively funded and directed scientific research across many disciplines.</span></li>
+                <li><span class="label">Tadmor Observatory:</span> <span class="detail">Established on the plain of Palmyra — dedicated to astronomy and geometric measurement of the heavens.</span></li>
+                <li><span class="label">Instruments:</span> <span class="detail">Quadrant, astrolabe, dial, celestial globes — purpose-built tools for precise sky observation.</span></li>
+                <li><span class="label">Systematic Inquiry:</span> <span class="detail">Astronomers made long-term, careful celestial observations — not guesses but documented, repeatable measurements.</span></li>
+                <li><span class="label">Modern Parallel:</span> <span class="detail">Space research centres (NASA, ESA, JAXA) use the same model: dedicated institution + specialized instruments + sustained observation = progress.</span></li>
+              </ol>
+              <div class="keyfacts">
+                <span class="fact">Al-Ma'mun</span>
+                <span class="fact">Tadmor (Palmyra)</span>
+                <span class="fact">Quadrant · Astrolabe</span>
+                <span class="fact">Institutional Science</span>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- Chain Q14 -->
+        <article class="chain-card" id="chain-q14">
+          <div class="chain-header" role="button" tabindex="0" aria-expanded="false">
+            <span class="chain-badge">14</span>
+            <span class="chain-title">Bayt al-Hikmah → Global Knowledge Hub → Digital Age Equivalent</span>
+            <span class="chain-toggle" aria-hidden="true">▾</span>
+          </div>
+          <div class="chain-body" aria-hidden="true">
+            <div class="chain-inner">
+              <p class="prompt-line">State-sponsored academy → 4 source languages → scholars from all backgrounds → preserve+build → modern digital network</p>
+              <ol class="chain">
+                <li><span class="label">The Institution:</span> <span class="detail">Bayt al-Hikmah — House of Wisdom; state academy, library, and translation centre in Baghdad under Al-Ma'mun.</span></li>
+                <li><span class="label">4 Languages:</span> <span class="detail">Sanskrit, Greek, Syriac, and Persian works translated into Arabic — making world knowledge accessible in one language.</span></li>
+                <li><span class="label">Open to All:</span> <span class="detail">Muslims, Jews, Christians, scholars of every background worked together — diversity of thought was the engine of discovery.</span></li>
+                <li><span class="label">Preserve + Build:</span> <span class="detail">Not just translating — scholars added their own innovations and discoveries on top of preserved older knowledge.</span></li>
+                <li><span class="label">Digital Equivalent:</span> <span class="detail">Open-access journals, arXiv, Wikipedia, global research networks — same principle: knowledge preserved, accessible, and cumulatively built upon.</span></li>
+              </ol>
+              <div class="keyfacts">
+                <span class="fact">Bayt al-Hikmah</span>
+                <span class="fact">4 Source Languages</span>
+                <span class="fact">Baghdad</span>
+                <span class="fact">Open Knowledge</span>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- Chain Q15 -->
+        <article class="chain-card" id="chain-q15">
+          <div class="chain-header" role="button" tabindex="0" aria-expanded="false">
+            <span class="chain-badge">15</span>
+            <span class="chain-title">Al-Ma'mun's Inclusive Council → Interdisciplinary Engineering Teams</span>
+            <span class="chain-toggle" aria-hidden="true">▾</span>
+          </div>
+          <div class="chain-body" aria-hidden="true">
+            <div class="chain-inner">
+              <p class="prompt-line">Multi-faith council → multi-discipline court → why diversity works → modern engineering team parallel</p>
+              <ol class="chain">
+                <li><span class="label">Multi-faith Council:</span> <span class="detail">Al-Ma'mun's Council of State included Muslims, Jews, Christians — governance built on representation, not exclusion.</span></li>
+                <li><span class="label">Multi-discipline Court:</span> <span class="detail">His court housed mathematicians, astronomers, physicians, philosophers, translators — all under one intellectual roof.</span></li>
+                <li><span class="label">Why Diversity Works:</span> <span class="detail">Different perspectives identify problems and solutions that homogeneous groups miss — the sum is greater than the parts.</span></li>
+                <li><span class="label">Modern Parallel:</span> <span class="detail">Engineering projects require civil, mechanical, electrical, software, and human factors engineers working together — same pluralistic model.</span></li>
+                <li><span class="label">Lesson:</span> <span class="detail">Diversity of knowledge + shared purpose = stronger problem-solving. Al-Ma'mun proved it; engineering practice confirms it.</span></li>
+              </ol>
+              <div class="keyfacts">
+                <span class="fact">Multi-faith Council</span>
+                <span class="fact">Multi-discipline Court</span>
+                <span class="fact">Diversity + Purpose</span>
+                <span class="fact">Interdisciplinary Teams</span>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- Chain Q16 -->
+        <article class="chain-card" id="chain-q16">
+          <div class="chain-header" role="button" tabindex="0" aria-expanded="false">
+            <span class="chain-badge">16</span>
+            <span class="chain-title">La Darar wa La Dirar → Environmental Decision-Making</span>
+            <span class="chain-toggle" aria-hidden="true">▾</span>
+          </div>
+          <div class="chain-body" aria-hidden="true">
+            <div class="chain-inner">
+              <p class="prompt-line">Principle name + meaning → applies to environment → khalifah framework → practical decision steps → no harm wins</p>
+              <ol class="chain">
+                <li><span class="label">The Principle:</span> <span class="detail">La darar wa la dirar — "No harm, and no reciprocating harm" — a foundational Islamic legal maxim.</span></li>
+                <li><span class="label">Environmental Scope:</span> <span class="detail">Engineering decisions that harm the environment harm people who depend on it — darar applies to ecosystems, not just individuals.</span></li>
+                <li><span class="label">Khalifah Framework:</span> <span class="detail">Engineers are trustees (khalifah) of the Earth — protecting the environment is a religious and professional duty, not optional.</span></li>
+                <li><span class="label">Decision Steps:</span> <span class="detail">① Identify risks → ② Apply safety measures → ③ Seek alternatives that protect people and environment → ④ Do not proceed if harm is unavoidable.</span></li>
+                <li><span class="label">Conclusion:</span> <span class="detail">Short-term profit never justifies preventable environmental damage — avoiding harm takes absolute precedence.</span></li>
+              </ol>
+              <div class="keyfacts">
+                <span class="fact">La Darar wa La Dirar</span>
+                <span class="fact">No Harm Principle</span>
+                <span class="fact">Khalifah as Trustee</span>
+                <span class="fact">Environment = Darar Scope</span>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- Chain Q17 -->
+        <article class="chain-card" id="chain-q17">
+          <div class="chain-header" role="button" tabindex="0" aria-expanded="false">
+            <span class="chain-badge">17</span>
+            <span class="chain-title">Khalifah + Amanah → Profit vs Safety → Rana Plaza</span>
+            <span class="chain-toggle" aria-hidden="true">▾</span>
+          </div>
+          <div class="chain-body" aria-hidden="true">
+            <div class="chain-inner">
+              <p class="prompt-line">Khalifah concept → amanah = trust → temptation of profit → Rana Plaza lesson → right action</p>
+              <ol class="chain">
+                <li><span class="label">Khalifah:</span> <span class="detail">Humans are Allah's vicegerent on Earth — engineers hold this role professionally; their decisions affect all of creation.</span></li>
+                <li><span class="label">Amanah:</span> <span class="detail">Engineering is a trust (amanah) — not a business opportunity. The engineer answers to a higher standard than profit.</span></li>
+                <li><span class="label">The Temptation:</span> <span class="detail">Cost-cutting, poor materials, overlooked warnings — the pressure to profit at the expense of safety is real and constant.</span></li>
+                <li><span class="label">Rana Plaza:</span> <span class="detail">Factory collapse, Bangladesh — poor materials, dishonesty, negligence, ignored structural warnings → over 1,100 deaths. The consequence of choosing profit over safety.</span></li>
+                <li><span class="label">Right Action:</span> <span class="detail">Maintain honesty, conduct risk assessment, implement safety measures, uphold accountability — this is what a true khalifah does.</span></li>
+              </ol>
+              <div class="keyfacts">
+                <span class="fact">Khalifah</span>
+                <span class="fact">Amanah (Trust)</span>
+                <span class="fact">Rana Plaza</span>
+                <span class="fact">Safety over Profit</span>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- Chain Q18 -->
+        <article class="chain-card" id="chain-q18">
+          <div class="chain-header" role="button" tabindex="0" aria-expanded="false">
+            <span class="chain-badge">18</span>
+            <span class="chain-title">Islamic Golden Age → Rekindling Innovation in AI & Renewable Energy</span>
+            <span class="chain-toggle" aria-hidden="true">▾</span>
+          </div>
+          <div class="chain-body" aria-hidden="true">
+            <div class="chain-inner">
+              <p class="prompt-line">Golden Age achievements → decline → 2 priority sectors → how to rebuild → roadmap elements</p>
+              <ol class="chain">
+                <li><span class="label">Golden Age:</span> <span class="detail">Major achievements in maths, astronomy, optics, medicine, chemistry — Muslim scholars led global science for centuries.</span></li>
+                <li><span class="label">The Gap:</span> <span class="detail">Muslim world currently imports technology rather than producing it — the legacy must be reclaimed through active investment.</span></li>
+                <li><span class="label">AI Priority:</span> <span class="detail">AI for disease diagnosis, personalized education, economic growth — but only when developed ethically, not as a black box.</span></li>
+                <li><span class="label">Renewable Energy:</span> <span class="detail">Muslim world has abundant sun and wind — reduce fossil fuel dependence, create local industries and jobs.</span></li>
+                <li><span class="label">Roadmap:</span> <span class="detail">STEM education + research funding + global collaboration + ethical grounding = rekindling the Golden Age flame.</span></li>
+              </ol>
+              <div class="keyfacts">
+                <span class="fact">Islamic Golden Age</span>
+                <span class="fact">AI (ethical)</span>
+                <span class="fact">Renewable Energy</span>
+                <span class="fact">STEM Roadmap</span>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- Chain Q19 -->
+        <article class="chain-card" id="chain-q19">
+          <div class="chain-header" role="button" tabindex="0" aria-expanded="false">
+            <span class="chain-badge">19</span>
+            <span class="chain-title">Brain Drain → Brain Gain: The Engineer's Role</span>
+            <span class="chain-toggle" aria-hidden="true">▾</span>
+          </div>
+          <div class="chain-body" aria-hidden="true">
+            <div class="chain-inner">
+              <p class="prompt-line">Define brain drain → why it happens → 4 roadmap solutions → long-term vision → young engineer's role</p>
+              <ol class="chain">
+                <li><span class="label">Brain Drain:</span> <span class="detail">Talented scientists and engineers leave for better-funded labs abroad — weakening home countries' research capacity.</span></li>
+                <li><span class="label">Why It Happens:</span> <span class="detail">Lack of research funding, limited mentorship, weak industry-academia links, no local innovation ecosystem.</span></li>
+                <li><span class="label">Roadmap — 4 Pillars:</span> <span class="detail">① STEM education → ② Mentorship (junior + senior scientist pairing) → ③ Research hubs & innovation parks → ④ University-industry partnerships.</span></li>
+                <li><span class="label">Long-term Vision:</span> <span class="detail">Muslim countries become exporters of high-tech solutions, not importers — leading in selected fields globally.</span></li>
+                <li><span class="label">Your Role:</span> <span class="detail">Young Muslim engineers: build skills, stay to contribute, create the environment where the next generation doesn't have to leave.</span></li>
+              </ol>
+              <div class="keyfacts">
+                <span class="fact">Brain Drain</span>
+                <span class="fact">Brain Gain</span>
+                <span class="fact">4-Pillar Roadmap</span>
+                <span class="fact">Research Hubs</span>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- Chain Q20 -->
+        <article class="chain-card" id="chain-q20">
+          <div class="chain-header" role="button" tabindex="0" aria-expanded="false">
+            <span class="chain-badge">20</span>
+            <span class="chain-title">South Korea & Singapore → Muslim World's Unique Strengths</span>
+            <span class="chain-toggle" aria-hidden="true">▾</span>
+          </div>
+          <div class="chain-body" aria-hidden="true">
+            <div class="chain-inner">
+              <p class="prompt-line">SK model → SG model → Muslim world's 3 strengths → 60% under 30 → how to capitalise</p>
+              <ol class="chain">
+                <li><span class="label">South Korea Model:</span> <span class="detail">Government investment in R&D + strong university-industry links + tech conglomerates (Samsung, LG, Hyundai) → from war-torn to tech powerhouse in 50 years.</span></li>
+                <li><span class="label">Singapore Model:</span> <span class="detail">No natural resources → invested in education + attracted MNCs + recruited global talent → world's most competitive knowledge economy.</span></li>
+                <li><span class="label">Muslim World Strength 1:</span> <span class="detail">Young population — over 60% under age 30 — the largest untapped human capital base on Earth.</span></li>
+                <li><span class="label">Muslim World Strength 2:</span> <span class="detail">Long history of scholarship and discovery — a cultural identity rooted in intellectual pursuit.</span></li>
+                <li><span class="label">Path Forward:</span> <span class="detail">STEM + research hubs + industry partnerships + global collaboration + ethical innovation = leap from talent to technology leader.</span></li>
+              </ol>
+              <div class="keyfacts">
+                <span class="fact">South Korea</span>
+                <span class="fact">Singapore</span>
+                <span class="fact">60% Under 30</span>
+                <span class="fact">Knowledge Economy</span>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- Chain Q21 -->
+        <article class="chain-card" id="chain-q21">
+          <div class="chain-header" role="button" tabindex="0" aria-expanded="false">
+            <span class="chain-badge">21</span>
+            <span class="chain-title">Maslahah → Ethical Innovation in Biotech & Space</span>
+            <span class="chain-toggle" aria-hidden="true">▾</span>
+          </div>
+          <div class="chain-body" aria-hidden="true">
+            <div class="chain-inner">
+              <p class="prompt-line">Define maslahah → apply to biotech → apply to space → 3 tests for ethical innovation</p>
+              <ol class="chain">
+                <li><span class="label">Maslahah:</span> <span class="detail">Public interest — the Islamic principle that innovation should serve the wider good of society, not just private gain.</span></li>
+                <li><span class="label">Biotech Application:</span> <span class="detail">Medicines, better crops, disease-resistant varieties, public health resilience — these serve maslahah; vanity biotech does not.</span></li>
+                <li><span class="label">Space Application:</span> <span class="detail">Space exploration builds engineering expertise and scientific capacity — legitimate maslahah goal if it develops local talent and knowledge.</span></li>
+                <li><span class="label">3 Tests:</span> <span class="detail">① Is it technically possible? → ② Does it genuinely benefit society? → ③ Is it consistent with ethical responsibility (human dignity + no harm)?</span></li>
+                <li><span class="label">Conclusion:</span> <span class="detail">Maslahah is not a veto on innovation — it is the compass that points innovation toward what actually matters for humanity.</span></li>
+              </ol>
+              <div class="keyfacts">
+                <span class="fact">Maslahah</span>
+                <span class="fact">Public Interest</span>
+                <span class="fact">Biotech · Space</span>
+                <span class="fact">3-Test Framework</span>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- Chain Q22 -->
+        <article class="chain-card" id="chain-q22">
+          <div class="chain-header" role="button" tabindex="0" aria-expanded="false">
+            <span class="chain-badge">22</span>
+            <span class="chain-title">Al-Jazari → Crank System → Bicycle → Internal Combustion Engine</span>
+            <span class="chain-toggle" aria-hidden="true">▾</span>
+          </div>
+          <div class="chain-body" aria-hidden="true">
+            <div class="chain-inner">
+              <p class="prompt-line">Father of automation → crank mechanism → motion conversion → 2 named inventions it enabled → mechanical legacy</p>
+              <ol class="chain">
+                <li><span class="label">The Inventor:</span> <span class="detail">Al-Jazari — father of automation and robotics; Artuqid court engineer, 12th–13th century.</span></li>
+                <li><span class="label">Crank-Connecting Rod:</span> <span class="detail">His revolutionary crank-connecting rod system — converted continuous rotary motion into reciprocating (back-and-forth) linear motion.</span></li>
+                <li><span class="label">The Power:</span> <span class="detail">Allowed heavy loads to be lifted and moved mechanically — efficient work from rotating power sources.</span></li>
+                <li><span class="label">The Bicycle:</span> <span class="detail">Crank pedals convert the rider's circular leg motion into forward linear thrust — direct descendant of Al-Jazari's mechanism.</span></li>
+                <li><span class="label">Internal Combustion Engine:</span> <span class="detail">Pistons (linear) connected to crankshaft (rotary) — the same rotary↔linear conversion principle at the heart of every car engine.</span></li>
+              </ol>
+              <div class="keyfacts">
+                <span class="fact">Al-Jazari</span>
+                <span class="fact">Crank-Connecting Rod</span>
+                <span class="fact">Bicycle</span>
+                <span class="fact">Internal Combustion Engine</span>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- Chain Q23 -->
+        <article class="chain-card" id="chain-q23">
+          <div class="chain-header" role="button" tabindex="0" aria-expanded="false">
+            <span class="chain-badge">23</span>
+            <span class="chain-title">Qur'an: Mountains as Stabilizers → Structural Foundations in Engineering</span>
+            <span class="chain-toggle" aria-hidden="true">▾</span>
+          </div>
+          <div class="chain-body" aria-hidden="true">
+            <div class="chain-inner">
+              <p class="prompt-line">Qur'anic reference → mountains as stakes → Earth's crust analogy → civil engineering principle → mega-structure application</p>
+              <ol class="chain">
+                <li><span class="label">Qur'anic Reference:</span> <span class="detail">Mountains described as awtad (stakes/pegs) — driven into the Earth to prevent it from shaking (Qur'an 78:7, 21:31).</span></li>
+                <li><span class="label">Geological Truth:</span> <span class="detail">Mountains have deep roots that anchor tectonic plates — the Qur'anic image is geologically accurate (isostasy).</span></li>
+                <li><span class="label">Stability Principle:</span> <span class="detail">What anchors the Earth: deep roots + mass + interlocking structure — the same trio that stabilizes engineered mega-structures.</span></li>
+                <li><span class="label">Civil Engineering:</span> <span class="detail">Deep pile foundations, bedrock anchoring, interlocked structural systems — engineers replicate the mountain's stabilizing function.</span></li>
+                <li><span class="label">Lesson:</span> <span class="detail">Stability is the first principle of mega-construction — nature's best model is the mountain; engineering's task is to build its equivalent.</span></li>
+              </ol>
+              <div class="keyfacts">
+                <span class="fact">Awtad (Stakes/Pegs)</span>
+                <span class="fact">Qur'an 78:7</span>
+                <span class="fact">Geological Roots</span>
+                <span class="fact">Foundation Engineering</span>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- Chain Q24 -->
+        <article class="chain-card" id="chain-q24">
+          <div class="chain-header" role="button" tabindex="0" aria-expanded="false">
+            <span class="chain-badge">24</span>
+            <span class="chain-title">Islamic Knowledge Transmission → Open-Source Analogy</span>
+            <span class="chain-toggle" aria-hidden="true">▾</span>
+          </div>
+          <div class="chain-body" aria-hidden="true">
+            <div class="chain-inner">
+              <p class="prompt-line">Translation movement → 4 languages → House of Wisdom → onward to Europe → open-source parallel</p>
+              <ol class="chain">
+                <li><span class="label">Translation Movement:</span> <span class="detail">Arabic scholars translated Sanskrit, Greek, Syriac, and Persian works — the largest intellectual preservation project in medieval history.</span></li>
+                <li><span class="label">House of Wisdom:</span> <span class="detail">Bayt al-Hikmah — the hub where translated works were stored, studied, and built upon by scholars of all backgrounds.</span></li>
+                <li><span class="label">Onward to Europe:</span> <span class="detail">Through Spain (Toledo), Sicily, and the Crusades — Arabic texts (including Greek works) re-entered Europe and sparked the Renaissance.</span></li>
+                <li><span class="label">Open-Source Parallel:</span> <span class="detail">Knowledge made available for all to study, fork, and build upon — not proprietary, not locked. The same principle as GPL or Creative Commons today.</span></li>
+                <li><span class="label">Core Lesson:</span> <span class="detail">Progress is cumulative — no generation starts from zero when previous knowledge is preserved and freely shared.</span></li>
+              </ol>
+              <div class="keyfacts">
+                <span class="fact">Translation Movement</span>
+                <span class="fact">Bayt al-Hikmah</span>
+                <span class="fact">4 Languages</span>
+                <span class="fact">Open-Source Parallel</span>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- Chain Q25 -->
+        <article class="chain-card" id="chain-q25">
+          <div class="chain-header" role="button" tabindex="0" aria-expanded="false">
+            <span class="chain-badge">25</span>
+            <span class="chain-title">Umayyad Shipbuilding → Naval Industrial Complex</span>
+            <span class="chain-toggle" aria-hidden="true">▾</span>
+          </div>
+          <div class="chain-body" aria-hidden="true">
+            <div class="chain-inner">
+              <p class="prompt-line">Umayyad expansion → key centres → Akka + Tunis factories → fleet size → industrial complex comparison</p>
+              <ol class="chain">
+                <li><span class="label">Naval Expansion:</span> <span class="detail">Umayyads built the first significant Arab naval force — Egypt and Syria became primary centres of shipbuilding under Mu'awiyah.</span></li>
+                <li><span class="label">Key Centres:</span> <span class="detail">Akka (Acre) — major shipyard; Syrian coast — multiple yards; Tunis — large factory founded by Abdul Malik.</span></li>
+                <li><span class="label">Workforce:</span> <span class="detail">Appointed experts and artisans — skilled labour organized under state direction, not individual craftsmen working alone.</span></li>
+                <li><span class="label">Fleet Size:</span> <span class="detail">~1,700 ships by the end of Mu'awiyah's reign — a scale of production requiring organized industrial logistics.</span></li>
+                <li><span class="label">Industrial Complex Parallel:</span> <span class="detail">Organized facilities + skilled specialists + large-scale production + state coordination = the same structure as today's naval industrial complexes.</span></li>
+              </ol>
+              <div class="keyfacts">
+                <span class="fact">Umayyad Navy</span>
+                <span class="fact">Akka · Tunis Yards</span>
+                <span class="fact">~1,700 Ships</span>
+                <span class="fact">State-Organized Production</span>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- Chain Q26 -->
+        <article class="chain-card" id="chain-q26">
+          <div class="chain-header" role="button" tabindex="0" aria-expanded="false">
+            <span class="chain-badge">26</span>
+            <span class="chain-title">Al-Ma'mun's Geodesy → Precision with Limited Resources</span>
+            <span class="chain-toggle" aria-hidden="true">▾</span>
+          </div>
+          <div class="chain-body" aria-hidden="true">
+            <div class="chain-inner">
+              <p class="prompt-line">Mission → instruments used → result (563 miles/degree) → accuracy achieved → engineering lesson</p>
+              <ol class="chain">
+                <li><span class="label">The Mission:</span> <span class="detail">Al-Ma'mun commissioned his astronomers to measure the Earth's circumference — fundamental geodetic science with practical implications.</span></li>
+                <li><span class="label">Instruments:</span> <span class="detail">Quadrant, astrolabe, dial, globes — sophisticated for their era, but nothing compared to modern surveying technology.</span></li>
+                <li><span class="label">The Method:</span> <span class="detail">Measured the length of one degree of meridian arc by observing stars at two points along a north-south line — pure geometric reasoning.</span></li>
+                <li><span class="label">The Result:</span> <span class="detail">563 Arabic miles per degree — a remarkably accurate value that held up against modern verification of the Earth's size.</span></li>
+                <li><span class="label">Engineering Lesson:</span> <span class="detail">Limited tools ≠ limited results. Careful observation + mathematical rigour + disciplined method = precision. Advanced technology amplifies good methodology; it does not replace it.</span></li>
+              </ol>
+              <div class="keyfacts">
+                <span class="fact">Al-Ma'mun Astronomers</span>
+                <span class="fact">563 Arabic Miles/Degree</span>
+                <span class="fact">Quadrant · Astrolabe</span>
+                <span class="fact">Precision from Method</span>
+              </div>
+            </div>
+          </div>
+        </article>
+
+      </div><!-- /chains-container -->
+      <div class="no-results" aria-live="polite"><span>◌</span><p>No chains match your search.</p></div>
+    </section>
+
+  </div><!-- /content-wrap -->
+</main>
+
+<button id="scroll-top" aria-label="Scroll to top">↑</button>
+
+<script>
+// ── SIDEBAR TOGGLE ──
+const sidebar = document.getElementById('sidebar');
+const toggle = document.getElementById('menu-toggle');
+const overlay = document.getElementById('overlay');
+function openSidebar() { sidebar.classList.add('open'); overlay.classList.add('show'); toggle.setAttribute('aria-expanded', 'true'); }
+function closeSidebar() { sidebar.classList.remove('open'); overlay.classList.remove('show'); toggle.setAttribute('aria-expanded', 'false'); }
+toggle.addEventListener('click', () => { sidebar.classList.contains('open') ? closeSidebar() : openSidebar(); });
+overlay.addEventListener('click', closeSidebar);
+overlay.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); closeSidebar(); } });
+
+// ── PAGE TABS ──
+const pageTabs = document.querySelectorAll('.page-tab');
+const pageAnswers = document.getElementById('page-answers');
+const pageChains = document.getElementById('page-chains');
+const navAnswers = document.getElementById('nav-answers');
+const navChains = document.getElementById('nav-chains');
+
+function staggerCards(container) {
+  container.querySelectorAll('.q-card, .chain-card').forEach((card, i) => {
+    card.style.setProperty('--i', i);
+    card.style.animation = 'none';
+    card.offsetHeight;
+    card.style.animation = '';
+  });
+}
+
+function switchPage(pageId) {
+  pageTabs.forEach(tab => { const a = tab.dataset.page === pageId; tab.classList.toggle('active', a); tab.setAttribute('aria-selected', a); });
+  pageAnswers.classList.toggle('active', pageId === 'answers');
+  pageChains.classList.toggle('active', pageId === 'chains');
+  navAnswers.classList.toggle('active', pageId === 'answers');
+  navChains.classList.toggle('active', pageId === 'chains');
+  const input = document.querySelector('.search-input[data-page="' + pageId + '"]');
+  if (input) { input.value = ''; input.dispatchEvent(new Event('input')); }
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+  staggerCards(document.getElementById('page-' + pageId));
+}
+pageTabs.forEach(tab => { tab.addEventListener('click', () => switchPage(tab.dataset.page)); });
+
+document.querySelectorAll('#nav-chains a').forEach(link => {
+  link.addEventListener('click', e => {
+    if (!navChains.classList.contains('active')) { e.preventDefault(); const href = link.getAttribute('href'); switchPage('chains'); setTimeout(() => { const t = document.querySelector(href); if (t) t.scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 350); }
+    if (window.innerWidth <= 900) closeSidebar();
+  });
+});
+document.querySelectorAll('#nav-answers a').forEach(link => {
+  link.addEventListener('click', e => {
+    if (!navAnswers.classList.contains('active')) { e.preventDefault(); const href = link.getAttribute('href'); switchPage('answers'); setTimeout(() => { const t = document.querySelector(href); if (t) t.scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 350); }
+    if (window.innerWidth <= 900) closeSidebar();
+  });
+});
+
+// ── ACCORDION: Q&A CARDS ──
+document.querySelectorAll('#page-answers .q-header').forEach(header => {
+  const body = header.closest('.q-card').querySelector('.q-answer');
+  if (body) header.setAttribute('aria-controls', body.id || (body.id = header.closest('.q-card').id + '-answer'));
+  if (!body.id) body.id = header.closest('.q-card').id + '-answer';
+  function toggleCard() {
+    const card = header.closest('.q-card');
+    const answer = card.querySelector('.q-answer');
+    const isOpen = card.classList.contains('open');
+    card.classList.toggle('open', !isOpen);
+    header.setAttribute('aria-expanded', !isOpen);
+    answer.setAttribute('aria-hidden', isOpen);
+  }
+  header.addEventListener('click', toggleCard);
+  header.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggleCard(); } });
+});
+
+// ── ACCORDION: CHAIN CARDS ──
+document.querySelectorAll('#page-chains .chain-header').forEach(header => {
+  const card = header.closest('.chain-card');
+  const body = card.querySelector('.chain-body');
+  if (body) header.setAttribute('aria-controls', body.id || (body.id = card.id + '-body'));
+  function toggleCard() {
+    const isOpen = card.classList.contains('open');
+    card.classList.toggle('open', !isOpen);
+    header.setAttribute('aria-expanded', !isOpen);
+    body.setAttribute('aria-hidden', isOpen);
+  }
+  header.addEventListener('click', toggleCard);
+  header.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggleCard(); } });
+});
+
+// ── SEARCH ──
+function filterCards(container, query, countEl) {
+  const cards = container.querySelectorAll('.q-card, .chain-card');
+  const noResults = container.parentElement.querySelector('.no-results');
+  let count = 0;
+  cards.forEach(card => {
+    const text = card.textContent.toLowerCase();
+    const match = text.includes(query.toLowerCase());
+    card.style.display = match ? '' : 'none';
+    if (match) count++;
+  });
+  if (noResults) noResults.classList.toggle('visible', count === 0);
+  if (countEl) {
+    const total = cards.length;
+    countEl.textContent = query ? count + ' of ' + total + (count === total ? '' : ' visible') : '';
+  }
+}
+document.querySelectorAll('.search-input').forEach(input => {
+  const page = input.closest('.page');
+  const container = page.querySelector('.answers-container, .chains-container');
+  const countEl = page.querySelector('.search-count');
+  input.addEventListener('input', () => filterCards(container, input.value, countEl));
+});
+
+// ── KEYBOARD SHORTCUT: / to focus search ──
+document.addEventListener('keydown', e => {
+  if (e.key === '/' && !e.ctrlKey && !e.metaKey && !e.altKey && !['INPUT', 'TEXTAREA', 'SELECT'].includes(e.target.tagName)) {
+    e.preventDefault();
+    const active = document.querySelector('.page.active .search-input');
+    if (active) active.focus();
+  }
+});
+
+// ── ACTIVE NAV ──
+const allNavLinks = Array.from(document.querySelectorAll('#sidebar nav a'));
+const allCards = Array.from(document.querySelectorAll('.q-card, .chain-card'));
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      allNavLinks.forEach(l => l.classList.remove('active-link'));
+      const match = allNavLinks.find(l => l.getAttribute('href') === '#' + entry.target.id);
+      if (match) match.classList.add('active-link');
+    }
+  });
+}, { rootMargin: '-30% 0px -60% 0px' });
+allCards.forEach(el => observer.observe(el));
+
+// ── PROGRESS BAR ──
+const bar = document.getElementById('progress-bar');
+window.addEventListener('scroll', () => {
+  const max = document.body.scrollHeight - window.innerHeight;
+  bar.style.width = (window.scrollY / max) * 100 + '%';
+});
+
+// ── SCROLL TO TOP ──
+const scrollBtn = document.getElementById('scroll-top');
+window.addEventListener('scroll', () => { scrollBtn.classList.toggle('show', window.scrollY > 400); });
+scrollBtn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+
+// ── INIT ──
+staggerCards(pageAnswers);
+staggerCards(pageChains);
+</script>
+</body>
+</html>

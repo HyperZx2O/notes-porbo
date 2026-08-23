@@ -1,0 +1,1550 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PHY 4241 — Physics II Study Guide</title>
+<script>
+  // Set the theme before first paint so saved preference doesn't flash to dark first.
+  document.documentElement.setAttribute('data-theme', localStorage.getItem('theme') || 'dark');
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=IBM+Plex+Serif:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+<style>
+
+/* ═══════════════════════════════════════════════
+   DESIGN TOKENS — Dark Academic Chemistry Theme
+   Palette: Deep navy + amber gold accent
+   Signature: Glowing formula blocks + periodic-
+   table-grid section indicators
+═══════════════════════════════════════════════ */
+:root {
+  --bg-0:       #0d0f14;
+  --bg-1:       #141720;
+  --bg-2:       #1a1e2e;
+  --bg-3:       #222840;
+  --bg-4:       #2c3355;
+  --border:     #2e3454;
+  --border-hi:  #3d4870;
+
+  --text-0:     #e8eaf2;
+  --text-1:     #b8bdd4;
+  --text-2:     #7c85ab;
+  --text-3:     #4e5678;
+
+  --gold:       #c9a227;
+  --gold-dim:   #7a610f;
+  --gold-glow:  rgba(201,162,39,0.10);
+
+  --teal:       #2cbfbf;
+  --teal-dim:   rgba(44,191,191,0.12);
+
+  --red:        #e05c5c;
+  --red-dim:    rgba(224,92,92,0.12);
+
+  --green:      #4dbb7a;
+  --green-dim:  rgba(77,187,122,0.12);
+
+  --purple:     #9b7fd4;
+  --purple-dim: rgba(155,127,212,0.12);
+
+  --font-sans:  'IBM Plex Sans', system-ui, sans-serif;
+  --font-serif: 'IBM Plex Serif', Georgia, serif;
+  --font-mono:  'IBM Plex Mono', 'Courier New', monospace;
+
+  --radius-sm:  4px;
+  --radius:     8px;
+  --radius-lg:  12px;
+
+  --sidebar-w:  260px;
+  --header-h:   56px;
+
+  --transition: 180ms ease;
+}
+
+[data-theme="light"] {
+  --bg-0:      #f4f5f9;
+  --bg-1:      #ffffff;
+  --bg-2:      #eef0f8;
+  --bg-3:      #e2e5f2;
+  --bg-4:      #ccd0e8;
+  --border:    #d0d4e8;
+  --border-hi: #b8bedc;
+  --text-0:    #111828;
+  --text-1:    #2c3654;
+  --text-2:    #5a6289;
+  --text-3:    #6b7394;
+  --gold:      #996d00;
+  --gold-dim:  #e8d49a;
+  --gold-glow: rgba(153,109,0,0.08);
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; font-size: 16px; overflow-x: clip; transition: background-color 0.3s ease, color 0.3s ease; }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+  }
+}
+
+body {
+  font-family: var(--font-sans);
+  background: var(--bg-0);
+  color: var(--text-0);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+.theme-transitioning,
+.theme-transitioning *,
+.theme-transitioning *::before,
+.theme-transitioning *::after {
+  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease !important;
+}
+
+/* ── SCROLLBAR ── */
+::selection { background: var(--gold-dim); color: var(--text-0); }
+
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--bg-0); }
+::-webkit-scrollbar-thumb { background: var(--border-hi); border-radius: 3px; }
+
+/* ── FOCUS INDICATORS ── */
+*:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 2px;
+}
+#search-input:focus-visible { outline-offset: -1px; }
+
+/* KaTeX error fallback */
+.katex-error {
+  color: var(--red);
+  border: 1px dashed var(--red);
+  border-radius: var(--radius-sm);
+  padding: 2px 6px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  background: var(--red-dim);
+}
+.icon { display: inline-block; width: 1em; height: 1em; vertical-align: -0.125em; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.icon-sm { width: 0.875em; height: 0.875em; }
+
+/* ══════════════════════════════════════
+   LAYOUT
+══════════════════════════════════════ */
+#app { display: flex; flex-direction: column; min-height: 100vh; }
+
+/* ── HEADER ── */
+#header {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  height: var(--header-h);
+  background: var(--bg-1);
+  border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; gap: 12px;
+  padding: 0 16px;
+}
+#header-logo {
+  display: flex; align-items: baseline; gap: 8px; text-decoration: none;
+  color: var(--text-0);
+}
+#header-logo .course-code {
+  font-family: var(--font-mono); font-size: 12px;
+  color: var(--gold); letter-spacing: .06em;
+}
+#header-logo .course-name {
+  font-family: var(--font-sans); font-weight: 600; font-size: 14px;
+}
+#header-spacer { flex: 1; }
+
+/* Search */
+#search-wrap {
+  position: relative; width: 280px;
+}
+#search-input {
+  width: 100%;
+  background: var(--bg-2); border: 1px solid var(--border);
+  color: var(--text-0); font-family: var(--font-sans); font-size: 13px;
+  padding: 7px 32px 7px 12px; border-radius: var(--radius);
+  outline: none; transition: border-color var(--transition);
+}
+#search-input:focus { border-color: var(--gold); }
+#search-input::placeholder { color: var(--text-3); }
+#search-clear {
+  position: absolute; right: 8px; top: 50%; transform: translateY(-50%);
+  background: none; border: none; color: var(--text-3); cursor: pointer;
+  font-size: 16px; padding: 2px; display: none; line-height: 1;
+}
+#search-results {
+  position: absolute; top: calc(100% + 4px); left: 0; right: 0;
+  background: var(--bg-1); border: 1px solid var(--border);
+  border-radius: var(--radius); max-height: 340px; overflow-y: auto;
+  z-index: 200; display: none;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+}
+.search-result-item {
+  padding: 10px 14px; cursor: pointer; border-bottom: 1px solid var(--border);
+  transition: background var(--transition);
+}
+.search-result-item:last-child { border-bottom: none; }
+.search-result-item:hover { background: var(--bg-2); }
+.search-result-subject {
+  font-size: 10px; font-family: var(--font-mono); color: var(--gold);
+  text-transform: uppercase; letter-spacing: .08em; margin-bottom: 2px;
+}
+.search-result-title { font-size: 13px; color: var(--text-0); font-weight: 500; }
+.search-result-snippet { font-size: 12px; color: var(--text-2); margin-top: 2px; }
+#search-empty { padding: 16px; text-align: center; color: var(--text-2); font-size: 13px; display: none; }
+
+/* Header buttons */
+.hdr-btn {
+  background: var(--bg-2); border: 1px solid var(--border);
+  color: var(--text-1); border-radius: var(--radius-sm);
+  padding: 6px 10px; font-size: 12px; cursor: pointer;
+  transition: all var(--transition); font-family: var(--font-sans);
+  white-space: nowrap;
+}
+.hdr-btn:hover { border-color: var(--gold); color: var(--gold); }
+
+#sidebar-toggle { display: block; min-width: 44px; min-height: 44px; }
+.hdr-btn-search { display: none; }
+
+/* ── BODY WRAP ── */
+#body-wrap {
+  display: flex;
+  margin-top: var(--header-h);
+  min-height: calc(100vh - var(--header-h));
+}
+
+/* ── SIDEBAR ── */
+#sidebar {
+  position: fixed; left: 0;
+  top: var(--header-h);
+  width: var(--sidebar-w);
+  height: calc(100vh - var(--header-h));
+  overflow-y: auto; overflow-x: hidden;
+  background: var(--bg-1);
+  border-right: 1px solid var(--border);
+  padding: 16px 0 32px;
+  transition: transform var(--transition);
+  z-index: 90;
+}
+#sidebar::-webkit-scrollbar { width: 4px; }
+
+.sidebar-section { margin-bottom: 4px; }
+.sidebar-subject {
+  display: flex; align-items: center; gap: 8px;
+  padding: 8px 16px; cursor: pointer;
+  font-size: 12px; font-weight: 600;
+  text-transform: uppercase; letter-spacing: .08em;
+  color: var(--text-2);
+  border-left: 2px solid transparent;
+  transition: all var(--transition);
+  user-select: none;
+}
+.sidebar-subject:hover { color: var(--text-0); border-left-color: var(--border-hi); }
+.sidebar-subject.active { color: var(--gold); border-left-color: var(--gold); background: var(--gold-glow); }
+.sidebar-subject .subj-num {
+  font-family: var(--font-mono); font-size: 10px;
+  background: var(--bg-3); border-radius: 3px;
+  padding: 1px 5px; min-width: 20px; text-align: center;
+}
+.sidebar-subject.active .subj-num { background: var(--gold-dim); color: var(--bg-0); }
+.sidebar-chevron { margin-left: auto; font-size: 10px; transition: transform var(--transition); }
+.sidebar-subject.open .sidebar-chevron { transform: rotate(90deg); }
+
+.sidebar-toc { display: none; }
+.sidebar-toc.open { display: block; }
+.sidebar-toc a {
+  display: block; padding: 5px 16px 5px 28px;
+  font-size: 12px; color: var(--text-2); text-decoration: none;
+  border-left: 2px solid transparent;
+  transition: color 0.2s ease, border-left-color 0.2s ease, background 0.2s ease;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.sidebar-toc a:hover { color: var(--text-0); border-left-color: var(--border-hi); background: var(--bg-2); }
+.sidebar-toc a.active { color: var(--gold); border-left-color: var(--gold); background: var(--gold-glow); }
+
+.sidebar-home {
+  display: flex; align-items: center; gap: 8px;
+  padding: 8px 16px 16px; cursor: pointer;
+  font-size: 13px; font-weight: 500; color: var(--text-1);
+  border-bottom: 1px solid var(--border); margin-bottom: 8px;
+  text-decoration: none;
+}
+.sidebar-home:hover { color: var(--gold); }
+
+/* ── MAIN CONTENT ── */
+#main {
+  margin-left: var(--sidebar-w);
+  flex: 1;
+  max-width: 100%;
+  transition: margin-left 0.25s ease;
+}
+
+/* ══════════════════════════════════════
+   PAGES
+══════════════════════════════════════ */
+.page { display: none; min-height: calc(100vh - var(--header-h)); }
+.page.active { display: block; }
+
+/* ── DASHBOARD ── */
+#page-home { padding: 0; }
+
+.dashboard-hero {
+  padding: 64px 48px 48px;
+  border-bottom: 1px solid var(--border);
+  background: var(--bg-1);
+  animation: heroFadeIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+@keyframes heroFadeIn {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.dashboard-hero h1 {
+  font-family: var(--font-serif); font-size: clamp(30px, 5vw, 48px);
+  font-weight: 600; color: var(--text-0); line-height: 1.15; margin-bottom: 12px;
+  overflow-wrap: anywhere; min-width: 0;
+}
+.dashboard-hero .subtitle {
+  font-size: 15px; color: var(--text-2); max-width: 560px; line-height: 1.6;
+}
+.dashboard-meta {
+  display: flex; gap: 24px; margin-top: 24px; flex-wrap: wrap;
+}
+.dashboard-meta-item {
+  display: flex; flex-direction: column;
+}
+.dashboard-meta-item .meta-val {
+  font-size: 22px; font-weight: 600; color: var(--gold); font-family: var(--font-mono);
+}
+.dashboard-meta-item .meta-label {
+  font-size: 11px; color: var(--text-3); text-transform: uppercase; letter-spacing: .08em;
+}
+
+.subjects-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1px;
+  background: var(--border);
+  border-top: 1px solid var(--border);
+}
+.subject-card {
+  background: var(--bg-1); padding: 28px 32px;
+  cursor: pointer; transition: background 0.2s ease, transform 0.2s ease;
+  display: flex; flex-direction: column; gap: 10px;
+  opacity: 0; transform: translateY(12px);
+  animation: cardReveal 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+.subject-card:nth-child(1) { animation-delay: 0ms; }
+.subject-card:nth-child(2) { animation-delay: 60ms; }
+.subject-card:nth-child(3) { animation-delay: 120ms; }
+.subject-card:nth-child(4) { animation-delay: 180ms; }
+.subject-card:nth-child(5) { animation-delay: 240ms; }
+.subject-card:nth-child(6) { animation-delay: 300ms; }
+@keyframes cardReveal {
+  to { opacity: 1; transform: translateY(0); }
+}
+.subject-card:hover { background: var(--bg-2); transform: translateY(-2px); }
+.subject-card-header { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; }
+.subject-card-num {
+  font-family: var(--font-mono); font-size: 11px; color: var(--gold);
+  background: var(--gold-glow); border: 1px solid var(--gold-dim);
+  padding: 3px 8px; border-radius: var(--radius-sm); white-space: nowrap;
+  flex-shrink: 0;
+}
+.subject-card-arrow { color: var(--text-3); font-size: 18px; transition: transform var(--transition), color var(--transition); }
+.subject-card:hover .subject-card-arrow { transform: translateX(4px); color: var(--gold); }
+.subject-card h3 {
+  font-family: var(--font-serif); font-size: 18px; font-weight: 600;
+  color: var(--text-0); line-height: 1.3;
+  overflow-wrap: anywhere; min-width: 0;
+}
+.subject-card p { font-size: 13px; color: var(--text-2); line-height: 1.5; }
+.subject-card-tags { display: flex; flex-wrap: wrap; gap: 6px; }
+.tag {
+  font-size: 10px; font-family: var(--font-mono);
+  padding: 2px 7px; border-radius: var(--radius-sm);
+  border: 1px solid var(--border); color: var(--text-3);
+  letter-spacing: .04em;
+}
+
+/* ── STUDY PAGE ── */
+.study-page { padding: 0 0 80px; }
+
+.study-header {
+  padding: 40px 48px 32px;
+  border-bottom: 1px solid var(--border);
+  background: var(--bg-1);
+  position: sticky; top: var(--header-h); z-index: 50;
+}
+.study-header h2 {
+  font-family: var(--font-serif); font-size: clamp(22px, 3.5vw, 32px);
+  font-weight: 600; color: var(--text-0); line-height: 1.2;
+  overflow-wrap: anywhere; min-width: 0;
+}
+.study-header .src-note {
+  font-size: 11px; color: var(--text-3); margin-top: 6px; font-family: var(--font-mono);
+  letter-spacing: .04em;
+}
+
+.study-content { padding: 0 48px; }
+
+/* ── SECTION GROUPS ── */
+.section-group {
+  margin-top: 48px;
+  padding-bottom: 32px;
+  border-bottom: 1px solid var(--border);
+}
+.section-group:last-of-type { border-bottom: none; }
+
+.section-heading {
+  display: flex; align-items: center; gap: 12px;
+  margin-bottom: 20px; cursor: pointer;
+  user-select: none;
+}
+.section-num {
+  font-family: var(--font-mono); font-size: 11px; color: var(--gold);
+  background: var(--gold-glow); border: 1px solid var(--gold-dim);
+  padding: 3px 8px; border-radius: var(--radius-sm); flex-shrink: 0;
+}
+.section-heading h3 {
+  font-family: var(--font-serif); font-size: 20px; font-weight: 600;
+  color: var(--text-0); flex: 1;
+  overflow-wrap: anywhere; min-width: 0;
+}
+.section-toggle {
+  color: var(--text-3); font-size: 14px; transition: transform var(--transition);
+  flex-shrink: 0;
+}
+.section-heading.collapsed .section-toggle { transform: rotate(-90deg); }
+.section-body { }
+.section-body.hidden {
+  opacity: 0; max-height: 0; overflow: hidden;
+  transition: opacity 0.2s ease, max-height 0.25s ease;
+  margin-top: 0; padding-top: 0;
+}
+.section-body:not(.hidden) {
+  opacity: 1; max-height: 50000px;
+  transition: opacity 0.2s ease 0.05s, max-height 0.3s ease;
+}
+
+/* subsection */
+.subsection { margin-top: 32px; }
+h4.subsection-heading {
+  font-family: var(--font-sans); font-size: 13px; font-weight: 600;
+  color: var(--gold); text-transform: uppercase; letter-spacing: .08em;
+  margin-bottom: 12px; padding-bottom: 6px;
+  border-bottom: 1px solid var(--gold-dim);
+}
+
+/* ── TYPOGRAPHY WITHIN CONTENT ── */
+.content-body p { margin-bottom: 16px; color: var(--text-1); font-size: 15px; max-width: 70ch; }
+.content-body ul, .content-body ol { margin: 0 0 14px 20px; max-width: 70ch; }
+.content-body li { color: var(--text-1); font-size: 15px; margin-bottom: 5px; }
+.content-body strong { color: var(--text-0); font-weight: 600; }
+
+/* ── CALLOUT BLOCKS ── */
+.callout {
+  border-left: 3px solid; border-radius: 0 var(--radius) var(--radius) 0;
+  padding: 14px 18px; margin: 16px 0; font-size: 14px;
+}
+.callout-def {
+  border-color: var(--teal);
+  background: var(--teal-dim);
+}
+.callout-def .callout-label { color: var(--teal); font-size: 10px; font-family: var(--font-mono); text-transform: uppercase; letter-spacing: .1em; margin-bottom: 10px; }
+
+.callout-important {
+  border-color: var(--gold);
+  background: var(--gold-glow);
+}
+.callout-important .callout-label { color: var(--gold); font-size: 10px; font-family: var(--font-mono); text-transform: uppercase; letter-spacing: .1em; margin-bottom: 10px; }
+
+.callout-warn {
+  border-color: var(--red);
+  background: var(--red-dim);
+}
+.callout-warn .callout-label { color: var(--red); font-size: 10px; font-family: var(--font-mono); text-transform: uppercase; letter-spacing: .1em; margin-bottom: 10px; }
+
+.callout-note {
+  border-color: var(--purple);
+  background: var(--purple-dim);
+}
+.callout-note .callout-label { color: var(--purple); font-size: 10px; font-family: var(--font-mono); text-transform: uppercase; letter-spacing: .1em; margin-bottom: 10px; }
+
+.callout p, .callout ul, .callout li { color: var(--text-1); margin-bottom: 6px; }
+.callout p:last-child, .callout li:last-child { margin-bottom: 0; }
+
+/* ── FORMULA BLOCKS — signature element ── */
+.formula-block {
+  background: var(--bg-2);
+  border: 1px solid var(--gold-dim);
+  border-radius: var(--radius);
+  padding: 16px 20px;
+  margin: 16px 0;
+  position: relative;
+  overflow-x: auto;
+  max-width: 70ch;
+}
+.formula-block::before {
+  content: '';
+  position: absolute; left: 0; top: 0; bottom: 0; width: 3px;
+  background: var(--gold);
+  border-radius: var(--radius-sm) 0 0 var(--radius-sm);
+}
+.formula-label {
+  font-family: var(--font-mono); font-size: 10px; color: var(--gold);
+  text-transform: uppercase; letter-spacing: .1em; margin-bottom: 8px;
+}
+.formula-body {
+  font-family: var(--font-mono); font-size: 15px; color: var(--text-0);
+  white-space: pre-wrap; word-break: break-word;
+  font-variant-numeric: tabular-nums;
+}
+
+/* inline code */
+code {
+  font-family: var(--font-mono); font-size: 13px;
+  background: var(--bg-3); color: var(--text-0);
+  padding: 1px 5px; border-radius: var(--radius-sm);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ── TABLES ── */
+.table-wrap { overflow-x: auto; margin: 16px 0; max-width: 70ch; }
+table {
+  width: 100%; border-collapse: collapse;
+  font-size: 14px;
+  font-variant-numeric: tabular-nums;
+}
+th {
+  background: var(--bg-3); color: var(--gold);
+  font-family: var(--font-mono); font-size: 11px;
+  text-transform: uppercase; letter-spacing: .07em;
+  padding: 10px 14px; text-align: left;
+  border-bottom: 2px solid var(--gold-dim);
+}
+td {
+  padding: 9px 14px; border-bottom: 1px solid var(--border);
+  color: var(--text-1); vertical-align: top;
+}
+tr:last-child td { border-bottom: none; }
+tr:hover td { background: var(--bg-3); }
+
+/* comparison table */
+.compare-table th:first-child { border-right: 1px solid var(--border); }
+.compare-table td:first-child { border-right: 1px solid var(--border); color: var(--text-0); font-weight: 500; }
+
+/* ── PROBLEM/SOLUTION BLOCKS ── */
+.problem-block {
+  background: var(--bg-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  margin: 20px 0;
+}
+.problem-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 12px 18px;
+  background: var(--bg-3);
+  border-bottom: 1px solid var(--border);
+  cursor: pointer;
+}
+.problem-label { font-family: var(--font-mono); font-size: 11px; color: var(--purple); text-transform: uppercase; letter-spacing: .1em; }
+.problem-title { font-size: 14px; color: var(--text-0); font-weight: 500; }
+.problem-toggle { color: var(--text-3); font-size: 14px; transition: transform var(--transition); }
+.problem-header.open .problem-toggle { transform: rotate(180deg); }
+.problem-body { padding: 18px; }
+.problem-body.hidden {
+  opacity: 0; max-height: 0; overflow: hidden;
+  transition: opacity 0.2s ease, max-height 0.25s ease;
+  padding-top: 0; padding-bottom: 0;
+}
+.problem-body:not(.hidden) {
+  opacity: 1; max-height: 50000px;
+  transition: opacity 0.2s ease 0.05s, max-height 0.3s ease;
+}
+.problem-step { margin-bottom: 14px; }
+.problem-step-label { font-size: 11px; font-family: var(--font-mono); color: var(--gold); letter-spacing: .1em; text-transform: uppercase; margin-bottom: 6px; }
+.problem-answer {
+  background: var(--bg-3); border: 1px solid var(--green);
+  border-radius: var(--radius); padding: 12px 16px;
+  margin-top: 12px;
+}
+.problem-answer .answer-label { font-size: 10px; font-family: var(--font-mono); color: var(--green); text-transform: uppercase; letter-spacing: .1em; margin-bottom: 6px; }
+
+/* ── FORMULA QUICK-REFERENCE PANEL ── */
+#ref-panel {
+  position: fixed; right: -340px; top: var(--header-h);
+  width: 320px; height: calc(100vh - var(--header-h));
+  background: var(--bg-1); border-left: 1px solid var(--border);
+  overflow-y: auto; padding: 20px; z-index: 80;
+  transition: right 0.25s ease;
+}
+#ref-panel::after {
+  content: '';
+  position: sticky; bottom: 0; left: 0; right: 0;
+  display: block; height: 40px;
+  background: linear-gradient(transparent, var(--bg-1));
+  pointer-events: none;
+  margin: -40px 0 0;
+}
+#ref-panel.open { right: 0; }
+.ref-panel-header {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1px solid var(--border);
+}
+.ref-panel-header h4 { font-family: var(--font-serif); font-size: 15px; color: var(--text-0); }
+#ref-panel-close {
+  background: none; border: 1px solid var(--border);
+  color: var(--text-2); cursor: pointer; font-size: 18px;
+  width: 32px; height: 32px; border-radius: var(--radius-sm);
+  display: flex; align-items: center; justify-content: center;
+  transition: all var(--transition);
+}
+#ref-panel-close:hover { border-color: var(--gold); color: var(--gold); background: var(--gold-glow); }
+#ref-panel-content { animation: fadeSlideIn 0.3s ease both; }
+@keyframes fadeSlideIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.ref-subject { margin-bottom: 24px; }
+.ref-subject-title {
+  font-size: 12px; font-family: var(--font-mono); color: var(--gold);
+  text-transform: uppercase; letter-spacing: .1em; margin-bottom: 12px;
+  padding-bottom: 8px; border-bottom: 2px solid var(--gold-dim);
+  position: sticky; top: 0; background: var(--bg-1); z-index: 1;
+}
+.ref-empty { text-align: center; padding: 40px 16px; color: var(--text-3); font-size: 13px; line-height: 1.6; }
+.ref-empty .ref-empty-icon { font-size: 28px; margin-bottom: 12px; opacity: 0.4; }
+.ref-formula { background: var(--bg-2); border-radius: var(--radius-sm); padding: 8px 10px; margin-bottom: 6px; font-size: 14px; color: var(--text-0); overflow-x: auto; }
+
+/* ── BACK TO TOP ── */
+#back-top {
+  position: fixed; bottom: 24px; right: 24px; z-index: 99;
+  width: 40px; height: 40px; border-radius: 50%;
+  background: var(--bg-3); border: 1px solid var(--border-hi);
+  color: var(--text-1); font-size: 18px; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  opacity: 0; transform: translateY(8px);
+  transition: opacity 0.3s ease, transform 0.3s ease, background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+  pointer-events: none;
+}
+#back-top.visible { opacity: 1; transform: translateY(0); pointer-events: auto; }
+
+/* ── BREADCRUMB ── */
+.breadcrumb {
+  padding: 10px 48px;
+  font-size: 12px; color: var(--text-3);
+  border-bottom: 1px solid var(--border);
+  background: var(--bg-0);
+  position: sticky; top: calc(var(--header-h) + 89px); z-index: 40;
+}
+.breadcrumb a { color: var(--text-3); text-decoration: none; }
+.breadcrumb a:hover { color: var(--gold); }
+.breadcrumb span { margin: 0 6px; }
+
+/* ══════════════════════════════════════
+   RESPONSIVE
+══════════════════════════════════════ */
+@media (max-width: 900px) {
+  :root { --sidebar-w: 0px; }
+  #sidebar { transform: translateX(-260px); width: 260px; --sidebar-w: 260px; }
+  #sidebar.open { transform: translateX(0); }
+  #main { margin-left: 0; }
+  .dashboard-hero { padding: 32px 24px 24px; }
+  .subjects-grid { grid-template-columns: 1fr; }
+  .study-header { padding: 24px 24px 20px; position: static; }
+  .breadcrumb { padding: 8px 24px; position: static; }
+  .study-content { padding: 0 20px; }
+  #search-wrap { width: 180px; }
+  #ref-panel { width: 280px; right: -280px; }
+  .section-heading { min-height: 44px; }
+  .problem-header { min-height: 44px; }
+}
+
+@media (max-width: 600px) {
+  #search-wrap {
+    position: static; width: auto;
+  }
+  #search-input {
+    position: fixed; top: var(--header-h); left: 0; right: 0;
+    width: 100%; border-radius: 0; border-left: none; border-right: none;
+    padding: 10px 40px 10px 12px; font-size: 14px;
+    z-index: 150; display: none;
+  }
+  #search-input.mobile-open { display: block; }
+  #search-clear { right: 12px; z-index: 151; }
+  #search-results { position: fixed; top: calc(var(--header-h) + 42px); left: 0; right: 0; border-radius: 0; z-index: 150; }
+  .hdr-btn-search { display: flex; min-width: 44px; min-height: 44px; }
+  .dashboard-hero h1 { font-size: 22px; }
+  .study-content { padding: 0 16px; }
+  .dashboard-hero { padding: 24px 16px; }
+  .breadcrumb { padding: 8px 16px; }
+  .study-header { padding: 20px 16px; }
+  #ref-panel { width: 100%; right: -100%; }
+}
+
+/* ── OVERLAY ── */
+#overlay {
+  display: none; position: fixed; inset: 0; z-index: 80;
+  background: rgba(0,0,0,0);
+  transition: background 0.25s ease;
+}
+#overlay.visible { display: block; background: rgba(0,0,0,0.5); }
+
+/* ── SIDEBAR COLLAPSED (desktop) ── */
+.sidebar-collapsed #sidebar { transform: translateX(-260px); }
+.sidebar-collapsed #main { margin-left: 0; }
+
+</style>
+</head>
+<body>
+<div id="app">
+
+<!-- HEADER -->
+<header id="header">
+  <button class="hdr-btn" id="sidebar-toggle" aria-label="Toggle sidebar"><svg class="icon" viewBox="0 0 24 24"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg></button>
+  <a id="header-logo" href="#" onclick="showPage('home'); return false;">
+    <span class="course-code">PHY 4241</span>
+    <span class="course-name">Physics II</span>
+  </a>
+  <div id="header-spacer"></div>
+  <div id="search-wrap">
+    <input type="search" id="search-input" placeholder="Search formulas, topics…" aria-label="Search formulas, topics" autocomplete="off">
+    <button id="search-clear" aria-label="Clear search"><svg class="icon icon-sm" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+    <div id="search-results" aria-label="Search results" aria-live="polite">
+      <div id="search-empty">No results found</div>
+    </div>
+  </div>
+  <button class="hdr-btn" onclick="toggleRefPanel()"><svg class="icon icon-sm" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg> Formulas</button>
+  <button class="hdr-btn hdr-btn-search" id="mobile-search-toggle" aria-label="Search"><svg class="icon icon-sm" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></button>
+  <button class="hdr-btn" id="theme-toggle"><svg class="icon icon-sm" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg> Light</button>
+</header>
+
+<!-- SIDEBAR -->
+<div id="sidebar">
+  <a class="sidebar-home" href="#" onclick="showPage('home'); closeSidebar(); return false;">
+    <svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M3 12l9-9 9 9"/><path d="M5 10v10h14V10"/></svg>
+    Dashboard
+  </a>
+  <div id="sidebar-nav"></div>
+</div>
+<div id="overlay" onclick="closeSidebar()"></div>
+
+<!-- MAIN -->
+<div id="body-wrap">
+<main id="main">
+
+<!-- DASHBOARD -->
+<div id="page-home" class="page active">
+  <div class="dashboard-hero">
+    <h1>Physics II — Circuit Analysis</h1>
+    <p class="subtitle">Comprehensive finals study guide covering network theorems, magnetic circuits, sinusoidal AC waveforms, and the basic R/L/C elements with phasors.</p>
+    <p class="src-note" style="margin-top:16px">4 chapters · KaTeX math rendering · Boylestad textbook</p>
+  </div>
+  <div class="subjects-grid" id="subjects-grid"></div>
+</div>
+
+<!-- STUDY PAGES (generated by JS) -->
+<div id="page-1" class="page study-page"></div>
+<div id="page-2" class="page study-page"></div>
+<div id="page-3" class="page study-page"></div>
+<div id="page-4" class="page study-page"></div>
+
+
+</main>
+</div>
+
+</div>
+
+<!-- Reference Panel -->
+<div id="ref-panel">
+  <div class="ref-panel-header">
+    <h4>Formula Quick Reference</h4>
+    <button id="ref-panel-close" onclick="toggleRefPanel()" aria-label="Close reference panel"><svg class="icon" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+  </div>
+  <div id="ref-panel-content"></div>
+</div>
+
+<button id="back-top" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="Back to top" aria-label="Back to top"><svg class="icon" viewBox="0 0 24 24"><polyline points="18 15 12 9 6 15"/></svg></button>
+
+
+<script>
+const SUBJECTS = [
+  {
+    "id": 1,
+    "code": "CH 9",
+    "title": "Network Theorems",
+    "source": "Chapter 9 - Network Theorems, Boylestad, Introductory Circuit Analysis.",
+    "desc": "Comprehensive study guide for Network Theorems. Source: Chapter 9 - Network Theorems, Boylestad, Introductory Circuit Analysis.",
+    "tags": [
+      "Superposition",
+      "Thévenin",
+      "Norton",
+      "Max Power"
+    ],
+    "formulas": [
+      "I_T = \\sum_i I_i",
+      "E_{Th} = V_{oc}",
+      "R_{Th} = R_{\\text{deact}}",
+      "E_{Th} = I_N R_N",
+      "P_{\\max} = \\frac{E_{Th}^2}{4 R_{Th}}",
+      "E_{eq} = \\frac{\\sum \\frac{E_i}{R_i}}{\\sum \\frac{1}{R_i}}"
+    ],
+    "sections": [
+      {
+        "num": "1",
+        "title": "9.1 — Introduction",
+        "content": "<p>This chapter introduces a number of theorems that have application throughout the field of electricity and electronics. They can be used to solve networks such as encountered in the previous chapter, but they also provide an opportunity to determine the impact of a particular source or element on the response of the entire system. In most cases, the network to be analyzed and the mathematics required to find the solution are simplified. All of the theorems appear again in the analysis of ac networks; in fact, the application of each theorem to ac networks is very similar in content to that found in this chapter.</p><p>The first theorem introduced is the <strong>superposition theorem</strong>, followed by <strong>Thévenin's theorem</strong>, <strong>Norton's theorem</strong>, and the <strong>maximum power transfer theorem</strong>. The chapter concludes with a brief introduction to <strong>Millman's theorem</strong> and the <strong>substitution</strong> and <strong>reciprocity theorems</strong>.</p><p><strong>Chapter Objectives</strong> (from textbook):</p><ul><li>Become familiar with the superposition theorem and its unique ability to separate the impact of each source on the quantity of interest.</li><li>Be able to apply Thévenin's theorem to reduce any two-terminal, series-parallel network with any number of sources to a single voltage source and series resistor.</li><li>Become familiar with Norton's theorem and how it can be used to reduce any two-terminal, series-parallel network with any number of sources to a single current source and a parallel resistor.</li><li>Understand how to apply the maximum power transfer theorem to determine the maximum power to a load and to choose a load that will receive maximum power.</li><li>Become aware of the reduction powers of Millman's theorem and the powerful implications of the substitution and reciprocity theorems.</li></ul><hr/>"
+      },
+      {
+        "num": "2",
+        "title": "9.2 — Superposition Theorem",
+        "content": "<h4 class='subsection-heading'>General Statement</h4><p>The superposition theorem states the following:</p><p>&gt; <strong>The current through, or voltage across, any element of a network is equal to the algebraic sum of the currents or voltages produced independently by each source.</strong></p><p>In other words, this theorem allows us to find a solution for a current or voltage using only one source at a time. Once we have the solution for each source, we can combine the results to obtain the total solution. The term <em>algebraic</em> appears in the above theorem statement because the currents resulting from the sources of the network can have different directions, just as the resulting voltages can have opposite polarities.</p><h4 class='subsection-heading'>Applications</h4><p>The theorem can be used to:</p><ul><li>Analyze networks that have two or more sources that are not in series or parallel.</li><li>Reveal the effect of each source on a particular quantity of interest.</li><li>For sources of different types (such as dc and ac), apply a separate analysis for each type, with the total result simply the algebraic sum of the results.</li></ul><h4 class='subsection-heading'>Rules for Removing Sources</h4><p><strong>Voltage source removal:</strong> Setting a voltage source to zero volts is like placing a short circuit across its terminals.</p><ul><li><strong>When removing a voltage source from a network schematic, replace it with a direct connection (short circuit) of zero ohms.</strong> Any internal resistance associated with the source must remain in the network.</li></ul><p><strong>Current source removal:</strong> Setting a current source to zero amperes is like replacing it with an open circuit.</p><ul><li><strong>When removing a current source from a network schematic, replace it by an open circuit of infinite ohms.</strong> Any internal resistance associated with the source must remain in the network.</li></ul><h4 class='subsection-heading'>Combining Contributions</h4><p>The number of networks to be analyzed equals the number of sources.</p><ul><li><strong>For currents:</strong> Contributions to that current must be determined for each source. Currents in the same direction are added; those having the opposite direction are subtracted. The total result has the direction of the larger sum and the magnitude of the difference.</li><li><strong>For voltages:</strong> Voltages with the same polarity are added; those with opposite polarity are subtracted. The total result has the polarity of the larger sum and the magnitude of the difference.</li></ul><h4 class='subsection-heading'>Important Limitation</h4><p><strong>Superposition cannot be applied to power effects</strong> because the power is related to the <em>square</em> of the voltage across a resistor or the current through a resistor. The squared term results in a nonlinear relationship between the power and the determining current or voltage. For example:</p><ul><li>Doubling the current through a resistor increases the power by a factor of 4 (not 2).</li><li>Tripling the current increases the power level by a factor of 9.</li></ul><div class='problem-block'><div class='problem-header' onclick='toggleProblem(this)'><div><span class='problem-label'>Example 9.1</span> <span class='problem-title'>Two-source network, current source shorted</span></div><span class='problem-toggle'><svg class='icon icon-sm' viewBox='0 0 24 24'><polyline points='6 9 12 15 18 9'/></svg></span></div><div class='problem-body hidden'><p><strong>Network (Fig. 9.2):</strong> E = 30 V, I = 3 A, R₁ = 6 Ω.</p><p><em>Step 1: Effect of voltage source (current source replaced by open circuit, Fig. 9.3).</em> Due to the open circuit, R₁ is in series (and, in fact, in parallel) with the voltage source E. The voltage across R₁ is the applied voltage: $$I'_{1} = \\frac{V_{R_1}}{R_1} = \\frac{E}{R_1} = \\frac{30\\text{ V}}{6\\,\\Omega} = 5\\text{ A}$$</p><p><em>Step 2: Effect of current source (voltage source replaced by short circuit, Fig. 9.4).</em> The current source has been replaced with a short-circuit equivalent directly across the current source and resistor R₁. Since the source current takes the path of least resistance, it chooses the zero-ohm path. Current divider rule: $$I''_{1} = \\frac{R_{sc} \\, I_{sc}}{R_{sc} + R_1} = \\frac{(0)(3)}{0 + 6} = 0\\text{ A}$$</p><p><em>Total:</em> Since I′₁ and I″₁ have the same defined direction: $$I_1 = I'_1 + I''_1 = 5\\text{ A} + 0\\text{ A} = 5\\text{ A}$$</p><p>Note: The voltage source is in parallel with the current source and load resistor R₁, so the voltage across each must be 30 V, giving I₁ = 30 V / 6 Ω = 5 A as a quick sanity check.</p></div></div><div class='problem-block'><div class='problem-header' onclick='toggleProblem(this)'><div><span class='problem-label'>Example 9.2</span> <span class='problem-title'>Direction reversal of contributions</span></div><span class='problem-toggle'><svg class='icon icon-sm' viewBox='0 0 24 24'><polyline points='6 9 12 15 18 9'/></svg></span></div><div class='problem-body hidden'><p><strong>Network (Fig. 9.5):</strong> R₁ = 24 Ω, R₃ = 4 Ω, R₂ = 12 Ω, E₁ = 54 V, E₂ = 48 V. Find current through R₂.</p><p><em>Step 1: Effect of 54 V source (48 V source replaced by short circuit, Fig. 9.6).</em> R₂ and R₃ are in parallel: $$R_{T} = R_1 + (R_2 \\parallel R_3) = 24 + \\frac{(12)(4)}{12 + 4} = 24 + 3 = 27\\,\\Omega$$ $$I_{s_1} = \\frac{E_1}{R_{T}} = \\frac{54}{27} = 2\\text{ A}$$ Current divider rule: $$I'_2 = \\frac{R_3 \\, I_{s_1}}{R_3 + R_2} = \\frac{(4)(2)}{4 + 12} = 0.5\\text{ A}$$</p><p><em>Step 2: Effect of 48 V source (54 V source replaced by short circuit, Fig. 9.7).</em> R₂ and R₁ are in parallel: $$R_{T} = R_3 + (R_1 \\parallel R_2) = 4 + \\frac{(24)(12)}{24 + 12} = 4 + 8 = 12\\,\\Omega$$ $$I_{s_2} = \\frac{E_2}{R_{T}} = \\frac{48}{12} = 4\\text{ A}$$ $$I''_2 = \\frac{R_1 \\, I_{s_2}}{R_1 + R_2} = \\frac{(24)(4)}{24 + 12} = 2.67\\text{ A}$$</p><p><em>Total:</em> The currents have opposite directions, so: $$I_2 = I''_2 - I'_2 = 2.67 - 0.5 = 2.17\\text{ A}$$ Direction is that of the 48 V source contribution (the larger).</p></div></div><div class='problem-block'><div class='problem-header' onclick='toggleProblem(this)'><div><span class='problem-label'>Example 9.3</span> <span class='problem-title'>Limitation: power cannot use superposition</span></div><span class='problem-toggle'><svg class='icon icon-sm' viewBox='0 0 24 24'><polyline points='6 9 12 15 18 9'/></svg></span></div><div class='problem-body hidden'><p><strong>Network (Fig. 9.9):</strong> E = 36 V, R₁ = 12 Ω, R₂ = 6 Ω, I = 9 A. Find current through R₂.</p><p><em>Step 1: Effect of 36 V voltage source (current source replaced by open circuit, Fig. 9.10).</em> Simple series circuit: $$I'_2 = \\frac{E}{R_1 + R_2} = \\frac{36}{12 + 6} = 2\\text{ A}$$</p><p><em>Step 2: Effect of 9 A current source (voltage source replaced by short circuit, Fig. 9.11).</em> R₁ and R₂ are in parallel. Current divider rule: $$I''_2 = \\frac{R_1 \\, I}{R_1 + R_2} = \\frac{(12)(9)}{12 + 6} = 6\\text{ A}$$</p><p><em>Total current:</em> Same direction, so: $$I_2 = I'_2 + I''_2 = 2 + 6 = 8\\text{ A}$$</p><p><em>Part b — Why power fails superposition:</em> $$P_{R_2} = I_2^{2} R_2 = (8)^{2}(6) = 384\\text{ W}$$ If we tried superposition on power: $$P'_{R_2} = (I'_2)^{2} R_2 = (2)^{2}(6) = 24\\text{ W}$$ $$P''_{R_2} = (I''_2)^{2} R_2 = (6)^{2}(6) = 216\\text{ W}$$ $$P'_2 + P''_2 = 24 + 216 = 240\\text{ W} \\ne 384\\text{ W}$$</p><p>The correct total power (384 W) differs from the algebraic sum of individual powers (240 W) — confirming the nonlinear (squared) relationship prevents superposition from applying to power.</p><p>---</p></div></div>"
+      },
+      {
+        "num": "3",
+        "title": "9.3 — Thévenin's Theorem",
+        "content": "<h4 class='subsection-heading'>General Statement</h4><p>&gt; <strong>Thévenin's theorem states that any two-terminal, linear, dc network can be replaced by an equivalent circuit consisting of a voltage source and a series resistor.</strong></p><p>The theorem provides a simplification that reduces any two-terminal network to a single source and series resistor — making it much easier to analyze how the load responds as it varies.</p><h4 class='subsection-heading'>Definitions</h4><ul><li><strong>E_Th</strong>: the open-circuit voltage at the load terminals (with the load removed).</li><li><strong>R_Th</strong>: the resistance looking back into the network from the load terminals with all sources (both voltage and current) set to zero (their internal resistances remain).</li></ul><h4 class='subsection-heading'>Procedure</h4><ol><li>Remove the load from the network.</li><li>Mark the terminals where the load was connected (a, b).</li><li>Calculate E_Th — the open-circuit voltage between the marked terminals.</li><li>Calculate R_Th — the resistance between the marked terminals with all sources replaced by their internal resistances (voltage sources → short circuit; current sources → open circuit).</li><li>Draw the Thévenin equivalent: voltage source E_Th in series with R_Th, then reconnect the load.</li><li>Use Ohm's law: I_L = E_Th / (R_Th + R_L).</li></ol><div class='problem-block'><div class='problem-header' onclick='toggleProblem(this)'><div><span class='problem-label'>Example 9.4</span> <span class='problem-title'>Basic Thévenin</span></div><span class='problem-toggle'><svg class='icon icon-sm' viewBox='0 0 24 24'><polyline points='6 9 12 15 18 9'/></svg></span></div><div class='problem-body hidden'><p><strong>Network (Fig. 9.14):</strong> E = 24 V, R₁ = 6 Ω, R₂ = 12 Ω, R_L = 10 Ω. Find I_L.</p><p><em>Step 1: Open-circuit voltage E_Th.</em> With load removed, no current through R₁ (open at load terminals). Therefore V_ab = voltage across R₂ = full source voltage 24 V. $$E_{Th} = 24\\text{ V}$$</p><p><em>Step 2: Thévenin resistance R_Th.</em> With voltage source replaced by short circuit, looking back from a-b: R₁ and R₂ are in parallel. $$R_{Th} = R_1 \\parallel R_2 = \\frac{6 \\cdot 12}{6 + 12} = \\frac{72}{18} = 4\\,\\Omega$$</p><p><em>Step 3: Load current.</em> $$I_{L} = \\frac{E_{Th}}{R_{Th} + R_{L}} = \\frac{24}{4 + 10} = \\frac{24}{14} \\approx 1.71\\text{ A}$$</p></div></div><div class='problem-block'><div class='problem-header' onclick='toggleProblem(this)'><div><span class='problem-label'>Example 9.5</span> <span class='problem-title'>Network with current source</span></div><span class='problem-toggle'><svg class='icon icon-sm' viewBox='0 0 24 24'><polyline points='6 9 12 15 18 9'/></svg></span></div><div class='problem-body hidden'><p><strong>Network (Fig. 9.18):</strong> E = 6 V, R = 2 Ω, I_s = 4 A, R_L = 4 Ω. Find I_L.</p><p><em>Step 1: E_Th — open-circuit voltage at load terminals.</em> With load removed, voltage at the load is determined by superposition or direct analysis. $$E_{Th} = 6\\text{ V} + (4\\text{ A})(2\\,\\Omega) = 14\\text{ V}$$</p><p><em>Step 2: R_Th — turn off both sources.</em></p><ul><li>Voltage source → short circuit.</li><li>Current source → open circuit.</li><li>Looking back: R = 2 Ω.</li></ul><div class='formula-block'><div class='formula-body'>$$R_{Th} = 2\\,\\Omega$$</div></div><p><em>Step 3: Load current.</em> $$I_{L} = \\frac{E_{Th}}{R_{Th} + R_{L}} = \\frac{14}{2 + 4} = \\frac{14}{6} \\approx 2.33\\text{ A}$$</p><p>---</p></div></div>"
+      },
+      {
+        "num": "4",
+        "title": "9.4 — Norton's Theorem",
+        "content": "<h4 class='subsection-heading'>General Statement</h4><p>&gt; <strong>Norton's theorem states that any two-terminal, linear, dc network can be replaced by an equivalent circuit consisting of a current source and a parallel resistor.</strong></p><p>Norton's theorem is the dual of Thévenin's theorem. Where Thévenin produces a voltage source in series with a resistance, Norton produces a current source in parallel with a resistance.</p><h4 class='subsection-heading'>Definitions</h4><ul><li><strong>I_N</strong>: the short-circuit current between the load terminals.</li><li><strong>R_N</strong>: the resistance looking back into the network from the load terminals with all sources replaced by their internal resistances (voltage sources → short circuit; current sources → open circuit). R_N = R_Th.</li></ul><h4 class='subsection-heading'>Procedure</h4><ol><li>Remove the load from the network.</li><li>Mark the terminals a, b.</li><li>Calculate I_N — the short-circuit current between a and b (place a wire between them and find the current).</li><li>Calculate R_N = R_Th — the resistance looking back with sources deactivated.</li><li>Draw the Norton equivalent: current source I_N in parallel with R_N, then reconnect the load.</li><li>Use current divider rule: I_L = R_N × I_N / (R_N + R_L).</li></ol><h4 class='subsection-heading'>Conversion Between Thévenin and Norton</h4><p>The Thévenin and Norton equivalents are related by: $$E_{Th} = I_{N} R_{N} \\quad \\text{and} \\quad I_{N} = \\frac{E_{Th}}{R_{Th}}$$ $$R_{Th} = R_{N}$$</p><div class='problem-block'><div class='problem-header' onclick='toggleProblem(this)'><div><span class='problem-label'>Example 9.6</span> <span class='problem-title'>Determining Norton current</span></div><span class='problem-toggle'><svg class='icon icon-sm' viewBox='0 0 24 24'><polyline points='6 9 12 15 18 9'/></svg></span></div><div class='problem-body hidden'><p><strong>Network (Fig. 9.22):</strong> E = 24 V, R₁ = 6 Ω, R₂ = 12 Ω. Find I_N at the load terminals.</p><p><em>Step 1: Short-circuit current I_N.</em> Place a short between a-b. The current flowing through this short is: $$I_{N} = \\frac{E}{R_1} = \\frac{24}{6} = 4\\text{ A}$$</p><p><em>Step 2: Norton resistance R_N.</em> Same as R_Th: $$R_{N} = R_1 \\parallel R_2 = \\frac{6 \\cdot 12}{6 + 12} = 4\\,\\Omega$$</p><p><em>Step 3: For a load R_L = 10 Ω, current divider rule:</em> $$I_{L} = \\frac{R_{N} \\, I_{N}}{R_{N} + R_{L}} = \\frac{(4)(4)}{4 + 10} = \\frac{16}{14} \\approx 1.14\\text{ A}$$</p><p>This matches the result from the Thévenin equivalent.</p><p>---</p></div></div>"
+      },
+      {
+        "num": "5",
+        "title": "9.5 — Maximum Power Transfer Theorem",
+        "content": "<h4 class='subsection-heading'>General Statement</h4><p>&gt; <strong>For a given source, the maximum power delivered to a load occurs when the load resistance equals the Thévenin resistance of the network.</strong></p><p>When R_L = R_Th: $$P_{max} = \\frac{E_{Th}^{2}}{4 R_{Th}}$$</p><h4 class='subsection-heading'>Three Conditions</h4><ol><li><strong>R_L = R_Th</strong>: maximum power transfer to a fixed-resistance load.</li><li><strong>R_L = R_Th magnitude (for AC networks)</strong>: when the magnitudes match and reactances cancel.</li><li><strong>R_L = 0</strong>: maximum power delivered to a fixed-voltage load (infinite current).</li></ol><div class='problem-block'><div class='problem-header' onclick='toggleProblem(this)'><div><span class='problem-label'>Example 9.7</span> <span class='problem-title'>Maximum power transfer</span></div><span class='problem-toggle'><svg class='icon icon-sm' viewBox='0 0 24 24'><polyline points='6 9 12 15 18 9'/></svg></span></div><div class='problem-body hidden'><p><strong>Network:</strong> E_Th = 24 V, R_Th = 4 Ω.</p><p><em>Maximum power point:</em> $$R_{L} = R_{Th} = 4\\,\\Omega$$ $$P_{max} = \\frac{E_{Th}^{2}}{4 R_{Th}} = \\frac{(24)^{2}}{4(4)} = \\frac{576}{16} = 36\\text{ W}$$</p><p><em>Power at other load values (illustrative):</em></p><ul><li>R_L = 2 Ω: P = (24)² × 2 / (4 + 2)² = 1152/36 = 32 W</li><li>R_L = 4 Ω: P = 36 W (max)</li><li>R_L = 10 Ω: P = (24)² × 10 / (4 + 10)² = 5760/196 ≈ 29.4 W</li></ul><p>---</p></div></div>"
+      },
+      {
+        "num": "6",
+        "title": "9.6 — Millman's Theorem",
+        "content": "<h4 class='subsection-heading'>General Statement</h4><p>&gt; <strong>Millman's theorem permits the combining of any number of parallel voltage sources into a single equivalent source.</strong></p><p>It is particularly useful for analyzing circuits where several branches with voltage sources feed a common node.</p><h4 class='subsection-heading'>Formula</h4><p>For N parallel branches each having a voltage source E_i and series resistance R_i feeding a common node (with the other end grounded): $$E_{eq} = \\frac{\\sum \\frac{E_{i}}{R_{i}}}{\\sum \\frac{1}{R_{i}}}$$ $$R_{eq} = \\frac{1}{\\sum \\frac{1}{R_{i}}}$$</p><div class='problem-block'><div class='problem-header' onclick='toggleProblem(this)'><div><span class='problem-label'>Example 9.8</span> <span class='problem-title'>Combining three parallel sources</span></div><span class='problem-toggle'><svg class='icon icon-sm' viewBox='0 0 24 24'><polyline points='6 9 12 15 18 9'/></svg></span></div><div class='problem-body hidden'><p><strong>Network (Fig. 9.34):</strong> Three parallel branches each with:</p><ul><li>Branch 1: E₁ = 6 V, R₁ = 2 Ω</li><li>Branch 2: E₂ = 12 V, R₂ = 4 Ω</li><li>Branch 3: E₃ = 18 V, R₃ = 6 Ω</li></ul><p><em>Equivalent voltage:</em> $$E_{eq} = \\frac{\\frac{6}{2} + \\frac{12}{4} + \\frac{18}{6}}{\\frac{1}{2} + \\frac{1}{4} + \\frac{1}{6}} = \\frac{3 + 3 + 3}{0.5 + 0.25 + 0.167} = \\frac{9}{0.917} \\approx 9.82\\text{ V}$$</p><p><em>Equivalent resistance:</em> $$R_{eq} = \\frac{1}{\\frac{1}{2} + \\frac{1}{4} + \\frac{1}{6}} = \\frac{1}{0.917} \\approx 1.09\\,\\Omega$$</p><p>---</p></div></div>"
+      },
+      {
+        "num": "7",
+        "title": "9.7 — Substitution Theorem",
+        "content": "<h4 class='subsection-heading'>General Statement</h4><p>&gt; <strong>If the voltage across and the current through any branch of a dc network are known, this branch can be replaced by any combination of elements that will maintain the same voltage and current.</strong></p><p>In other words, if we know V and I for a branch, we can substitute for that branch any equivalent combination that maintains those values — for instance:</p><ul><li>A voltage source equal to V (in series with whatever resistance maintains I).</li><li>A current source equal to I (in parallel with whatever resistance maintains V).</li></ul><p>The substitution theorem is useful for simplifying particular branches of a network or for verifying solutions.</p><div class='problem-block'><div class='problem-header' onclick='toggleProblem(this)'><div><span class='problem-label'>Example 9.9</span> <span class='problem-title'>Substituting a branch</span></div><span class='problem-toggle'><svg class='icon icon-sm' viewBox='0 0 24 24'><polyline points='6 9 12 15 18 9'/></svg></span></div><div class='problem-body hidden'><p>Suppose a branch carries I = 2 A and has V = 8 V across it.</p><ul><li>Equivalent: 8 V source in series with 4 Ω resistor (since I = 8/(R_series) → R_series = 4 Ω).</li><li>Or: 2 A current source in parallel with 4 Ω resistor (since V = I × R_parallel = 2 × 4 = 8 V).</li></ul><p>The rest of the network will not \"see\" any difference.</p><p>---</p></div></div>"
+      },
+      {
+        "num": "8",
+        "title": "9.8 — Reciprocity Theorem",
+        "content": "<h4 class='subsection-heading'>General Statement</h4><p>&gt; <strong>The reciprocity theorem states that for single-source networks, the current I in any branch of a network due to a voltage source E in any other branch is equal to the current through the branch in which the source was originally located if the source is placed in the branch in which the current was originally measured.</strong></p><p>In simpler terms: the ratio of excitation (voltage source) to response (current) remains the same when the positions of source and measurement are interchanged.</p><h4 class='subsection-heading'>Conditions</h4><ul><li>The network must have only one independent source.</li><li>The network must be linear (resistors, not dependent sources).</li><li>Initial conditions in energy-storage elements must be zero.</li></ul><div class='problem-block'><div class='problem-header' onclick='toggleProblem(this)'><div><span class='problem-label'>Example 9.10</span> <span class='problem-title'>Reciprocity check</span></div><span class='problem-toggle'><svg class='icon icon-sm' viewBox='0 0 24 24'><polyline points='6 9 12 15 18 9'/></svg></span></div><div class='problem-body hidden'><p><strong>Network (Fig. 9.40):</strong> E = 12 V applied at one branch; current measured at another branch = 2 A.</p><p><em>Step 1: Original setup.</em> E = 12 V in branch A, current in branch B = I_B = 2 A.</p><p><em>Step 2: Swap positions.</em> Place E = 12 V in branch B; current in branch A. By reciprocity, current in branch A = 2 A as well.</p><p>---</p></div></div>"
+      },
+      {
+        "num": "9",
+        "title": "9.9 — Computer Analysis",
+        "content": "<h4 class='subsection-heading'>PSpice</h4><p>PSpice can be used to verify network theorem results. Typical procedure:</p><ol><li>Build the schematic with the appropriate source (VSRC for voltage, ISRC for current).</li><li>Set source values.</li><li>Set up a simulation profile (DC bias or transient).</li><li>Run the simulation and add traces for the variables of interest.</li><li>Compare with hand-calculated values.</li></ol><h4 class='subsection-heading'>Multisim</h4><p>Multisim provides similar functionality with a more visual interface:</p><ol><li>Place components from the parts bin.</li><li>Connect the circuit.</li><li>Set values.</li><li>Run a DC Operating Point analysis or Transient analysis.</li><li>Use multimeters or oscilloscopes to measure.</li></ol><p>Both tools allow students to confirm analytical results obtained from network theorems.</p><hr/><p>## Key Formulas — Summary Table</p><div class='table-wrap'><table class='compare-table'>\n<thead><tr><th>Theorem</th><th>Formula</th><th>Use</th></tr></thead>\n<tbody>\n<tr><td>Superposition</td><td>I_total = Σ I_individual</td><td>Combine individual source contributions</td></tr>\n<tr><td>Thévenin (voltage)</td><td>E_Th = V_oc across load terminals</td><td>Open-circuit voltage</td></tr>\n<tr><td>Thévenin (resistance)</td><td>R_Th = R viewed from load with sources zeroed</td><td>Equivalent resistance</td></tr>\n<tr><td>Norton (current)</td><td>I_N = I_sc between load terminals</td><td>Short-circuit current</td></tr>\n<tr><td>Norton (resistance)</td><td>R_N = R_Th</td><td>Same as Thévenin resistance</td></tr>\n<tr><td>Thévenin ↔ Norton</td><td>E_Th = I_N · R_N</td><td>Conversion</td></tr>\n<tr><td>Max Power</td><td>P_max = E_Th² / (4 R_Th), R_L = R_Th</td><td>Maximum power transfer</td></tr>\n<tr><td>Millman</td><td>E_eq = Σ(E_i/R_i) / Σ(1/R_i)</td><td>Combine parallel voltage sources</td></tr>\n<tr><td>Substitution</td><td>V_branch, I_branch known</td><td>Replace any branch with equivalent</td></tr>\n<tr><td>Reciprocity</td><td>I_excite / V_response = same when swapped</td><td>Single-source networks</td></tr>\n</tbody></table></div><hr/><p>## Glossary of Terms</p><ul><li><strong>Algebraic sum</strong>: Sum with attention to sign (directions/polarities).</li><li><strong>Current source</strong>: Two-terminal device that maintains a specified current regardless of the voltage across it.</li><li><strong>Equivalent circuit</strong>: A simplified representation that behaves identically at its terminals.</li><li><strong>Linear network</strong>: A network whose parameters (R, L, C) are constant — not functions of current or voltage.</li><li><strong>Load</strong>: The element or component receiving power from the source.</li><li><strong>Norton equivalent</strong>: A current source I_N in parallel with resistance R_N, equivalent to the original network at its terminals.</li><li><strong>Open circuit</strong>: A break in the circuit (infinite resistance, zero current).</li><li><strong>Open-circuit voltage</strong>: Voltage measured across the load terminals with the load removed.</li><li><strong>Reciprocity</strong>: Property of single-source linear networks that the source-response ratio is invariant when source and response are interchanged.</li><li><strong>Short circuit</strong>: A direct connection (zero resistance) between two points.</li><li><strong>Short-circuit current</strong>: Current that flows when a direct short is placed across the load terminals.</li><li><strong>Substitution</strong>: Replacing a branch with any equivalent combination that maintains its terminal voltage and current.</li><li><strong>Superposition</strong>: Combining individual source contributions to obtain the total response.</li><li><strong>Thévenin equivalent</strong>: A voltage source E_Th in series with resistance R_Th, equivalent to the original network at its terminals.</li><li><strong>Thévenin voltage (E_Th)</strong>: The open-circuit voltage at the load terminals.</li><li><strong>Thévenin resistance (R_Th)</strong>: The resistance looking back into the network from the load terminals with all sources deactivated.</li></ul><hr/><p><em>Source: Chapter 9 — Network Theorems, Boylestad, Introductory Circuit Analysis. Faithful coverage of Sections 9.1–9.9, including all worked examples, key formulas, definitions, and glossary terms as presented in the source text.</em></p>"
+      }
+    ]
+  },
+  {
+    "id": 2,
+    "code": "CH 12",
+    "title": "Magnetic Circuits",
+    "source": "Chapter 12 - Magnetic Circuits, Boylestad, Introductory Circuit Analysis.",
+    "desc": "Comprehensive study guide for Magnetic Circuits. Source: Chapter 12 - Magnetic Circuits, Boylestad, Introductory Circuit Analysis.",
+    "tags": [
+      "B-H Curve",
+      "Reluctance",
+      "Hysteresis"
+    ],
+    "formulas": [
+      "B = \\frac{\\Phi}{A}",
+      "\\mathcal{F} = NI",
+      "\\mu_r = \\frac{\\mu}{\\mu_0}",
+      "\\mathcal{R} = \\frac{l}{\\mu A}",
+      "\\Phi = \\frac{\\mathcal{F}}{\\mathcal{R}}",
+      "H = \\frac{NI}{l}",
+      "B = \\mu H",
+      "\\sum_{\\text{loop}} \\mathcal{F} = 0",
+      "P_h = \\eta B_{\\max}^{1.6} f v"
+    ],
+    "sections": [
+      {
+        "num": "1",
+        "title": "12.1 — Introduction",
+        "content": "<p>Magnetic and electromagnetic effects play an important role in the design of a wide variety of electrical/electronic systems in use today. Motors, generators, transformers, loudspeakers, relays, medical equipment, and movements of all kinds depend on magnetic effects to function properly. The response and characteristics of each have an impact on the current and voltage levels of the system, the efficiency of the design, the resulting size, and many other important considerations.</p><p>Fortunately, there is a great deal of similarity between the analyses of electric circuits and magnetic circuits. The magnetic flux of magnetic circuits has properties very similar to the current of electric circuits. The flux has a direction and a closed path. The magnitude of the established flux is a direct function of the applied magnetomotive force — resulting in a duality with electric circuits where the resulting current is a function of the magnitude of the applied voltage. The flux established is also inversely related to the structural opposition of the magnetic path in the same way the current in a network is inversely related to the resistance of the network.</p><p>One of the difficulties associated with studying magnetic circuits is that three different systems of units are commonly used in the industry. The SI system is applied throughout the chapter; references to the CGS and English systems require the use of Appendix F.</p><p><strong>Chapter Objectives:</strong></p><ul><li>Become aware of the similarities between the analysis of magnetic circuits and electric circuits.</li><li>Develop a clear understanding of the important parameters of a magnetic circuit and how to find each quantity for a variety of magnetic circuit configurations.</li><li>Begin to appreciate why a clear understanding of magnetic circuit parameters is an important component in the design of electrical/electronic systems.</li></ul><hr/>"
+      },
+      {
+        "num": "2",
+        "title": "12.2 — Magnetic Field",
+        "content": "<p>The magnetic field distribution around a permanent magnet or electromagnet was covered in detail in Chapter 11. Recall that flux lines strive to be as short as possible and take the path with the highest permeability. The flux density is defined by:</p><div class='formula-block'><div class='formula-body'>$$B = \\frac{\\Phi}{A} \\quad \\text{(Wb/m}^{2}\\text{ = teslas, T)} \\qquad (12.1)$$</div></div><p>where:</p><ul><li>Φ = magnetic flux, in webers (Wb)</li><li>A = cross-sectional area, in square meters (m²)</li></ul><p>The \"pressure\" on the system to establish magnetic lines of force is determined by the applied magnetomotive force, which is directly related to the number of turns and current of the magnetizing coil:</p><div class='formula-block'><div class='formula-body'>$$\\mathcal{F} = NI \\quad \\text{(ampere-turns, At)} \\qquad (12.2)$$</div></div><p>where:</p><ul><li>N = number of turns</li><li>I = current in amperes</li></ul><p>The level of magnetic flux established in a ferromagnetic core is a direct function of the permeability of the material. Ferromagnetic materials have a very high level of permeability while non-magnetic materials such as air and wood have very low levels. The ratio of the permeability of the material to that of air is called the <strong>relative permeability</strong>:</p><div class='formula-block'><div class='formula-body'>$$\\mu_r = \\frac{\\mu}{\\mu_0}, \\qquad\\mu_0 = 4\\pi \\times 10^{-7} \\text{ Wb/A·m} \\qquad (12.3)$$</div></div><p>The values of μᵣ are not provided in a table format because the value is determined by the other quantities of the magnetic circuit. Change the magnetomotive force, and the relative permeability changes.</p><hr/>"
+      },
+      {
+        "num": "3",
+        "title": "12.3 — Reluctance",
+        "content": "<p>The resistance of a material to the flow of charge (current) is determined for electric circuits by:</p><div class='formula-block'><div class='formula-body'>$$R = \\rho \\frac{l}{A} \\quad \\text{(ohms, }\\Omega\\text{)}$$</div></div><p>The <strong>reluctance</strong> of a material to the setting up of magnetic flux lines in the material is determined by:</p><div class='formula-block'><div class='formula-body'>$$\\mathcal{R} = \\frac{l}{\\mu A} \\quad \\text{(rels, or At/Wb)} \\qquad (12.4)$$</div></div><p>where ℛ is the reluctance, <em>l</em> is the length of the magnetic path, and <em>A</em> is the cross-sectional area.</p><p><strong>Note:</strong> There is no widely accepted unit for reluctance, although the <em>rel</em> and the At/Wb are usually applied.</p><p><strong>Comparison between resistance and reluctance:</strong></p><ul><li>Both are inversely proportional to the area (increase in area → reduction in each → increase in current and flux).</li><li>For an increase in length, both increase (and the desired effect is reduced).</li><li>The reluctance is inversely proportional to the permeability; the resistance is directly proportional to the resistivity.</li></ul><p>The larger the μ or the smaller the ρ, the smaller the reluctance and resistance, respectively. Materials with high permeability, such as the ferromagnetics, have very small reluctances and result in an increased measure of flux through the core.</p><hr/>"
+      },
+      {
+        "num": "4",
+        "title": "12.4 — Ohm's Law for Magnetic Circuits",
+        "content": "<p>The \"cause\" analogy applied to electric circuits gives Ohm's law. For magnetic circuits, the effect desired is the flux Φ, the cause is the magnetomotive force (mmf) ℱ, and the opposition to the setting up of the flux Φ is the reluctance ℛ:</p><div class='formula-block'><div class='formula-body'>$$\\Phi = \\frac{\\mathcal{F}}{\\mathcal{R}} \\qquad (12.5)$$</div></div><p>Since ℱ = NI, this equation clearly reveals that an increase in the number of turns or the current through the wire results in an increased \"pressure\" on the system to establish the flux lines through the core.</p><p><strong>Important:</strong> Although there is a great deal of similarity between electric and magnetic circuits, the flux Φ is not a \"flow\" variable such as current in an electric circuit. Magnetic flux is established in the core through the alteration of the atomic structure of the core due to external pressure and is not a measure of the flow of some charged particles through the core.</p><hr/>"
+      },
+      {
+        "num": "5",
+        "title": "12.5 — Magnetizing Force",
+        "content": "<p>The magnetomotive force per unit length is called the <strong>magnetizing force</strong> (H):</p><div class='formula-block'><div class='formula-body'>$$H = \\frac{\\mathcal{F}}{l} \\quad \\text{(At/m)} \\qquad (12.6)$$</div></div><p>Substituting for the magnetomotive force:</p><div class='formula-block'><div class='formula-body'>$$H = \\frac{NI}{l} \\quad \\text{(At/m)} \\qquad (12.7)$$</div></div><p><strong>Example:</strong> For a magnetic circuit with NI = 40 At and l = 0.2 m: $$H = \\frac{NI}{l} = \\frac{40 \\text{ At}}{0.2 \\text{ m}} = 200 \\text{ At/m}$$</p><p>This indicates that there are 200 At of \"pressure\" per meter to establish flux in the core.</p><p>The direction of the flux Φ can be determined by placing the fingers of the right hand in the direction of current around the core and noting the direction of the thumb. The magnetizing force is <strong>independent</strong> of the type of core material — it is determined solely by the number of turns, the current, and the length of the core.</p><p>The applied magnetizing force has a pronounced effect on the resulting permeability of a magnetic material. As H increases, permeability rises to a maximum and then drops to a minimum.</p><p>The flux density and the magnetizing force are related by:</p><div class='formula-block'><div class='formula-body'>$$B =\\mu H \\qquad (12.8)$$</div></div><p>This equation indicates that for a particular magnetizing force, the greater the permeability, the greater the induced flux density.</p><p><strong>Notation note:</strong> henries (H) and the magnetizing force (H) use the same capital letter. Units of measurement (like henries) use roman letters (H), while variables (like magnetizing force) use italic letters (H).</p><hr/>"
+      },
+      {
+        "num": "6",
+        "title": "12.6 — Hysteresis",
+        "content": "<p>A curve of the flux density B versus the magnetizing force H of a material is of particular importance to the engineer. Such curves are usually found in manuals, descriptive pamphlets, and brochures published by manufacturers of magnetic materials.</p><p>A typical B-H curve for a ferromagnetic material such as steel can be derived using the setup in Fig. 12.4. The core is initially unmagnetized, and the current I = 0. As I increases:</p><ul><li>H increases, determined by H = NI/l.</li><li>Φ and B (B = Φ/A) also increase with I.</li></ul><h4 class='subsection-heading'>Hysteresis Loop — Key Points</h4><ol><li><strong>Initial magnetization (o to a):</strong> From zero to H_a; flux density follows the path shown.</li><li><strong>Saturation (a to b):</strong> As H increases until saturation H_s, B reaches maximum B_max.</li><li><strong>Reducing H to zero (b to c):</strong> The flux density B_R that remains when H = 0 is the <strong>residual flux density</strong> (B_R). This residual flux density makes permanent magnets possible — it is a measure of the material's <strong>retentivity</strong>.</li><li><strong>Reversing current (c to d):</strong> The flux density decreases; when H = -H_d, the flux density is zero. The magnetizing force -H_d required to \"coerce\" the flux density to zero is called the <strong>coercive force</strong> (a measure of coercivity).</li><li><strong>Saturation in opposite direction (d to e):</strong> Continued increase to saturation.</li><li><strong>Return path (e to f to b):</strong> The full cycle.</li></ol><p>The complete curve (bcdefb) is the <strong>hysteresis curve</strong> for the ferromagnetic material, from the Greek <em>hysterein</em>, meaning \"to lag behind.\" The flux density B lagged behind the magnetizing force H during the entire plotting.</p><h4 class='subsection-heading'>Normal Magnetization Curve</h4><p>For each maximum value of H less than saturation, the hysteresis loop is smaller. To assign a particular value of B to each value of H, we compromise by connecting the tips of the hysteresis loops. The resulting curve is called the <strong>normal magnetization curve</strong> (Fig. 12.7).</p><p>If we find μ for each value of H using μ = B/H from the normal magnetization curve, we obtain the μ-versus-H curves of Fig. 12.3.</p><h4 class='subsection-heading'>Domain Theory of Magnetism</h4><p>Within each atom, orbiting electrons are spinning as they revolve around the nucleus. The atom, due to its spinning electrons, has a magnetic field associated with it:</p><ul><li>In <strong>nonmagnetic materials</strong>, the net magnetic field is effectively zero — the magnetic fields of the atoms oppose each other.</li><li>In <strong>magnetic materials</strong> (iron, steel), the magnetic fields of groups of atoms numbering on the order of 10¹² are aligned, forming very small bar magnets. Each group is called a <strong>domain</strong>.</li></ul><p>For an unmagnetized sample, domains appear randomly (Fig. 12.9a), so the net magnetic field in any direction is zero. When an external magnetizing force is applied, the domains nearly aligned with the applied field grow at the expense of less favorably oriented domains (Fig. 12.9b). Eventually, with a sufficiently strong field, all domains have the orientation of the applied field — this is <strong>saturation</strong>.</p><p>When the magnetizing force is removed, the alignment is lost to some measure and B drops to B_R. This is the elasticity of the process.</p><hr/>"
+      },
+      {
+        "num": "7",
+        "title": "12.7 — Ampère's Circuital Law",
+        "content": "<p>Applying the \"cause\" analogy to Kirchhoff's voltage law (ΣV = 0), we obtain:</p><div class='formula-block'><div class='formula-body'>$$\\sum_{\\text{closed loop}} \\mathcal{F} = 0 \\quad \\text{(for magnetic circuits)} \\qquad (12.9)$$</div></div><p>In words, the <strong>algebraic sum of the rises and drops of the mmf around a closed loop of a magnetic circuit is equal to zero</strong>; that is, the sum of the rises in mmf equals the sum of the drops in mmf around a closed loop.</p><p>This is referred to as <strong>Ampère's circuital law</strong>.</p><h4 class='subsection-heading'>Comparison Table — Electric vs Magnetic Circuits</h4><div class='table-wrap'><table class='compare-table'>\n<thead><tr><th>Electric Circuits</th><th>Magnetic Circuits</th></tr></thead>\n<tbody>\n<tr><td>Cause: E (voltage)</td><td>Cause: ℱ (mmf)</td></tr>\n<tr><td>Effect: I (current)</td><td>Effect: Φ (flux)</td></tr>\n<tr><td>Opposition: R (resistance)</td><td>Opposition: ℛ (reluctance)</td></tr>\n</tbody></table></div><hr/>"
+      },
+      {
+        "num": "8",
+        "title": "12.8 — Series Magnetic Circuits: Determining NI",
+        "content": "<p><strong>The series magnetic circuit</strong> is one in which the same flux passes through each section of the magnetic core (analogous to a series electric circuit where the same current flows through each element).</p><p>For a series circuit, the total reluctance is the sum of the individual reluctances of each section: $$\\mathcal{R}_T = \\mathcal{R}_1 + \\mathcal{R}_2 + \\mathcal{R}_3 + \\cdots$$</p><p>And the mmf required: $$\\mathcal{F} =\\Phi \\, \\mathcal{R}_T \\quad \\text{or} \\quad NI =\\Phi \\, \\mathcal{R}_T$$</p><div class='problem-block'><div class='problem-header' onclick='toggleProblem(this)'><div><span class='problem-label'>Example 12.1</span> <span class='problem-title'>Series circuit, finding NI</span></div><span class='problem-toggle'><svg class='icon icon-sm' viewBox='0 0 24 24'><polyline points='6 9 12 15 18 9'/></svg></span></div><div class='problem-body hidden'><p><strong>Given:</strong> Cast steel core with cross-sectional area A = 4 × 10⁻⁴ m², mean length l = 0.16 m, N = 400 turns, B = 0.4 T (desired). Find I.</p><p><strong>Solution:</strong></p><ol><li>Compute Φ: Φ = BA = (0.4)(4 × 10⁻⁴) = 1.6 × 10⁻⁴ Wb.</li><li>From the B-H curve for cast steel, B = 0.4 T corresponds to H = 240 At/m.</li><li>Magnetomotive force: ℱ = Hl = (240)(0.16) = 38.4 At.</li><li>Current: I = ℱ/N = 38.4/400 = 96 mA.</li></ol></div></div><div class='problem-block'><div class='problem-header' onclick='toggleProblem(this)'><div><span class='problem-label'>Example 12.2</span> <span class='problem-title'>Series circuit with air gap</span></div><span class='problem-toggle'><svg class='icon icon-sm' viewBox='0 0 24 24'><polyline points='6 9 12 15 18 9'/></svg></span></div><div class='problem-body hidden'><p><strong>Given:</strong> Cast steel core with A = 4 × 10⁻⁴ m², l_steel = 0.16 m, air gap l_g = 0.002 m, B = 0.4 T, N = 400 turns.</p><p><strong>Solution:</strong></p><ol><li>Φ = BA = 1.6 × 10⁻⁴ Wb.</li><li>For steel at B = 0.4 T: H = 240 At/m.</li></ol><ul><li>H_g = B/μ₀ = 0.4 / (4π × 10⁻⁷) = 318,310 At/m.</li></ul><ol><li>mmf steel: ℱ_steel = H × l = (240)(0.16) = 38.4 At.</li><li>mmf gap: ℱ_g = H_g × l_g = (318,310)(0.002) = 636.6 At.</li><li>Total mmf: ℱ_T = ℱ_steel + ℱ_g = 38.4 + 636.6 = 675 At.</li><li>Current: I = ℱ_T / N = 675/400 ≈ 1.69 A.</li></ol><p>Note the dramatic effect of even a small air gap on the mmf required.</p><p>---</p></div></div>"
+      },
+      {
+        "num": "9",
+        "title": "12.9 — Series Magnetic Circuits: Determining Φ",
+        "content": "<p>When NI is given, finding Φ requires using the <strong>normal magnetization curve</strong> because μ depends on H (and therefore on Φ).</p><h4 class='subsection-heading'>Procedure (Trial-and-Error or Graphical Method)</h4><ol><li>Choose a value of B.</li><li>Determine H from the B-H curve.</li><li>Calculate ℱ = Hl_total for each section (steel + air gap if present).</li><li>Sum ℱ_steel + ℱ_gap to get ℱ_T.</li><li>Compare ℱ_T with the applied NI.</li><li>Iterate (choose new B) until ℱ_T ≈ NI.</li><li>Compute Φ = BA.</li></ol><div class='problem-block'><div class='problem-header' onclick='toggleProblem(this)'><div><span class='problem-label'>Example 12.3</span> <span class='problem-title'>Determining Φ in series circuit</span></div><span class='problem-toggle'><svg class='icon icon-sm' viewBox='0 0 24 24'><polyline points='6 9 12 15 18 9'/></svg></span></div><div class='problem-body hidden'><p><strong>Given:</strong> Cast steel core, A = 4 × 10⁻⁴ m², l_steel = 0.16 m, air gap l_g = 0.002 m, N = 400 turns, I = 0.5 A.</p><p><strong>Solution:</strong></p><ol><li>Applied mmf: ℱ = NI = (400)(0.5) = 200 At.</li><li>Trial: Assume B = 0.3 T → H_steel = 160 At/m, H_gap = 0.3/(4π × 10⁻⁷) ≈ 238,732 At/m.</li><li>ℱ_steel = (160)(0.16) = 25.6 At; ℱ_gap = (238,732)(0.002) = 477.5 At.</li><li>ℱ_T = 25.6 + 477.5 = 503.1 At. Much greater than 200 At → assume smaller B.</li><li>Trial: B = 0.1 T → H_steel ≈ 50 At/m, H_gap = 79,577 At/m.</li><li>ℱ_steel = 8 At; ℱ_gap = 159.15 At. ℱ_T = 167.15 At. Slightly less than 200 At → try B between 0.1 and 0.3 T.</li><li>By iteration, B ≈ 0.115 T → ℱ_T ≈ 200 At. Therefore Φ = (0.115)(4 × 10⁻⁴) = 4.6 × 10⁻⁵ Wb.</li></ol><p>---</p></div></div>"
+      },
+      {
+        "num": "10",
+        "title": "12.10 — Series-Parallel Magnetic Circuits",
+        "content": "<p>Series-parallel magnetic circuits are those in which there are paths through which the flux divides (analogous to parallel electric circuits).</p><p>For such circuits:</p><ul><li>The flux through the parallel branches must satisfy Φ_total = Φ₁ + Φ₂ (KCL analog).</li><li>The mmf across each parallel branch must be equal (KVL analog).</li><li>The total mmf applied equals the sum of the mmf drops across each section in series.</li></ul><h4 class='subsection-heading'>Procedure</h4><ol><li>Identify series and parallel sections.</li><li>Apply Ampère's circuital law around each closed loop.</li><li>Use the B-H curves to relate B to H for each material.</li></ol><div class='problem-block'><div class='problem-header' onclick='toggleProblem(this)'><div><span class='problem-label'>Example 12.4</span> <span class='problem-title'>Series-parallel circuit</span></div><span class='problem-toggle'><svg class='icon icon-sm' viewBox='0 0 24 24'><polyline points='6 9 12 15 18 9'/></svg></span></div><div class='problem-body hidden'><p><strong>Given:</strong> A cast steel core with a cast iron parallel branch. Cast steel section: l₁ = 0.2 m, A₁ = 5 × 10⁻⁴ m². Cast iron section: l₂ = 0.1 m, A₂ = 3 × 10⁻⁴ m². Air gap in steel section: l_g = 0.001 m. N = 300 turns.</p><p><strong>Solution:</strong> Set up equations based on Ampère's circuital law for the steel-only loop and apply KCL at the junction.</p><p>---</p></div></div>"
+      },
+      {
+        "num": "11",
+        "title": "12.11 — Hysteresis Loss",
+        "content": "<p>Hysteresis loss results from the energy required to realign the domains during each cycle of the applied magnetizing force. The energy lost per cycle per unit volume is equal to the area enclosed by the hysteresis loop.</p><p>For a core of volume v, the power lost to hysteresis is: $$P_{h} = \\eta \\, B_{\\max}^{1.6} \\, f \\, v \\quad \\text{(Steinmetz equation)}$$</p><p>where:</p><ul><li>η = Steinmetz coefficient (depends on material)</li><li>B_max = maximum flux density (Wb/m² or T)</li><li>f = frequency (Hz)</li><li>v = volume of core (m³)</li></ul><div class='problem-block'><div class='problem-header' onclick='toggleProblem(this)'><div><span class='problem-label'>Example 12.5</span> <span class='problem-title'>Hysteresis loss</span></div><span class='problem-toggle'><svg class='icon icon-sm' viewBox='0 0 24 24'><polyline points='6 9 12 15 18 9'/></svg></span></div><div class='problem-body hidden'><p><strong>Given:</strong> Sheet steel core, η = 0.038 (typical), B_max = 1.2 T, f = 60 Hz, v = 0.0001 m³.</p><p><strong>Solution:</strong> $$P_{h} = (0.038)(1.2)^{1.6}(60)(0.0001) \\approx 0.038 \\times 1.372 \\times 60 \\times 0.0001 \\approx 0.313 \\text{ W}$$</p><p>---</p></div></div>"
+      },
+      {
+        "num": "12",
+        "title": "12.12 — Eddy Current Loss",
+        "content": "<p>Eddy current losses are due to circulating currents induced in the core material itself as the flux changes. These currents flow in closed loops perpendicular to the flux and dissipate energy as heat (I²R losses).</p><h4 class='subsection-heading'>Reduction of Eddy Current Losses</h4><ul><li>Laminate the core (use thin sheets insulated from each other).</li><li>Use high-resistivity core materials (silicon steel, for example).</li></ul><p>For a laminated core, the eddy current power loss is approximately: $$P_{e} = K_{e} \\, B_{\\max}^{2} \\, f^{2} \\, t^{2} \\, v$$</p><p>where:</p><ul><li>K_e = eddy current constant</li><li>t = thickness of lamination</li><li>v = volume</li></ul><div class='problem-block'><div class='problem-header' onclick='toggleProblem(this)'><div><span class='problem-label'>Example 12.6</span> <span class='problem-title'>Eddy current loss</span></div><span class='problem-toggle'><svg class='icon icon-sm' viewBox='0 0 24 24'><polyline points='6 9 12 15 18 9'/></svg></span></div><div class='problem-body hidden'><p><strong>Given:</strong> Laminated silicon steel core, B_max = 1.0 T, f = 60 Hz, t = 0.5 mm = 0.0005 m, v = 0.0001 m³.</p><p><strong>Solution:</strong> The thicker the lamination and the higher the frequency, the greater the eddy current loss. Using typical values of K_e, the loss is significantly reduced by thin laminations.</p><p>---</p></div></div>"
+      },
+      {
+        "num": "13",
+        "title": "12.13 — Maximum Flux Linkage (and Other Topics)",
+        "content": "<p>The chapter concludes with a discussion of maximum flux linkage and its application in coupled circuits and transformers (anticipating Chapter 19 on coupled coils and transformers).</p><p>Key concept: <strong>flux linkage</strong> = NΦ. When flux changes, the induced emf is: $$e = -N \\frac{d\\Phi}{dt}$$</p><hr/><p>## Key Formulas — Summary Table</p><div class='table-wrap'><table class='compare-table'>\n<thead><tr><th>Concept</th><th>Formula</th><th>Eq. #</th></tr></thead>\n<tbody>\n<tr><td>Flux density</td><td>B = Φ/A</td><td>(12.1)</td></tr>\n<tr><td>Magnetomotive force</td><td>ℱ = NI</td><td>(12.2)</td></tr>\n<tr><td>Relative permeability</td><td>μᵣ = μ/μ₀</td><td>(12.3)</td></tr>\n<tr><td>Reluctance</td><td>ℛ = l/(μA)</td><td>(12.4)</td></tr>\n<tr><td>Ohm's law (magnetic)</td><td>Φ = ℱ/ℛ</td><td>(12.5)</td></tr>\n<tr><td>Magnetizing force</td><td>H = ℱ/l = NI/l</td><td>(12.6), (12.7)</td></tr>\n<tr><td>B-H relationship</td><td>B = μH</td><td>(12.8)</td></tr>\n<tr><td>Ampère's circuital law</td><td>Σ ℱ (closed loop) = 0</td><td>(12.9)</td></tr>\n<tr><td>Hysteresis loss</td><td>P_h = η B_max^1.6 f v</td><td>(Steinmetz)</td></tr>\n<tr><td>Eddy current loss</td><td>P_e = K_e B_max² f² t² v</td><td>—</td></tr>\n</tbody></table></div><hr/><p>## Glossary of Terms</p><ul><li><strong>Ampère's Circuital Law</strong>: The algebraic sum of the rises and drops of the mmf around a closed loop of a magnetic circuit is equal to zero.</li><li><strong>Coercive Force (H_d)</strong>: The magnetizing force required to reduce the residual flux density to zero.</li><li><strong>Coercivity</strong>: A measure of the coercive force of a magnetic material.</li><li><strong>Domain</strong>: A group of magnetically aligned atoms (~10¹² atoms) forming a tiny bar magnet.</li><li><strong>Eddy Current Loss</strong>: Power loss in a core due to circulating currents induced by the changing flux.</li><li><strong>Ferromagnetic Material</strong>: Material with very high permeability (e.g., iron, steel).</li><li><strong>Flux (Φ)</strong>: The magnetic lines of force, measured in webers (Wb).</li><li><strong>Flux Density (B)</strong>: Flux per unit cross-sectional area, B = Φ/A, in teslas (T) or Wb/m².</li><li><strong>Flux Linkage</strong>: NΦ — total flux linking a coil of N turns.</li><li><strong>Hysteresis</strong>: The lag of flux density behind the magnetizing force; energy is lost in realigning domains each cycle.</li><li><strong>Hysteresis Loss</strong>: Power dissipated in a magnetic core due to the area enclosed by the hysteresis loop.</li><li><strong>Lamination</strong>: Thin layers of magnetic material separated by insulation to reduce eddy current losses.</li><li><strong>Magnetizing Force (H)</strong>: Magnetomotive force per unit length, H = NI/l (At/m).</li><li><strong>Magnetomotive Force (mmf, ℱ)</strong>: The \"pressure\" on the system to establish magnetic flux lines, ℱ = NI (At).</li><li><strong>Normal Magnetization Curve</strong>: A curve obtained by connecting the tips of several hysteresis loops for the same material.</li><li><strong>Permanent Magnet</strong>: A magnet made from a material with high retentivity (high residual flux density).</li><li><strong>Permeability (μ)</strong>: A measure of how easily flux can be established in a material; μ = B/H.</li><li><strong>Relative Permeability (μᵣ)</strong>: μ/μ₀; ratio of permeability of a material to that of free space.</li><li><strong>Reluctance (ℛ)</strong>: The opposition of a material to the establishment of magnetic flux, ℛ = l/(μA), in rels or At/Wb.</li><li><strong>Residual Flux Density (B_R)</strong>: The flux density remaining in a material when the magnetizing force is zero.</li><li><strong>Resistivity (ρ)</strong>: A measure of a material's opposition to current flow.</li><li><strong>Retentivity</strong>: The ability of a material to retain its magnetic properties after the magnetizing force is removed.</li><li><strong>Saturation</strong>: The condition when all domains are aligned with the applied magnetizing force; further increase in H produces only a very small increase in B.</li><li><strong>Steinmetz Coefficient (η)</strong>: A coefficient used to estimate hysteresis loss.</li><li><strong>Weber (Wb)</strong>: The SI unit of magnetic flux.</li></ul><hr/><p><em>Source: Chapter 12 — Magnetic Circuits, Boylestad, Introductory Circuit Analysis. Faithful coverage of Sections 12.1–12.13, including all worked examples, key formulas, definitions, and glossary terms as presented in the source text.</em></p>"
+      }
+    ]
+  },
+  {
+    "id": 3,
+    "code": "CH 13",
+    "title": "Sinusoidal AC Waveforms",
+    "source": "Chapter 13 - Sinusoidal Alternating Waveforms, Boylestad, Introductory Circuit Analysis.",
+    "desc": "Comprehensive study guide for Sinusoidal AC Waveforms. Source: Chapter 13 - Sinusoidal Alternating Waveforms, Boylestad, Introductory Circuit Analysis.",
+    "tags": [
+      "Frequency",
+      "RMS",
+      "Phase"
+    ],
+    "formulas": [
+      "f = \\frac{1}{T}",
+      "T = \\frac{1}{f}",
+      "v(t) = V_m \\sin(\\omega t + \\theta)",
+      "\\omega = 2\\pi f",
+      "V_{avg} = 0 \\quad (\\text{full cycle})",
+      "V_{avg} = \\frac{2 V_m}{\\pi} \\quad (\\text{half cycle})",
+      "V_{rms} = \\frac{V_m}{\\sqrt{2}}"
+    ],
+    "sections": [
+      {
+        "num": "1",
+        "title": "13.1 — Introduction",
+        "content": "<p>The analysis thus far has been limited to dc networks — networks in which the currents or voltages are fixed in magnitude except for transient effects. We now turn our attention to the analysis of networks in which the magnitude of the source varies in a set manner. Of particular interest is the time-varying voltage that is commercially available in large quantities and is commonly called the <strong>ac voltage</strong> (the letters ac are an abbreviation for alternating current).</p><p>To be absolutely rigorous, the terminology <em>ac voltage</em> or <em>ac current</em> is not sufficient to describe the type of signal. Each waveform in Fig. 13.1 is an alternating waveform available from commercial supplies. The term <em>alternating</em> indicates only that the waveform alternates between two prescribed levels in a set time sequence. To be absolutely correct, the term <em>sinusoidal</em>, <em>square-wave</em>, or <em>triangular</em> must also be applied.</p><p>The pattern of particular interest is the <strong>sinusoidal ac voltage</strong> in Fig. 13.1. Since this type of signal is encountered in the vast majority of instances, the abbreviated phrases <em>ac voltage</em> and <em>ac current</em> are commonly applied without confusion. For the other patterns in Fig. 13.1, the descriptive term is always present.</p><p><strong>Why concentrate on the sinusoidal ac voltage:</strong></p><ul><li>It is the voltage generated by utilities throughout the world.</li><li>It is applied throughout electrical, electronic, communication, and industrial systems.</li><li>The waveform itself has a number of characteristics that result in a unique response when applied to basic electrical elements.</li><li>The wide range of theorems and methods introduced for dc networks will also be applied to sinusoidal ac systems.</li></ul><hr/>"
+      },
+      {
+        "num": "2",
+        "title": "13.2 — Sinusoidal ac Voltage Characteristics and Definitions",
+        "content": "<h4 class='subsection-heading'>Generation</h4><p>Sinusoidal ac voltages are available from a variety of sources:</p><ul><li><strong>Power plant</strong> [Fig. 13.2(a)]: Most power plants are fueled by water power, oil, gas, or nuclear fusion. An ac generator (also called an alternator) is the primary component. The power to the shaft developed by one of the energy sources turns a rotor (constructed of alternating magnetic poles) inside a set of windings housed in the stator (the stationary part of the dynamo) and induces a voltage across the windings of the stator, as defined by Faraday's law:</li></ul><div class='formula-block'><div class='formula-body'>$$e = N\\frac{d\\Phi}{dt}$$</div></div><p>Through proper design of the generator, a sinusoidal ac voltage is developed that can be transformed to higher levels for distribution through the power lines to the consumer.</p><ul><li><strong>Portable ac generators</strong> [Fig. 13.2(b)]: Run on gasoline for isolated locations without power lines.</li></ul><ul><li><strong>Wind-power stations</strong> [Fig. 13.2(c)]: Turning propellers connected directly to the shaft of an ac generator.</li></ul><ul><li><strong>Solar panels</strong> [Fig. 13.2(d)]: Generate dc voltages; an electronic package called an <strong>inverter</strong> converts the dc voltage to one of a sinusoidal nature. Boats and recreational vehicles use this inversion process in isolated areas.</li></ul><ul><li><strong>Function generators</strong> [Fig. 13.2(e)]: Sinusoidal ac voltages with characteristics that can be controlled by the user — different peak values and different repetition rates. Used in laboratory investigations.</li></ul><h4 class='subsection-heading'>Definitions</h4><p>The sinusoidal waveform in Fig. 13.3 with its additional notation defines the basic terms that follow. The vertical scaling is in volts or amperes; the horizontal scaling is in units of time.</p><ul><li><strong>Waveform</strong>: The path traced by a quantity (such as voltage) plotted as a function of some variable (time, position, degrees, radians, temperature, etc.).</li><li><strong>Instantaneous value</strong>: The magnitude of a waveform at any instant of time; denoted by lowercase letters (e.g., e₁, e₂).</li><li><strong>Peak amplitude (E_m)</strong>: The maximum value of a waveform as measured from its average, or mean, value. Denoted by uppercase letters (E_m for sources of voltage, V_m for the voltage drop across a load).</li><li><strong>Peak value</strong>: The maximum instantaneous value of a function as measured from the zero level. For the waveform in Fig. 13.3, the peak amplitude and peak value are the same, since the average value is zero volts.</li><li><strong>Peak-to-peak value (E_p-p or V_p-p)</strong>: The full voltage between positive and negative peaks of the waveform — the sum of the magnitudes of the positive and negative peaks.</li><li><strong>Periodic waveform</strong>: A waveform that continually repeats itself after the same time interval.</li><li><strong>Period (T)</strong>: The time interval of a periodic waveform.</li><li><strong>Cycle</strong>: The portion of a waveform contained in one period of time.</li><li><strong>Frequency (f)</strong>: The number of cycles that occur in 1 s.</li></ul><div class='formula-block'><div class='formula-body'>$$1 \\text{ hertz (Hz)} = 1 \\text{ cycle per second (cps)} \\qquad (13.1)$$</div></div><p>The unit hertz is derived from the surname of <strong>Heinrich Rudolph Hertz</strong> (1857–1894), a German physicist who did original research on alternating currents and voltages and their effect on basic R, L, and C elements. The frequency standard for North America is <strong>60 Hz</strong>; for Europe, it is predominantly <strong>50 Hz</strong>.</p><p>Historical note: In 1993, Berlin, Germany, received all its power from eastern plants whose output frequency was varying between 50.03 Hz and 51 Hz. The result was that clocks were gaining as much as 4 minutes a day, alarms went off too soon, and VCRs clicked off before the end of programs. In 1994, when power was linked with the rest of Europe, the precise standard of 50 Hz was reestablished.</p><div class='problem-block'><div class='problem-header' onclick='toggleProblem(this)'><div><span class='problem-label'>Example 13.1</span> <span class='problem-title'>Waveform parameters</span></div><span class='problem-toggle'><svg class='icon icon-sm' viewBox='0 0 24 24'><polyline points='6 9 12 15 18 9'/></svg></span></div><div class='problem-body hidden'><p>For the sinusoidal waveform in Fig. 13.7:</p><ul><li>(a) <strong>Peak value</strong>: 8 V</li><li>(b) <strong>Instantaneous values</strong>: at 0.3 s, +8 V; at 0.6 s, 0 V</li><li>(c) <strong>Peak-to-peak value</strong>: 16 V</li><li>(d) <strong>Period</strong>: 0.4 s</li><li>(e) <strong>Number of cycles shown</strong>: 3.5 cycles</li><li>(f) <strong>Frequency</strong>: 2.5 cps = 2.5 Hz</li></ul><p>---</p></div></div>"
+      },
+      {
+        "num": "3",
+        "title": "13.3 — Frequency Spectrum",
+        "content": "<p>Using a log scale (described in detail in Chapter 20), a frequency spectrum from 1 Hz to 1000 GHz can be displayed on the same axis (Fig. 13.8). The audio range (human ear) extends from only <strong>15 Hz to 20 kHz</strong>, but the transmission of radio signals can occur between <strong>3 kHz and 300 GHz</strong>.</p><p>The radio-frequency spectrum is divided into bands:</p><ul><li><strong>ELF</strong> (Extremely Low Freq): 30 Hz – 3 kHz</li><li><strong>VLF</strong> (Very Low Freq): 3 kHz – 30 kHz</li><li><strong>LF</strong> (Low Freq): 30 kHz – 300 kHz</li><li><strong>MF</strong> (Medium Freq): 300 kHz – 3 MHz</li><li><strong>HF</strong> (High Freq): 3 MHz – 30 MHz</li><li><strong>VHF</strong> (Very High Freq): 30 MHz – 300 MHz</li><li><strong>UHF</strong> (Ultrahigh Freq): 300 MHz – 3 GHz</li><li><strong>SHF</strong> (Super-High Freq): 3 GHz – 30 GHz</li><li><strong>EHF</strong> (Extremely High Freq): 30 GHz – 300 GHz</li></ul><p>Other familiar frequencies: FM 88–108 MHz; TV channels (2–6) 54–88 MHz; CB 26.9–27.4 MHz; cellular phones 46–49 MHz; microwave oven 2.45 GHz; Intel Pentium 4 chips run at speeds over 2 GHz.</p><h4 class='subsection-heading'>Frequency-Period Relationship</h4><p>Frequency and period are inversely related — as one increases, the other decreases by an equal amount:</p><div class='formula-block'><div class='formula-body'>$$f = \\frac{1}{T} \\quad \\text{(Hz)} \\qquad (13.2)$$</div></div><div class='formula-block'><div class='formula-body'>$$T = \\frac{1}{f} \\quad \\text{(seconds, s)} \\qquad (13.3)$$</div></div><div class='problem-block'><div class='problem-header' onclick='toggleProblem(this)'><div><span class='problem-label'>Example 13.2</span> <span class='problem-title'>Period calculation</span></div><span class='problem-toggle'><svg class='icon icon-sm' viewBox='0 0 24 24'><polyline points='6 9 12 15 18 9'/></svg></span></div><div class='problem-body hidden'><p>Find the period of a periodic waveform with a frequency of:</p><ul><li>(a) 60 Hz:  T = 1/60 = 0.01667 s or <strong>16.67 ms</strong></li><li>(b) 1000 Hz: T = 1/1000 = 10⁻³ s = <strong>1 ms</strong></li></ul></div></div><div class='problem-block'><div class='problem-header' onclick='toggleProblem(this)'><div><span class='problem-label'>Example 13.3</span> <span class='problem-title'>Frequency from waveform</span></div><span class='problem-toggle'><svg class='icon icon-sm' viewBox='0 0 24 24'><polyline points='6 9 12 15 18 9'/></svg></span></div><div class='problem-body hidden'><p>For the waveform in Fig. 13.9 with T = (25 ms − 5 ms) = 20 ms: $$f = \\frac{1}{T} = \\frac{1}{20 \\times 10^{-3} \\text{ s}} = 50 \\text{ Hz}$$</p><p>---</p></div></div>"
+      },
+      {
+        "num": "4",
+        "title": "13.4 — The Sinusoidal Waveform: General Format",
+        "content": "<h4 class='subsection-heading'>Mathematical Expression</h4><p>The sinusoidal waveform can be written using the sine function: $$v(t) = V_{m} \\sin(\\omega t +\\theta)$$</p><p>where:</p><ul><li><strong>V_m</strong>: peak amplitude (maximum value)</li><li><strong>ω</strong>: angular frequency (radians per second, rad/s)</li><li><strong>θ</strong>: phase angle (radians or degrees)</li><li><strong>t</strong>: time</li></ul><h4 class='subsection-heading'>Angular Frequency</h4><p>The angular frequency relates to the period and frequency by: $$\\omega = \\frac{2\\pi}{T} = 2\\pi f \\quad \\text{(rad/s)}$$</p><p>The units of ω are radians per second (rad/s). One complete cycle corresponds to 2π radians.</p><h4 class='subsection-heading'>Phase Angle</h4><p>The phase angle θ (in radians or degrees) determines the position of the waveform along the time axis at t = 0:</p><ul><li>Positive θ shifts the waveform to the <strong>left</strong> (leads).</li><li>Negative θ shifts the waveform to the <strong>right</strong> (lags).</li></ul><h4 class='subsection-heading'>Conversion Between Radians and Degrees</h4><div class='formula-block'><div class='formula-body'>$$360^{\\circ}  = 2\\pi \\text{ radians}$$</div></div><div class='formula-block'><div class='formula-body'>$$1 \\text{ radian} = \\frac{180^{\\circ} }{\\pi} \\approx 57.3^{\\circ} $$</div></div><div class='formula-block'><div class='formula-body'>$$1^{\\circ}  = \\frac{\\pi}{180} \\text{ radians} \\approx 0.01745 \\text{ rad}$$</div></div><hr/>"
+      },
+      {
+        "num": "5",
+        "title": "13.5 — Sinusoidal Waveform: Phase Relations",
+        "content": "<p>Two sinusoidal waveforms of the same frequency can differ in <strong>phase</strong>.</p><h4 class='subsection-heading'>Leading and Lagging</h4><p>If waveform A reaches its peak value before waveform B (within the same cycle), then <strong>A leads B</strong>. Equivalently, <strong>B lags A</strong>.</p><p>The phase difference Δθ = θ_A − θ_B:</p><ul><li>If Δθ &gt; 0: A leads B.</li><li>If Δθ &lt; 0: A lags B.</li></ul><div class='problem-block'><div class='problem-header' onclick='toggleProblem(this)'><div><span class='problem-label'>Example 13.4</span> <span class='problem-title'>Phase relationships</span></div><span class='problem-toggle'><svg class='icon icon-sm' viewBox='0 0 24 24'><polyline points='6 9 12 15 18 9'/></svg></span></div><div class='problem-body hidden'><p>For two waveforms:</p><ul><li>v₁ = 10 sin(ωt + 30°)</li><li>v₂ = 5 sin(ωt − 20°)</li></ul><p>The phase difference is 30° − (−20°) = 50°. Therefore v₁ leads v₂ by 50° (or v₂ lags v₁ by 50°).</p></div></div><h4 class='subsection-heading'>Phase-Shifted Sinusoid Forms</h4><p>Sometimes the waveform is given in cosine form. Use the identity: $$\\cos(\\omega t +\\theta) = \\sin(\\omega t +\\theta + 90^{\\circ} )$$ $$\\sin(\\omega t +\\theta) = \\cos(\\omega t +\\theta - 90^{\\circ} )$$</p><hr/>"
+      },
+      {
+        "num": "6",
+        "title": "13.6 — Average Value",
+        "content": "<p>The <strong>average value</strong> of a waveform over a full period (for purely sinusoidal with zero average) is zero because the positive and negative halves cancel. The average value over a half cycle is non-zero.</p><h4 class='subsection-heading'>Mathematical Definition</h4><div class='formula-block'><div class='formula-body'>$$V_{avg} = \\frac{1}{T} \\int_0^T v(t) \\, dt$$</div></div><h4 class='subsection-heading'>For Pure Sinusoid (Full Cycle)</h4><div class='formula-block'><div class='formula-body'>$$V_{avg} = 0$$</div></div><h4 class='subsection-heading'>For Pure Sinusoid (Half Cycle)</h4><div class='formula-block'><div class='formula-body'>$$V_{avg} = \\frac{2V_m}{\\pi} \\approx 0.637 V_{m}$$</div></div><div class='problem-block'><div class='problem-header' onclick='toggleProblem(this)'><div><span class='problem-label'>Example 13.5</span> <span class='problem-title'>Average of full-wave rectified sinusoid</span></div><span class='problem-toggle'><svg class='icon icon-sm' viewBox='0 0 24 24'><polyline points='6 9 12 15 18 9'/></svg></span></div><div class='problem-body hidden'><p>For a full-wave rectified sinusoid (both halves positive), the average over a full period: $$V_{avg} = \\frac{2V_m}{\\pi} \\approx 0.637 V_{m}$$</p></div></div><div class='problem-block'><div class='problem-header' onclick='toggleProblem(this)'><div><span class='problem-label'>Example 13.6</span> <span class='problem-title'>Average of half-wave rectified sinusoid</span></div><span class='problem-toggle'><svg class='icon icon-sm' viewBox='0 0 24 24'><polyline points='6 9 12 15 18 9'/></svg></span></div><div class='problem-body hidden'><p>For a half-wave rectified sinusoid (positive half retained, negative half zero): $$V_{avg} = \\frac{V_{m}}{\\pi} \\approx 0.318 V_{m}$$</p><p>---</p></div></div>"
+      },
+      {
+        "num": "7",
+        "title": "13.7 — Effective (rms) Values",
+        "content": "<p>The <strong>effective value</strong> of a sinusoidal waveform is the dc equivalent that produces the same heating effect (power dissipation) in a resistive load.</p><h4 class='subsection-heading'>Mathematical Definition</h4><div class='formula-block'><div class='formula-body'>$$V_{rms} = \\sqrt{\\frac{1}{T}\\int_0^T v^{2}(t) \\, dt}$$</div></div><h4 class='subsection-heading'>For a Pure Sinusoid</h4><div class='formula-block'><div class='formula-body'>$$V_{rms} = \\frac{V_{m}}{\\sqrt{2}} \\approx 0.707 V_{m}$$</div></div><div class='formula-block'><div class='formula-body'>$$I_{rms} = \\frac{I_{m}}{\\sqrt{2}} \\approx 0.707 I_{m}$$</div></div><p>The <strong>rms</strong> stands for <strong>root mean square</strong> — the square root of the mean of the squared values.</p><h4 class='subsection-heading'>Why Effective Value Matters</h4><p>Most ac meters (voltmeters, ammeters, multimeters) are calibrated to read rms values, not peak values. A household 120 V ac outlet actually has V_rms = 120 V, which means V_m = 120 × √2 ≈ 169.7 V peak.</p><div class='problem-block'><div class='problem-header' onclick='toggleProblem(this)'><div><span class='problem-label'>Example 13.7</span> <span class='problem-title'>Calculate rms from peak</span></div><span class='problem-toggle'><svg class='icon icon-sm' viewBox='0 0 24 24'><polyline points='6 9 12 15 18 9'/></svg></span></div><div class='problem-body hidden'><p>A sinusoidal voltage has V_m = 170 V. Find V_rms. $$V_{rms} = \\frac{V_{m}}{\\sqrt{2}} = \\frac{170}{\\sqrt{2}} \\approx 120 \\text{ V}$$</p></div></div><div class='problem-block'><div class='problem-header' onclick='toggleProblem(this)'><div><span class='problem-label'>Example 13.8</span> <span class='problem-title'>Calculate peak from rms</span></div><span class='problem-toggle'><svg class='icon icon-sm' viewBox='0 0 24 24'><polyline points='6 9 12 15 18 9'/></svg></span></div><div class='problem-body hidden'><p>A sinusoidal current has I_rms = 5 A. Find I_m. $$I_{m} = \\sqrt{2} \\times I_{rms} = \\sqrt{2} \\times 5 \\approx 7.07 \\text{ A}$$</p><p>---</p></div></div>"
+      },
+      {
+        "num": "8",
+        "title": "13.8 — ac Meters and Instruments",
+        "content": "<h4 class='subsection-heading'>Types of ac Meters</h4><ul><li><strong>D'Arsonval meter movement</strong> (with rectifier): Measures the average value of the rectified waveform, then scales to read rms.</li><li><strong>Iron-vane movement</strong>: Reads true rms regardless of waveform shape.</li><li><strong>Thermocouple meter</strong>: Reads true rms by heating effect.</li><li><strong>Digital multimeter (DMM)</strong>: True-rms reading when specified.</li></ul><h4 class='subsection-heading'>Voltmeters and Ammeters</h4><p>Most ac voltmeters and ammeters are calibrated to read rms values for sinusoidal waveforms. The scale markings assume the sinusoidal form, so non-sinusoidal waveforms may give incorrect readings on meters that are not true-rms.</p><h4 class='subsection-heading'>Oscilloscope</h4><p>An oscilloscope displays the actual waveform shape (instantaneous values versus time). The peak value can be read directly from the screen.</p><hr/>"
+      },
+      {
+        "num": "9",
+        "title": "13.9 — (Other Topics and Applications)",
+        "content": "<h4 class='subsection-heading'>Power in AC Circuits (Preview)</h4><p>The instantaneous power in an ac circuit is: $$p(t) = v(t) \\, i(t)$$</p><p>The <strong>average (real) power</strong> is: $$P = V_{rms} I_{rms} \\cos\\theta$$</p><p>where θ is the phase angle between voltage and current.</p><h4 class='subsection-heading'>Power Factor</h4><div class='formula-block'><div class='formula-body'>$$\\text{Power Factor} = \\cos\\theta = \\frac{P}{V_{rms} I_{rms}}$$</div></div><ul><li>Pure resistive: PF = 1</li><li>Pure reactive (L or C): PF = 0</li><li>Mixed: 0 &lt; PF &lt; 1</li></ul><hr/><p>## Key Formulas — Summary Table</p><div class='table-wrap'><table class='compare-table'>\n<thead><tr><th>Concept</th><th>Formula</th><th>Eq. #</th></tr></thead>\n<tbody>\n<tr><td>Frequency</td><td>f = 1/T</td><td>(13.2)</td></tr>\n<tr><td>Period</td><td>T = 1/f</td><td>(13.3)</td></tr>\n<tr><td>Sinusoid</td><td>v(t) = V_m sin(ωt + θ)</td><td>—</td></tr>\n<tr><td>Angular frequency</td><td>ω = 2π/T = 2πf</td><td>—</td></tr>\n<tr><td>Average (sinusoid, full cycle)</td><td>V_avg = 0</td><td>—</td></tr>\n<tr><td>Average (sinusoid, half cycle)</td><td>V_avg = 2V_m/π ≈ 0.637 V_m</td><td>—</td></tr>\n<tr><td>Average (full-wave rectified)</td><td>V_avg = 2V_m/π</td><td>—</td></tr>\n<tr><td>Average (half-wave rectified)</td><td>V_avg = V_m/π</td><td>—</td></tr>\n<tr><td>RMS (sinusoid)</td><td>V_rms = V_m/√2 ≈ 0.707 V_m</td><td>—</td></tr>\n<tr><td>RMS definition</td><td>V_rms = √(1/T ∫v² dt)</td><td>—</td></tr>\n<tr><td>Power</td><td>P = V_rms I_rms cos θ</td><td>—</td></tr>\n</tbody></table></div><hr/><p>## Glossary of Terms</p><ul><li><strong>Alternating Current (ac)</strong>: Current that alternates between two prescribed levels in a set time sequence.</li><li><strong>Average Value</strong>: The average of the instantaneous values over a period (or specified interval).</li><li><strong>Cycle</strong>: The portion of a waveform contained in one period of time.</li><li><strong>Effective Value</strong>: The dc equivalent that produces the same heating effect in a resistive load. For a sinusoid, this equals the rms value.</li><li><strong>Frequency (f)</strong>: The number of cycles per second; measured in hertz (Hz).</li><li><strong>Frequency Spectrum</strong>: The range of frequencies available for various applications (audio, radio, microwave, etc.).</li><li><strong>Half-wave Rectified</strong>: A waveform where only one half (positive or negative) of the cycle is present.</li><li><strong>Full-wave Rectified</strong>: A waveform where both halves of the cycle are present with the same sign.</li><li><strong>Hertz (Hz)</strong>: The unit of frequency; 1 Hz = 1 cycle per second.</li><li><strong>Instantaneous Value</strong>: The magnitude of a waveform at any instant of time; denoted by lowercase letters.</li><li><strong>Inverter</strong>: An electronic device that converts dc to ac.</li><li><strong>Peak Amplitude (E_m, V_m)</strong>: The maximum value of a waveform as measured from its average, or mean, value.</li><li><strong>Peak-to-Peak Value (E_p-p)</strong>: The full voltage between positive and negative peaks.</li><li><strong>Peak Value</strong>: The maximum instantaneous value of a function as measured from the zero volt level.</li><li><strong>Period (T)</strong>: The time interval of a periodic waveform.</li><li><strong>Periodic Waveform</strong>: A waveform that continually repeats itself after the same time interval.</li><li><strong>Phase Angle (θ)</strong>: The angle by which a waveform leads or lags a reference.</li><li><strong>Phase Lead</strong>: One waveform reaching a particular point (e.g., peak) before another waveform.</li><li><strong>Phase Lag</strong>: One waveform reaching a particular point (e.g., peak) after another waveform.</li><li><strong>Power Factor</strong>: cos θ; the cosine of the phase angle between voltage and current.</li><li><strong>RMS (Root Mean Square)</strong>: The square root of the average of the squared values; equals the effective value for power calculations.</li><li><strong>Sinusoidal Waveform</strong>: A waveform that varies as the sine (or cosine) of an angle that is itself a linear function of time.</li><li><strong>Stator</strong>: The stationary part of a dynamo or ac generator.</li><li><strong>Rotor</strong>: The rotating part of a dynamo or ac generator.</li><li><strong>Waveform</strong>: The path traced by a quantity plotted as a function of some variable.</li></ul><hr/><p><em>Source: Chapter 13 — Sinusoidal Alternating Waveforms, Boylestad, Introductory Circuit Analysis. Faithful coverage of Sections 13.1–13.9, including all worked examples, key formulas, definitions, and glossary terms as presented in the source text.</em></p>"
+      }
+    ]
+  },
+  {
+    "id": 4,
+    "code": "CH 14",
+    "title": "Basic Elements & Phasors",
+    "source": "Chapter 14 - The Basic Elements and Phasors, Boylestad, Introductory Circuit Analysis.",
+    "desc": "Comprehensive study guide for Basic Elements & Phasors. Source: Chapter 14 - The Basic Elements and Phasors, Boylestad, Introductory Circuit Analysis.",
+    "tags": [
+      "R/L/C",
+      "Complex",
+      "Phasors"
+    ],
+    "formulas": [
+      "\\frac{d}{dt}[V_m \\sin(\\omega t + \\theta)] = \\omega V_m \\cos(\\omega t + \\theta)",
+      "I_m = \\frac{V_m}{R}",
+      "X_L = \\omega L",
+      "X_C = \\frac{1}{\\omega C}",
+      "P = V_{rms} I_{rms} \\cos\\theta",
+      "F_p = \\cos\\theta",
+      "C = X + jY",
+      "C = Z \\angle \\theta",
+      "\\frac{C_1}{C_2} = \\frac{Z_1}{Z_2} \\angle (\\theta_1 - \\theta_2)"
+    ],
+    "sections": [
+      {
+        "num": "1",
+        "title": "14.1 — Introduction",
+        "content": "<p>The response of the basic R, L, and C elements to a sinusoidal voltage and current is examined in this chapter, with special note of how frequency affects the \"opposing\" characteristic of each element. Phasor notation is then introduced to establish a method of analysis that permits a direct correspondence with a number of the methods, theorems, and concepts introduced in the dc chapters.</p><p><strong>Chapter Objectives:</strong></p><ul><li>Become familiar with the response of a resistor, inductor, and capacitor to the application of a sinusoidal voltage or current.</li><li>Learn how to apply the phasor format to add and subtract sinusoidal waveforms.</li><li>Understand how to calculate the real power to resistive elements and the reactive power to inductive and capacitive elements.</li><li>Become aware of the differences between the frequency response of ideal and practical elements.</li><li>Become proficient in the use of a calculator or Mathcad to work with complex numbers.</li></ul><hr/>"
+      },
+      {
+        "num": "2",
+        "title": "14.2 — Derivative",
+        "content": "<p>To understand the response of the basic R, L, and C elements to a sinusoidal signal, we need to examine the concept of the <strong>derivative</strong> in some detail. We do not have to become proficient in the mathematical technique but simply understand the impact of a relationship defined by a derivative.</p><p>Recall that the derivative dx/dt is defined as the rate of change of x with respect to time. If x fails to change at a particular instant, dx = 0 and the derivative is zero.</p><p>For the sinusoidal waveform, dx/dt is zero only at the positive and negative peaks (ωt = π/2 and 3π/2), since x fails to change at these instants of time. The derivative dx/dt is actually the slope of the graph at any instant of time.</p><h4 class='subsection-heading'>Key Observations</h4><ol><li><strong>The derivative of a sine wave is a cosine wave</strong> (Fig. 14.2).</li><li><strong>The derivative of a sine wave has the same period and frequency</strong> as the original sinusoidal waveform.</li><li>The peak value of the derivative is directly related to the frequency of the original waveform — higher frequency → steeper slope at horizontal axis → greater dx/dt (Fig. 14.3).</li><li>At ωt = 0, π, and 2π, the derivative is at its maximum magnitude.</li></ol><h4 class='subsection-heading'>Formula</h4><p>For the sinusoidal voltage: $$e(t) = E_{m} \\sin(\\omega t +\\theta)$$</p><p>the derivative is: $$\\frac{de(t)}{dt} =\\omega E_{m} \\cos(\\omega t +\\theta) = 2\\pi f E_{m} \\cos(\\omega t +\\theta) \\qquad (14.1)$$</p><p>The peak value of the derivative, 2πfE_m, is a function of the frequency of e(t).</p><hr/>"
+      },
+      {
+        "num": "3",
+        "title": "14.3 — Response of Basic R, L, and C Elements to a Sinusoidal Voltage or Current",
+        "content": "<h4 class='subsection-heading'>Resistor (R)</h4><p>For power-line frequencies and frequencies up to a few hundred kilohertz, resistance is, for all practical purposes, unaffected by the frequency of the applied sinusoidal voltage or current. For this frequency region, the resistor can be treated as a constant, and Ohm's law applies directly.</p><p>For v = V_m sin ωt: $$i = \\frac{v}{R} = \\frac{V_{m} \\sin\\omega t}{R} = \\frac{V_{m}}{R} \\sin\\omega t = I_{m} \\sin\\omega t$$</p><p>where: $$I_{m} = \\frac{V_{m}}{R} \\qquad (14.2)$$</p><p>For a given i: $$v = iR = (I_{m} \\sin\\omega t) R = I_{m} R \\sin\\omega t = V_{m} \\sin\\omega t$$</p><p>where: $$V_{m} = I_{m} R \\qquad (14.3)$$</p><p><strong>Key conclusion:</strong> For a purely resistive element, the voltage across and the current through the element are <strong>in phase</strong>, with their peak values related by Ohm's law (Fig. 14.5).</p><h4 class='subsection-heading'>Inductor (L)</h4><p>For the inductor (Fig. 14.8): $$v_L = L \\frac{di_L}{dt}$$</p><p>For i_L = I_m sin ωt, applying differentiation: $$\\frac{di_L}{dt} = \\frac{d}{dt}(I_{m} \\sin\\omega t) =\\omega I_{m} \\cos\\omega t$$</p><p>Therefore: $$v_L = L \\frac{di_L}{dt} = L\\omega I_{m} \\cos\\omega t =\\omega L I_{m} \\cos\\omega t$$</p><div class='formula-block'><div class='formula-body'>$$v_L = V_{m} \\sin(\\omega t + 90^{\\circ} )$$</div></div><p>where: $$V_{m} =\\omega L I_{m}$$</p><p>The peak value of v_L is directly related to ω (= 2πf) and L, as predicted in the discussion above.</p><p><strong>Key conclusion:</strong> For a pure inductor, the voltage across the coil <strong>leads the current through the coil by 90°</strong>, or i_L <strong>lags</strong> v_L by 90° (Fig. 14.9).</p><p><strong>Mnemonic:</strong> \"<strong>ELI the ICEman</strong>\" — the <strong>L</strong> (inductor) has the <strong>E</strong> before the <strong>I</strong> (e leads i by 90°).</p><h4 class='subsection-heading'>Inductive Reactance</h4><p>The opposition established by an inductor in an ac sinusoidal network is: $$\\text{Opposition} = \\frac{\\text{cause}}{\\text{effect}} = \\frac{V_{m}}{I_{m}} = \\frac{\\omega L I_{m}}{I_{m}} =\\omega L$$</p><p>This is called the <strong>reactance</strong> (from the word \"reaction\") of an inductor, symbolically represented by X_L and measured in ohms: $$X_{L} =\\omega L \\quad \\text{(ohms, }\\Omega\\text{)} \\qquad (14.4)$$</p><p>In an Ohm's law format: $$X_{L} = \\frac{V_{m}}{I_{m}} \\quad \\text{(ohms, }\\Omega\\text{)} \\qquad (14.5)$$</p><p><strong>Inductive reactance</strong> is the opposition to the flow of current, which results in the continual interchange of energy between the source and the magnetic field of the inductor. Unlike resistance (which dissipates energy as heat), inductive reactance does not dissipate electrical energy (ignoring internal resistance).</p><h4 class='subsection-heading'>Capacitor (C)</h4><p>For the capacitor (Fig. 14.11): $$i_C = C \\frac{dv_C}{dt}$$</p><p>For v_C = V_m sin ωt: $$\\frac{dv_C}{dt} =\\omega V_{m} \\cos\\omega t$$</p><p>Therefore: $$i_C = C \\frac{dv_C}{dt} = C\\omega V_{m} \\cos\\omega t =\\omega C V_{m} \\cos\\omega t$$</p><div class='formula-block'><div class='formula-body'>$$i_C = I_{m} \\sin(\\omega t + 90^{\\circ} )$$</div></div><p>where: $$I_{m} =\\omega C V_{m}$$</p><p><strong>Key conclusion:</strong> For a capacitor, <strong>i_C leads v_C by 90°</strong>, or v_C <strong>lags</strong> i_C by 90° (Fig. 14.12).</p><p><strong>Mnemonic:</strong> \"ELI the ICEman\" — the <strong>C</strong> (capacitor) has the <strong>I</strong> before the <strong>E</strong> (i leads e by 90°).</p><h4 class='subsection-heading'>Capacitive Reactance</h4><p>The opposition of a capacitor: $$\\text{Opposition} = \\frac{V_{m}}{I_{m}} = \\frac{V_{m}}{\\omega C V_{m}} = \\frac{1}{\\omega C}$$</p><p>This is called the <strong>reactance of a capacitor</strong>, symbolically represented by X_C and measured in ohms: $$X_{C} = \\frac{1}{\\omega C} \\quad \\text{(ohms, }\\Omega\\text{)} \\qquad (14.6)$$</p><p>In an Ohm's law format: $$X_{C} = \\frac{V_{m}}{I_{m}} \\quad \\text{(ohms, }\\Omega\\text{)} \\qquad (14.7)$$</p><p><strong>Capacitive reactance</strong> is the opposition to the flow of charge, which results in the continual interchange of energy between the source and the electric field of the capacitor. Like the inductor, the capacitor does not dissipate energy in any form (ignoring leakage resistance).</p><h4 class='subsection-heading'>Avoiding Integration</h4><p>In the circuits just considered, the current was given in the inductive circuit and the voltage in the capacitive circuit — this avoids integration:</p><ul><li>Inductive: v_L = L(di/dt) → but i_L = (1/L)∫v_L dt</li><li>Capacitive: i_C = C(dv/dt) → but v_C = (1/C)∫i_C dt</li></ul><h4 class='subsection-heading'>Determining Predominantly Capacitive or Inductive</h4><ul><li>If the <strong>source current leads</strong> the applied voltage, the network is predominantly <strong>capacitive</strong>.</li><li>If the <strong>applied voltage leads</strong> the source current, the network is predominantly <strong>inductive</strong>.</li></ul><div class='problem-block'><div class='problem-header' onclick='toggleProblem(this)'><div><span class='problem-label'>Example 14.1</span> <span class='problem-title'>Resistor</span></div><span class='problem-toggle'><svg class='icon icon-sm' viewBox='0 0 24 24'><polyline points='6 9 12 15 18 9'/></svg></span></div><div class='problem-body hidden'><p>The voltage across a resistor is given. Find the sinusoidal expression for the current if the resistor is 10 Ω.</p><p><strong>(a)</strong> v = 100 sin 377t</p><ul><li>I_m = V_m / R = 100 / 10 = 10 A</li><li>Result: i = 10 sin 377t (in phase with v)</li></ul><p><strong>(b)</strong> v = 25 sin(377t + 60°)</p><ul><li>I_m = V_m / R = 25 / 10 = 2.5 A</li><li>Result: i = 2.5 sin(377t + 60°) (in phase)</li></ul></div></div><div class='problem-block'><div class='problem-header' onclick='toggleProblem(this)'><div><span class='problem-label'>Example 14.3</span> <span class='problem-title'>Inductor</span></div><span class='problem-toggle'><svg class='icon icon-sm' viewBox='0 0 24 24'><polyline points='6 9 12 15 18 9'/></svg></span></div><div class='problem-body hidden'><p>The current through a 0.1 H coil is given. Find the sinusoidal expression for the voltage.</p><p><strong>(a)</strong> i = 10 sin 377t</p><ul><li>X_L = ωL = (377)(0.1) = 37.7 Ω</li><li>V_m = I_m X_L = (10)(37.7) = 377 V</li><li>v leads i by 90°</li><li>Result: v = 377 sin(377t + 90°)</li></ul><p><strong>(b)</strong> i = 7 sin(377t − 70°)</p><ul><li>X_L remains 37.7 Ω</li><li>V_m = (7)(37.7) = 263.9 V</li><li>Result: v = 263.9 sin(377t − 70° + 90°) = 263.9 sin(377t + 20°)</li></ul></div></div><div class='problem-block'><div class='problem-header' onclick='toggleProblem(this)'><div><span class='problem-label'>Example 14.4</span> <span class='problem-title'>Inductor voltage, find current</span></div><span class='problem-toggle'><svg class='icon icon-sm' viewBox='0 0 24 24'><polyline points='6 9 12 15 18 9'/></svg></span></div><div class='problem-body hidden'><p>The voltage across a 0.5 H coil is v = 100 sin 20t. Find the current.</p><ul><li>X_L = ωL = (20)(0.5) = 10 Ω</li><li>I_m = V_m / X_L = 100 / 10 = 10 A</li><li>i lags v by 90°</li><li>Result: i = 10 sin(20t − 90°)</li></ul></div></div><div class='problem-block'><div class='problem-header' onclick='toggleProblem(this)'><div><span class='problem-label'>Example 14.5</span> <span class='problem-title'>Capacitor</span></div><span class='problem-toggle'><svg class='icon icon-sm' viewBox='0 0 24 24'><polyline points='6 9 12 15 18 9'/></svg></span></div><div class='problem-body hidden'><p>The voltage across a 1 µF capacitor is v = 30 sin 400t. Find the current.</p><ul><li>X_C = 1/(ωC) = 1/[(400)(1 × 10⁻⁶)] = 2500 Ω</li><li>I_m = V_m / X_C = 30 / 2500 = 0.0120 A = 12 mA</li><li>i leads v by 90°</li><li>Result: i = 12 × 10⁻³ sin(400t + 90°)</li></ul></div></div><div class='problem-block'><div class='problem-header' onclick='toggleProblem(this)'><div><span class='problem-label'>Example 14.6</span> <span class='problem-title'>Capacitor current, find voltage</span></div><span class='problem-toggle'><svg class='icon icon-sm' viewBox='0 0 24 24'><polyline points='6 9 12 15 18 9'/></svg></span></div><div class='problem-body hidden'><p>The current through a 100 µF capacitor is i = 40 sin(500t + 60°). Find the voltage.</p><ul><li>X_C = 1/(ωC) = 1/[(500)(100 × 10⁻⁶)] = 20 Ω</li><li>V_m = I_m X_C = (40)(20) = 800 V</li><li>v lags i by 90°</li><li>Result: v = 800 sin(500t + 60° − 90°) = 800 sin(500t − 30°)</li></ul></div></div><div class='problem-block'><div class='problem-header' onclick='toggleProblem(this)'><div><span class='problem-label'>Example 14.7</span> <span class='problem-title'>Identifying element type</span></div><span class='problem-toggle'><svg class='icon icon-sm' viewBox='0 0 24 24'><polyline points='6 9 12 15 18 9'/></svg></span></div><div class='problem-body hidden'><p>For the following pairs, determine whether the element is a capacitor, inductor, or resistor:</p><p><strong>(a)</strong> v = 100 sin(ωt + 40°), i = 20 sin(ωt + 40°)</p><ul><li>v and i in phase → <strong>resistor</strong></li><li>R = V_m / I_m = 100 / 20 = 5 Ω</li></ul><p><strong>(b)</strong> v = 1000 sin(377t + 10°), i = 5 sin(377t − 80°)</p><ul><li>v leads i by 90° → <strong>inductor</strong></li><li>X_L = V_m / I_m = 1000 / 5 = 200 Ω</li><li>L = X_L / ω = 200 / 377 ≈ 0.53 H</li></ul><p><strong>(c)</strong> v = 500 sin(157t + 30°), i = 1 sin(157t + 120°)</p><ul><li>i leads v by 90° → <strong>capacitor</strong></li><li>X_C = V_m / I_m = 500 / 1 = 500 Ω</li><li>C = 1/(ωX_C) = 1/[(157)(500)] ≈ 12.74 µF</li></ul><p><strong>(d)</strong> v = 50 cos(ωt + 20°) = 50 sin(ωt + 20° + 90°) = 50 sin(ωt + 110°)</p><ul><li>i = 5 sin(ωt + 110°) → v and i in phase → <strong>resistor</strong></li><li>R = 50 / 5 = 10 Ω</li></ul><p>---</p></div></div>"
+      },
+      {
+        "num": "4",
+        "title": "14.4 — Frequency Response of the Basic Elements",
+        "content": "<h4 class='subsection-heading'>Ideal Resistor (R)</h4><p>For an ideal resistor, frequency has absolutely no effect on the impedance level (Fig. 14.19). At 5 kHz or 20 kHz, the resistance remains at its nameplate value.</p><h4 class='subsection-heading'>Ideal Inductor (L)</h4><p>The equation for reactance can be written to isolate the frequency term: $$X_{L} =\\omega L = 2\\pi f L = (2\\pi L) f = k f, \\quad k = 2\\pi L$$</p><p>This matches the equation for a straight line: y = mx + b = kf + 0 = kf.</p><ul><li>At f = 0 Hz: X_L = 0 Ω → <strong>short circuit</strong> equivalent (Fig. 14.21).</li><li>At very high frequencies: X_L → ∞ → <strong>open circuit</strong> equivalent.</li><li>Higher inductance → steeper straight-line plot (Fig. 14.20).</li></ul><p><strong>Summary:</strong></p><ul><li>X_L = 0 Ω at f = 0 Hz</li><li>At very high frequencies, the inductor approaches an open-circuit equivalent.</li></ul><h4 class='subsection-heading'>Ideal Capacitor (C)</h4><div class='formula-block'><div class='formula-body'>$$X_{C} = \\frac{1}{2\\pi f C} = \\frac{1}{(2\\pi C)} \\cdot \\frac{1}{f}$$</div></div><p>This matches the basic format for a hyperbola: yx = k.</p><ul><li>At f = 0 Hz: X_C → ∞ → <strong>open circuit</strong> equivalent (Fig. 14.23).</li><li>At very high frequencies: X_C → 0 → <strong>short circuit</strong> equivalent.</li></ul><p><strong>Summary:</strong> As frequency increases, the reactance of an inductive element increases while that of a capacitor decreases, with one approaching an open-circuit equivalent as the other approaches a short-circuit equivalent.</p><h4 class='subsection-heading'>Practical Response</h4><p>#### Practical Resistor Every resistive element inherits stray capacitance levels and lead inductances. For most applications, the levels are low enough that their effects can be ignored. Beyond a few megahertz, however, it may be necessary to be aware of their effects. For carbon composition resistors:</p><ul><li>100 Ω resistor: stable up to about 300 MHz.</li><li>100 kΩ resistor: starts to drop off at about 15 MHz.</li><li>General: ideal up to about 15 MHz.</li></ul><p>#### Practical Inductor A true equivalent for an inductor (Fig. 14.25) includes:</p><ul><li>R_s (series resistance): copper losses, eddy current losses, hysteresis losses.</li><li>C_p (parallel capacitance): stray capacitance between windings.</li></ul><p>For inductors in the mH range (typical), frequencies approaching 100 kHz can affect ideal characteristics. For µH inductors, 1 MHz may introduce negative effects.</p><p>#### Practical Capacitor A complete equivalent model for a capacitor (Fig. 14.27) includes:</p><ul><li>R_s: defined by resistivity of the dielectric and case resistance (leakage current path). Some electrolytic capacitors discharge in seconds; paper may take hours; polystyrene may take days.</li><li>R_p: energy lost as atoms continually realign in the dielectric.</li><li>L_s: lead inductance (~0.05 µH/cm, or 0.2 µH for a capacitor with two 2 cm leads).</li></ul><p>At higher frequencies, a capacitor eventually takes on inductive characteristics.</p><p><strong>Application notes:</strong> Electrolytics are limited to frequencies to perhaps 10 kHz, while ceramic or mica can handle frequencies higher than 10 MHz. Temperature: electrolytics lose 20% of their room-temperature capacitance at 0°C; high-k ceramics can lose up to 30% at 100°C.</p><div class='problem-block'><div class='problem-header' onclick='toggleProblem(this)'><div><span class='problem-label'>Example 14.8</span> <span class='problem-title'>Frequency matching</span></div><span class='problem-toggle'><svg class='icon icon-sm' viewBox='0 0 24 24'><polyline points='6 9 12 15 18 9'/></svg></span></div><div class='problem-body hidden'><p>At what frequency will the reactance of a 200 mH inductor match the resistance level of a 5 kΩ resistor?</p><ul><li>R = 5000 Ω = X_L = 2πfL = 2π(200 × 10⁻³)f = 1.257f</li><li>f = 5000 / 1.257 ≈ <strong>3.98 kHz</strong></li></ul></div></div><div class='problem-block'><div class='problem-header' onclick='toggleProblem(this)'><div><span class='problem-label'>Example 14.9</span> <span class='problem-title'>L and C matching frequency</span></div><span class='problem-toggle'><svg class='icon icon-sm' viewBox='0 0 24 24'><polyline points='6 9 12 15 18 9'/></svg></span></div><div class='problem-body hidden'><p>At what frequency will an inductor of 5 mH have the same reactance as a capacitor of 0.1 µF?</p><ul><li>X_L = X_C</li><li>2πfL = 1/(2πfC)</li><li>f² = 1/(4π²LC)</li><li>f = 1/(2π√(LC)) = 1/(2π√(5 × 10⁻³ × 0.1 × 10⁻⁶))</li><li>f = 1/(2π × 2.236 × 10⁻⁵) ≈ <strong>7.12 kHz</strong></li></ul><p>---</p></div></div>"
+      },
+      {
+        "num": "5",
+        "title": "14.5 — Average Power and Power Factor",
+        "content": "<h4 class='subsection-heading'>The Question</h4><p>How can a sinusoidal voltage or current deliver power to a load if it seems to be delivering power during one part of its cycle and taking it back during the negative part? The equal oscillations above and below the axis seem to suggest that over one full cycle there is no net transfer of power or energy.</p><p>However, there is a net transfer of power over one full cycle because power is delivered to the load at each instant of the applied voltage or current (except when either is crossing the axis), no matter what the direction is of the current or polarity of the voltage.</p><p>Even though the current through and the voltage across reverse direction and polarity, respectively, <strong>power is delivered to the resistive load at each instant of time</strong> (Fig. 14.30).</p><h4 class='subsection-heading'>Average Power Formula</h4><p>The average value of the power curve occurs at a level equal to V_m I_m / 2: $$P_{av} = \\frac{V_{m} I_{m}}{2}$$</p><p>Substituting peak values in terms of rms values: $$P_{av} = \\frac{V_{m} I_{m}}{2} = \\frac{\\sqrt{2} V_{rms} \\sqrt{2} I_{rms}}{2} = V_{rms} I_{rms}$$</p><div class='formula-block'><div class='formula-body'>$$P_{av} = V_{rms} I_{rms} \\qquad (14.10)$$</div></div><h4 class='subsection-heading'>General Average Power Equation</h4><p>Using the trigonometric identity for the product of sinusoids, with the phase angle θ = |θ_v − θ_i|: $$P = \\frac{V_{m} I_{m}}{2} \\cos\\theta \\quad \\text{(watts, W)} \\qquad (14.11)$$</p><p>Or equivalently: $$P = V_{rms} I_{rms} \\cos\\theta \\qquad (14.12)$$</p><h4 class='subsection-heading'>Power for Each Element</h4><p>#### Resistor (in phase, θ = 0°) $$P = \\frac{V_{m} I_{m}}{2} \\cos 0^{\\circ}  = \\frac{V_{m} I_{m}}{2} = V_{rms} I_{rms} \\quad \\text{(W)} \\qquad (14.13)$$ $$P = \\frac{V_{rms}^{2}}{R} = I_{rms}^{2} R \\quad \\text{(W)} \\qquad (14.14)$$</p><p>#### Inductor (v leads i by 90°, θ = 90°) $$P = \\frac{V_{m} I_{m}}{2} \\cos 90^{\\circ}  = 0 \\text{ W}$$</p><p>The average power dissipated by the ideal inductor is <strong>zero watts</strong>.</p><p>#### Capacitor (i leads v by 90°, θ = 90°) $$P = \\frac{V_{m} I_{m}}{2} \\cos 90^{\\circ}  = 0 \\text{ W}$$</p><p>The average power dissipated by the ideal capacitor is <strong>zero watts</strong>.</p><div class='problem-block'><div class='problem-header' onclick='toggleProblem(this)'><div><span class='problem-label'>Example 14.10</span> <span class='problem-title'>Resistive circuit average power</span></div><span class='problem-toggle'><svg class='icon icon-sm' viewBox='0 0 24 24'><polyline points='6 9 12 15 18 9'/></svg></span></div><div class='problem-body hidden'><p>Input current and voltage:</p><ul><li>i = 5 sin(ωt + 40°)</li><li>v = 10 sin(ωt + 40°)</li></ul><p>Since v and i are in phase, the circuit is purely resistive. $$P = \\frac{V_{m} I_{m}}{2} = \\frac{(10)(5)}{2} = 25 \\text{ W}$$</p><p>Or: $$R = \\frac{V_{m}}{I_{m}} = \\frac{10}{5} = 2 \\,\\Omega$$ $$P = \\frac{V_{rms}^{2}}{R} = \\frac{(0.707 \\cdot 10)^{2}}{2} = \\frac{50}{2} = 25 \\text{ W}$$</p></div></div><div class='problem-block'><div class='problem-header' onclick='toggleProblem(this)'><div><span class='problem-label'>Example 14.11</span> <span class='problem-title'>Mixed circuit average power</span></div><span class='problem-toggle'><svg class='icon icon-sm' viewBox='0 0 24 24'><polyline points='6 9 12 15 18 9'/></svg></span></div><div class='problem-body hidden'><p><strong>(a)</strong> v = 100 sin(ωt + 40°), i = 20 sin(ωt + 70°)</p><ul><li>θ = |40° − 70°| = 30°</li><li>P = (100 × 20 / 2) cos 30° = 1000 × 0.866 ≈ <strong>866 W</strong></li></ul><p><strong>(b)</strong> v = 150 sin(ωt − 70°), i = 3 sin(ωt − 50°)</p><ul><li>θ = |−70° − (−50°)| = |−20°| = 20°</li><li>P = (150 × 3 / 2) cos 20° = 225 × 0.9397 ≈ <strong>211.43 W</strong></li></ul></div></div><h4 class='subsection-heading'>Power Factor</h4><p>The factor cos θ has significant control over the delivered power level. It is given the name <strong>power factor</strong>: $$\\text{Power Factor} = F_{p} = \\cos\\theta \\qquad (14.15)$$</p><p>In terms of average power and terminal voltage and current: $$F_{p} = \\cos\\theta = \\frac{P}{V_{rms} I_{rms}} \\qquad (14.16)$$</p><p><strong>For purely resistive load</strong> (Fig. 14.33): phase angle = 0°, F_p = cos 0° = <strong>1</strong>. Power delivered is maximum. <strong>For purely reactive load</strong> (Fig. 14.34): phase angle = 90°, F_p = cos 90° = <strong>0</strong>. Power delivered is zero.</p><p>For mixed loads, F_p varies between 0 and 1.</p><h4 class='subsection-heading'>Leading and Lagging Power Factors</h4><ul><li><strong>Leading power factor</strong>: Current leads the voltage → <strong>capacitive</strong> network.</li><li><strong>Lagging power factor</strong>: Current lags the voltage → <strong>inductive</strong> network.</li></ul><div class='problem-block'><div class='problem-header' onclick='toggleProblem(this)'><div><span class='problem-label'>Example 14.12</span> <span class='problem-title'>Power factor determination</span></div><span class='problem-toggle'><svg class='icon icon-sm' viewBox='0 0 24 24'><polyline points='6 9 12 15 18 9'/></svg></span></div><div class='problem-body hidden'><p><strong>(a)</strong> From Fig. 14.35: i = 2 sin(ωt + 40°), v = 50 sin(ωt − 20°)</p><ul><li>θ = |40° − (−20°)| = 60°</li><li>F_p = cos 60° = <strong>0.5 leading</strong> (i leads v → capacitive)</li></ul><p><strong>(b)</strong> From Fig. 14.36: v = 120 sin(ωt + 80°), i = 5 sin(ωt + 30°)</p><ul><li>θ = |80° − 30°| = 50°</li><li>F_p = cos 50° ≈ <strong>0.64 lagging</strong> (i lags v → inductive)</li></ul><p><strong>(c)</strong> From Fig. 14.37: V_eff = 20 V, I_eff = 5 A, P = 100 W</p><ul><li>F_p = P / (V_eff I_eff) = 100 / (20 × 5) = <strong>1</strong></li><li>Load is resistive, F_p is neither leading nor lagging.</li></ul><p>---</p></div></div>"
+      },
+      {
+        "num": "6",
+        "title": "14.6 — Complex Numbers",
+        "content": "<p>We need to determine the algebraic sum of voltages and currents in ac networks. Finding the sum on a point-to-point basis would be long and tedious.</p><p>The introduction of <strong>complex numbers</strong> allows us to find the algebraic sum of sinusoidal waveforms quickly, directly, and accurately. In the following chapters, this technique extends to permit the analysis of sinusoidal ac networks in a manner similar to dc networks. The methods and theorems from dc networks can be applied to sinusoidal ac networks with little difficulty.</p><h4 class='subsection-heading'>Definition</h4><p>A <strong>complex number</strong> represents a point in a two-dimensional plane located with reference to two distinct axes. This point can also determine a radius vector drawn from the origin to the point.</p><ul><li><strong>Real axis</strong>: horizontal axis.</li><li><strong>Imaginary axis</strong>: vertical axis, labeled with the symbol <strong>j</strong> (or sometimes i).</li></ul><p>All positive numbers to the right of the imaginary axis; all negative numbers to the left. All positive imaginary numbers are above the real axis; all negative imaginary numbers below.</p><h4 class='subsection-heading'>Two Forms</h4><p>Two forms represent a complex number:</p><ol><li><strong>Rectangular form</strong></li><li><strong>Polar form</strong></li></ol><p>Each can represent a point in the plane or a radius vector drawn from the origin to that point.</p><hr/>"
+      },
+      {
+        "num": "7",
+        "title": "14.7 — Rectangular Form",
+        "content": "<p>The format for the rectangular form: $$C = X + jY \\qquad (14.17)$$</p><p>(Fig. 14.39) where:</p><ul><li><strong>C</strong> (boldface) represents the complex number with magnitude and direction.</li><li><strong>C</strong> (italic) represents magnitude only.</li><li><strong>j</strong> is the symbol for the imaginary component.</li></ul><hr/>"
+      },
+      {
+        "num": "8",
+        "title": "14.8 — Polar Form",
+        "content": "<p>The format for the polar form: $$C = Z \\angle\\theta \\qquad (14.18)$$</p><p>with Z chosen from the sequence X, Y, Z.</p><ul><li><strong>Z</strong> indicates magnitude only.</li><li><strong>θ</strong> is always measured <strong>counterclockwise (CCW)</strong> from the positive real axis (Fig. 14.43).</li><li>Angles measured clockwise from the positive real axis must have a negative sign.</li></ul><p>A negative sign in front of the polar form has the effect shown in Fig. 14.44: $$-C = -Z \\angle\\theta = Z \\angle\\theta + 180^{\\circ}  \\qquad (14.19)$$</p><hr/>"
+      },
+      {
+        "num": "9",
+        "title": "14.9 — Conversion Between Forms",
+        "content": "<h4 class='subsection-heading'>Rectangular → Polar</h4><p>Given C = X + jY: $$C = Z \\angle\\theta = \\sqrt{X^{2} + Y^{2}} \\angle \\tan^{-1}\\left(\\frac{Y}{X}\\right)$$</p><p><strong>Quadrant rules for θ:</strong></p><ul><li>X &gt; 0, Y &gt; 0 (1st quadrant): θ as computed</li><li>X &lt; 0, Y &gt; 0 (2nd quadrant): θ = 180° − |computed|</li><li>X &lt; 0, Y &lt; 0 (3rd quadrant): θ = −180° + |computed| (or 180° + computed negative)</li><li>X &gt; 0, Y &lt; 0 (4th quadrant): θ as computed (negative)</li></ul><h4 class='subsection-heading'>Polar → Rectangular</h4><p>Given C = Z ∠ θ: $$C = X + jY = Z\\cos\\theta + jZ\\sin\\theta$$</p><div class='problem-block'><div class='problem-header' onclick='toggleProblem(this)'><div><span class='problem-label'>Example 14.13</span> <span class='problem-title'>Rectangular form sketches</span></div><span class='problem-toggle'><svg class='icon icon-sm' viewBox='0 0 24 24'><polyline points='6 9 12 15 18 9'/></svg></span></div><div class='problem-body hidden'><p>Sketch the following complex numbers:</p><ul><li>(a) C = 3 + j4 (1st quadrant, Fig. 14.40)</li><li>(b) C = 0 − j6 (negative imaginary axis, Fig. 14.41)</li><li>(c) C = −10 − j20 (3rd quadrant, Fig. 14.42)</li></ul><p>---</p></div></div>"
+      },
+      {
+        "num": "10",
+        "title": "14.10 — Mathematical Operations with Complex Numbers",
+        "content": "<h4 class='subsection-heading'>Addition and Subtraction</h4><p>To add or subtract complex numbers in rectangular form, simply add or subtract the real and imaginary parts separately.</p><div class='formula-block'><div class='formula-body'>$$C_1 + C_2 = (X_1 + X_2) + j(Y_1 + Y_2)$$</div></div><div class='formula-block'><div class='formula-body'>$$C_1 - C_2 = (X_1 - X_2) + j(Y_1 - Y_2)$$</div></div><h4 class='subsection-heading'>Multiplication</h4><p><strong>In rectangular form</strong>, multiply using FOIL (First, Outer, Inner, Last): $$C_1 \\cdot C_2 = (X_1 + jY_1)(X_2 + jY_2) = (X_1 X_2 - Y_1 Y_2) + j(X_1 Y_2 + X_2 Y_1)$$</p><p><strong>In polar form</strong>, multiply the magnitudes and add the angles: $$C_1 \\cdot C_2 = Z_1 Z_2 \\angle (\\theta_1 +\\theta_2)$$</p><h4 class='subsection-heading'>Division</h4><p><strong>In polar form</strong>, divide the magnitudes and subtract the angles: $$\\frac{C_1}{C_2} = \\frac{Z_1}{Z_2} \\angle (\\theta_1 -\\theta_2)$$</p><h4 class='subsection-heading'>Reciprocal</h4><div class='formula-block'><div class='formula-body'>$$\\frac{1}{C} = \\frac{1}{Z} \\angle -\\theta$$</div></div><h4 class='subsection-heading'>Complex Conjugate</h4><p>The <strong>complex conjugate</strong> of a complex number in rectangular form is obtained by changing the sign of the imaginary component: $$C^* = X - jY$$</p><p>In polar form, the conjugate negates the angle: $$C^* = Z \\angle -\\theta$$</p><hr/>"
+      },
+      {
+        "num": "11",
+        "title": "14.11 — Calculator and Computer Methods",
+        "content": "<h4 class='subsection-heading'>Calculator (TI-89, etc.)</h4><p>Modern scientific calculators have built-in support for complex numbers. They allow:</p><ul><li>Direct entry in either rectangular or polar form.</li><li>Automatic conversion between forms.</li><li>Mathematical operations (+, −, ×, ÷) directly on complex numbers.</li></ul><p>For example, on a TI calculator:</p><ul><li>3 + j4 → magnitude = 5, angle = 53.13°.</li><li>5 ∠ 53.13° → 3 + j4.</li></ul><h4 class='subsection-heading'>Mathcad</h4><p>Mathcad is particularly useful for symbolic computation with complex numbers, allowing symbolic manipulation, plotting, and matrix operations with complex entries.</p><hr/>"
+      },
+      {
+        "num": "12",
+        "title": "14.12 — Phasors",
+        "content": "<h4 class='subsection-heading'>Definition</h4><p>A <strong>phasor</strong> is a radius vector that has a constant magnitude at a fixed angle from the positive real axis, and that represents a sinusoidal voltage or current in the vector domain.</p><h4 class='subsection-heading'>Phasor Notation</h4><p>For the sinusoidal waveform: $$v(t) = V_{m} \\sin(\\omega t +\\theta)$$</p><p>The phasor representation is: $$\\mathbf{V} = V_{m} \\angle\\theta$$</p><p>The phasor contains the <strong>peak value</strong> (or rms value, depending on the convention) and the <strong>phase angle</strong>. The time variation e^(jωt) is implicit.</p><h4 class='subsection-heading'>Phasor Diagram</h4><p>A <strong>phasor diagram</strong> is a \"snapshot\" of the phasors that represent a number of sinusoidal waveforms at t = 0. It shows the relative magnitudes and phase angles of the waveforms.</p><h4 class='subsection-heading'>Conversion</h4><p><strong>Time domain → Phasor domain:</strong> $$v(t) = V_{m} \\sin(\\omega t +\\theta) \\;\\rightarrow\\; \\mathbf{V} = V_{m} \\angle\\theta$$</p><p><strong>Phasor domain → Time domain:</strong> $$\\mathbf{V} = V_{m} \\angle\\theta \\;\\rightarrow\\; v(t) = V_{m} \\sin(\\omega t +\\theta)$$</p><h4 class='subsection-heading'>Addition of Sinusoidal Waveforms Using Phasors</h4><p>To add two or more sinusoidal waveforms of the same frequency:</p><ol><li>Convert each to phasor form.</li><li>Add the phasors (using complex number addition).</li><li>Convert back to time domain.</li></ol><div class='problem-block'><div class='problem-header' onclick='toggleProblem(this)'><div><span class='problem-label'>Example 14.30</span> <span class='problem-title'>Adding sinusoids with phasors</span></div><span class='problem-toggle'><svg class='icon icon-sm' viewBox='0 0 24 24'><polyline points='6 9 12 15 18 9'/></svg></span></div><div class='problem-body hidden'><p>Given:</p><ul><li>i₁ = 42.42 mA sin(ωt + 60°)</li><li>i₂ = 60 mA sin(ωt − 60°)</li><li>i_T = i₁ + i₂</li></ul><p><strong>Step 1 — Convert to phasors:</strong></p><ul><li>I₁ = 42.42 ∠ 60° = 42.42 cos 60° + j 42.42 sin 60° = 21.21 + j 36.74 mA</li><li>I₂ = 60 ∠ −60° = 60 cos(−60°) + j 60 sin(−60°) = 30 − j 51.96 mA</li></ul><p><strong>Step 2 — Add:</strong></p><ul><li>I_T = (21.21 + 30) + j(36.74 − 51.96) = 51.21 − j 15.22 mA</li><li>|I_T| = √(51.21² + 15.22²) ≈ 53.42 mA</li><li>θ = tan⁻¹(−15.22 / 51.21) ≈ −16.55°</li><li>I_T ≈ 53.42 ∠ −16.55° mA</li></ul><p><strong>Step 3 — Back to time domain:</strong></p><ul><li>i_T = 53.42 sin(ωt − 16.55°) mA</li></ul><p>---</p></div></div>"
+      },
+      {
+        "num": "13",
+        "title": "14.13 — Computer Analysis (PSpice / Multisim)",
+        "content": "<h4 class='subsection-heading'>PSpice — Capacitor Response</h4><p>To analyze the response of a capacitor to a sinusoidal ac signal (Fig. 14.79):</p><ol><li><strong>Source</strong>: Place VSIN (Place part key → SOURCE → VSIN → OK). Set:</li></ol><ul><li>Name and value of any parameter by double-clicking.</li><li>Under Display, select Name and Value.</li></ul><ol><li><strong>New Simulation Profile</strong>:</li></ol><ul><li>Name: PSpice 14-1</li><li>Create → Simulation Settings dialog → Analysis type: Time Domain (Transient).</li><li>Run to time: 3 ms (to permit display of three cycles; T = 1/f = 1/1000 Hz = 1 ms).</li><li>Start saving data after: 0 s.</li><li>Maximum step size: 3 ms / 1000 = 3 µs.</li></ul><ol><li><strong>Run PSpice</strong>.</li><li><strong>Add traces</strong>:</li></ol><ul><li>V(Vs:+) to show applied ac voltage.</li><li>I(C) to show capacitor current.</li></ul><ol><li><strong>Expected results</strong>:</li></ol><ul><li>X_C = 2.34 Ω (theoretical).</li><li>Peak value of I_C = E_m / X_C = 5 V / 2.34 Ω ≈ 2.136 A.</li><li>Power: V(Vs:+) × I(C), sinusoidal at twice the applied frequency.</li><li>Maximum power ≈ 5.34 W.</li><li>Over 3 ms (3 cycles), area above axis = area below; no net power transfer.</li></ul><h4 class='subsection-heading'>Multisim — Inductor Response</h4><p>For the inductive element (Fig. 14.81):</p><ol><li><strong>Source</strong>: From Sources parts bin, set values in AC Voltage dialog.</li><li><strong>Series resistor of 1 Ω</strong>: Required to convert voltage to current for display (i = v_R / 1 Ω).</li><li><strong>Transient Analysis</strong>:</li></ol><ul><li>Simulate → Analyses → Transient Analysis.</li><li>Start time: 0 s; End time: 105 ms.</li><li>Minimum number of time points: 10,000.</li></ul><ol><li><strong>Output variables</strong>: nodes 1 and 2 to Selected variables for analysis using Add.</li><li><strong>Range setting</strong>: Properties → Bottom Axis → Range: Minimum 0.100 s, Maximum 0.105 s.</li><li><strong>Display</strong>:</li></ol><ul><li>Show/Hide Grid keypad.</li><li>Show/Hide Legend keypad.</li></ul><ol><li><strong>Right axis</strong>: Traces → Trace 2 (voltage across 1 Ω resistor) → Right Axis → OK.</li></ol><ul><li>Set Range −500 mA to +500 mA; Total Ticks 8; Minor Ticks 2.</li></ul><ol><li><strong>Cursors</strong>: Show/Hide Cursors → Transient Analysis dialog.</li></ol><ul><li>Set cursor at 101.5 ms (x1): peak current ≈ 159.05 mA.</li><li>Set cursor 2 at 101.75 ms (x2): minimum ≈ −5.18 mA.</li><li>Difference dx = 252 µs = 0.25 ms = T/4 (at 1 ms period).</li></ul><hr/><p>## Key Formulas — Summary Table</p><div class='table-wrap'><table class='compare-table'>\n<thead><tr><th>Concept</th><th>Formula</th><th>Eq. #</th></tr></thead>\n<tbody>\n<tr><td>Derivative of sine</td><td>d/dt[V_m sin(ωt+θ)] = ωV_m cos(ωt+θ)</td><td>(14.1)</td></tr>\n<tr><td>Ohm's law (R)</td><td>I_m = V_m/R</td><td>(14.2)</td></tr>\n<tr><td>Ohm's law (R)</td><td>V_m = I_m R</td><td>(14.3)</td></tr>\n<tr><td>Inductive reactance</td><td>X_L = ωL</td><td>(14.4)</td></tr>\n<tr><td>Ohm's law (L)</td><td>X_L = V_m / I_m</td><td>(14.5)</td></tr>\n<tr><td>Capacitive reactance</td><td>X_C = 1/(ωC)</td><td>(14.6)</td></tr>\n<tr><td>Ohm's law (C)</td><td>X_C = V_m / I_m</td><td>(14.7)</td></tr>\n<tr><td>Average power (R)</td><td>P = V_m I_m / 2 = V_rms I_rms</td><td>(14.10), (14.13)</td></tr>\n<tr><td>Average power (general)</td><td>P = (V_m I_m / 2) cos θ</td><td>(14.11)</td></tr>\n<tr><td>Average power (rms form)</td><td>P = V_rms I_rms cos θ</td><td>(14.12)</td></tr>\n<tr><td>Power (R in rms)</td><td>P = V_rms² / R = I_rms² R</td><td>(14.14)</td></tr>\n<tr><td>Power factor</td><td>F_p = cos θ = P / (V_rms I_rms)</td><td>(14.15), (14.16)</td></tr>\n<tr><td>Rectangular form</td><td>C = X + jY</td><td>(14.17)</td></tr>\n<tr><td>Polar form</td><td>C = Z ∠ θ</td><td>(14.18)</td></tr>\n<tr><td>Negative in polar</td><td>−C = Z ∠ (θ + 180°)</td><td>(14.19)</td></tr>\n</tbody></table></div><hr/><p>## Glossary of Terms</p><ul><li><strong>Average (or real) power</strong>: The power delivered to and dissipated by the load over a full cycle.</li><li><strong>Capacitive Reactance (X_C)</strong>: Opposition of a capacitor to sinusoidal current; X_C = 1/(ωC) Ω.</li><li><strong>Complex Conjugate</strong>: A complex number defined by simply changing the sign of the imaginary component (in rectangular form) or negating the angle (in polar form).</li><li><strong>Complex Number</strong>: A number that represents a point in a two-dimensional plane located with reference to two distinct axes. It defines a vector drawn from the origin to that point.</li><li><strong>Derivative</strong>: The instantaneous rate of change of a function with respect to time or another variable.</li><li><strong>Effective (rms) Value</strong>: The dc value that produces the same heating effect as the sinusoidal waveform.</li><li><strong>Imaginary Axis</strong>: The vertical axis of the complex plane.</li><li><strong>Inductive Reactance (X_L)</strong>: Opposition of an inductor to sinusoidal current; X_L = ωL Ω.</li><li><strong>Leading Power Factor</strong>: An indication that current leads voltage — associated with capacitive networks.</li><li><strong>Lagging Power Factor</strong>: An indication that current lags voltage — associated with inductive networks.</li><li><strong>Laminations</strong>: Thin sheets of magnetic core material separated by insulation to reduce eddy current losses.</li><li><strong>Phasor</strong>: A radius vector that has a constant magnitude at a fixed angle from the positive real axis, representing a sinusoidal voltage or current in the vector domain.</li><li><strong>Phasor Diagram</strong>: A \"snapshot\" of the phasors that represent a number of sinusoidal waveforms at t = 0.</li><li><strong>Polar Form</strong>: A method of defining a point in a complex plane that includes a single magnitude (distance from origin) and an angle (counterclockwise from positive real axis).</li><li><strong>Power Factor (F_p)</strong>: An indication of how reactive or resistive an electrical system is; F_p = cos θ. Higher F_p → greater resistive component.</li><li><strong>Reactance</strong>: The opposition of an inductor or capacitor to the flow of charge that results in the continual exchange of energy between the circuit and the magnetic field of an inductor or the electric field of a capacitor.</li><li><strong>Real Axis</strong>: The horizontal axis of the complex plane.</li><li><strong>Reciprocal</strong>: 1 divided by the complex number.</li><li><strong>Rectangular Form</strong>: A method of defining a point in a complex plane that includes the magnitude of the real component and the magnitude of the imaginary component (defined by j).</li><li><strong>Rotor</strong>: The rotating part of an ac generator.</li><li><strong>Stator</strong>: The stationary part of an ac generator.</li><li><strong>Stray Capacitance</strong>: Unintended capacitance between conducting parts (e.g., inductor windings).</li><li><strong>Stray Inductance</strong>: Unintended inductance in conductors (e.g., capacitor leads).</li></ul><hr/><p><em>Source: Chapter 14 — The Basic Elements and Phasors, Boylestad, Introductory Circuit Analysis. Faithful coverage of Sections 14.1–14.13, including all worked examples (14.1–14.30), key formulas, definitions, and glossary terms as presented in the source text.</em></p>"
+      }
+    ]
+  }
+];
+// ══════════════════════════════════════════════════════
+//  BUILD SEARCH INDEX
+// ══════════════════════════════════════════════════════
+let searchIndex = [];
+
+function buildSearchIndex() {
+  SUBJECTS.forEach(subj => {
+    subj.sections.forEach(sec => {
+      const stripped = sec.content.replace(/<[^>]+>/g, ' ').replace(/\s+/g,' ').trim();
+      searchIndex.push({
+        subjId: subj.id,
+        subjTitle: subj.title,
+        secNum: sec.num,
+        secTitle: sec.title,
+        text: stripped.toLowerCase(),
+        displayText: stripped.substring(0, 200)
+      });
+    });
+  });
+}
+
+// ══════════════════════════════════════════════════════
+//  RENDER FUNCTIONS
+// ══════════════════════════════════════════════════════
+function renderDashboard() {
+  const grid = document.getElementById('subjects-grid');
+  grid.innerHTML = SUBJECTS.map(s => `
+    <div class="subject-card" onclick="showPage(${s.id})">
+      <div class="subject-card-header">
+        <span class="subject-card-num">${s.code}</span>
+        <span class="subject-card-arrow"><svg class="icon" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span>
+      </div>
+      <h3>${s.title}</h3>
+      <p>${s.desc}</p>
+      <div class="subject-card-tags">${s.tags.map(t=>`<span class="tag">${t}</span>`).join('')}</div>
+    </div>
+  `).join('');
+}
+
+function renderSidebar() {
+  const nav = document.getElementById('sidebar-nav');
+  nav.innerHTML = SUBJECTS.map(s => `
+    <div class="sidebar-section" id="sb-sec-${s.id}">
+      <div class="sidebar-subject" id="sb-subj-${s.id}" role="button" tabindex="0" aria-expanded="false" aria-controls="sb-toc-${s.id}" onclick="sidebarToggle(${s.id})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();sidebarToggle(${s.id})}">
+        <span class="subj-num">${s.code}</span>
+        <span style="flex:1;font-size:11px">${s.title}</span>
+        <span class="sidebar-chevron"><svg class="icon icon-sm" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></span>
+      </div>
+      <div class="sidebar-toc" id="sb-toc-${s.id}" role="region" aria-label="${s.title} sections">
+        ${s.sections.map(sec=>`
+          <a href="#sec-${s.id}-${sec.num}" onclick="showPage(${s.id});closeSidebar()" id="sb-link-${s.id}-${sec.num}">${sec.num}. ${sec.title}</a>
+        `).join('')}
+      </div>
+    </div>
+  `).join('');
+}
+
+function renderRefPanel() {
+  const el = document.getElementById('ref-panel-content');
+  if (!SUBJECTS.length) {
+    el.innerHTML = '<div class="ref-empty"><div class="ref-empty-icon"><svg class="icon" viewBox="0 0 24 24" style="width:1em;height:1em;fill:none;stroke:currentColor;stroke-width:2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg></div>No subjects loaded.</div>';
+    return;
+  }
+  el.innerHTML = SUBJECTS.map(s => `
+    <div class="ref-subject">
+      <div class="ref-subject-title">${s.title}</div>
+      ${s.formulas.map(f=>`<div class="ref-formula">$${f}$</div>`).join('')}
+    </div>
+  `).join('');
+  if (typeof renderMathInElement !== 'undefined') {
+    renderMathInElement(el, {
+      delimiters: [
+        {left:'$$',right:'$$',display:true},
+        {left:'$',right:'$',display:false}
+      ],
+      throwOnError: false,
+      errorColor: 'var(--red)'
+    });
+  }
+}
+
+function renderStudyPage(subj) {
+  const page = document.getElementById(`page-${subj.id}`);
+  let html = `
+    <div class="study-header">
+      <h2>${subj.title}</h2>
+      <div class="src-note">Source: ${subj.source}</div>
+    </div>
+    <div class="breadcrumb">
+      <a href="#" onclick="showPage('home');return false">Dashboard</a>
+      <span><svg class="icon icon-sm" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></span>
+      <span>${subj.title}</span>
+    </div>
+    <div class="study-content">
+  `;
+
+  subj.sections.forEach((sec, idx) => {
+    html += `
+      <div class="section-group" id="sec-${subj.id}-${sec.num}">
+        <div class="section-heading" role="button" tabindex="0" aria-expanded="true" aria-controls="sec-body-${subj.id}-${sec.num}" onclick="toggleSection(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleSection(this)}">
+          <span class="section-num">${sec.num}</span>
+          <h3>${sec.title}</h3>
+          <span class="section-toggle"><svg class="icon icon-sm" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></span>
+        </div>
+        <div class="section-body content-body" id="sec-body-${subj.id}-${sec.num}">
+          ${sec.content}
+        </div>
+      </div>
+    `;
+  });
+
+  html += `</div>`; // close study-content
+  page.innerHTML = html;
+
+  // Wrap formula-body content in $ delimiters for KaTeX, then render
+  page.querySelectorAll('.formula-body').forEach(el => {
+    if (!el.querySelector('.katex') && el.textContent.trim()) {
+      el.innerHTML = '$' + el.textContent.trim() + '$';
+    }
+  });
+  if (typeof renderMathInElement !== 'undefined') {
+    renderMathInElement(page, {
+      delimiters: [
+        {left:'$$',right:'$$',display:true},
+        {left:'$',right:'$',display:false}
+      ],
+      throwOnError: false,
+      errorColor: 'var(--red)'
+    });
+    page.classList.add('katex-rendered');
+  }
+}
+
+
+
+// ══════════════════════════════════════════════════════
+//  NAVIGATION
+// ══════════════════════════════════════════════════════
+let currentPage = 'home';
+
+function showPage(id) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.sidebar-subject').forEach(s => s.classList.remove('active'));
+
+  if (id === 'home') {
+    document.getElementById('page-home').classList.add('active');
+    currentPage = 'home';
+  } else {
+    const page = document.getElementById(`page-${id}`);
+    if (page) {
+      page.classList.add('active');
+      currentPage = id;
+      const sb = document.getElementById(`sb-subj-${id}`);
+      if (sb) sb.classList.add('active');
+      window.scrollTo(0,0);
+    }
+  }
+}
+
+function sidebarToggle(id) {
+  const toc = document.getElementById(`sb-toc-${id}`);
+  const subj = document.getElementById(`sb-subj-${id}`);
+  const isOpen = toc.classList.contains('open');
+  // close all
+  document.querySelectorAll('.sidebar-toc').forEach(t => { t.classList.remove('open'); t.setAttribute('aria-expanded', 'false'); });
+  document.querySelectorAll('.sidebar-subject').forEach(s => { s.classList.remove('open'); s.setAttribute('aria-expanded', 'false'); });
+  if (!isOpen) {
+    toc.classList.add('open');
+    subj.classList.add('open');
+    toc.setAttribute('aria-expanded', 'true');
+    subj.setAttribute('aria-expanded', 'true');
+  }
+  showPage(id);
+}
+
+function toggleSection(heading) {
+  const body = heading.nextElementSibling;
+  const isCollapsed = heading.classList.toggle('collapsed');
+  body.classList.toggle('hidden');
+  heading.setAttribute('aria-expanded', !isCollapsed);
+}
+
+function toggleProblem(header) {
+  const body = header.nextElementSibling;
+  const isOpen = header.classList.toggle('open');
+  body.classList.toggle('hidden');
+  header.setAttribute('aria-expanded', isOpen);
+}
+
+function toggleRefPanel() {
+  const panel = document.getElementById('ref-panel');
+  const content = document.getElementById('ref-panel-content');
+  panel.classList.toggle('open');
+  if (panel.classList.contains('open')) {
+    content.style.animation = 'none';
+    content.offsetHeight;
+    content.style.animation = '';
+  }
+}
+
+function closeSidebar() {
+  document.getElementById('sidebar').classList.remove('open');
+  document.getElementById('overlay').classList.remove('visible');
+}
+
+// ══════════════════════════════════════════════════════
+//  SEARCH
+// ══════════════════════════════════════════════════════
+function doSearch(q) {
+  if (!q || q.length < 2) {
+    document.getElementById('search-results').style.display='none';
+    document.getElementById('search-clear').style.display='none';
+    return;
+  }
+  document.getElementById('search-clear').style.display='block';
+  const terms = q.toLowerCase().split(/\s+/);
+  const results = searchIndex.filter(item => terms.every(t => item.text.includes(t))).slice(0,8);
+  const container = document.getElementById('search-results');
+  const empty = document.getElementById('search-empty');
+  container.style.display = 'block';
+  if (results.length === 0) {
+    empty.style.display = 'block';
+    container.querySelectorAll('.search-result-item').forEach(el=>el.remove());
+    return;
+  }
+  empty.style.display = 'none';
+  const existing = container.querySelectorAll('.search-result-item');
+  existing.forEach(e=>e.remove());
+  results.forEach(r => {
+    const div = document.createElement('div');
+    div.className = 'search-result-item';
+    const snip = r.displayText.substring(0,120);
+    div.innerHTML = `
+      <div class="search-result-subject">${r.subjTitle}</div>
+      <div class="search-result-title">${r.secNum}. ${r.secTitle}</div>
+      <div class="search-result-snippet">${snip}…</div>
+    `;
+    div.onclick = () => {
+      showPage(r.subjId);
+      container.style.display='none';
+      document.getElementById('search-input').value='';
+      document.getElementById('search-clear').style.display='none';
+      searchFocusIdx = -1;
+      setTimeout(()=>{
+        const el = document.getElementById(`sec-${r.subjId}-${r.secNum}`);
+        if (el) el.scrollIntoView({behavior:'smooth',block:'start'});
+      }, 100);
+    };
+    container.appendChild(div);
+  });
+}
+
+// ══════════════════════════════════════════════════════
+//  SCROLL SPY
+// ══════════════════════════════════════════════════════
+function initScrollSpy() {
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const id = entry.target.id;
+        const parts = id.split('-');
+        if (parts.length >= 3) {
+          const subjId = parts[1];
+          const secNum = parts[2];
+          document.querySelectorAll('.sidebar-toc a').forEach(a=>a.classList.remove('active'));
+          const link = document.getElementById(`sb-link-${subjId}-${secNum}`);
+          if (link) link.classList.add('active');
+        }
+      }
+    });
+  }, { rootMargin: '-20% 0px -70% 0px', threshold: 0 });
+
+  document.querySelectorAll('.section-group').forEach(el => observer.observe(el));
+}
+
+// ══════════════════════════════════════════════════════
+//  THEME
+// ══════════════════════════════════════════════════════
+function initTheme() {
+  const btn = document.getElementById('theme-toggle');
+  const saved = localStorage.getItem('theme') || 'dark';
+  document.documentElement.setAttribute('data-theme', saved);
+  updateThemeBtn(btn, saved);
+  btn.onclick = () => {
+    const cur = document.documentElement.getAttribute('data-theme');
+    const next = cur === 'dark' ? 'light' : 'dark';
+    document.documentElement.setAttribute('data-theme', next);
+    localStorage.setItem('theme', next);
+    updateThemeBtn(btn, next);
+  };
+}
+
+function updateThemeBtn(btn, theme) {
+  const sunSvg = '<svg class="icon icon-sm" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>';
+  const moonSvg = '<svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>';
+  btn.innerHTML = theme === 'dark' ? sunSvg + ' Light' : moonSvg + ' Dark';
+  document.body.classList.add('theme-transitioning');
+  setTimeout(() => document.body.classList.remove('theme-transitioning'), 350);
+}
+
+// ══════════════════════════════════════════════════════
+//  BACK TO TOP & SCROLL EVENTS
+// ══════════════════════════════════════════════════════
+window.addEventListener('scroll', () => {
+  const btn = document.getElementById('back-top');
+  if (window.scrollY > 400) btn.classList.add('visible');
+  else btn.classList.remove('visible');
+});
+
+// ══════════════════════════════════════════════════════
+//  KATEX RESILIENT LOADING
+// ══════════════════════════════════════════════════════
+function tryRenderMath(retries) {
+  retries = retries || 10;
+  if (typeof renderMathInElement !== 'undefined') {
+    // Only process elements not already rendered by renderStudyPage/renderRefPanel
+    document.querySelectorAll('.page:not(.katex-rendered)').forEach(el => {
+      renderMathInElement(el, {
+        delimiters: [
+          {left:'$$',right:'$$',display:true},
+          {left:'$',right:'$',display:false}
+        ],
+        throwOnError: false,
+        errorColor: 'var(--red)'
+      });
+      el.classList.add('katex-rendered');
+    });
+    document.querySelectorAll('.katex-error').forEach(el => {
+      el.title = 'Formula rendering unavailable — raw LaTeX shown';
+    });
+  } else if (retries > 0) {
+    setTimeout(function() { tryRenderMath(retries - 1); }, 100);
+  } else {
+    document.querySelectorAll('.formula-body').forEach(el => {
+      if (el.textContent.includes('\\') && !el.querySelector('.katex')) {
+        el.classList.add('katex-error');
+        el.title = 'KaTeX failed to load — raw LaTeX displayed';
+      }
+    });
+  }
+}
+
+// ══════════════════════════════════════════════════════
+//  POST-RENDER A11Y FIXES
+// ══════════════════════════════════════════════════════
+function initPostRender() {
+  // Convert subsection-heading divs to h4 for semantic HTML
+  document.querySelectorAll('.subsection-heading').forEach(el => {
+    const h4 = document.createElement('h4');
+    h4.className = el.className;
+    h4.innerHTML = el.innerHTML;
+    el.parentNode.replaceChild(h4, el);
+  });
+
+  // Add ARIA to problem headers (injected via content HTML)
+  document.querySelectorAll('.problem-header').forEach(el => {
+    if (!el.getAttribute('role')) {
+      el.setAttribute('role', 'button');
+      el.setAttribute('tabindex', '0');
+      el.setAttribute('aria-expanded', 'false');
+      const body = el.nextElementSibling;
+      if (body) {
+        const bodyId = 'prob-body-' + Math.random().toString(36).slice(2, 8);
+        body.id = bodyId;
+        el.setAttribute('aria-controls', bodyId);
+      }
+      el.addEventListener('keydown', e => {
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggleProblem(el); }
+      });
+    }
+  });
+}
+
+// ══════════════════════════════════════════════════════
+//  SEARCH KEYBOARD NAVIGATION
+// ══════════════════════════════════════════════════════
+let searchFocusIdx = -1;
+
+function navigateSearch(direction) {
+  const container = document.getElementById('search-results');
+  const items = container.querySelectorAll('.search-result-item');
+  if (!items.length) return;
+  items.forEach(i => i.style.background = '');
+  searchFocusIdx = Math.max(-1, Math.min(items.length - 1, searchFocusIdx + direction));
+  if (searchFocusIdx >= 0) {
+    items[searchFocusIdx].style.background = 'var(--bg-2)';
+    items[searchFocusIdx].scrollIntoView({ block: 'nearest' });
+  }
+}
+
+function activateSearchResult() {
+  const container = document.getElementById('search-results');
+  const items = container.querySelectorAll('.search-result-item');
+  if (searchFocusIdx >= 0 && searchFocusIdx < items.length) {
+    items[searchFocusIdx].click();
+  }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  renderDashboard();
+  renderSidebar();
+  renderRefPanel();
+  SUBJECTS.forEach(s => renderStudyPage(s));
+
+  buildSearchIndex();
+  initTheme();
+
+  setTimeout(() => {
+    initScrollSpy();
+    initPostRender();
+    tryRenderMath();
+  }, 200);
+
+  // Search events
+  const input = document.getElementById('search-input');
+  input.addEventListener('input', e => { searchFocusIdx = -1; doSearch(e.target.value); });
+  input.addEventListener('keydown', e => {
+    if (e.key === 'Escape') { input.value = ''; document.getElementById('search-results').style.display = 'none'; document.getElementById('search-clear').style.display = 'none'; searchFocusIdx = -1; }
+    else if (e.key === 'ArrowDown') { e.preventDefault(); navigateSearch(1); }
+    else if (e.key === 'ArrowUp') { e.preventDefault(); navigateSearch(-1); }
+    else if (e.key === 'Enter') { e.preventDefault(); activateSearchResult(); }
+  });
+  document.getElementById('search-clear').onclick = () => { input.value=''; document.getElementById('search-results').style.display='none'; document.getElementById('search-clear').style.display='none'; };
+  document.addEventListener('click', e => { if (!e.target.closest('#search-wrap')) { document.getElementById('search-results').style.display='none'; } });
+
+  // Sidebar toggle (desktop + mobile)
+  const savedSidebar = localStorage.getItem('sidebar');
+  if (savedSidebar === 'collapsed' && window.innerWidth > 900) {
+    document.body.classList.add('sidebar-collapsed');
+  }
+  document.getElementById('sidebar-toggle').onclick = () => {
+    if (window.innerWidth <= 900) {
+      document.getElementById('sidebar').classList.toggle('open');
+      document.getElementById('overlay').classList.toggle('visible');
+    } else {
+      document.body.classList.toggle('sidebar-collapsed');
+      localStorage.setItem('sidebar', document.body.classList.contains('sidebar-collapsed') ? 'collapsed' : 'expanded');
+    }
+  };
+
+  // Mobile search toggle
+  document.getElementById('mobile-search-toggle').onclick = () => {
+    const input = document.getElementById('search-input');
+    const isOpen = input.classList.toggle('mobile-open');
+    if (isOpen) { input.focus(); }
+    else { input.value = ''; input.classList.remove('mobile-open'); document.getElementById('search-results').style.display = 'none'; document.getElementById('search-clear').style.display = 'none'; }
+  };
+});
+
+
+</script>
+</body>
+</html>
