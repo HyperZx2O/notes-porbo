@@ -264,7 +264,6 @@ body {
 }
 .sidebar-toc a:hover { color: var(--text-0); border-left-color: var(--border-hi); background: var(--bg-2); }
 .sidebar-toc a.active { color: var(--gold); border-left-color: var(--gold); background: var(--gold-glow); }
-.sidebar-toc a { transition: color 0.3s ease, border-left-color 0.3s ease, background 0.3s ease; }
 
 .sidebar-home {
   display: flex; align-items: center; gap: 8px;
@@ -635,7 +634,7 @@ tr:hover td { background: var(--bg-3); }
 }
 .ref-empty { text-align: center; padding: 40px 16px; color: var(--text-3); font-size: 13px; line-height: 1.6; }
 .ref-empty .ref-empty-icon { font-size: 28px; margin-bottom: 12px; opacity: 0.4; }
-.ref-formula { background: var(--bg-2); border-radius: var(--radius-sm); padding: 8px 10px; margin-bottom: 6px; font-family: var(--font-mono); font-size: 12px; color: var(--text-0); }
+.ref-formula { background: var(--bg-2); border-radius: var(--radius-sm); padding: 8px 10px; margin-bottom: 6px; font-size: 12px; color: var(--text-0); }
 
 /* ── BACK TO TOP ── */
 #back-top {
@@ -705,15 +704,58 @@ tr:hover td { background: var(--bg-3); }
 
 /* ── OVERLAY ── */
 #overlay {
-  display: none; position: fixed; inset: 0; z-index: 80;
-  background: rgba(0,0,0,0);
-  transition: background 0.25s ease;
+  visibility: hidden; opacity: 0; position: fixed; inset: 0; z-index: 80;
+  background: rgba(0,0,0,0.5);
+  transition: opacity 0.25s ease, visibility 0.25s ease;
+  pointer-events: none;
 }
-#overlay.visible { display: block; background: rgba(0,0,0,0.5); }
+#overlay.visible { visibility: visible; opacity: 1; pointer-events: auto; }
 
 /* ── SIDEBAR COLLAPSED (desktop) ── */
 .sidebar-collapsed #sidebar { transform: translateX(-260px); }
 .sidebar-collapsed #main { margin-left: 0; }
+
+/* ── INLINE SEMANTIC SPANS (from imported content) ── */
+span.must { color: var(--gold); font-weight: 600; }
+span.important { color: var(--teal); font-weight: 600; }
+span.warn { color: var(--red); font-weight: 600; }
+
+/* ── DIAGRAM BLOCKS ── */
+.diagram {
+  background: var(--bg-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px 20px;
+  margin: 16px 0;
+  overflow-x: auto;
+  max-width: 70ch;
+}
+.diagram pre { font-family: var(--font-mono); font-size: 13px; color: var(--text-0); white-space: pre; line-height: 1.5; }
+
+/* ── H3 HEADINGS WITHIN SECTION CONTENT ── */
+.content-body h3 {
+  font-family: var(--font-serif);
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text-0);
+  margin-top: 24px;
+  margin-bottom: 8px;
+  padding-bottom: 4px;
+  border-bottom: 1px solid var(--border);
+}
+.content-body h3:first-child { margin-top: 0; }
+
+/* ── H4 HEADINGS WITHIN SECTION CONTENT ── */
+.content-body h4 {
+  font-family: var(--font-sans);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--teal);
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  margin-top: 18px;
+  margin-bottom: 6px;
+}
 </style>
 </head>
 <body>
@@ -2909,7 +2951,7 @@ X Q₁   0  1
 <li><span class="warn">Asynchronous Sequential Circuits</span>: Behavior depends on the order of input changes and propagation delays. No global clock.</li>
 </ol>
 
-<div class="callout must">Synchronous circuits are easier to design and are the standard in modern digital design.</div>
+<div class="callout callout-must">Synchronous circuits are easier to design and are the standard in modern digital design.</div>
 
 <h3>Memory Element Basics</h3>
 <ul>
@@ -2949,7 +2991,7 @@ X Q₁   0  1
 <li>$/S = /R = 0$ → invalid.</li>
 </ul>
 
-<div class="callout diff"><strong>Key Difference:</strong> NOR-based uses active-high S, R; NAND-based uses active-low $/S, /R$.</div>
+<div class="callout callout-diff"><strong>Key Difference:</strong> NOR-based uses active-high S, R; NAND-based uses active-low $/S, /R$.</div>
 
 <h3>Gated SR Latch (with Control/Clock Input)</h3>
 
@@ -3014,7 +3056,7 @@ X Q₁   0  1
 </table>
 
 <p><strong>JK Characteristic Equation:</strong></p>
-<div class="formula">$Q(t+1) = J \\cdot Q'(t) + K' \\cdot Q(t)$</div>`
+<div class="formula-block"><div class="formula-body">$Q(t+1) = J \\cdot Q'(t) + K' \\cdot Q(t)$</div></div>`
       },
 
       { num: '3', title: 'Flip-Flops and Their Conversions',
@@ -3040,14 +3082,14 @@ X Q₁   0  1
 </table>
 
 <p><strong>Characteristic Equation:</strong></p>
-<div class="formula">$Q(t+1) = T \\oplus Q$</div>
+<div class="formula-block"><div class="formula-body">$Q(t+1) = T \\oplus Q$</div></div>
 
 <h3>Flip-Flop Conversions</h3>
 <table>
 <thead><tr><th>Conversion</th><th>Equation</th></tr></thead>
 <tbody>
 <tr><td>D to JK</td><td>$D = J Q' + K' Q$</td></tr>
-<tr><td>JK to D</td><td>$K = D, \\; J = D'$</td></tr>
+<tr><td>JK to D</td><td>$J = D, \\; K = D'$</td></tr>
 <tr><td>JK to T</td><td>$T = J K$ (tie J and K together)</td></tr>
 <tr><td>D to T</td><td>$D = T \\oplus Q$</td></tr>
 <tr><td>T to D</td><td>$T = D \\oplus Q$</td></tr>
@@ -3089,7 +3131,7 @@ X Q₁   0  1
 </tbody>
 </table>
 
-<div class="callout must"><strong>Must Memorize:</strong> Characteristic equations: D → $Q' = D$, JK → $Q' = J Q' + K' Q$, T → $Q' = T \\oplus Q$. SR → $Q' = S + R' Q$ (with SR = 0).</div>`
+<div class="callout callout-must"><strong>Must Memorize:</strong> Characteristic equations: D → $Q' = D$, JK → $Q' = J Q' + K' Q$, T → $Q' = T \\oplus Q$. SR → $Q' = S + R' Q$ (with SR = 0).</div>`
       },
 
       { num: '4', title: 'Sequential Circuit Analysis',
@@ -3337,7 +3379,7 @@ X Q₁   0  1
 <li>Implement.</li>
 </ol>
 
-<div class="callout note"><strong>Source notes:</strong> Chapter 5 is a comprehensive textbook chapter on synchronous sequential logic, the core of any digital logic design course. The examples covered (sequence detector, modulo-N counter, BCD-to-Excess-3) reflect the typical Mano textbook organization.</div>`
+<div class="callout callout-note"><strong>Source notes:</strong> Chapter 5 is a comprehensive textbook chapter on synchronous sequential logic, the core of any digital logic design course. The examples covered (sequence detector, modulo-N counter, BCD-to-Excess-3) reflect the typical Mano textbook organization.</div>`
       }
   ]
   },
@@ -3423,7 +3465,7 @@ X Q₁   0  1
 <li><strong>Hold:</strong> Apply S = 0, R = 0.</li>
 </ul>
 
-<div class="callout must"><strong>Must Memorize:</strong> The characteristic equation $Q(t+1) = S + R' \\cdot Q$, with the constraint $S R = 0$ to avoid the forbidden state.</div>`
+<div class="callout callout-must"><strong>Must Memorize:</strong> The characteristic equation $Q(t+1) = S + R' \\cdot Q$, with the constraint $S R = 0$ to avoid the forbidden state.</div>`
       },
 
       { num: '3', title: 'Basic SR Latch with NAND Gates',
@@ -3447,7 +3489,7 @@ X Q₁   0  1
 </tbody>
 </table>
 
-<div class="callout diff"><strong>Key Difference vs NOR-based:</strong> NAND-based uses active-low inputs. The "memory" state is $/S = /R = 1$ (rather than S = R = 0). The "forbidden" state is $/S = /R = 0$.</div>`
+<div class="callout callout-diff"><strong>Key Difference vs NOR-based:</strong> NAND-based uses active-low inputs. The "memory" state is $/S = /R = 1$ (rather than S = R = 0). The "forbidden" state is $/S = /R = 0$.</div>`
       },
 
       { num: '4', title: 'Gated SR Latch',
@@ -3551,7 +3593,7 @@ X Q₁   0  1
 </table>
 
 <h3>Characteristic Equation</h3>
-<div class="formula">$Q(t+1) = J \\cdot Q' + K' \\cdot Q$</div>
+<div class="formula-block"><div class="formula-body">$Q(t+1) = J \\cdot Q' + K' \\cdot Q$</div></div>
 
 <h3>Conversion to T Flip-Flop</h3>
 <ul>
@@ -3565,7 +3607,7 @@ X Q₁   0  1
 <li>Then $Q(t+1) = D \\cdot Q' + D \\cdot Q = D \\cdot (Q' + Q) = D$. ✓</li>
 </ul>
 
-<div class="callout must"><strong>Must Memorize:</strong> JK characteristic equation $Q(t+1) = J Q' + K' Q$ and the conversion $J = D$, $K = D'$ for a D flip-flop.</div>`
+<div class="callout callout-must"><strong>Must Memorize:</strong> JK characteristic equation $Q(t+1) = J Q' + K' Q$ and the conversion $J = D$, $K = D'$ for a D flip-flop.</div>`
       },
 
       { num: '7', title: 'Edge-Triggered Flip-Flops',
@@ -3673,7 +3715,7 @@ X Q₁   0  1
 </table>
 <p>(Because $R = Q \\cdot Q_{next}'$ and $S = Q' \\cdot Q_{next}$ for SR; both have don't-cares when the value doesn't need to change or set.)</p>
 
-<div class="callout must"><strong>Must Memorize:</strong> All four excitation tables above.</div>
+<div class="callout callout-must"><strong>Must Memorize:</strong> All four excitation tables above.</div>
 
 <h3>Designing With Excitation Tables</h3>
 <ol>
@@ -3730,7 +3772,7 @@ X Q₁   0  1
 <li>Two flip-flops in series (a 2-flop synchronizer) synchronize an asynchronous input to a clocked system.</li>
 </ul>
 
-<div class="callout warn"><strong>Common Confusion/Mistake:</strong> Don't confuse flip-flops with latches — flip-flops are edge-triggered; latches are level-sensitive. The same flip-flop type (e.g., D) can be implemented as either a latch (transparency) or an edge-triggered device (depending on internal construction).</div>`
+<div class="callout callout-warn"><strong>Common Confusion/Mistake:</strong> Don't confuse flip-flops with latches — flip-flops are edge-triggered; latches are level-sensitive. The same flip-flop type (e.g., D) can be implemented as either a latch (transparency) or an edge-triggered device (depending on internal construction).</div>`
       }
   ]
   }
@@ -3874,12 +3916,11 @@ function sidebarToggle(id) {
   const toc = document.getElementById(`sb-toc-${id}`);
   const subj = document.getElementById(`sb-subj-${id}`);
   const isOpen = toc.classList.contains('open');
-  document.querySelectorAll('.sidebar-toc').forEach(t => { t.classList.remove('open'); t.setAttribute('aria-expanded', 'false'); });
+  document.querySelectorAll('.sidebar-toc').forEach(t => t.classList.remove('open'));
   document.querySelectorAll('.sidebar-subject').forEach(s => { s.classList.remove('open'); s.setAttribute('aria-expanded', 'false'); });
   if (!isOpen) {
     toc.classList.add('open');
     subj.classList.add('open');
-    toc.setAttribute('aria-expanded', 'true');
     subj.setAttribute('aria-expanded', 'true');
   }
   showPage(id);

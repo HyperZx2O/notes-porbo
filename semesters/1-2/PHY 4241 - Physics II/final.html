@@ -6,7 +6,11 @@
 <title>PHY 4241 — Physics II Study Guide</title>
 <script>
   // Set the theme before first paint so saved preference doesn't flash to dark first.
-  document.documentElement.setAttribute('data-theme', localStorage.getItem('theme') || 'dark');
+  try {
+    document.documentElement.setAttribute('data-theme', localStorage.getItem('theme') || 'dark');
+  } catch(e) {
+    document.documentElement.setAttribute('data-theme', 'dark');
+  }
 </script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=IBM+Plex+Serif:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
@@ -388,6 +392,7 @@ body {
   font-weight: 600; color: var(--text-0); line-height: 1.2;
   overflow-wrap: anywhere; min-width: 0;
 }
+.src-note,
 .study-header .src-note {
   font-size: 11px; color: var(--text-3); margin-top: 6px; font-family: var(--font-mono);
   letter-spacing: .04em;
@@ -711,7 +716,7 @@ tr:hover td { background: var(--bg-3); }
 <!-- HEADER -->
 <header id="header">
   <button class="hdr-btn" id="sidebar-toggle" aria-label="Toggle sidebar"><svg class="icon" viewBox="0 0 24 24"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg></button>
-  <a id="header-logo" href="#" onclick="showPage('home'); return false;">
+  <a id="header-logo" href="javascript:void(0)" onclick="showPage('home')">
     <span class="course-code">PHY 4241</span>
     <span class="course-name">Physics II</span>
   </a>
@@ -730,7 +735,7 @@ tr:hover td { background: var(--bg-3); }
 
 <!-- SIDEBAR -->
 <div id="sidebar">
-  <a class="sidebar-home" href="#" onclick="showPage('home'); closeSidebar(); return false;">
+  <a class="sidebar-home" href="javascript:void(0)" onclick="showPage('home'); closeSidebar();">
     <svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M3 12l9-9 9 9"/><path d="M5 10v10h14V10"/></svg>
     Dashboard
   </a>
@@ -1184,7 +1189,7 @@ function renderStudyPage(subj) {
       <div class="src-note">Source: ${subj.source}</div>
     </div>
     <div class="breadcrumb">
-      <a href="#" onclick="showPage('home');return false">Dashboard</a>
+      <a href="javascript:void(0)" onclick="showPage('home')">Dashboard</a>
       <span><svg class="icon icon-sm" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></span>
       <span>${subj.title}</span>
     </div>
@@ -1209,12 +1214,7 @@ function renderStudyPage(subj) {
   html += `</div>`; // close study-content
   page.innerHTML = html;
 
-  // Wrap formula-body content in $ delimiters for KaTeX, then render
-  page.querySelectorAll('.formula-body').forEach(el => {
-    if (!el.querySelector('.katex') && el.textContent.trim()) {
-      el.innerHTML = '$' + el.textContent.trim() + '$';
-    }
-  });
+  // formula-body divs already contain $$...$$ — just render the whole page
   if (typeof renderMathInElement !== 'undefined') {
     renderMathInElement(page, {
       delimiters: [
@@ -1290,7 +1290,7 @@ function toggleRefPanel() {
   panel.classList.toggle('open');
   if (panel.classList.contains('open')) {
     content.style.animation = 'none';
-    content.offsetHeight;
+    void content.offsetHeight; // force reflow to restart animation
     content.style.animation = '';
   }
 }
@@ -1375,24 +1375,28 @@ function initScrollSpy() {
 // ══════════════════════════════════════════════════════
 function initTheme() {
   const btn = document.getElementById('theme-toggle');
-  const saved = localStorage.getItem('theme') || 'dark';
+  let saved = 'dark';
+  try { saved = localStorage.getItem('theme') || 'dark'; } catch(e) {}
   document.documentElement.setAttribute('data-theme', saved);
-  updateThemeBtn(btn, saved);
+  updateThemeBtn(btn, saved, false);
   btn.onclick = () => {
     const cur = document.documentElement.getAttribute('data-theme');
     const next = cur === 'dark' ? 'light' : 'dark';
     document.documentElement.setAttribute('data-theme', next);
-    localStorage.setItem('theme', next);
-    updateThemeBtn(btn, next);
+    try { localStorage.setItem('theme', next); } catch(e) {}
+    updateThemeBtn(btn, next, true);
   };
 }
 
-function updateThemeBtn(btn, theme) {
+function updateThemeBtn(btn, theme, animate) {
   const sunSvg = '<svg class="icon icon-sm" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>';
   const moonSvg = '<svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>';
   btn.innerHTML = theme === 'dark' ? sunSvg + ' Light' : moonSvg + ' Dark';
-  document.body.classList.add('theme-transitioning');
-  setTimeout(() => document.body.classList.remove('theme-transitioning'), 350);
+  // Only animate on user-triggered toggle, not on initial load
+  if (animate) {
+    document.body.classList.add('theme-transitioning');
+    setTimeout(() => document.body.classList.remove('theme-transitioning'), 350);
+  }
 }
 
 // ══════════════════════════════════════════════════════
@@ -1400,6 +1404,7 @@ function updateThemeBtn(btn, theme) {
 // ══════════════════════════════════════════════════════
 window.addEventListener('scroll', () => {
   const btn = document.getElementById('back-top');
+  if (!btn) return;
   if (window.scrollY > 400) btn.classList.add('visible');
   else btn.classList.remove('visible');
 });
@@ -1521,17 +1526,19 @@ document.addEventListener('DOMContentLoaded', () => {
   document.addEventListener('click', e => { if (!e.target.closest('#search-wrap')) { document.getElementById('search-results').style.display='none'; } });
 
   // Sidebar toggle (desktop + mobile)
-  const savedSidebar = localStorage.getItem('sidebar');
-  if (savedSidebar === 'collapsed' && window.innerWidth > 900) {
-    document.body.classList.add('sidebar-collapsed');
-  }
+  try {
+    const savedSidebar = localStorage.getItem('sidebar');
+    if (savedSidebar === 'collapsed' && window.innerWidth > 900) {
+      document.body.classList.add('sidebar-collapsed');
+    }
+  } catch(e) {}
   document.getElementById('sidebar-toggle').onclick = () => {
     if (window.innerWidth <= 900) {
       document.getElementById('sidebar').classList.toggle('open');
       document.getElementById('overlay').classList.toggle('visible');
     } else {
       document.body.classList.toggle('sidebar-collapsed');
-      localStorage.setItem('sidebar', document.body.classList.contains('sidebar-collapsed') ? 'collapsed' : 'expanded');
+      try { localStorage.setItem('sidebar', document.body.classList.contains('sidebar-collapsed') ? 'collapsed' : 'expanded'); } catch(e) {}
     }
   };
 
