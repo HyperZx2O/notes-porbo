@@ -2,28 +2,34 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="color-scheme" content="light dark">
+  <meta name="description" content="Notes Porbo — IUT study dashboard, organized by semester.">
+  <meta name="theme-color" content="#f5f1e8" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#1a1815" media="(prefers-color-scheme: dark)">
   <link rel="icon" type="image/svg+xml" href="favicon.svg">
   <script data-goatcounter="https://hyperzx20.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
   <title>Notes Porbo</title>
-  <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@800&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&display=swap">
+  <link rel="stylesheet" href="assets/css/style.css?v=8">
 </head>
 <body>
 
   <header class="masthead">
     <h1 class="wordmark">Notes <em>Porbo</em></h1>
     <div class="search-wrap">
-      <a href="https://drive.google.com/drive/u/1/folders/1M_1z8t7hDfQUgv0BBw3xt6wj1j-iRT9I" class="drive-external" target="_blank" rel="noopener noreferrer">DRIVE</a>
-      <input type="text" id="search-input" placeholder="Search courses" readonly aria-label="Search courses or files">
+      <a href="https://drive.google.com/drive/u/1/folders/1M_1z8t7hDfQUgv0BBw3xt6wj1j-iRT9I" class="drive-external" target="_blank" rel="noopener noreferrer" aria-label="Open shared Drive folder">DRIVE</a>
+      <input type="text" id="search-input" placeholder="Search courses and files…" readonly aria-label="Search courses or files">
       <button type="button" class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode">DARK</button>
-      <button type="button" class="drive-link" id="drive-btn" aria-label="Connect Google Drive">
+      <span class="drive-link drive-status" id="drive-btn" aria-hidden="true">
         <svg width="22" height="22" viewBox="0 0 48 48" aria-hidden="true">
           <polygon points="24,4 8,30 40,30" fill="currentColor"/>
           <polygon points="8,30 16,44 32,44 24,30" fill="currentColor" opacity="0.65"/>
           <polygon points="40,30 32,44 24,30" fill="currentColor" opacity="0.35"/>
         </svg>
-      </button>
+      </span>
     </div>
   </header>
 
@@ -36,6 +42,6 @@
     <p>Notes Porbo &copy; 2026 <span class="footer-sep">/</span> <button class="changelog-btn" id="stats-btn">Stats</button> <span class="footer-sep">/</span> <button class="changelog-btn" id="bookmarks-btn">Bookmarks</button> <span class="footer-sep">/</span> <button class="changelog-btn" id="changelog-btn">Changelog</button></p>
   </footer>
 
-  <script src="assets/js/main.js?v=6"></script>
+  <script src="assets/js/main.js?v=7"></script>
 </body>
 </html>

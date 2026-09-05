@@ -376,7 +376,7 @@ var SearchModal = {
     document.getElementById("search-modal-close").addEventListener("click", function () { self.close(); });
     o.addEventListener("click", function (e) { if (e.target === o) self.close(); });
 
-    this.input.addEventListener("input", function () { self.search(this.value); });
+    this.input.addEventListener("input", function () { self.scheduleSearch(this.value); });
 
     this.input.addEventListener("keydown", function (e) {
       if (e.key === "Escape") { self.close(); return; }
@@ -404,6 +404,35 @@ var SearchModal = {
     this.activeIndex = -1;
   },
 
+  _index: null,
+  _debounceT: 0,
+
+  buildIndex: function () {
+    if (this._index || !COURSES) return;
+    var idx = [];
+    Object.keys(COURSES).forEach(function (sem) {
+      COURSES[sem].forEach(function (course) {
+        course.files.forEach(function (file) {
+          idx.push({
+            semester: sem,
+            course: course.name,
+            file: file,
+            href: getCourseDir(sem, course.name) + "/" + file,
+            hay: (course.name + " " + file).toLowerCase(),
+          });
+        });
+      });
+    });
+    this._index = idx;
+  },
+
+  scheduleSearch: function (query) {
+    var self = this;
+    if (!query.trim()) { this.search(""); return; }
+    clearTimeout(this._debounceT);
+    this._debounceT = setTimeout(function () { self.search(query); }, 90);
+  },
+
   search: function (query) {
     query = query.trim().toLowerCase();
     this.results = [];
@@ -414,48 +443,50 @@ var SearchModal = {
     }
 
     if (!COURSES) return;
+    this.buildIndex();
 
-    Object.keys(COURSES).forEach(function (sem) {
-      COURSES[sem].forEach(function (course) {
-        var courseMatch = course.name.toLowerCase().includes(query);
-        course.files.forEach(function (file) {
-          var fileMatch = file.toLowerCase().includes(query);
-          if (courseMatch || fileMatch) {
-            this.results.push({
-              semester: sem,
-              course: course.name,
-              file: file,
-              href: getCourseDir(sem, course.name) + "/" + file,
-              matchType: fileMatch ? "file" : "course",
-            });
-          }
-        }, this);
-      }, this);
-    }, this);
+    for (var i = 0; i < this._index.length; i++) {
+      var it = this._index[i];
+      if (it.hay.indexOf(query) >= 0) {
+        this.results.push({
+          semester: it.semester,
+          course: it.course,
+          file: it.file,
+          href: it.href,
+          matchType: it.file.toLowerCase().indexOf(query) >= 0 ? "file" : "course",
+        });
+      }
+    }
 
     this.renderResults(query);
   },
 
   renderResults: function (query) {
+    var commit;
     if (this.results.length === 0) {
-      this.body.innerHTML = '<div class="search-no-results">No results found</div>';
-      this.activeIndex = -1;
-      return;
+      commit = function () { this.body.innerHTML = '<div class="search-no-results">No results found</div>'; }.bind(this);
+    } else {
+      var html = "";
+      var q = query.toLowerCase();
+      for (var i = 0; i < this.results.length; i++) {
+        var r = this.results[i];
+        var nameLabel = r.file.replace(/\.html$/, "").replace(/-/g, " ");
+        var nameHighlighted = highlightText(nameLabel, q);
+        var courseHighlighted = highlightText(r.course, q);
+        html += '<a class="search-result" data-index="' + i + '" href="' + r.href + '">'
+          + '<span class="search-result-path">' + r.semester + ' / ' + r.course + '</span>'
+          + '<span class="search-result-name">' + nameHighlighted + '</span>'
+          + '</a>';
+      }
+      commit = function () { this.body.innerHTML = html; }.bind(this);
     }
-
-    var html = "";
-    var q = query.toLowerCase();
-    for (var i = 0; i < this.results.length; i++) {
-      var r = this.results[i];
-      var nameLabel = r.file.replace(/\.html$/, "").replace(/-/g, " ");
-      var nameHighlighted = highlightText(nameLabel, q);
-      var courseHighlighted = highlightText(r.course, q);
-      html += '<a class="search-result" data-index="' + i + '" href="' + r.href + '">'
-        + '<span class="search-result-path">' + r.semester + ' / ' + r.course + '</span>'
-        + '<span class="search-result-name">' + nameHighlighted + '</span>'
-        + '</a>';
+    // Progressive enhancement: morph list when supported, plain swap otherwise.
+    if (document.startViewTransition) {
+      try { document.startViewTransition(commit); }
+      catch (e) { commit(); }
+    } else {
+      commit();
     }
-    this.body.innerHTML = html;
     this.activeIndex = -1;
 
     var self = this;
@@ -1018,36 +1049,6 @@ function computeStatsHTML() {
     freshnessHTML += '<div class="stats-row" style="border:none;padding-top:0"><span></span><span class="stats-meta">' + ago + '</span></div>';
   }
 
-  var popularHTML = '<div class="stats-row"><span>Loading popular files…</span><span></span></div>';
-  fetch('https://hyperzx20.goatcounter.com/counter//hits.json?event=true')
-    .then(function(r) { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
-    .then(function(hits) {
-      var body = document.getElementById('stats-body');
-      if (!body) return;
-      var popularEl = body.querySelector('.stats-popular');
-      if (!popularEl) return;
-      if (!hits || hits.length === 0) {
-        popularEl.innerHTML = '<div class="stats-row"><span>No data yet</span><span></span></div>';
-        return;
-      }
-      var html = '';
-      var shown = 0;
-      hits.forEach(function(h) {
-        if (shown >= 5) return;
-        if (!h.title || h.count < 1) return;
-        shown++;
-        html += '<div class="stats-row"><span>' + shown + '. ' + h.title + '</span><span>' + h.count + '×</span></div>';
-      });
-      if (!html) html = '<div class="stats-row"><span>No data yet</span><span></span></div>';
-      popularEl.innerHTML = html;
-    })
-    .catch(function() {
-      var body = document.getElementById('stats-body');
-      if (!body) return;
-      var popularEl = body.querySelector('.stats-popular');
-      if (popularEl) popularEl.innerHTML = '<div class="stats-row"><span>Unavailable</span><span></span></div>';
-    });
-
   return '<div class="stats-section">'
     + '<div class="stats-row"><span>Courses</span><span>' + courseCount + '</span></div>'
     + '<div class="stats-row" style="border:none"><span>Files</span><span>' + total + '</span></div>'
@@ -1067,10 +1068,6 @@ function computeStatsHTML() {
     + '<div class="stats-section">'
     + '<h3>Freshness</h3>'
     + freshnessHTML
-    + '</div>'
-    + '<div class="stats-section">'
-    + '<h3>Popular</h3>'
-    + '<div class="stats-popular">' + popularHTML + '</div>'
     + '</div>';
 }
 

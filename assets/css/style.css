@@ -7,7 +7,29 @@
  */
 
 @import url("tokens.css");
-@import url("https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@800&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&display=swap");
+
+::selection {
+  background: var(--color-accent);
+  color: var(--color-paper);
+}
+
+:root {
+  scrollbar-color: var(--color-rule) var(--color-paper);
+}
+
+::-webkit-scrollbar {
+  width: 12px;
+  height: 12px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-rule);
+  border: 3px solid var(--color-paper);
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-paper);
+}
 
 *,
 *::before,
@@ -50,10 +72,10 @@ body.no-scroll {
 
 .masthead .wordmark {
   font-family: var(--font-display);
-  font-size: var(--text-xl);
+  font-size: var(--text-2xl);
   font-weight: 800;
-  line-height: 1.1;
-  letter-spacing: -0.02em;
+  line-height: 1;
+  letter-spacing: -0.03em;
   text-transform: uppercase;
   color: var(--color-ink);
   overflow-wrap: anywhere;
@@ -128,6 +150,11 @@ button.drive-link {
   color: var(--color-accent);
 }
 
+span.drive-link {
+  pointer-events: none;
+  cursor: default;
+}
+
 .theme-toggle {
   font-family: var(--font-mono);
   font-size: var(--text-xs);
@@ -169,6 +196,11 @@ button.drive-link {
   color: var(--color-ink);
   border: var(--border-thick) solid var(--color-rule);
   padding: var(--space-xs) var(--space-sm);
+  height: 2.5rem;
+  box-sizing: border-box;
+  display: inline-grid;
+  place-items: center;
+  line-height: 1;
   transition: color var(--dur-fast) var(--ease-out), border-color var(--dur-fast) var(--ease-out);
   flex-shrink: 0;
 }
@@ -231,7 +263,6 @@ button.drive-link {
   max-height: 80vh;
   display: flex;
   flex-direction: column;
-  transition: max-width var(--dur-fast) var(--ease-out), max-height var(--dur-fast) var(--ease-out);
 }
 
 .drive-modal-panel.preview {
@@ -517,13 +548,14 @@ button.drive-link {
 
 .dashboard-header h2 {
   font-family: var(--font-display);
-  font-size: var(--text-2xl);
+  font-size: var(--text-3xl);
   font-weight: 800;
-  line-height: 1.15;
-  letter-spacing: -0.02em;
+  line-height: 1;
+  letter-spacing: -0.03em;
   text-transform: uppercase;
   overflow-wrap: anywhere;
   min-width: 0;
+  text-wrap: balance;
 }
 
 .dashboard-header p {
@@ -631,22 +663,26 @@ button.drive-link {
   color: var(--color-accent);
 }
 
-/* ponytail: max-height animation is a layout property — Hallmark wants
-   transform/opacity only. A grid-template-rows 0fr→1fr swap avoids layout
-   thrashing on modern browsers but still animates layout. This works,
-   feels instant, and is zero-JS. Upgrade if you need content to push
-   sibling cards without a reflow cost. */
+/* ponytail: grid-rows 0fr→1fr avoids max-height layout thrash,
+   animates transform-safe grid, zero-JS. Visibility hides the
+   collapsed strip so padding/border can't peek out. */
 .course-files {
-  max-height: 0;
+  display: grid;
+  grid-template-rows: 0fr;
   overflow: hidden;
-  transition: max-height var(--dur-slow) var(--ease-out);
+  visibility: hidden;
+  transition: grid-template-rows var(--dur-slow) var(--ease-out), visibility 0s linear var(--dur-slow);
 }
 
 .course-card.expanded .course-files {
-  max-height: 500px;
+  grid-template-rows: 1fr;
+  visibility: visible;
+  transition: grid-template-rows var(--dur-slow) var(--ease-out), visibility 0s;
 }
 
 .course-files-inner {
+  overflow: hidden;
+  min-height: 0;
   border-top: 1px solid var(--color-rule-light);
   padding: var(--space-sm) var(--space-lg) var(--space-md);
 }
@@ -1271,6 +1307,93 @@ button.drive-link {
   color: var(--color-accent);
 }
 
+/* ─── Harden + adapt + motion feedback (steps 3/4/7/8/10) ─── */
+
+body {
+  padding-left: env(safe-area-inset-left);
+  padding-right: env(safe-area-inset-right);
+}
+
+.dashboard {
+  max-width: 76rem;
+  margin-inline: auto;
+}
+
+.dashboard-header p,
+.course-card-header h3,
+.drive-modal-title,
+.search-result-name {
+  hyphens: auto;
+}
+
+.course-card-header:active,
+.semester-tab:active,
+.theme-toggle:active,
+.drive-external:active {
+  transform: scale(0.97);
+}
+
+.course-card.expanded .course-card-header h3 {
+  text-decoration: underline;
+  text-decoration-color: var(--color-accent);
+  text-decoration-thickness: 3px;
+  text-underline-offset: 4px;
+}
+
+.drive-modal-img {
+  background: var(--color-paper-2);
+}
+
+[dir="rtl"] .file-link::before,
+[dir="rtl"] .file-download::after {
+  transform: scaleX(-1);
+}
+
+.drive-modal-overlay.open .drive-modal-panel,
+.changelog-overlay.open .changelog-panel,
+.stats-overlay.open .stats-panel,
+.bookmark-overlay.open .bookmark-panel,
+.search-modal-overlay.open .search-modal-panel {
+  animation: overlay-in var(--dur-normal) var(--ease-out);
+}
+
+@keyframes overlay-in {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: none; }
+}
+
+@media (hover: none) {
+  .course-card:hover,
+  .file-link:hover,
+  .semester-tab:hover,
+  .drive-link:hover,
+  .theme-toggle:hover,
+  .drive-external:hover {
+    border-color: var(--color-rule);
+    color: inherit;
+  }
+
+  .course-card:hover {
+    border-color: var(--color-rule);
+  }
+
+  .file-link:hover,
+  .file-link:hover::before {
+    color: var(--color-ink);
+  }
+}
+
+@media (pointer: coarse) {
+  .drive-link,
+  .theme-toggle,
+  .drive-card-btn,
+  .file-download,
+  .bookmark-star {
+    min-width: 44px;
+    min-height: 44px;
+  }
+}
+
 /* ─── Responsive ─── */
 
 @media (max-width: 768px) {
@@ -1436,6 +1559,12 @@ button.drive-link {
   border-left: 3px solid transparent;
   text-decoration: none;
   transition: border-color var(--dur-fast) var(--ease-out), background var(--dur-fast) var(--ease-out);
+  animation: result-in var(--dur-fast) var(--ease-out);
+}
+
+@keyframes result-in {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: none; }
 }
 
 .search-result:hover {
@@ -1512,6 +1641,7 @@ mark {
   *::before,
   *::after {
     transition-duration: 0.01ms !important;
+    transition-delay: 0s !important;
     animation-duration: 0.01ms !important;
   }
 }
