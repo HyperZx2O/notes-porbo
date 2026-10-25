@@ -1,5 +1,5 @@
 {
-  "_refreshedAt": "2026-08-23T05:13:57.270Z",
+  "_refreshedAt": "2026-10-25T14:48:56.885Z",
   "files": [
     {
       "mimeType": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
@@ -663,6 +663,30 @@
     },
     {
       "mimeType": "application/pdf",
+      "id": "1QlTiTmMpItGzRTdUVWUmfgZmvgiV6s1m",
+      "name": "CSE4107_mid_21.pdf",
+      "modifiedTime": "2025-07-26T02:28:12.000Z",
+      "_path": "1-1 CSE'24/CSE 4107 - Structured Programming I/Midterm/CSE4107_mid_21.pdf",
+      "_hasGroup": true
+    },
+    {
+      "mimeType": "application/pdf",
+      "id": "1ZAehO-jqqGkW0rY3GCvoHWpHacA3Knvs",
+      "name": "CSE4107_mid_22.pdf",
+      "modifiedTime": "2025-07-26T02:10:56.000Z",
+      "_path": "1-1 CSE'24/CSE 4107 - Structured Programming I/Midterm/CSE4107_mid_22.pdf",
+      "_hasGroup": true
+    },
+    {
+      "mimeType": "text/plain",
+      "id": "1ibJEqZXRi1TzvjjToZ04tDVtOONM8kvi",
+      "name": "Online Resources.txt",
+      "modifiedTime": "2025-07-17T05:59:44.000Z",
+      "_path": "1-1 CSE'24/CSE 4107 - Structured Programming I/Midterm/Online Resources.txt",
+      "_hasGroup": true
+    },
+    {
+      "mimeType": "application/pdf",
       "id": "1bWufSl3vbY7VrLJxjhFLfiWBL6a_ZbqW",
       "name": "0.0 Quiz2 Samples Questions.pdf",
       "modifiedTime": "2026-06-20T15:53:17.000Z",
@@ -723,6 +747,22 @@
       "name": "Quiz2.pdf",
       "modifiedTime": "2026-04-06T19:02:45.000Z",
       "_path": "1-1 CSE'24/CSE 4107 - Structured Programming I/Quiz/Quiz2.pdf",
+      "_hasGroup": true
+    },
+    {
+      "mimeType": "application/pdf",
+      "id": "1EpS5P85QYNEizkI_nR9i3iLt6BgsVKqf",
+      "name": "CSE_4107_slide1(For SWE Also).pdf",
+      "modifiedTime": "2025-07-18T01:19:20.000Z",
+      "_path": "1-1 CSE'24/CSE 4107 - Structured Programming I/Slides/CSE_4107_slide1(For SWE Also).pdf",
+      "_hasGroup": true
+    },
+    {
+      "mimeType": "application/pdf",
+      "id": "1Nx1EzoC_uvbq6vrxJ8aLVDqOlJVF0owv",
+      "name": "CSE_4107_slide2. (For SWE Also)pdf.pdf",
+      "modifiedTime": "2025-07-18T01:19:10.000Z",
+      "_path": "1-1 CSE'24/CSE 4107 - Structured Programming I/Slides/CSE_4107_slide2. (For SWE Also)pdf.pdf",
       "_hasGroup": true
     },
     {
@@ -3295,10 +3335,34 @@
     },
     {
       "mimeType": "application/pdf",
+      "id": "1p0Amfq5eMHjqSiD6rVXfQzVC_NgNv_fy",
+      "name": "CHEM 4241 Final.pdf",
+      "modifiedTime": "2026-10-14T12:45:08.008Z",
+      "_path": "1-2 CSE'24/CHEM 4241 - Chemistry/Final/CHEM 4241 Final.pdf",
+      "_hasGroup": true
+    },
+    {
+      "mimeType": "application/pdf",
+      "id": "15g9DnW8eRJ2jCSHBL81HExi8LGTJr19t",
+      "name": "chem_questions.pdf",
+      "modifiedTime": "2026-09-08T08:20:25.000Z",
+      "_path": "1-2 CSE'24/CHEM 4241 - Chemistry/Final/chem_questions.pdf",
+      "_hasGroup": true
+    },
+    {
+      "mimeType": "application/pdf",
       "id": "1EDgyr1qnv0s4OaHIEnu402u2IPUxkcAM",
       "name": "Chem Notes Final.pdf",
       "modifiedTime": "2026-08-20T15:44:42.362Z",
       "_path": "1-2 CSE'24/CHEM 4241 - Chemistry/Handnotes/Final Term /Chem Notes Final.pdf",
+      "_hasGroup": true
+    },
+    {
+      "mimeType": "application/pdf",
+      "id": "1Jdlmpsh1BMGRGzmk2vrNMiF-AvtdwjJc",
+      "name": "Questions.pdf",
+      "modifiedTime": "2026-08-26T04:34:36.746Z",
+      "_path": "1-2 CSE'24/CHEM 4241 - Chemistry/Handnotes/Final Term /Questions.pdf",
       "_hasGroup": true
     },
     {
@@ -3443,14 +3507,6 @@
       "name": "Electrochemistry.pdf",
       "modifiedTime": "2026-08-17T01:22:02.860Z",
       "_path": "1-2 CSE'24/CHEM 4241 - Chemistry/Slides/Final Term/Electrochemistry.pdf",
-      "_hasGroup": true
-    },
-    {
-      "mimeType": "application/pdf",
-      "id": "1ZzB4GR1TvvubewG7HtCHgKm16aX6LUJD",
-      "name": "Molecular Geometry.pdf",
-      "modifiedTime": "2026-08-22T04:29:27.703Z",
-      "_path": "1-2 CSE'24/CHEM 4241 - Chemistry/Slides/Final Term/Molecular Geometry.pdf",
       "_hasGroup": true
     },
     {
@@ -3991,6 +4047,14 @@
     },
     {
       "mimeType": "application/pdf",
+      "id": "1XbtUFMZFvY7MXE_qPLvC1Xkt7JDmcret",
+      "name": "CSE 4203 Final.pdf",
+      "modifiedTime": "2026-09-24T03:38:08.752Z",
+      "_path": "1-2 CSE'24/CSE 4203 - Discrete Mathematics/CSE 4203 Final.pdf",
+      "_hasGroup": true
+    },
+    {
+      "mimeType": "application/pdf",
       "id": "1_ckY5_KoNcqoMqPV6IgtnuIFsDMA2J47",
       "name": "A01 - Logic, Proofs, and Sets + Contradiction and Induction.pdf",
       "modifiedTime": "2026-04-30T18:29:41.000Z",
@@ -4159,10 +4223,26 @@
     },
     {
       "mimeType": "application/pdf",
-      "id": "1wFumnmvkUB0CbJXKVOF9nA7ACLWkDB52",
-      "name": "CSE 4203 Midterm.pdf",
-      "modifiedTime": "2026-07-06T12:48:29.442Z",
-      "_path": "1-2 CSE'24/CSE 4203 - Discrete Mathematics/Midterm/CSE 4203 Midterm.pdf",
+      "id": "12aNYj3uynLu9ywtRhdl6IRMcT0pKhZcj",
+      "name": "Question.pdf",
+      "modifiedTime": "2026-09-11T09:02:14.433Z",
+      "_path": "1-2 CSE'24/CSE 4203 - Discrete Mathematics/Midterm/Question.pdf",
+      "_hasGroup": true
+    },
+    {
+      "mimeType": "application/vnd.openxmlformats-officedocument.presentationml.presentation",
+      "id": "1HALcqBuqfTLmu7iJl_ncQ-bKryZrR6oe",
+      "name": "ComputerArchitecture.pptx",
+      "modifiedTime": "2026-10-21T03:01:10.100Z",
+      "_path": "1-2 CSE'24/CSE 4203 - Discrete Mathematics/Slides/ComputerArchitecture.pptx",
+      "_hasGroup": true
+    },
+    {
+      "mimeType": "application/zip",
+      "id": "1_ANB7ABGg2zufOIdmvBKCuuH8OABnOEf",
+      "name": "ComputerArchitecture.pptx.zip",
+      "modifiedTime": "2026-10-21T03:20:01.288Z",
+      "_path": "1-2 CSE'24/CSE 4203 - Discrete Mathematics/Slides/ComputerArchitecture.pptx.zip",
       "_hasGroup": true
     },
     {
@@ -4287,6 +4367,14 @@
     },
     {
       "mimeType": "application/pdf",
+      "id": "1KI1QMhivhhXT_5qiXhOj7xVWC-uqXOyU",
+      "name": "CSE 4205 Final.pdf",
+      "modifiedTime": "2026-10-14T12:44:23.795Z",
+      "_path": "1-2 CSE'24/CSE 4205 - Digital Logic Design/CSE 4205 Final.pdf",
+      "_hasGroup": true
+    },
+    {
+      "mimeType": "application/pdf",
       "id": "1mRAPwKLqYmopNcdvfX2xrP334ap0XpE2",
       "name": "Digital Logic And Computer Design By M. Morris Mano (2nd Edition).pdf",
       "modifiedTime": "2026-04-25T05:16:10.078Z",
@@ -4303,10 +4391,34 @@
     },
     {
       "mimeType": "application/pdf",
+      "id": "1dxZvw699UYd4Z9fyXV1Vn_pX3S4OXMN5",
+      "name": "DOC-20260904-WA0000.pdf",
+      "modifiedTime": "2026-09-07T12:36:28.799Z",
+      "_path": "1-2 CSE'24/CSE 4205 - Digital Logic Design/Handnotes/Final /DOC-20260904-WA0000.pdf",
+      "_hasGroup": true
+    },
+    {
+      "mimeType": "application/pdf",
+      "id": "121UvTDK9JwnwV4Zqij3EeNLFij4MWMwL",
+      "name": "DOC-20260905-WA0076.pdf",
+      "modifiedTime": "2026-09-07T12:36:28.266Z",
+      "_path": "1-2 CSE'24/CSE 4205 - Digital Logic Design/Handnotes/Final /DOC-20260905-WA0076.pdf",
+      "_hasGroup": true
+    },
+    {
+      "mimeType": "application/pdf",
+      "id": "1x6Ra-AgXeN0QCR2Y85zvSztzZ4XOB0o2",
+      "name": "DOC-20260905-WA0077.pdf",
+      "modifiedTime": "2026-09-07T12:36:27.819Z",
+      "_path": "1-2 CSE'24/CSE 4205 - Digital Logic Design/Handnotes/Final /DOC-20260905-WA0077.pdf",
+      "_hasGroup": true
+    },
+    {
+      "mimeType": "application/pdf",
       "id": "1Alsiqrdngpdn21xX_piuRmwc8xFkdJ7J",
       "name": "26.04.24 DLD (by Mahir).pdf",
       "modifiedTime": "2026-04-24T16:36:14.143Z",
-      "_path": "1-2 CSE'24/CSE 4205 - Digital Logic Design/Handnotes/26.04.24 DLD (by Mahir).pdf",
+      "_path": "1-2 CSE'24/CSE 4205 - Digital Logic Design/Handnotes/Mid Term/26.04.24 DLD (by Mahir).pdf",
       "_hasGroup": true
     },
     {
@@ -4314,7 +4426,7 @@
       "id": "1cXliKkFPU2lkOtDtLztDJK-GykGWca3G",
       "name": "26.05.05_Logic_Gates.pdf",
       "modifiedTime": "2026-05-07T07:11:59.849Z",
-      "_path": "1-2 CSE'24/CSE 4205 - Digital Logic Design/Handnotes/26.05.05_Logic_Gates.pdf",
+      "_path": "1-2 CSE'24/CSE 4205 - Digital Logic Design/Handnotes/Mid Term/26.05.05_Logic_Gates.pdf",
       "_hasGroup": true
     },
     {
@@ -4322,7 +4434,7 @@
       "id": "1jgMQwZrTyhfkkoiupPMkwo8glUYlhHc3",
       "name": "DLD Notes.pdf",
       "modifiedTime": "2026-08-08T18:49:55.684Z",
-      "_path": "1-2 CSE'24/CSE 4205 - Digital Logic Design/Handnotes/DLD Notes.pdf",
+      "_path": "1-2 CSE'24/CSE 4205 - Digital Logic Design/Handnotes/Mid Term/DLD Notes.pdf",
       "_hasGroup": true
     },
     {
@@ -4330,7 +4442,7 @@
       "id": "1upvKzeKE55L3bnt4CF5zC9L3uzrDQP2L",
       "name": "Slide 01.pdf",
       "modifiedTime": "2026-07-01T18:51:37.609Z",
-      "_path": "1-2 CSE'24/CSE 4205 - Digital Logic Design/Handnotes/Slide 01.pdf",
+      "_path": "1-2 CSE'24/CSE 4205 - Digital Logic Design/Handnotes/Mid Term/Slide 01.pdf",
       "_hasGroup": true
     },
     {
@@ -4338,7 +4450,7 @@
       "id": "1Kk25hEoolY4_mDDFkfPGWALvHwPYYDDc",
       "name": "Slide 02.pdf",
       "modifiedTime": "2026-07-01T18:51:38.028Z",
-      "_path": "1-2 CSE'24/CSE 4205 - Digital Logic Design/Handnotes/Slide 02.pdf",
+      "_path": "1-2 CSE'24/CSE 4205 - Digital Logic Design/Handnotes/Mid Term/Slide 02.pdf",
       "_hasGroup": true
     },
     {
@@ -4346,7 +4458,7 @@
       "id": "1aPU3oCdsneQ82od3XJODd3fiHXvWabpP",
       "name": "Slide 03.pdf",
       "modifiedTime": "2026-07-01T18:51:38.723Z",
-      "_path": "1-2 CSE'24/CSE 4205 - Digital Logic Design/Handnotes/Slide 03.pdf",
+      "_path": "1-2 CSE'24/CSE 4205 - Digital Logic Design/Handnotes/Mid Term/Slide 03.pdf",
       "_hasGroup": true
     },
     {
@@ -4354,7 +4466,7 @@
       "id": "1BZ31A9g3nFQXNxgflWA9Hrp-cXvVT2B5",
       "name": "Slide 04.pdf",
       "modifiedTime": "2026-07-01T18:51:39.172Z",
-      "_path": "1-2 CSE'24/CSE 4205 - Digital Logic Design/Handnotes/Slide 04.pdf",
+      "_path": "1-2 CSE'24/CSE 4205 - Digital Logic Design/Handnotes/Mid Term/Slide 04.pdf",
       "_hasGroup": true
     },
     {
@@ -4362,7 +4474,7 @@
       "id": "1dav25A3thSwEycp0liTUdf2vySQLQ8Zx",
       "name": "Slide 06.pdf",
       "modifiedTime": "2026-07-01T18:51:39.422Z",
-      "_path": "1-2 CSE'24/CSE 4205 - Digital Logic Design/Handnotes/Slide 06.pdf",
+      "_path": "1-2 CSE'24/CSE 4205 - Digital Logic Design/Handnotes/Mid Term/Slide 06.pdf",
       "_hasGroup": true
     },
     {
@@ -4395,6 +4507,14 @@
       "name": "Quiz 2.pdf",
       "modifiedTime": "2026-07-19T05:50:10.000Z",
       "_path": "1-2 CSE'24/CSE 4205 - Digital Logic Design/Quiz/Quiz 2.pdf",
+      "_hasGroup": true
+    },
+    {
+      "mimeType": "application/pdf",
+      "id": "1sNtyCG2WuE81epOxODB0NLlwKWEyLprT",
+      "name": "Quiz 3.pdf",
+      "modifiedTime": "2026-09-07T12:37:47.311Z",
+      "_path": "1-2 CSE'24/CSE 4205 - Digital Logic Design/Quiz/Quiz 3.pdf",
       "_hasGroup": true
     },
     {
@@ -4655,6 +4775,14 @@
     },
     {
       "mimeType": "application/pdf",
+      "id": "1ySZ-HtPVTbRLGsKPkI2AfD1N5BgAW8lB",
+      "name": "HUM 4241 Final.pdf",
+      "modifiedTime": "2026-09-24T03:39:26.833Z",
+      "_path": "1-2 CSE'24/HUM 4241 - Islamic History Science and Culture/Final/HUM 4241 Final.pdf",
+      "_hasGroup": true
+    },
+    {
+      "mimeType": "application/pdf",
       "id": "1tYvGOC6pHTvKb-79eUWW_7FQErygamjT",
       "name": "HUM 4241 Midterm.pdf",
       "modifiedTime": "2026-06-30T17:03:33.170Z",
@@ -4715,6 +4843,14 @@
       "name": "Lecture 05-10.pdf",
       "modifiedTime": "2026-06-25T17:23:09.328Z",
       "_path": "1-2 CSE'24/HUM 4241 - Islamic History Science and Culture/Slides/Lecture 05-10.pdf",
+      "_hasGroup": true
+    },
+    {
+      "mimeType": "application/pdf",
+      "id": "1WiPX_fyu4B_IHL1Ei78uuYvUj-To6x6S",
+      "name": "HUM 4242 Final.pdf",
+      "modifiedTime": "2026-08-24T08:55:46.634Z",
+      "_path": "1-2 CSE'24/HUM 4242 - Arabic II/Final/HUM 4242 Final.pdf",
       "_hasGroup": true
     },
     {
@@ -4983,10 +5119,42 @@
     },
     {
       "mimeType": "application/pdf",
+      "id": "1JIYTnbbM58MBPrzRTc1KRseohFZAyswO",
+      "name": "MathFinal_Sadman.pdf",
+      "modifiedTime": "2026-08-26T04:42:51.737Z",
+      "_path": "1-2 CSE'24/MATH 4241 - Integral Calculus and Differential Equations/Digital Notes/Final/MathFinal_Sadman.pdf",
+      "_hasGroup": true
+    },
+    {
+      "mimeType": "application/pdf",
+      "id": "15z1h9FFVEnzU0RXh36Y6X5mSOOdv2xJx",
+      "name": "Math 4241 Final.pdf",
+      "modifiedTime": "2026-09-24T03:36:52.620Z",
+      "_path": "1-2 CSE'24/MATH 4241 - Integral Calculus and Differential Equations/Final/Math 4241 Final.pdf",
+      "_hasGroup": true
+    },
+    {
+      "mimeType": "application/pdf",
+      "id": "1tz3Lg1jgV817CYEU7ASY4np6fFliYcaB",
+      "name": "MATH4123.pdf",
+      "modifiedTime": "2026-08-28T20:08:50.643Z",
+      "_path": "1-2 CSE'24/MATH 4241 - Integral Calculus and Differential Equations/Final/previous years/MATH4123.pdf",
+      "_hasGroup": true
+    },
+    {
+      "mimeType": "application/pdf",
       "id": "1SjTY9npbMGjt_QKnRBoy-4uqDiF3GZlG",
       "name": "math4241_final_16-17_integralCalculusAndDifferentialEquation.pdf",
       "modifiedTime": "2026-05-11T18:31:28.000Z",
       "_path": "1-2 CSE'24/MATH 4241 - Integral Calculus and Differential Equations/Final/previous years/math4241_final_16-17_integralCalculusAndDifferentialEquation.pdf",
+      "_hasGroup": true
+    },
+    {
+      "mimeType": "application/pdf",
+      "id": "13k1bx6qqt_yFnwlnFdsG6C0ZbGynnACe",
+      "name": "Question s.pdf",
+      "modifiedTime": "2026-08-28T20:10:58.579Z",
+      "_path": "1-2 CSE'24/MATH 4241 - Integral Calculus and Differential Equations/Final/previous years/Question s.pdf",
       "_hasGroup": true
     },
     {
@@ -5334,14 +5502,6 @@
       "_hasGroup": true
     },
     {
-      "mimeType": "application/vnd.google-apps.document",
-      "id": "1zgYpA1EpqsshScoDnJCTAccyb8pv64TIprlkMMSC9lo",
-      "name": "Physics Yt videos",
-      "modifiedTime": "2026-05-09T06:34:41.032Z",
-      "_path": "1-2 CSE'24/PHY 4241 - Physics II/Physics Yt videos",
-      "_hasGroup": true
-    },
-    {
       "mimeType": "application/pdf",
       "id": "1lyjnQnscOiXabZEDDJnEAP0mfNmh42AO",
       "name": "Boyelestad.pdf",
@@ -5363,6 +5523,14 @@
       "name": "Chapter 9-14.pdf",
       "modifiedTime": "2026-08-22T16:17:19.000Z",
       "_path": "1-2 CSE'24/PHY 4241 - Physics II/Final/Chapter 9-14.pdf",
+      "_hasGroup": true
+    },
+    {
+      "mimeType": "application/pdf",
+      "id": "1AumeT9t9MxYzDu9uh9X7mYVeyXNQ6PQe",
+      "name": "PHY 4241 Final.pdf",
+      "modifiedTime": "2026-09-24T04:35:03.865Z",
+      "_path": "1-2 CSE'24/PHY 4241 - Physics II/Final/PHY 4241 Final.pdf",
       "_hasGroup": true
     },
     {
@@ -5463,6 +5631,14 @@
     },
     {
       "mimeType": "application/pdf",
+      "id": "1C9PYr75wVH2nhfS9Xd93wDj4mPII4PQn",
+      "name": "Quiz 4.pdf",
+      "modifiedTime": "2026-08-24T08:56:47.229Z",
+      "_path": "1-2 CSE'24/PHY 4241 - Physics II/Quiz/Quiz 4.pdf",
+      "_hasGroup": true
+    },
+    {
+      "mimeType": "application/pdf",
       "id": "1FodhO6ycPP5p6cl1S0pwWraehwF9i7Ms",
       "name": "1. Introduction to Circuit Elements and Electrical Units.pdf",
       "modifiedTime": "2026-05-30T07:03:40.377Z",
@@ -5515,6 +5691,14 @@
       "name": "Course Outline (Course Plan) Yesitwasthisjagged.pdf",
       "modifiedTime": "2026-04-20T05:26:19.642Z",
       "_path": "1-2 CSE'24/PHY 4242 - Physics II Lab/Course Outline (Course Plan) Yesitwasthisjagged.pdf",
+      "_hasGroup": true
+    },
+    {
+      "mimeType": "application/pdf",
+      "id": "1SSOi5azmROLsH2QU92QkcmxyV2_JRkl7",
+      "name": "Electrical_Viva_QnA.pdf",
+      "modifiedTime": "2026-08-24T09:01:10.075Z",
+      "_path": "1-2 CSE'24/PHY 4242 - Physics II Lab/Final/Electrical_Viva_QnA.pdf",
       "_hasGroup": true
     },
     {
@@ -5606,6 +5790,38 @@
       "_hasGroup": true
     },
     {
+      "mimeType": "image/jpeg",
+      "id": "1srO6FFLali7vvdaR6FJO415CheOqxJ3A",
+      "name": "All experiments.jpeg",
+      "modifiedTime": "2026-08-24T09:00:40.602Z",
+      "_path": "1-2 CSE'24/PHY 4242 - Physics II Lab/Lab Reports/Circuit Implementation in Breadboard/All experiments.jpeg",
+      "_hasGroup": true
+    },
+    {
+      "mimeType": "image/jpeg",
+      "id": "1rPNueBUG19FcoORzsaT-5AbSY1eJVTD1",
+      "name": "Experiment 02.jpeg",
+      "modifiedTime": "2026-08-24T08:59:13.901Z",
+      "_path": "1-2 CSE'24/PHY 4242 - Physics II Lab/Lab Reports/Circuit Implementation in Breadboard/Experiment 02.jpeg",
+      "_hasGroup": true
+    },
+    {
+      "mimeType": "image/jpeg",
+      "id": "1sUs0HTbsc62pNvEuHGQYIcZEtTu20ftZ",
+      "name": "Experiment 03.jpeg",
+      "modifiedTime": "2026-08-24T08:59:47.033Z",
+      "_path": "1-2 CSE'24/PHY 4242 - Physics II Lab/Lab Reports/Circuit Implementation in Breadboard/Experiment 03.jpeg",
+      "_hasGroup": true
+    },
+    {
+      "mimeType": "image/jpeg",
+      "id": "1nRixJa7wiUR_NOX9v3CKuVL5dMFFI7HP",
+      "name": "Experiment 04.jpeg",
+      "modifiedTime": "2026-08-24T09:00:16.903Z",
+      "_path": "1-2 CSE'24/PHY 4242 - Physics II Lab/Lab Reports/Circuit Implementation in Breadboard/Experiment 04.jpeg",
+      "_hasGroup": true
+    },
+    {
       "mimeType": "application/pdf",
       "id": "1H0aq5kvnXhV3J942-hp9H-F90OmXgqbn",
       "name": "Tasks(Exp 01)(Phy 4242)(B18).pdf",
@@ -5643,6 +5859,14 @@
       "name": "Tasks(Exp 05)(Phy 4242)(B18).pdf",
       "modifiedTime": "2026-04-20T06:00:54.871Z",
       "_path": "1-2 CSE'24/PHY 4242 - Physics II Lab/Lab Reports/Task Manual (Old)/Tasks(Exp 05)(Phy 4242)(B18).pdf",
+      "_hasGroup": true
+    },
+    {
+      "mimeType": "application/pdf",
+      "id": "1Z9Mxn5W2IOkF_WQ_MqxmpEzynOL66v31",
+      "name": "routine.pdf",
+      "modifiedTime": "2026-10-23T14:48:52.997Z",
+      "_path": "2-1 CSE'24/Class Routine/routine.pdf",
       "_hasGroup": true
     }
   ]

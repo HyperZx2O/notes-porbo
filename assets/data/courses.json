@@ -76,5 +76,31 @@
         "midterm.html"
       ]
     }
+  ],
+  "2-1": [
+    {
+      "name": "CSE 4301 - Object Oriented Programming",
+      "files": []
+    },
+    {
+      "name": "CSE 4303 - Data Structures",
+      "files": []
+    },
+    {
+      "name": "CSE 4305 - Computer Organization and Architecture",
+      "files": []
+    },
+    {
+      "name": "CSE 4307 - Database Management Systems",
+      "files": []
+    },
+    {
+      "name": "EEE 4383 - Electronic Devices and Circuits",
+      "files": []
+    },
+    {
+      "name": "MATH 4341 - Linear Algebra",
+      "files": []
+    }
   ]
 }
